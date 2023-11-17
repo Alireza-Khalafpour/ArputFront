@@ -1,7 +1,9 @@
+import ProfileMainPage from "@/components/templates/ProfileMainPage";
+
 const Profile = () => {
     return (
         <div>
-            Enter
+            <ProfileMainPage/>
         </div>
     );
 }

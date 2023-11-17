@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* :root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+} */
+
+
+
+/* Fonts ------------------- */
+
+/* @font-face {
+  font-family: "IrSans";
+  src: url("/public/fonts/IRANSans/IRANSans.ttf"), url("/public/fonts/IRANSans/IRANSans_Black.ttf");
+} */
+
+@font-face {
+  font-family: iranSans;
+  src: url("../../public/fonts/IRANSans/IRANSans.ttf") ,
+      url("../../public/fonts/IRANSans/IRANSans_Black.ttf"),
+      url("../../public/fonts/IRANSans/Farsi_numerals/IRANSans\(FaNum\).ttf"),
+      url("../../public/fonts/IRANSans/IRANSansFaNum.ttf");
+}
+
+/* ------------------------- */
+
+*{
+  font-family: iranSans !important;
+  direction: rtl;
+}
+
+html, body{
+  font-family: iranSans !important;
+  direction: rtl !important;
+  background-color: #F2F2F2 !important;
+  scroll-behavior: smooth;
+  font-size: small;
+}
+input{
+  font-family: iranSans !important;
+}
+
+a{
+  text-decoration: none !important;
+}
+
+li{
+  list-style-type: none;
+}
+
+/* Desktop scroll bar-------------- */
+
+@media only screen and (min-width: 992px) {
+  ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+      background-color: rgba(64,54,187,0.2);
+  }
+
+
+  ::-webkit-scrollbar-thumb:hover {
+      border: 2px solid transparent;
+      border-radius: 20px;
+      background-color: rgba(64,54,187,0.6);
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+      border-radius: 20px;
+  }
+}
+/* input borders--------------------------- */
+
+.muirtl-1s2u09g {
+  border-color: black !important;
+}
+
+/* ------------------------------------------------------ */
+.test{
+  background-image: url("../../public/images/evil-dead-rise-2023-small.jpg");
+}
+
+
+
+
+
+
+/* SignIn component ********************************* */
+
+#backGroundSignin-up{
+  background-image: url("../../public/images/wave-haikei.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#illustrationSignin{
+  background-image: url("../../public/images/Login-amico.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+/* SignUp component*********************************** */
+
+#illustrationSignup{
+  background-image: url("../../public/images/registerSVG.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+/* *************************************************** */

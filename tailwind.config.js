@@ -16,8 +16,8 @@ module.exports = {
           "paszamine2":"#D7D7D7",
           "paszamine3":"#5E5E5E",
           "asliDark":"#0A2739",
-          "asliLight":"#2F7CEE",
-          "khas":"#FF8B07",
+          "asliLight":"#1D9BF0",
+          "khas":"#FF9900",
 
         // light mode
         tremor: {

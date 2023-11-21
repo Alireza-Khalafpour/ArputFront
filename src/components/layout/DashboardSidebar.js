@@ -17,10 +17,8 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
-import { ExpandMore, Home, Payment, ShoppingBasket } from '@mui/icons-material';
-import Mail from '@mui/icons-material/Mail';
+import { Accordion, AccordionSummary } from '@mui/material';
+import { AddRounded, ExpandMore, Home, ManageSearchRounded, Payment, ShoppingBasket } from '@mui/icons-material';
 import Link from 'next/link';
 
 
@@ -99,7 +97,6 @@ export default function DashbordSidebar({children}) {
 
   return (
     <div sx={{ display: 'flex' }}>
-      <CssBaseline />
       <AppBar position="relative" open={open}>
         <Toolbar className='bg-asliLight' >
           <IconButton
@@ -117,7 +114,6 @@ export default function DashbordSidebar({children}) {
         </Toolbar>
       </AppBar>
       <Grid open={open} className='w-full p-6 gap-8 flex flex-col' >
-        <DrawerHeader />
 
           {children}
 
@@ -163,15 +159,19 @@ export default function DashbordSidebar({children}) {
                   id="panel1a-header"
                   className='hover:bg-slate-700 rounded-lg'
                 >
-                  <Typography>  ثبت محصول </Typography>
+                  <Typography>  محصول </Typography>
                 </AccordionSummary>
+                <Link  href="/dashboard/add-texture" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                    جستجو یا درج تکسچر
+                    <AddRounded className='text-khas'/>
+                </Link>
                 <Link  href="/dashboard/createProduct" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
-                    ایجاد محصول
-                    <InboxIcon className='text-khas'/>
+                    جستجو یا درج محصول
+                    <ManageSearchRounded className='text-khas'/>
                 </Link>
                 <Link href="#"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
-                    ایجاد ویژگی
-                    <Mail className='text-khas'/>
+                    مدیریت محصولات
+                    <InboxIcon  className='text-khas'/>
                 </Link>
               </Accordion>
             </ListItem>

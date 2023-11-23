@@ -159,18 +159,18 @@ export default function DashbordSidebar({children}) {
                   id="panel1a-header"
                   className='hover:bg-slate-700 rounded-lg'
                 >
-                  <Typography>  محصول </Typography>
+                  <Typography>  محصولات </Typography>
                 </AccordionSummary>
                 <Link  href="/dashboard/add-texture" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
-                    جستجو یا درج تکسچر
+                    ایجاد محصول
                     <AddRounded className='text-khas'/>
                 </Link>
                 <Link  href="/dashboard/createProduct" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
-                    جستجو یا درج محصول
+                    لیست محصولات
                     <ManageSearchRounded className='text-khas'/>
                 </Link>
                 <Link href="#"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
-                    مدیریت محصولات
+                    مدیریت محصولات من
                     <InboxIcon  className='text-khas'/>
                 </Link>
               </Accordion>

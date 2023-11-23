@@ -1,4 +1,4 @@
-import AddTextureMainPage from "@/components/templates/AddTextureMainPage";
+import AddTextureMainPage from "@/components/templates/AddPreProductPage";
 
 const AddTextureMain = () => {
     return (

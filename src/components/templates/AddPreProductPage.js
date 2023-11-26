@@ -10,10 +10,10 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Avatar, ListDivider, ListItemDecorator, Option, Select } from '@mui/joy';
-import { Edit, Numbers, StackedBarChart } from '@mui/icons-material';
+import { CheckRounded, CloudUpload, Delete, Edit, Numbers, ProductionQuantityLimits, ScaleRounded, StackedBarChart, StraightenRounded } from '@mui/icons-material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Grid, Input, Slider } from '@mui/material';
+import { Autocomplete, FormControl, Grid, Input, InputAdornment, InputLabel, Slider, TextField } from '@mui/material';
 
 
 
@@ -46,17 +46,23 @@ const AddPreProductPage = () => {
 
     // API PART *******************************************************************************************
 
-    // Category Get API ---------------------
+    // Get Category API ---------------------
     useEffect(() => {
-        axios.get('https://supperapp-backend.chbk.run/category/list')
+        axios.get('https://supperapp-backend.chbk.run/category/list',{
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiJ2dBQUFBQUJsWUZ1aFZ3OXU3VHBITmpjdlVmVHdnMXR0XzBGdXNDX2t6RjRid1ViaWZoRC0wS3NUUTFNN3UzZUhDT3Ixa2F3V1ZnSTZQS1U1djM5dXpuRkZObXFUc0xPcDlpbVdKQkpfakJicTBnejZfaDJteko5Um1aMXYxZ3k0TWVIeElmU3R6bV9PJyJ9.Mv6mAsHHvrPgAWie0K96vsBGicTk0KFNHGgMFflxDR0'
+              }
+        })
         .then((response) => {
-            console.log(response , "Categoryssssssss");
+            console.log(response , "Categories");
         })
         .catch(function (error) {
-            console.log(error, "err categorizesss");
+            console.log(error, "error categories");
         })
 
     },[])
+
 
     //STATES AND FUNCTIONS PART ****************************************************************************
 
@@ -76,7 +82,7 @@ const AddPreProductPage = () => {
     };
 
     // Pre-product Input information ----------------
-    const [value, setValue] = useState(30);
+    const [value, setValue] = useState(0);
 
     const handleSliderChange = (event, newValue) => {
       setValue(newValue);
@@ -89,17 +95,26 @@ const AddPreProductPage = () => {
     const handleBlur = () => {
       if (value < 0) {
         setValue(0);
-      } else if (value > 100) {
-        setValue(100);
       }
     };
+
+    // Add image and Name for pre-product-------------
+    const [image, setImage] = useState([])
+    const[fileName, setFileName] = useState("فایلی انتخاب نشده...")
+  
+    const DeleteImg = () => {
+      setFileName("فایلی انتخاب نشده...")
+      setImage([])
+    }
   
     return (
-        <div className='w-full flex justify-center items-center' >
+        <div className='w-full flex flex-col justify-center items-center gap-4' >
 
-            <div className='w-[70%] '>
+            <h2 className='p-3 text-xl' > | با انجام گام های زیر کالای خود را ثبت کنید |</h2>
+
+            <div className='w-[70%] p-1 border-dashed border-4 rounded-2xl  '>
                 <Stepper className='flex' activeStep={activeStep} orientation="vertical">
-                    <Step className='py-4'>
+                    <Step className='border-b-4 py-3'>
                         <StepLabel >
                             <div className='text-xl font-bold text-right ' >
                             گام اول: انتخاب گروه کالا 
@@ -147,7 +162,7 @@ const AddPreProductPage = () => {
                             </div>
                         </StepContent>
                     </Step>
-                    <Step className='' >
+                    <Step className='border-b-4 py-3' >
                         <StepLabel>
                             <div className='text-xl font-bold text-right' >
                             گام دوم: درج اطلاعات کالا 
@@ -160,14 +175,14 @@ const AddPreProductPage = () => {
                                 </Typography> */}
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid className='text-lg font-bold text-asliLight' item>
-                                        عرض به سانتی متر
+                                        عرض (Cm) <StraightenRounded/>
                                     </Grid>
                                     <Grid item xs>
                                     <Slider
                                         value={typeof value === 'number' ? value : 0}
                                         onChange={handleSliderChange}
                                         aria-labelledby="input-slider"
-                                        max={1000}
+                                        max={500}
                                         min={0}
                                     />
                                     </Grid>
@@ -180,7 +195,7 @@ const AddPreProductPage = () => {
                                         inputProps={{
                                         step: 1,
                                         min: 0,
-                                        max: 1000,
+                                        max: 500,
                                         type: 'number',
                                         'aria-labelledby': 'input-slider',
                                         }}
@@ -197,14 +212,14 @@ const AddPreProductPage = () => {
                                 </Typography> */}
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid className='text-lg font-bold text-asliLight' item>
-                                        طول به سانتی متر
+                                        طول(Cm) <StraightenRounded/>
                                     </Grid>
                                     <Grid item xs>
                                     <Slider
                                         value={typeof value === 'number' ? value : 0}
                                         onChange={handleSliderChange}
                                         aria-labelledby="input-slider"
-                                        max={1000}
+                                        max={500}
                                         min={0}
                                     />
                                     </Grid>
@@ -217,7 +232,7 @@ const AddPreProductPage = () => {
                                         inputProps={{
                                         step: 1,
                                         min: 0,
-                                        max: 1000,
+                                        max: 500,
                                         type: 'number',
                                         'aria-labelledby': 'input-slider',
                                         }}
@@ -233,14 +248,14 @@ const AddPreProductPage = () => {
                                 </Typography> */}
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid className='text-lg font-bold text-asliLight' item>
-                                        وزن به کیلوگرم
+                                        وزن(kg) <ScaleRounded/> 
                                     </Grid>
                                     <Grid item xs>
                                     <Slider
                                         value={typeof value === 'number' ? value : 0}
                                         onChange={handleSliderChange}
                                         aria-labelledby="input-slider"
-                                        max={1000}
+                                        max={50}
                                         min={0}
                                     />
                                     </Grid>
@@ -254,7 +269,7 @@ const AddPreProductPage = () => {
                                         inputProps={{
                                         step: 1,
                                         min: 0,
-                                        max: 1000,
+                                        max: 50,
                                         type: 'number',
                                         'aria-labelledby': 'input-slider',
                                         }}
@@ -273,7 +288,7 @@ const AddPreProductPage = () => {
                                     ادامه
                                     </button>
                                     <button
-                                    className='p-2 rounded-2xl  hover:bg-red-100'
+                                    className='p-2 rounded-2xl  hover:bg-red-400 hover:text-white '
                                     disabled={activeStep === 0}
                                     onClick={handleBack}
                                     >
@@ -283,13 +298,36 @@ const AddPreProductPage = () => {
                             </div>
                         </StepContent>
                     </Step>
-                    <Step className='' >
+                    <Step className='border-b-4 py-3' >
                         <StepLabel>
                             <div className='text-xl font-bold text-right' >
                             گام سوم: درج ویژگی ها  
                             </div>
                         </StepLabel>
                         <StepContent className='flex flex-col gap-12 p-3 m-5' >
+
+                            <div className='flex flex-row justify-around items-center gap-6 w-full my-5' >
+                                <Autocomplete
+                                    className='w-[40%] bg-white'
+                                    noOptionsText=" موردی یافت نشد "
+                                    disablePortal
+                                    options={[]}
+                                    size='medium'
+                                    renderInput={(params) => <TextField {...params} label="انتخاب نوع ویژگی" />}
+                                />
+                                    <Autocomplete
+                                        className='w-[40%] bg-white'
+                                        multiple
+                                        noOptionsText=" موردی یافت نشد "
+                                        limitTags={2}
+                                        options={[]}
+                                        getOptionLabel={(option) => option.title}
+                                        defaultValue={[]}
+                                        renderInput={(params) => (
+                                            <TextField {...params} label=" انتخاب ویژگی " placeholder="انتخاب کنید" />
+                                        )}
+                                    />
+                            </div>
 
                             <div>
                                 <div className='flex flex-row gap-3 w-full justify-end'>
@@ -300,7 +338,84 @@ const AddPreProductPage = () => {
                                     ادامه
                                     </button>
                                     <button
-                                    className='p-2 rounded-2xl  hover:bg-red-100'
+                                    className='p-2 rounded-2xl  hover:bg-red-400 hover:text-white '
+                                    disabled={activeStep === 0}
+                                    onClick={handleBack}
+                                    >
+                                    بازگشت
+                                    </button>
+                                </div>
+                            </div>
+                        </StepContent>
+                    </Step>
+                    <Step className='border-b-4 py-3' >
+                        <StepLabel>
+                            <div className='text-xl font-bold text-right' >
+                            گام چهارم: ثبت تکسچر و نام محصول    
+                            </div>
+                        </StepLabel>
+                        <StepContent className='flex flex-col gap-12 p-3 m-5' >
+
+                            <div className='flex flex-row justify-around items-center gap-6 w-full my-5' >
+                                
+                            <div>
+                                <form onClick={() => document.getElementById("fileInput").click()} className='flex flex-col justify-center items-center border-2 cursor-pointer border-dashed border-asliLight w-56 h-36 rounded-3xl hover:animate-pulse' >
+                                <input 
+                                    type='file' 
+                                    id='fileInput' 
+                                    multiple 
+                                    hidden 
+                                    accept='image/*'
+                                    onChange={({target: {files}}) =>{
+                                    files[0] && setFileName(files[0].name)
+                                    if(files){
+                                        setImage(URL.createObjectURL(files[0]))
+                                    } 
+                                    }           
+                                    }
+                                />
+                                {image.length!==0 ?
+                                    <img className='w-full h-full p-1 rounded-3xl' src={image} alt="تکسچر محصول"  />
+                                    :
+                                    <div className='text-center'>
+                                    <CloudUpload className='text-3xl text-asliLight'/>
+                                    <p> آپلود تکسچر </p>
+                                    </div>
+                                }
+                                </form>
+                                <div className='w-52 flex flex-row justify-between items-center mt-1 p-1 text-sm' >
+                                    <Delete  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg()}/>
+                                    <p>{fileName}</p>
+                                </div>
+                            </div>
+
+                            <FormControl>
+                                <InputLabel htmlFor="input-with-icon-adornment">
+                                    نام کالا   
+                                </InputLabel>
+                                <Input
+                                    className='p-1'
+                                    id="input-with-icon-adornment"
+                                    startAdornment={
+                                        <InputAdornment className='mx-2' position="start">
+                                            <ProductionQuantityLimits />
+                                        </InputAdornment>
+                                    }
+                                />
+                            </FormControl>
+
+                            </div>
+
+                            <div>
+                                <div className='flex flex-row gap-3 w-full justify-end'>
+                                    <button
+                                        className='w-32 p-2 rounded-2xl bg-khas hover:bg-orange-500 text-white hover:font-semibold transition-all duration-100'
+                                        // onClick={handleNext}
+                                    >
+                                      <CheckRounded/> ثبت کالا 
+                                    </button>
+                                    <button
+                                    className='p-2 rounded-2xl  hover:bg-red-400 hover:text-white '
                                     disabled={activeStep === 0}
                                     onClick={handleBack}
                                     >

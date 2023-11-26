@@ -87,7 +87,9 @@ li{
 
 /* ------------------------------------------------------ */
 .test{
-  background-image: url("../../public/images/evil-dead-rise-2023-small.jpg");
+  background-image: url("https://www.rollingstone.com/wp-content/uploads/2019/12/RS-BestMoviesDecade.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 

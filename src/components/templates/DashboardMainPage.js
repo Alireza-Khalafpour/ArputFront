@@ -4,7 +4,6 @@ import { Grid } from "@mui/material";
 import AdminCard from "../module/AdminCard";
 import { Chart } from "../module/Chart";
 import { Bars } from "../module/Bars";
-import CustomTable from "../module/CustomTable";
 
 const DashboardMainPage = () => {
     return (
@@ -33,7 +32,7 @@ const DashboardMainPage = () => {
                     </Grid>
                 </Grid>
                 <Grid className='w-full border-2 text-center shadow-xl' >
-                    <CustomTable/>
+                    table
                 </Grid>
         </div>
     );

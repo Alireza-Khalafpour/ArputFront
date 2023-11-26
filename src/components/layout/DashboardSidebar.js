@@ -18,7 +18,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { Accordion, AccordionSummary } from '@mui/material';
-import { AddRounded, ExpandMore, Home, ManageSearchRounded, Payment, ShoppingBasket } from '@mui/icons-material';
+import { AddRounded, ExpandMore, Home, ManageAccountsOutlined, ManageSearchRounded, Payment, ShoppingBasket } from '@mui/icons-material';
 import Link from 'next/link';
 
 
@@ -140,7 +140,7 @@ export default function DashbordSidebar({children}) {
           </IconButton>
         </DrawerHeader>
         <Divider className='bg-slate-400' />
-        <List>
+        <List className='relative' >
 
             <ListItem disablePadding focusRipple >
               <Link href="/dashboard" className='bg-[#092739] text-[#F2F2F2] w-full mx-1 shadow-none border-none transition-all duration-200 flex justify-between cursor-pointer p-3 hover:bg-slate-700 rounded-lg text-right' >
@@ -161,11 +161,11 @@ export default function DashbordSidebar({children}) {
                 >
                   <Typography>  محصولات </Typography>
                 </AccordionSummary>
-                <Link  href="/dashboard/add-texture" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                <Link  href="/dashboard/add-pre-product" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
                     ایجاد محصول
                     <AddRounded className='text-khas'/>
                 </Link>
-                <Link  href="/dashboard/createProduct" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                <Link  href="/dashboard/pre-product-list" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
                     لیست محصولات
                     <ManageSearchRounded className='text-khas'/>
                 </Link>
@@ -188,17 +188,19 @@ export default function DashbordSidebar({children}) {
                 >
                   <Typography>  مالی </Typography>
                 </AccordionSummary>
-                <Link href="#" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
-                     موجودی حساب
+                <Link href="/dashboard/my-wallet" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                    کیف پول من
                     <Payment className='text-khas'/>
-                </Link>
-                <Link href="#" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
-                     تسویه حساب
-                    <ShoppingBasket className='text-khas'/>
                 </Link>
               </Accordion>
             </ListItem>
         </List>
+
+        <Link href="/dashboard/ticketChat" className=' absolute bottom-2 w-[90%] text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                      تیکت و پشتیبانی
+                    <ManageAccountsOutlined className='text-khas'/>
+        </Link>
+
       </Drawer>
     </div>
   );

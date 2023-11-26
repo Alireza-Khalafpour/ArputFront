@@ -1,4 +1,4 @@
-import AdminAddProductCard from "../module/AdminAddProductCard";
+import AdminAddProductCard from "../module/findlistproductforfrontclient";
 
 const CreateProductPage = () => {
     return (

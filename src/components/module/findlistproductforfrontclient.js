@@ -281,91 +281,91 @@
 //       </div>
 
 
-//       <Modal open={addProductModal} onClose={() => setAddProductModal(false)}>
-//         <ModalDialog variant="outlined" role="definition" className="w-[40vw] h-[65vh] p-0" >
-//           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
-//              افزودن مشخصات *نام تکستچر* 
-//           </DialogTitle>
-//           <Divider />
-//           <DialogContent className="flex flex-col justify-center items-center gap-10" >
-//             <div>
-//               <form onClick={() => document.getElementById("fileInput").click()} className='flex flex-col justify-center items-center border-2 cursor-pointer border-dashed border-asliLight w-56 h-36 rounded-3xl hover:animate-pulse' >
-//               <input 
-//                 type='file' 
-//                 id='fileInput' 
-//                 multiple 
-//                 hidden 
-//                 accept='image/*'
-//                 onChange={({target: {files}}) =>{
-//                   files[0] && setFileName(files[0].name)
-//                   if(files){
-//                     setImage(URL.createObjectURL(files[0]))
-//                   } 
-//                 }           
-//                 }
-//               />
-//               {image.length!==0 ?
-//                 <img className='w-full h-full p-1 rounded-3xl' src={image} alt="تصویر محصول"  />
-//                 :
-//                 <div className='text-center'>
-//                   <CloudUpload className='text-3xl text-asliLight'/>
-//                   <p> آپلود عکس محصول </p>
-//                 </div>
-//               }
-//               </form>
-//               <div className='w-52 flex flex-row justify-between items-center mt-1 p-1 text-sm' >
-//                 <Delete className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg()}/>
-//                 <p>{fileName}</p>
-//               </div>
-//             </div>
+    //   <Modal open={addProductModal} onClose={() => setAddProductModal(false)}>
+    //     <ModalDialog variant="outlined" role="definition" className="w-[40vw] h-[65vh] p-0" >
+    //       <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
+    //          افزودن مشخصات *نام تکستچر* 
+    //       </DialogTitle>
+    //       <Divider />
+    //       <DialogContent className="flex flex-col justify-center items-center gap-10" >
+    //         <div>
+    //           <form onClick={() => document.getElementById("fileInput").click()} className='flex flex-col justify-center items-center border-2 cursor-pointer border-dashed border-asliLight w-56 h-36 rounded-3xl hover:animate-pulse' >
+    //           <input 
+    //             type='file' 
+    //             id='fileInput' 
+    //             multiple 
+    //             hidden 
+    //             accept='image/*'
+    //             onChange={({target: {files}}) =>{
+    //               files[0] && setFileName(files[0].name)
+    //               if(files){
+    //                 setImage(URL.createObjectURL(files[0]))
+    //               } 
+    //             }           
+    //             }
+    //           />
+    //           {image.length!==0 ?
+    //             <img className='w-full h-full p-1 rounded-3xl' src={image} alt="تصویر محصول"  />
+    //             :
+    //             <div className='text-center'>
+    //               <CloudUpload className='text-3xl text-asliLight'/>
+    //               <p> آپلود عکس محصول </p>
+    //             </div>
+    //           }
+    //           </form>
+    //           <div className='w-52 flex flex-row justify-between items-center mt-1 p-1 text-sm' >
+    //             <Delete className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg()}/>
+    //             <p>{fileName}</p>
+    //           </div>
+    //         </div>
             
 
-//             <div className='w-full flex flex-row justify-around items-center' >
-//               <TextField
-//                 id="input-with-icon-textfield"
-//                 label=" تعداد موجودی "
-//                 placeholder=" تعداد موجودی "
-//                 value={e2p(count) }
-//                 onChange={(e) => setCount(e.target.value)}
-//                 InputProps={{
-//                   startAdornment: (
-//                     <InputAdornment position="end">
-//                       <TableRowsRounded className='text-asliLight' />
-//                     </InputAdornment>
-//                   ),
-//                 }}
-//                 variant="standard"
-//               />
+    //         <div className='w-full flex flex-row justify-around items-center' >
+    //           <TextField
+    //             id="input-with-icon-textfield"
+    //             label=" تعداد موجودی "
+    //             placeholder=" تعداد موجودی "
+    //             value={e2p(count) }
+    //             onChange={(e) => setCount(e.target.value)}
+    //             InputProps={{
+    //               startAdornment: (
+    //                 <InputAdornment position="end">
+    //                   <TableRowsRounded className='text-asliLight' />
+    //                 </InputAdornment>
+    //               ),
+    //             }}
+    //             variant="standard"
+    //           />
             
-//               <TextField
-//                 id="input-with-icon-textfield"
-//                 label="قیمت به ريال"
-//                 placeholder="قیمت به ريال"
-//                 value={e2p(price) }
-//                 onChange={(e) => setPrice(e.target.value)}
-//                 InputProps={{
-//                   startAdornment: (
-//                     <InputAdornment position="end">
-//                       <Payment className='text-asliLight' />
-//                     </InputAdornment>
-//                   ),
-//                 }}
-//                 variant="standard"
-//               />
-//             </div>
+    //           <TextField
+    //             id="input-with-icon-textfield"
+    //             label="قیمت به ريال"
+    //             placeholder="قیمت به ريال"
+    //             value={e2p(price) }
+    //             onChange={(e) => setPrice(e.target.value)}
+    //             InputProps={{
+    //               startAdornment: (
+    //                 <InputAdornment position="end">
+    //                   <Payment className='text-asliLight' />
+    //                 </InputAdornment>
+    //               ),
+    //             }}
+    //             variant="standard"
+    //           />
+    //         </div>
 
 
-//           </DialogContent>
-//           <DialogActions className="p-4" >
-//             <Button className='text-white bg-khas hover:bg-orange-600 w-36' onClick={() => setAddProductModal(false)}>
-//                ثبت
-//             </Button>
-//             <Button variant="soft" color='danger'  onClick={() => setAddProductModal(false)}>
-//               انصراف
-//             </Button>
-//           </DialogActions>
-//         </ModalDialog>
-//       </Modal>
+    //       </DialogContent>
+    //       <DialogActions className="p-4" >
+    //         <Button className='text-white bg-khas hover:bg-orange-600 w-36' onClick={() => setAddProductModal(false)}>
+    //            ثبت
+    //         </Button>
+    //         <Button variant="soft" color='danger'  onClick={() => setAddProductModal(false)}>
+    //           انصراف
+    //         </Button>
+    //       </DialogActions>
+    //     </ModalDialog>
+    //   </Modal>
 
 //     </Grid>
 //   );

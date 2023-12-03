@@ -202,7 +202,7 @@ export default function SignUpPage() {
                   activeStep!==2 &&(
                   <button
                     onClick={handleNext}
-                    className='text-white p-2 w-full bg-gradient-to-r from-indigo-800 to-indigo-400 hover:from-indigo-900 hover:to-indigo-600 rounded-full'
+                    className='text-white p-2 w-full bg-gradient-to-r from-asliDark to-asliLight hover:from-asliLight hover:to-asliDark transition-colors duration-500 rounded-full'
                     type="button"
                     >
                       {activeStep === 0 && ' ارسال کد '} 
@@ -213,7 +213,7 @@ export default function SignUpPage() {
                 {
                   activeStep===2 &&(
                   <button
-                    className='text-white p-2 w-full bg-gradient-to-r from-indigo-800 to-indigo-400 hover:from-indigo-900 hover:to-indigo-600 rounded-full'
+                    className='text-white p-2 w-full bg-gradient-to-r from-asliDark to-asliLight hover:from-asliLight hover:to-asliDark transition-colors duration-500 rounded-full'
                     type="button"
                     >
                       ایجاد حساب

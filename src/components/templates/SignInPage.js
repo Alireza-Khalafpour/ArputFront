@@ -10,8 +10,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-// import { Tabs, styled } from '@mui/material';
-// import { Tab as BaseTab, tabClasses } from '@mui/base/Tab';
+// import { cookies } from 'next/headers'
 import { Archive, BusinessRounded, Favorite, HowToRegRounded, LoginRounded, Person, Restore, StoreRounded, UsbRounded, VerifiedUserRounded, Visibility, VisibilityOff } from '@mui/icons-material';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -22,29 +21,59 @@ import { TabPanel as BaseTabPanel } from '@mui/base/TabPanel';
 import { Tab as BaseTab } from '@mui/base/Tab';
 import lottie from "lottie-web";
 import { defineElement } from "@lordicon/element";
-import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
+import { Alert, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Snackbar } from '@mui/material';
+import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 
 
 
 
 export default function SignInPage() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
 
-
-  const [value, setValue] = useState(0);
   const [showPassword, setShowPassword] = React.useState(false);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  const cookie = new Cookies()
+  const [message, setMessage] = useState();
+  const [alert, setAlert] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [userName, setUserName] = useState();
+  const [pass, setPass] = useState();
+
+ 
+  let formData = new FormData();
+
+  formData.append('username', userName); 
+  formData.append('password', pass);
+
+
+  async function HandleSubmit() {
+    setLoading(true);
+    await axios.post('https://supperapp-backend.chbk.run/register/login', formData , {
+      'accept': 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+      })
+      .then((response) => {
+        cookie.set("tokenDastResi", response.data.access_token, {secure:true, maxAge: 60 * 60 * 24 * 365 } );
+        setAlert(true)
+        console.log(response)
+        setMessage(" خوش آمدید ")
+        setTimeout(() => {
+          window.location.replace("/dashboard")
+        }, 1700);
+        setLoading(false)
+      })
+      .catch(function (error) {
+        console.log(error, "Error");
+        setMessage(error.response.data.detail)
+        setErrorAlert(true)
+        setLoading(false)
+      });
+
+  }
+
   
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -65,7 +94,7 @@ export default function SignInPage() {
         <Grid className='lg:w-2/4  w-full' >
 
             <div className='text-center mx-auto gap-12 my-6'>
-              <Avatar style={{backgroundColor:"#818CF8", width:66 , height:66}} className='mx-auto text-white'>
+              <Avatar style={{backgroundColor:"#1D9BF0", width:66 , height:66}} className='mx-auto text-white'>
                 <lord-icon trigger="loop" src="https://cdn.lordicon.com/kthelypq.json" state="in-account" delay="700" className="w-full" ></lord-icon>
               </Avatar>
               <h1 className='mx-auto text-xl '>
@@ -83,6 +112,8 @@ export default function SignInPage() {
                 <TabPanel value={0}>
                   <Grid className='md:w-4/5 w-full text-center mx-auto ' >
                         <TextField
+                            value={userName}
+                            onChange={(e) => setUserName(e.target.value)}
                             size="small"
                             className="mt-8 w-full"
                             fullWidth
@@ -105,6 +136,7 @@ export default function SignInPage() {
                             }}
                         />
                         <FormControl
+                            
                             variant="outlined" 
                             margin='normal' 
                             className='w-full mb-8'
@@ -124,6 +156,8 @@ export default function SignInPage() {
                             }}
                         >
                             <OutlinedInput
+                                value={pass}
+                                onChange={(e) => setPass(e.target.value)}
                                 size="small"
                                 placeholder='رمز عبور'
                                 id="outlined-adornment-password"
@@ -149,19 +183,20 @@ export default function SignInPage() {
 
                         <Grid className='w-full flex justify-between items-center gap-2 my-4' >
                           <button
-                            className='text-white p-2 w-1/2 bg-gradient-to-r from-indigo-800 to-indigo-400 hover:from-indigo-900 hover:to-indigo-600 rounded-full'  
+                            className='text-white p-2 w-1/2 bg-gradient-to-r from-asliDark to-asliLight hover:from-asliLight hover:to-asliDark transition-colors duration-500 rounded-full'  
                             type="submit"
                             fullWidth
                             variant="contained"
+                            onClick={() => HandleSubmit()}
                           >
-                            ورود 
+                            {loading ? <CircularProgress size="medium" /> : "ورود"}
                           </button>
                           <span className='w-1/2 hover:text-[#443DC0] hover:font-semibold hover:cursor-pointer hover:border-b-[3px]' > فراموشی رمز </span>
                         </Grid>
                         <Grid className=' w-full my-8 text-center self-center flex justify-center gap-2'>
 
                           <span> حساب کاربری نداری؟  </span>   
-                          <Link href="#" className='flex flex-row font-bold hover:font-extrabold rounded-full text-center transition-all duration-300' style={{color:"#6434D8"}}  >
+                          <Link href="/signup" className='flex flex-row font-bold hover:font-extrabold rounded-full text-center transition-all duration-300' style={{color:"#6434D8"}}  >
                               <span className='text-[1.06rem]' >ثبت نام</span>   
                               {/* <lord-icon
                                   src="https://cdn.lordicon.com/vduvxizq.json"
@@ -244,7 +279,7 @@ export default function SignInPage() {
 
                         <Grid className='w-full flex justify-between items-center gap-2 my-4' >
                           <button
-                            className='text-white p-2 w-1/2 bg-gradient-to-r from-indigo-800 to-indigo-400 hover:from-indigo-900 hover:to-indigo-600 rounded-full'  
+                            className='text-white p-2 w-1/2 bg-gradient-to-r from-asliDark to-asliLight hover:from-asliLight hover:to-asliDark transition-colors duration-500 rounded-full'  
                             type="submit"
                             fullWidth
                             variant="contained"
@@ -338,27 +373,18 @@ export default function SignInPage() {
 
                         <Grid className='w-full flex justify-between items-center gap-2 my-4' >
                           <button
-                            className='text-white p-2 w-1/2 bg-gradient-to-r from-indigo-800 to-indigo-400 hover:from-indigo-900 hover:to-indigo-600 rounded-full'  
+                            className='text-white p-2 w-1/2 bg-gradient-to-r from-asliDark to-asliLight hover:from-asliLight hover:to-asliDark transition-colors duration-500 rounded-full'  
                             type="submit"
-                            fullWidth
-                            variant="contained"
                           >
                             ورود 
                           </button>
-                          <span className='w-1/2 hover:text-[#443DC0] hover:text-lg hover:cursor-pointer ' > فراموشی رمز </span>
+                          <span className='w-1/2 hover:text-asliLight hover:text-lg hover:cursor-pointer ' > فراموشی رمز </span>
                         </Grid>
                         <Grid className=' w-full my-8 text-center self-center flex justify-center gap-2'>
 
                           <span> حساب کاربری نداری؟  </span>   
-                          <Link href="#" className='flex flex-row font-bold hover:font-extrabold rounded-full text-center transition-all duration-300' style={{color:"#6434D8"}}  >
+                          <Link href="/signup" className='flex flex-row font-bold hover:font-extrabold rounded-full text-center transition-all duration-300' style={{color:"#6434D8"}}  >
                               <span className='text-[1.06rem]' >ثبت نام</span>   
-                              {/* <lord-icon
-                                  src="https://cdn.lordicon.com/vduvxizq.json"
-                                  trigger="loop"
-                                  delay="700"
-                                  state="in-ternd-flat-3"
-                              > 
-                              </lord-icon> */}
                           </Link>
 
                         </Grid>
@@ -373,6 +399,25 @@ export default function SignInPage() {
       </Grid>
 
     </div>
+    <Snackbar
+      open={alert}
+      autoHideDuration={4000}
+      onClose={() => setAlert(false)}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      se
+    >
+      <Alert variant='filled' severity='success' className='text-lg text-white font-semibold' > {message} </Alert>
+    </Snackbar>
+
+    <Snackbar
+      open={errorAlert}
+      autoHideDuration={4000}
+      onClose={() => setErrorAlert(false)}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      se
+    >
+      <Alert variant='filled' severity='error' className='text-lg text-white font-semibold' > {message} </Alert>
+    </Snackbar>
 
     </>
 
@@ -387,7 +432,7 @@ const TabsList = React.forwardRef((props, ref) => {
     <BaseTabsList
       ref={ref}
       className={clsx(
-        'mb-4 rounded-xl bg-indigo-500 flex items-center justify-center content-between min-w-tabs-list shadow-lg',
+        'mb-4 rounded-xl bg-[#1D9BF0] flex items-center justify-center content-between min-w-tabs-list shadow-lg',
         className,
       )}
       {...other}
@@ -416,8 +461,8 @@ const Tab = React.forwardRef((props, ref) => {
             className: clsx(
               ` ${
                 ownerState.selected
-                  ? 'text-indigo-500 bg-white'
-                  : 'text-white bg-transparent focus:text-white hover:bg-indigo-400'
+                  ? 'text-[#1D9BF0] bg-white'
+                  : 'text-white bg-transparent focus:text-white hover:bg-[#4695ca]'
               } ${
                 ownerState.disabled
                   ? 'cursor-not-allowed opacity-50'

@@ -2,7 +2,7 @@ import SignInPage from "@/components/templates/SignInPage";
 
 
 
-function SignIn() {
+async function SignIn() {
 
     return (
         <div id="backGroundSignin-up" className="flex justify-center items-center w-full h-full"  >

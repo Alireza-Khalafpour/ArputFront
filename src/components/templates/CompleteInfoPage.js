@@ -71,7 +71,7 @@ const CompleteInfoPage = () => {
 
                         <div className="flex flex-row justify-center items-center w-full" >
 
-                        <button className="bg-khas p-3 rounded-full shadow-2xl w-56 text-white font-bold hover:bg-orange-500 transition-all duration-150" >
+                        <button className="bg-khas py-2 rounded-full shadow-2xl w-48 text-white hover:bg-orange-500 transition-all duration-150" >
                             ثبت مشخصات
                         </button>
 

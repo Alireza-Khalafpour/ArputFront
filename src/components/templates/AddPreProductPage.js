@@ -9,11 +9,11 @@ import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { Avatar, ListDivider, ListItemDecorator, Option, Select } from '@mui/joy';
+import { Avatar, ListDivider, ListItemDecorator, Option, Select, Sheet } from '@mui/joy';
 import { CheckRounded, CloudUpload, Delete, Edit, Numbers, ProductionQuantityLimits, ScaleRounded, StackedBarChart, StraightenRounded } from '@mui/icons-material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Autocomplete, FormControl, Grid, Input, InputAdornment, InputLabel, Slider, TextField } from '@mui/material';
+import { Autocomplete, Checkbox, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Slider, TextField } from '@mui/material';
 
 
 
@@ -106,6 +106,17 @@ const AddPreProductPage = () => {
       setFileName("فایلی انتخاب نشده...")
       setImage([])
     }
+
+    // Draf and Drop image ---------------------------
+
+    function DragHandler(e){
+        e.preventDefault();
+    }
+
+    function DropHandler(e){
+        e.preventDefault();
+        setImage(e.dataTransfer.files)
+    }
   
     return (
         <div className='w-full flex flex-col justify-center items-center gap-4' >
@@ -117,11 +128,11 @@ const AddPreProductPage = () => {
                     <Step className='border-b-4 py-3'>
                         <StepLabel >
                             <div className='text-xl font-bold text-right ' >
-                            گام اول: انتخاب گروه کالا 
+                                گام اول: انتخاب گروه کالا و نام کالا 
                             </div>
                         </StepLabel>
                         <StepContent>
-                            <div className='w-[30%] my-8'>
+                            <div className='w-full flex flex-row gap-2 justify-around items-center my-8'>
                                 <Select
                                     defaultValue="1"
                                     slotProps={{
@@ -133,7 +144,7 @@ const AddPreProductPage = () => {
                                     }}
                                     sx={{
                                         '--ListItemDecorator-size': '44px',
-                                        minWidth: 240,
+                                        minWidth: '160px',
                                     }}
                                     renderValue={renderValue}
                                     >
@@ -149,6 +160,22 @@ const AddPreProductPage = () => {
                                         </div>
                                     ))}
                                 </Select>
+
+                                <FormControl>
+                                    <InputLabel htmlFor="input-with-icon-adornment">
+                                        نام کالا   
+                                    </InputLabel>
+                                    <Input
+                                        className='p-1'
+                                        id="input-with-icon-adornment"
+                                        startAdornment={
+                                            <InputAdornment className='mx-2' position="start">
+                                                <ProductionQuantityLimits />
+                                            </InputAdornment>
+                                        }
+                                    />
+                                </FormControl>
+
                             </div>
                             <div>
                                 <div className=' w-full text-left '>
@@ -306,27 +333,47 @@ const AddPreProductPage = () => {
                         </StepLabel>
                         <StepContent className='flex flex-col gap-12 p-3 m-5' >
 
-                            <div className='flex flex-row justify-around items-center gap-6 w-full my-5' >
-                                <Autocomplete
-                                    className='w-[40%] bg-white'
-                                    noOptionsText=" موردی یافت نشد "
-                                    disablePortal
-                                    options={[]}
-                                    size='medium'
-                                    renderInput={(params) => <TextField {...params} label="انتخاب نوع ویژگی" />}
-                                />
+                            <div className='flex flex-col justify-around items-center gap-6 w-full my-5' >
+
+                                <div className=" flex flex-row justify-between mx-5 items-center p-3 w-[80%] gap-4 bg-paszamine1 rounded-lg border-asliLight border" >
+
+                                <FormControlLabel control={<Checkbox />} label=" نام برند " />
+
+
                                     <Autocomplete
-                                        className='w-[40%] bg-white'
+                                        className='w-1/2 bg-white'
                                         multiple
+                                        size='small'
                                         noOptionsText=" موردی یافت نشد "
                                         limitTags={2}
-                                        options={[]}
+                                        options={[{title:"کاشان"}]}
                                         getOptionLabel={(option) => option.title}
                                         defaultValue={[]}
                                         renderInput={(params) => (
-                                            <TextField {...params} label=" انتخاب ویژگی " placeholder="انتخاب کنید" />
+                                            <TextField {...params} label=" انتخاب سمپل " placeholder="انتخاب کنید" />
                                         )}
                                     />
+                                </div>
+                                <div className=" flex flex-row justify-between mx-5 items-center p-3 w-[80%] gap-4 bg-paszamine1 rounded-lg border-asliLight border" >
+
+                                    <FormControlLabel control={<Checkbox />} label=" نوع لعاب " />
+
+
+                                        <Autocomplete
+                                            className='w-1/2 bg-white'
+                                            multiple
+                                            size='small'
+                                            noOptionsText=" موردی یافت نشد "
+                                            limitTags={2}
+                                            options={[{title:"ساده"},{title:"طرح دار"}]}
+                                            getOptionLabel={(option) => option.title}
+                                            defaultValue={[]}
+                                            renderInput={(params) => (
+                                                <TextField {...params} label=" انتخاب سمپل " placeholder="انتخاب کنید" />
+                                            )}
+                                        />
+                                </div>
+
                             </div>
 
                             <div>
@@ -351,7 +398,7 @@ const AddPreProductPage = () => {
                     <Step className='border-b-4 py-3' >
                         <StepLabel>
                             <div className='text-xl font-bold text-right' >
-                            گام چهارم: ثبت تکسچر و نام محصول    
+                                گام چهارم: ثبت تکسچر        
                             </div>
                         </StepLabel>
                         <StepContent className='flex flex-col gap-12 p-3 m-5' >
@@ -359,7 +406,12 @@ const AddPreProductPage = () => {
                             <div className='flex flex-row justify-around items-center gap-6 w-full my-5' >
                                 
                             <div>
-                                <form onClick={() => document.getElementById("fileInput").click()} className='flex flex-col justify-center items-center border-2 cursor-pointer border-dashed border-asliLight w-56 h-36 rounded-3xl hover:animate-pulse' >
+                                <form 
+                                    onClick={() => document.getElementById("fileInput").click()}
+                                    onDragOver={(e) => DragHandler(e)}
+                                    onDrop={(e) => DropHandler(e)} 
+                                    className='flex flex-col justify-center items-center border-2 cursor-pointer border-dashed border-asliLight w-64 h-44 rounded-3xl hover:animate-pulse' 
+                                >
                                 <input 
                                     type='file' 
                                     id='fileInput' 
@@ -388,21 +440,6 @@ const AddPreProductPage = () => {
                                     <p>{fileName}</p>
                                 </div>
                             </div>
-
-                            <FormControl>
-                                <InputLabel htmlFor="input-with-icon-adornment">
-                                    نام کالا   
-                                </InputLabel>
-                                <Input
-                                    className='p-1'
-                                    id="input-with-icon-adornment"
-                                    startAdornment={
-                                        <InputAdornment className='mx-2' position="start">
-                                            <ProductionQuantityLimits />
-                                        </InputAdornment>
-                                    }
-                                />
-                            </FormControl>
 
                             </div>
 

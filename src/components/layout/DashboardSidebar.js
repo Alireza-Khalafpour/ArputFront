@@ -18,36 +18,15 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { Accordion, AccordionSummary } from '@mui/material';
-import { AddRounded, ExpandMore, Home, ManageAccountsOutlined, ManageSearchRounded, Payment, ShoppingBasket } from '@mui/icons-material';
+import { AddRounded, CalendarViewWeekOutlined, CheckCircleRounded, ExpandMore, FeaturedPlayListOutlined, Home, HourglassBottomOutlined, ListAltOutlined, ManageAccountsOutlined, ManageSearchRounded, Payment, ShoppingBasket } from '@mui/icons-material';
 import Link from 'next/link';
+import Cookies from 'universal-cookie';
+import NotAllowedPage from './NotAllowedPage';
 
 
 const drawerWidth = 240;
 
-// const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-//   ({ theme, open }) => ({
-//     padding: theme.spacing(3),
-//     transition: theme.transitions.create('margin', {
-//       easing: theme.transitions.easing.sharp,
-//       duration: theme.transitions.duration.leavingScreen,
-//     }),
-//     marginRight: -drawerWidth,
-//     ...(open && {
-//       transition: theme.transitions.create('margin', {
-//         easing: theme.transitions.easing.easeOut,
-//         duration: theme.transitions.duration.enteringScreen,
-//       }),
-//       marginRight: 0,
-//     }),
-//     /**
-//      * This is necessary to enable the selection of content. In the DOM, the stacking order is determined
-//      * by the order of appearance. Following this rule, elements appearing later in the markup will overlay
-//      * those that appear earlier. Since the Drawer comes after the Main content, this adjustment ensures
-//      * proper interaction with the underlying content.
-//      */
-//     position: 'relative',
-//   }),
-// );
+
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -79,6 +58,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function DashbordSidebar({children}) {
+
+  const cookie = new Cookies();
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -90,15 +72,11 @@ export default function DashbordSidebar({children}) {
     setOpen(false);
   };
 
-  // // navigation function--------
-  // const NavigateTo = (address) => {
-    
-  // }
 
   return (
     <div sx={{ display: 'flex' }}>
       <AppBar position="relative" open={open}>
-        <Toolbar className='bg-asliLight' >
+        <Toolbar className='bg-asliLight !max-h-5 ' >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -108,14 +86,20 @@ export default function DashbordSidebar({children}) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
+          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} clas component="div">
             داشبورد 
           </Typography>
         </Toolbar>
       </AppBar>
       <Grid open={open} className='w-full p-6 gap-8 flex flex-col' >
 
-          {children}
+          {
+            cookie.get("tokenDastResi")
+            ?
+            children
+            :
+            <NotAllowedPage/>
+          }
 
       </Grid>
       <Drawer
@@ -142,21 +126,48 @@ export default function DashbordSidebar({children}) {
         <Divider className='bg-slate-400' />
         <List className='relative' >
 
-            <ListItem disablePadding focusRipple >
+            <ListItem disablePadding >
               <Link href="/dashboard" className='bg-[#092739] text-[#F2F2F2] w-full mx-1 shadow-none border-none transition-all duration-200 flex justify-between cursor-pointer p-3 hover:bg-slate-700 rounded-lg text-right' >
                 <span> داشبورد </span>
                 <Home className='text-khas' />
               </Link>
             </ListItem>
 
-            <Divider className='bg-slate-400' />
+            
+            <Divider className='bg-slate-500' />
 
-            <ListItem  disablePadding focusRipple >
+            <ListItem  disablePadding >
               <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
                 <AccordionSummary
                   expandIcon={<ExpandMore style={{color:"white"}} />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
+                  className='hover:bg-slate-700 rounded-lg'
+                >
+                  <Typography>  ایجاد </Typography>
+                </AccordionSummary>
+                <Link href="/dashboard/create-category" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                      ایجاد و لیست دسته بندی ها  
+                    <ListAltOutlined className='text-khas'/>
+                </Link>
+                <Link href="/dashboard/done-orders" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                      ایحاد و لیست ویژگی ها    
+                    <FeaturedPlayListOutlined className='text-khas'/>
+                </Link>
+                <Link href="/dashboard/done-orders" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                      ایجاد و لیست سمپل ها    
+                    <CalendarViewWeekOutlined className='text-khas'/>
+                </Link>
+              </Accordion>
+            </ListItem>
+
+
+            <Divider className='bg-slate-500' />
+
+            <ListItem  disablePadding >
+              <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
+                <AccordionSummary
+                  expandIcon={<ExpandMore style={{color:"white"}} />}
                   className='hover:bg-slate-700 rounded-lg'
                 >
                   <Typography>  محصولات </Typography>
@@ -169,15 +180,15 @@ export default function DashbordSidebar({children}) {
                     لیست محصولات
                     <ManageSearchRounded className='text-khas'/>
                 </Link>
-                <Link href="#"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                <Link href="/dashboard/my-products"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
                     مدیریت محصولات من
                     <InboxIcon  className='text-khas'/>
                 </Link>
               </Accordion>
             </ListItem>
-        </List>
-        <Divider className='bg-slate-400' />
-        <List>
+        
+        <Divider className='bg-slate-500' />
+
             <ListItem  disablePadding >
               <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
                 <AccordionSummary
@@ -194,7 +205,37 @@ export default function DashbordSidebar({children}) {
                 </Link>
               </Accordion>
             </ListItem>
+
+        <Divider className='bg-slate-500' />
+
+            <ListItem  disablePadding >
+              <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
+                <AccordionSummary
+                  expandIcon={<ExpandMore style={{color:"white"}} />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  className='hover:bg-slate-700 rounded-lg'
+                >
+                  <Typography>  سفارشات </Typography>
+                </AccordionSummary>
+                <Link href="/dashboard/processing-orders" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                      سفارشات در صف انتظار  
+                    <HourglassBottomOutlined className='text-khas'/>
+                </Link>
+                <Link href="/dashboard/done-orders" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                      سفارشات انجام شده    
+                    <CheckCircleRounded className='text-khas'/>
+                </Link>
+              </Accordion>
+            </ListItem>
+
+        <Divider className='bg-slate-500' />
+
+
+
         </List>
+
+
 
         <Link href="/dashboard/ticketChat" className=' absolute bottom-2 w-[90%] text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
                       تیکت و پشتیبانی

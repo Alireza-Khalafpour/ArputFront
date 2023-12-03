@@ -3,7 +3,6 @@
 import { Dns, Edit, EditAttributes, Email, Person2, Smartphone } from "@mui/icons-material";
 import { Avatar, FormControl, FormHelperText, FormLabel, Input, Textarea } from "@mui/joy";
 import { Badge } from "@mui/material";
-import shazs from "../../../public/images/Sign up-amico.svg"
 
 const ProfileMainPage = () => {
     return (
@@ -20,7 +19,7 @@ const ProfileMainPage = () => {
                     />
                     }
                 >
-                    <Avatar alt="Aravis Howard" src={shazs} size="lg" className="md:w-64 w-40 md:h-64 h-40 border-2 border-paszamine2" />
+                    <Avatar alt="Aravis Howard" size="lg" className="md:w-64 w-40 md:h-64 h-40 border-2 border-paszamine2" />
                 </Badge>
 
                 <div className="gap-3 flex flex-col">

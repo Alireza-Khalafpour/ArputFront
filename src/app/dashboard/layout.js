@@ -1,12 +1,15 @@
 import DashbordSidebar from "@/components/layout/DashboardSidebar";
+import { Providers } from "../GlobalRedux/provider";
 
 
 const layout = ({children}) => {
     return (
         <div>
-        <DashbordSidebar>
-            {children}
-        </DashbordSidebar>
+        <Providers>
+            <DashbordSidebar>
+                {children}
+            </DashbordSidebar>
+        </Providers>
         </div>
     );
 }

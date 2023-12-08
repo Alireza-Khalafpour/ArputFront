@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
 import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DetailsOutlined, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
-import { Autocomplete, Box, Button, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, TextField, Tooltip } from "@mui/material";
+import { Alert, Autocomplete, Box, Button, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, Snackbar, TextField, Tooltip } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
@@ -18,9 +18,17 @@ export const CreateCategory = ()=> {
 
     const cookie = new Cookies();
 
+    const Auth = cookie.get('tokenDastResi')
+
+    const [message, setMessage] = useState();
+    const [alert, setAlert] = useState(false);
+    const [errorAlert, setErrorAlert] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const [data, setData] = useState([])
     const [featureList, setFeatureList] = useState([])
     const [addFeature, setAddFeatures] = useState([])
+    const [featureIds, setFeatureIds] = useState([])
     const [addCategName, setAddCategName] = useState("")
 
 
@@ -40,6 +48,8 @@ export const CreateCategory = ()=> {
         });
     }
 
+    
+
     async function FeatureListApi(Au) {
       
       await axios.get('https://supperapp-backend.chbk.run/features_sample/list', {
@@ -50,7 +60,6 @@ export const CreateCategory = ()=> {
         })
         .then((response) => {
           setFeatureList(response.data.data)
-          console.log(response.data.data)
         })
         .catch((error) => {
           console.log(error, "Error");
@@ -58,35 +67,40 @@ export const CreateCategory = ()=> {
     }
 
     useEffect(() => {
+      setFeatureIds(addFeature.map((i) => i.feature_data.id))
+    },[addFeature])
+
+    useEffect(() => {
       const Auth = cookie.get('tokenDastResi')
       ListApi(Auth);
       FeatureListApi(Auth);
-      AddCategoryApi(Auth);
     },[])
     
+    // -------------------------------------------------------
 
-
-    let formData = new FormData();
-
-    formData.append('name', addCategName); 
-    formData.append('features', addFeature);
+    const headers ={
+    'accept': 'application/json',
+    'Authorization': `Bearer ${Auth}`,
+    'Content-Type': 'application/json',
+    }
   
   
-    async function AddCategoryApi(Au) {
+    async function AddCategoryApi() {
       // setLoading(true);
-      await axios.post('https://supperapp-backend.chbk.run/category/create', formData , {
-        'accept': 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiJ2dBQUFBQUJsYkg4UGd3WjEwOU1fWDZmY3JTcHp5SHctUUJ6Qy1LbmVDQklzQU5JXzF1WmZMUnRleWpSM2pOaEJCZlhXUkRMWk5jWWVYS0NmZ1ZQd2hxLW9CRk9TMWhNRHpxYzNpWkt5dzdQcHNpc2FQSVgwU2FhZmhSbG9Ob0YtMXJtamlGeVowaEl1JyJ9.Gq-FYZymVwoibx122Hb84XupnmY0wuyNbyiNid4nvFk',
-        'Content-Type': 'application/json',
+      await axios.post('https://supperapp-backend.chbk.run/category/create', {'name': addCategName, 'features':featureIds}, {
+          headers: headers
         })
         .then((response) => {
-          // setAlert(true)
-          console.log(response, "javabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
-          // setMessage(" خوش آمدید ")
-          // setLoading(false)
+          setAlert(true)
+          setMessage(" دسته بندی جدید با موفقیت افزوده شد ")
+          setLoading(false)
+          setAddCategoryModal(false)
+          ListApi(Auth)
         })
         .catch(function (error) {
           console.log(error, "Error");
+          setMessage(" متاسفیم،خطایی رخ داده است ")
+          setErrorAlert(true)
           setLoading(false)
         });
   
@@ -114,7 +128,6 @@ export const CreateCategory = ()=> {
         accessorKey: 'id',
         id: 'id',
       },
-
     ],
     []
   );
@@ -198,7 +211,6 @@ const table = useMaterialReactTable({
 
     return (
 
-
       <div>
 
         <MaterialReactTable table={table}/>
@@ -254,7 +266,7 @@ const table = useMaterialReactTable({
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4" >
             <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddCategoryApi()}>
-               ثبت
+              {loading ? <CircularProgress size="medium" /> : " ثبت "}
             </Button>
             <Button variant="soft" color='danger'  onClick={() => setAddCategoryModal(false)}>
               انصراف
@@ -262,6 +274,26 @@ const table = useMaterialReactTable({
           </DialogActions>
         </ModalDialog>
       </Modal>
+
+      <Snackbar
+      open={alert}
+      autoHideDuration={4000}
+      onClose={() => setAlert(false)}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      se
+    >
+      <Alert variant='filled' severity='success' className='text-lg text-white font-semibold' > {message} </Alert>
+    </Snackbar>
+
+    <Snackbar
+      open={errorAlert}
+      autoHideDuration={4000}
+      onClose={() => setErrorAlert(false)}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      se
+    >
+      <Alert variant='filled' severity='error' className='text-lg text-white font-semibold' > {message} </Alert>
+    </Snackbar>
 
 
       </div>

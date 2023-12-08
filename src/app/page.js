@@ -1,4 +1,6 @@
-import Carousel from "@/components/module/Carousel";
+'use client'
+
+import Example from "@/components/module/carousel";
 import ProductSwiper from "@/components/templates/ProductSwiper";
 
 
@@ -9,11 +11,11 @@ export default function Home() {
 
       <div className="flex flex-col gap-8 p-8" >
 
+        <div>
+          <Example/>
+        </div>
 
-        {/* <div className="w-[75%] h-[5vh] my-40 " >
-          <Carousel  />
-        </div> */}
-        <div className="w-[75%] h-[5vh] " >
+        <div className="w-[80%] h-[5vh] " >
           <ProductSwiper/>
         </div>
 

@@ -1,6 +1,7 @@
 // import { ThemeProvider, createTheme, experimental_sx as sx, } from '@mui/material';
 import Header from '@/components/layout/Header'
 import './globals.css'
+import { Providers } from './GlobalRedux/provider'
 
 
 export const metadata = {
@@ -28,8 +29,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fa" >
       <body>
-        <Header/>
-          {children}
+        <Providers>
+          <Header/>
+            {children}
+        </Providers>
       </body>
     </html>
   )

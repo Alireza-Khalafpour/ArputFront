@@ -67,7 +67,7 @@ export default function SignInPage() {
       })
       .catch(function (error) {
         console.log(error, "Error");
-        setMessage(error.response.data.detail)
+        setMessage( error.response.data.detail)
         setErrorAlert(true)
         setLoading(false)
       });

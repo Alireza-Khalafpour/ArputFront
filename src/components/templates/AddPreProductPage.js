@@ -14,59 +14,54 @@ import { CheckRounded, CloudUpload, Delete, Edit, Numbers, ProductionQuantityLim
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Autocomplete, Checkbox, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Slider, TextField } from '@mui/material';
+import Cookies from 'universal-cookie';
 
 
 
-
-// select part for first step ----------------
-const options = [
-    { value: '1', label: 'سرامیک' },
-    { value: '2', label: 'کاشی' },
-    { value: '3', label: 'تایل' },
-  ];
-  
-  function renderValue(option) {
-    if (!option) {
-      return null;
-    }
-  
-    return (
-      <>
-        <ListItemDecorator>
-          <Edit/>
-        </ListItemDecorator>
-        {option.label}
-      </>
-    );
-  }
 
 
 
 const AddPreProductPage = () => {
 
-    // API PART *******************************************************************************************
+    const cookie = new Cookies();
 
-    // Get Category API ---------------------
-    useEffect(() => {
-        axios.get('https://supperapp-backend.chbk.run/category/list',{
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiJ2dBQUFBQUJsWUZ1aFZ3OXU3VHBITmpjdlVmVHdnMXR0XzBGdXNDX2t6RjRid1ViaWZoRC0wS3NUUTFNN3UzZUhDT3Ixa2F3V1ZnSTZQS1U1djM5dXpuRkZObXFUc0xPcDlpbVdKQkpfakJicTBnejZfaDJteko5Um1aMXYxZ3k0TWVIeElmU3R6bV9PJyJ9.Mv6mAsHHvrPgAWie0K96vsBGicTk0KFNHGgMFflxDR0'
-              }
+    const [categoryList, setcategoryList] = useState([])
+    const [addCateg, setaddCategs] = useState()
+    const [CategoryId, setCategoryId] = useState([])
+    const [preProductName, setPreProductName] = useState("")
+    const [width, setWidth] = useState(0)
+    const [height, setHeight] = useState(0)
+    const [weight, setWeight] = useState(0)
+
+console.log(addCateg,"addCateg")
+console.log(preProductName, "prepname")
+
+    // Get Category API -------------------------------------------
+
+    async function categoryListApi(Au) {
+        
+        await axios.get('https://supperapp-backend.chbk.run/category/list', {
+        headers:{
+            'accept': 'application/json',
+            'Authorization': `Bearer ${Au}`,
+        }
         })
         .then((response) => {
-            console.log(response , "Categories");
+            setcategoryList(response?.data.data)
         })
-        .catch(function (error) {
-            console.log(error, "error categories");
-        })
+        .catch((error) => {
+            console.log(error, "Error");
+        });
+    }
 
+    useEffect(() => {
+        const Auth = cookie.get('tokenDastResi')
+        categoryListApi(Auth);
     },[])
 
 
-    //STATES AND FUNCTIONS PART ****************************************************************************
 
-    //Category select step--------------------------
+    //Steps-------------------------------------------
     const [activeStep, setActiveStep] = useState(0);
 
     const handleNext = () => {
@@ -81,22 +76,51 @@ const AddPreProductPage = () => {
       setActiveStep(0);
     };
 
-    // Pre-product Input information ----------------
-    const [value, setValue] = useState(0);
+    // width - height - weight --------------------------------------------
 
-    const handleSliderChange = (event, newValue) => {
-      setValue(newValue);
+    const handleWidthChange = (event, newValue) => {
+      setWidth(newValue);
     };
   
-    const handleInputChange = (event) => {
-      setValue(event.target.value === '' ? 0 : Number(event.target.value));
+    const handleInputWidthChange = (event) => {
+      setWidth(event.target.value === '' ? 0 : Number(event.target.value));
     };
+
+    const handleHeightChange = (event, newValue) => {
+        setHeight(newValue);
+      };
+    
+      const handleInputHeightChange = (event) => {
+        setHeight(event.target.value === '' ? 0 : Number(event.target.value));
+      };
+
+      const handleWeightChange = (event, newValue) => {
+        setWeight(newValue);
+      };
+    
+      const handleInputWeightChange = (event) => {
+        setWeight(event.target.value === '' ? 0 : Number(event.target.value));
+      };
   
-    const handleBlur = () => {
-      if (value < 0) {
-        setValue(0);
+    const handleBlur1 = () => {
+      if (width < 0) {
+        setWidth(0);
       }
     };
+
+    const handleBlur2 = () => {
+        if (height < 0) {
+          setHeight(0);
+        }
+      };
+
+      const handleBlur3 = () => {
+        if (weight < 0) {
+          setWeight(0);
+        }
+      };
+
+    // ----------------------------------------------------
 
     // Add image and Name for pre-product-------------
     const [image, setImage] = useState([])
@@ -133,33 +157,17 @@ const AddPreProductPage = () => {
                         </StepLabel>
                         <StepContent>
                             <div className='w-full flex flex-row gap-2 justify-around items-center my-8'>
-                                <Select
-                                    defaultValue="1"
-                                    slotProps={{
-                                        listbox: {
-                                        sx: {
-                                            '--ListItemDecorator-size': '44px',
-                                        },
-                                        },
-                                    }}
-                                    sx={{
-                                        '--ListItemDecorator-size': '44px',
-                                        minWidth: '160px',
-                                    }}
-                                    renderValue={renderValue}
-                                    >
-                                    {options.map((option, index) => (
-                                        <div key={option.value}>
-                                        {index !== 0 ? <ListDivider role="none" inset="startContent" /> : null}
-                                        <Option value={option.value} label={option.label}>
-                                            <ListItemDecorator>
-                                                <StackedBarChart/>
-                                            </ListItemDecorator>
-                                            {option.label}
-                                        </Option>
-                                        </div>
-                                    ))}
-                                </Select>
+                            <Autocomplete
+                                className="md:w-[28%] w-[90%]"
+                                noOptionsText=" داده ای موحود نیست "
+                                options={categoryList}
+                                getOptionLabel={(i)=> i.name}
+                                onChange={(event, val) =>{
+                                setaddCategs(val);
+                                }}
+                                // sx={{ width:"190px"}}
+                                renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن دسته بندی " />}
+                            />
 
                                 <FormControl>
                                     <InputLabel htmlFor="input-with-icon-adornment">
@@ -168,6 +176,8 @@ const AddPreProductPage = () => {
                                     <Input
                                         className='p-1'
                                         id="input-with-icon-adornment"
+                                        value={preProductName}
+                                        onChange={(e) => setPreProductName(e.target.value)}
                                         startAdornment={
                                             <InputAdornment className='mx-2' position="start">
                                                 <ProductionQuantityLimits />
@@ -206,8 +216,8 @@ const AddPreProductPage = () => {
                                     </Grid>
                                     <Grid item xs>
                                     <Slider
-                                        value={typeof value === 'number' ? value : 0}
-                                        onChange={handleSliderChange}
+                                        value={typeof width === 'number' ? width : 0}
+                                        onChange={handleWidthChange}
                                         aria-labelledby="input-slider"
                                         max={500}
                                         min={0}
@@ -215,10 +225,10 @@ const AddPreProductPage = () => {
                                     </Grid>
                                     <Grid item>
                                     <Input
-                                        value={value}
-                                        size="small"
-                                        onChange={handleInputChange}
-                                        onBlur={handleBlur}
+                                        value={width}
+                                        size="medium"
+                                        onChange={handleInputWidthChange}
+                                        onBlur={handleBlur1}
                                         inputProps={{
                                         step: 1,
                                         min: 0,
@@ -243,8 +253,8 @@ const AddPreProductPage = () => {
                                     </Grid>
                                     <Grid item xs>
                                     <Slider
-                                        value={typeof value === 'number' ? value : 0}
-                                        onChange={handleSliderChange}
+                                        value={typeof height === 'number' ? height : 0}
+                                        onChange={handleHeightChange}
                                         aria-labelledby="input-slider"
                                         max={500}
                                         min={0}
@@ -252,10 +262,10 @@ const AddPreProductPage = () => {
                                     </Grid>
                                     <Grid item>
                                     <Input
-                                        value={value}
+                                        value={height}
                                         size="small"
-                                        onChange={handleInputChange}
-                                        onBlur={handleBlur}
+                                        onChange={handleInputHeightChange}
+                                        onBlur={handleBlur2}
                                         inputProps={{
                                         step: 1,
                                         min: 0,
@@ -279,8 +289,8 @@ const AddPreProductPage = () => {
                                     </Grid>
                                     <Grid item xs>
                                     <Slider
-                                        value={typeof value === 'number' ? value : 0}
-                                        onChange={handleSliderChange}
+                                        value={typeof weight === 'number' ? weight : 0}
+                                        onChange={handleWeightChange}
                                         aria-labelledby="input-slider"
                                         max={50}
                                         min={0}
@@ -289,10 +299,10 @@ const AddPreProductPage = () => {
                                     <Grid item>
                                     <Input
                                         prefix='Kg'
-                                        value={value}
+                                        value={weight}
                                         size="small"
-                                        onChange={handleInputChange}
-                                        onBlur={handleBlur}
+                                        onChange={handleInputWeightChange}
+                                        onBlur={handleBlur3}
                                         inputProps={{
                                         step: 1,
                                         min: 0,

@@ -13,9 +13,11 @@ import { Tab as BaseTab } from '@mui/base/Tab';
 import lottie from "lottie-web";
 import { defineElement } from "@lordicon/element";
 import StepperModule from '../module/Stepper';
-import { Button, FormControl, IconButton, InputAdornment, OutlinedInput, TextField, Typography } from '@mui/material';
+import { Alert, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Snackbar, TextField, Typography } from '@mui/material';
 import { AccountCircle, MobileFriendly, Visibility, VisibilityOff } from '@mui/icons-material';
+import axios from 'axios';
 import OtpInput from '../module/OtpInput';
+import { useSelector } from 'react-redux';
 
 
 
@@ -23,7 +25,18 @@ import OtpInput from '../module/OtpInput';
 
 export default function SignUpPage() {
 
-  const steps = [' شماره همراه ', ' کد ارسالی ', ' تکمیل ثبت نام '];
+  const steps = [' شماره همراه ', ' تکمیل ثبت نام '];
+
+  const [message, setMessage] = useState();
+  const [alert, setAlert] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
+  const [loading, setLoading] = useState(false)
+
+  // otp part-------------------------------------------------------
+
+  const Otp = useSelector((state) => state.counter.Otp)
+
+// -------------------------------------------------------------------
 
 
   const handleSubmit = (event) => {
@@ -56,6 +69,75 @@ export default function SignUpPage() {
 
   const [activeStep, setActiveStep] = React.useState(0);
 
+  const [phoneNum, setPhoneNum] = useState("")
+
+
+  const handleNextOtp = () => {
+
+    if(phoneNum !== "") {
+
+      setLoading(true);
+      axios.post('https://supperapp-backend.chbk.run/register/otp',{"phone": phoneNum }, {
+        'accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        })
+        .then((response) => {
+          if(response.data.Done === true){
+            setMessage(" کد با موفقیت ارسال شد ")
+            setAlert(true)
+            setTimeout(() => {
+              setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            }, 1200);
+          }
+        })
+        .catch(function (error) {
+          console.log(error, "Error");
+          setMessage(" مشکلی پیش آمده است! ")
+  
+        });
+
+    }else{
+
+      setMessage(" شماره همراه خود را وارد کنید ")
+      setErrorAlert(true)
+
+    }
+
+  };
+
+  const handleNextCodeValidation = () => {
+
+    if(phoneNum !== "") {
+
+    setLoading(true);
+    axios.post('https://supperapp-backend.chbk.run/register/otp',{"phone": phoneNum }, {
+      'accept': 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+      })
+      .then((response) => {
+        if(response.data.Done === true){
+          setMessage(" کد با موفقیت ارسال شد ")
+          setAlert(true)
+          setTimeout(() => {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          }, 1200);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, "Error");
+        setMessage(" مشکلی پیش آمده است! ")
+
+      });
+
+      }else{
+
+        setMessage(" شماره همراه خود را وارد کنید ")
+        setErrorAlert(true)
+
+      }
+
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -79,11 +161,6 @@ export default function SignUpPage() {
       <div className='w-full h-screen flex justify-center items-center' >
         <div className='flex flex-col gap-10 justify-center items-center max-w-7xl md:w-[60vw] w-full md:h-[80vh] h-full min-w-7xl shadow-[0_35px_60px_-12px_rgba(0,0,0,0.65)] bg-[#EEF0F0] rounded-2xl p-8' >
 
-        {/* <div>
-          <h1> ایجاد حساب کاربری </h1>
-          <h4> اطلاعات </h4>
-        </div> */}
-
         <div style={{direction:"ltr"}} className='md:w-[45vw] w-full' >
           <StepperModule activeStep={activeStep} />
         </div>
@@ -96,11 +173,13 @@ export default function SignUpPage() {
               <div className='flex flex-col justify-center items-center' > 
                 {
                   activeStep === 0 &&(
-                    <Grid className=' w-full my-8' >
+                    <Grid className=' w-full my-8 flex flex-col gap-3 ' >
                       <TextField
                           size="medium"
                           className="w-full"
                           fullWidth
+                          value={phoneNum}
+                          onChange={(e) => setPhoneNum(e.target.value)}
                           placeholder=" شماره همراه "
                           sx={{
                               "& .MuiOutlinedInput-root": {
@@ -114,83 +193,81 @@ export default function SignUpPage() {
                               </InputAdornment>
                             ),
                           }}
-                      />
+                          />
+
                     </Grid>
 
-                  )
+)
                 }
                 {
                   activeStep === 1 &&(
                     <Grid className=' w-full my-8' >
                       <OtpInput/>
-                    </Grid>
 
-                  )
-                }
-                {
-                  activeStep === 2 &&(
-                    <Grid className=' w-full text-center my-8' >
-                      <FormControl
-                        margin='normal' 
-                        className=' mb-8'
-                        sx={{
-                            "& .MuiOutlinedInput-root": {
-                              "& > fieldset": { borderColor: "black" },
-                            },
-                          }} 
-                    >
-                        <OutlinedInput
-                            size="small"
-                            placeholder='رمز عبور'
-                            id="outlined-adornment-password"
-                            type={!showPassword ? 'password' :'text' }
-                            
-                            endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                                >
-                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                            </InputAdornment>
-                            }
-                            label="رمز عبور"
-                            margin='normal'
-                        />
-                      </FormControl>
-                      <FormControl
-                        margin='normal' 
-                        className=' mb-8'
-                        sx={{
-                            "& .MuiOutlinedInput-root": {
-                              "& > fieldset": { borderColor: "black" },
-                            },
-                          }} 
-                    >
-                        <OutlinedInput
-                            size="small"
-                            placeholder=' تکرار رمز عبور ' 
-                            id="outlined-adornment-password"
-                            type={!showPassword ? 'password' :'text' }
-                            
-                            endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                                >
-                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                            </InputAdornment>
-                            }
-                            label="رمز عبور"
-                            margin='normal'
-                        />
-                      </FormControl>
+                      <Grid className=' w-full text-center my-8' >
+                        <FormControl
+                          margin='normal' 
+                          className=' mb-8'
+                          sx={{
+                              "& .MuiOutlinedInput-root": {
+                                "& > fieldset": { borderColor: "black" },
+                              },
+                            }} 
+                      >
+                          <OutlinedInput
+                              size="small"
+                              placeholder='رمز عبور'
+                              type={!showPassword ? 'password' :'text' }
+                              
+                              endAdornment={
+                              <InputAdornment position="end">
+                                  <IconButton
+                                  onClick={handleClickShowPassword}
+                                  onMouseDown={handleMouseDownPassword}
+                                  edge="end"
+                                  >
+                                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                                  </IconButton>
+                              </InputAdornment>
+                              }
+                              label="رمز عبور"
+                              margin='normal'
+                          />
+                        </FormControl>
+                        <FormControl
+                          margin='normal' 
+                          className=' mb-8'
+                          sx={{
+                              "& .MuiOutlinedInput-root": {
+                                "& > fieldset": { borderColor: "black" },
+                              },
+                            }} 
+                      >
+                          <OutlinedInput
+                              size="small"
+                              placeholder=' تکرار رمز عبور ' 
+                              type={!showPassword ? 'password' :'text' }
+                              
+                              endAdornment={
+                              <InputAdornment position="end">
+                                  <IconButton
+                                  aria-label="toggle password visibility"
+                                  onClick={handleClickShowPassword}
+                                  onMouseDown={handleMouseDownPassword}
+                                  edge="end"
+                                  >
+                                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                                  </IconButton>
+                              </InputAdornment>
+                              }
+                              label="رمز عبور"
+                              margin='normal'
+                          />
+                        </FormControl>
+                      </Grid>
+
+
+
                     </Grid>
 
                   )
@@ -199,27 +276,28 @@ export default function SignUpPage() {
               <Grid className='sm:w-28 w-[50vw] text-center' >
 
                 {
-                  activeStep!==2 &&(
+                  activeStep===0 &&(
                   <button
-                    onClick={handleNext}
+                    onClick={ () => handleNextOtp()}
+                    className='text-white p-2 w-full bg-gradient-to-r from-asliDark to-asliLight hover:from-asliLight hover:to-asliDark transition-colors duration-500 rounded-full'
+                    >
+                       ارسال کد
+                  </button>
+                  )
+                }
+
+                {
+                  activeStep===1 &&(
+                  <button
+                    onClick={() => handleNextCodeValidation()}
                     className='text-white p-2 w-full bg-gradient-to-r from-asliDark to-asliLight hover:from-asliLight hover:to-asliDark transition-colors duration-500 rounded-full'
                     type="button"
                     >
-                      {activeStep === 0 && ' ارسال کد '} 
                       {activeStep === 1 && ' تایید '} 
                   </button>
                   )
                 }
-                {
-                  activeStep===2 &&(
-                  <button
-                    className='text-white p-2 w-full bg-gradient-to-r from-asliDark to-asliLight hover:from-asliLight hover:to-asliDark transition-colors duration-500 rounded-full'
-                    type="button"
-                    >
-                      ایجاد حساب
-                  </button>
-                  )
-                }
+
 
 
                 {
@@ -228,16 +306,7 @@ export default function SignUpPage() {
                     onClick={handleBack}
                     className='gap-1 hover:gap-3 transition-all duration-200 mt-4 hover:text-indigo-600'
                   >
-                    <span>{"<<"}</span> مرحله قبل
-                  </button>
-                  )
-                }
-                {activeStep ===2 && (
-                    <button
-                    onClick={handleBack}
-                    className='gap-1 hover:gap-3 transition-all duration-200 mt-4 hover:text-indigo-600'
-                  >
-                    <span>{"<<"}</span> مرحله قبل
+                    <span>{"<<"}</span>  اصلاح شماره
                   </button>
                   )
                 }
@@ -253,6 +322,27 @@ export default function SignUpPage() {
         </div>
 
       </div>
+
+
+        <Snackbar
+          open={alert}
+          autoHideDuration={2500}
+          onClose={() => setAlert(false)}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          se
+        >
+          <Alert variant='filled' severity='success' className='text-lg text-white font-semibold' > {message} </Alert>
+        </Snackbar>
+
+        <Snackbar
+          open={errorAlert}
+          autoHideDuration={2500}
+          onClose={() => setErrorAlert(false)}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          se
+        >
+          <Alert variant='filled' severity='error' className='text-lg text-white font-semibold' > {message} </Alert>
+        </Snackbar>
     
 
 

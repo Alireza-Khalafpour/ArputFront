@@ -16,15 +16,15 @@ const ProductSwiper = () => {
       <h1 className='border-b border-khas font-bold text-lg' > کاشی و سرامیک </h1>
       <br />
       <Swiper
-        className='!flex !flex-row !relative'
+        className='!block'
         // modules={[Navigation, Pagination, A11y]}
         spaceBetween={1}
         breakpoints={{
           480: { slidesPerView: 2 },
           740: { slidesPerView: 3 },
-          1275: { slidesPerView: 8 },
+          1275: { slidesPerView: 7 },
         }}
-
+        
       >
 
           <SwiperSlide

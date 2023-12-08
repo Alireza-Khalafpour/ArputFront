@@ -1,9 +1,13 @@
 'use client'
+import { OtpCode } from "@/app/GlobalRedux/Features/counter/CounterSlice";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const OtpInput = () => {
 
     const [otp, setOtp] = useState(new Array(4).fill(""));
+
+    const dispatch = useDispatch();
 
     // const handleBackSpace = (e) => {
     //     console.log(e.key, "key")
@@ -24,7 +28,7 @@ const OtpInput = () => {
              element.target.nextSibling.focus();
         }
 
-        console.log(otp.join(""))
+        dispatch(OtpCode(otp.join("")))
     }
 
 

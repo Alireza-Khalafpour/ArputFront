@@ -3,16 +3,19 @@
 
 import { AddCircleOutlined, AddOutlined, CurrencyExchangeRounded, DeleteForeverOutlined, DetailsOutlined, FireTruckOutlined, FireTruckRounded, HdrPlus, History, PostAddRounded, RefreshOutlined } from "@mui/icons-material";
 import { MaterialReactTable } from "material-react-table";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import ContextMenu from "@/utils/ContextMenu";
 import { Filter, Filter1Rounded, FilterAlt, Search } from "@mui/icons-material";
 import { Button, Input } from "@mui/joy";
 import Link from "next/link";
 import { Divider } from "@mui/material";
+import Cookies from "universal-cookie";
+import axios from "axios";
 
 const PreProductListPage = () => {
     
+    const cookie = new Cookies();
     
     
     
@@ -37,7 +40,7 @@ const PreProductListPage = () => {
     
     const contextMenuOptions = [
     {
-    label: ' ارسال محموله ',
+    label: ' ایجاد محصول ',
     icon: (
     <FireTruckOutlined
     sx={{
@@ -70,7 +73,33 @@ const PreProductListPage = () => {
     onClick: () => alert("dbkjdfbk"),
     },
     ];
-    
+
+
+    // pre-product list API --------------------------------------------
+
+    useEffect(() => {
+        const Auth = cookie.get('tokenDastResi')
+        PreProductListApi(Auth);
+    },[])
+
+
+    async function PreProductListApi(Au) {
+      
+        await axios.get('https://supperapp-backend.chbk.run/PreProduct/list/all', {
+          headers:{
+            'accept': 'application/json',
+            'Authorization': `Bearer ${Au}`,
+          }
+          })
+          .then((response) => {
+            console.log(response)
+          })
+          .catch((error) => {
+            console.log(error, "Error");
+          });
+      }
+
+
     
     
     // columns and data =============================================

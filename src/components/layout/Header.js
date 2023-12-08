@@ -105,8 +105,9 @@ export default function Header() {
                 :
                 (
                 
-                  <IconButton color="inherit">
-                      <LoginOutlined onClick={() => window.location.replace("/signin")} className='w-7 h-7'  />
+                  <IconButton className='text-base border-2 rounded-xl border-white text-paszamine1' onClick={() => window.location.replace("/signin")} >
+                      ورود / ثبت نام
+                      <LoginOutlined className='w-7 h-7'  />
                   </IconButton>
 
                 

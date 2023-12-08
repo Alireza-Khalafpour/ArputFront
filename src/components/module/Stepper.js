@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
 
-const steps = [' شماره همراه ', ' ارسال کد ', ' ایجاد حساب  '];
+const steps = [' شماره همراه ', ' ایجاد حساب  '];
 
 export default function StepperModule({activeStep}) {
 
@@ -20,8 +20,8 @@ export default function StepperModule({activeStep}) {
           const labelProps = {};
 
           return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
+            <Step className='gap-3' key={label} {...stepProps}>
+              <StepLabel className='mx-1 gap-2'  {...labelProps}> {label}</StepLabel>
             </Step>
           );
         })}

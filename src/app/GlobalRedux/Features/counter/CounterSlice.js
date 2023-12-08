@@ -16,6 +16,7 @@ import { useState } from "react"
 
 const initialState ={
     items: [],
+    Otp:"",
 }
 
 export const counterSlice = createSlice({
@@ -60,11 +61,14 @@ export const counterSlice = createSlice({
             )
 
             state.items = nextCartItem
-        }
+        },
+        OtpCode: (state, action) => {
+            state.Otp = action.payload
+        },
     }
 
 })
 
-export const {increment, decrement, addCart, removeCart} = counterSlice.actions;
+export const {increment, decrement, addCart, removeCart, OtpCode} = counterSlice.actions;
 
 export default counterSlice.reducer

@@ -18,7 +18,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { Accordion, AccordionSummary } from '@mui/material';
-import { AddRounded, CalendarViewWeekOutlined, CheckCircleRounded, ExpandMore, FeaturedPlayListOutlined, Home, HourglassBottomOutlined, ListAltOutlined, ManageAccountsOutlined, ManageSearchRounded, Payment, ShoppingBasket } from '@mui/icons-material';
+import { AddRounded, CalendarViewWeekOutlined, CheckCircleRounded, ExpandMore, Factory, FactoryOutlined, FeaturedPlayListOutlined, Home, HourglassBottomOutlined, ListAltOutlined, ManageAccountsOutlined, ManageSearchRounded, Payment, ShoppingBasket } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import NotAllowedPage from './NotAllowedPage';
@@ -150,18 +150,35 @@ export default function DashbordSidebar({children}) {
                       ایجاد و لیست دسته بندی ها  
                     <ListAltOutlined className='text-khas'/>
                 </Link>
-                <Link href="/dashboard/done-orders" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                <Link href="/dashboard/CreateFeature" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
                       ایحاد و لیست ویژگی ها    
                     <FeaturedPlayListOutlined className='text-khas'/>
                 </Link>
-                <Link href="/dashboard/done-orders" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
-                      ایجاد و لیست سمپل ها    
-                    <CalendarViewWeekOutlined className='text-khas'/>
+                <Link href="/dashboard/create-factory" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                      ایحاد و لیست کارخانه ها    
+                    <FactoryOutlined className='text-khas'/>
                 </Link>
               </Accordion>
             </ListItem>
 
 
+            <Divider className='bg-slate-500' />
+
+                <ListItem  disablePadding >
+                  <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
+                    <AccordionSummary
+                      expandIcon={<ExpandMore style={{color:"white"}} />}
+                      className='hover:bg-slate-700 rounded-lg'
+                    >
+                      <Typography>  مدیریت نمایندگی ها </Typography>
+                    </AccordionSummary>
+                    <Link  href="/dashboard/add-pre-product" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                        ایجاد و لیست نمایندگی ها
+                        <AddRounded className='text-khas'/>
+                    </Link>
+                  </Accordion>
+                </ListItem>
+            
             <Divider className='bg-slate-500' />
 
             <ListItem  disablePadding >
@@ -173,11 +190,11 @@ export default function DashbordSidebar({children}) {
                   <Typography>  محصولات </Typography>
                 </AccordionSummary>
                 <Link  href="/dashboard/add-pre-product" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
-                    ایجاد محصول
+                    ایجاد پیش محصول
                     <AddRounded className='text-khas'/>
                 </Link>
                 <Link  href="/dashboard/pre-product-list" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
-                    لیست محصولات
+                    لیست پیش محصولات
                     <ManageSearchRounded className='text-khas'/>
                 </Link>
                 <Link href="/dashboard/my-products"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >

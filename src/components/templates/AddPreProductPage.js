@@ -27,16 +27,22 @@ const AddPreProductPage = () => {
 
     const [categoryList, setcategoryList] = useState([])
     const [addCateg, setaddCategs] = useState()
-    const [CategoryId, setCategoryId] = useState([])
     const [preProductName, setPreProductName] = useState("")
     const [width, setWidth] = useState(0)
     const [height, setHeight] = useState(0)
     const [weight, setWeight] = useState(0)
+    // ----------
+    const [CategoryIdsForCheckbox, setCategoryIdsForCheckbox] = useState([])
+    const [finalSampleFeatureIds, setFinalSampleFeatureIds] = useState([])
+    const [sampleOptions, setSampleOptions] = useState([])
 
-console.log(addCateg,"addCateg")
-console.log(preProductName, "prepname")
+    useEffect(() => {
+        setCategoryIdsForCheckbox(addCateg?.features.map((i) => i.id ))
+    },[addCateg])
 
-    // Get Category API -------------------------------------------
+
+
+    // Get Category and Sample API -------------------------------------------
 
     async function categoryListApi(Au) {
         
@@ -54,9 +60,26 @@ console.log(preProductName, "prepname")
         });
     }
 
+    async function sampleListApi(Au) {
+        
+        await axios.get('https://supperapp-backend.chbk.run/features_sample/list', {
+        headers:{
+            'accept': 'application/json',
+            'Authorization': `Bearer ${Au}`,
+        }
+        })
+        .then((response) => {
+            setSampleOptions(response?.data.data)
+        })
+        .catch((error) => {
+            console.log(error, "Error");
+        });
+    }
+
     useEffect(() => {
         const Auth = cookie.get('tokenDastResi')
         categoryListApi(Auth);
+        sampleListApi(Auth)
     },[])
 
 
@@ -66,6 +89,13 @@ console.log(preProductName, "prepname")
 
     const handleNext = () => {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    const handleNextFeatureSample = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        let arr = finalSampleFeatureIds.filter(item => typeof item === "object");
+        setFinalSampleFeatureIds(arr)
+        console.log(finalSampleFeatureIds, "finalllyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
     };
   
     const handleBack = () => {
@@ -141,6 +171,24 @@ console.log(preProductName, "prepname")
         e.preventDefault();
         setImage(e.dataTransfer.files)
     }
+
+    // Checked Features and samples ----------------------------------------------------------------
+
+    function ToggleFeatures(e, i) {
+        console.log(e)
+        console.log(i)
+        if(e === true && typeof e === 'boolean') {
+            setFinalSampleFeatureIds([...finalSampleFeatureIds,{'feature_id': CategoryIdsForCheckbox[i], 'sample_id':''}])
+        }
+        if(typeof e === 'string'){
+            setFinalSampleFeatureIds([...finalSampleFeatureIds,finalSampleFeatureIds[i].sample_id = e])
+        }
+        console.log(finalSampleFeatureIds, "finalllllllllllllll")
+    }
+
+
+
+
   
     return (
         <div className='w-full flex flex-col justify-center items-center gap-4' >
@@ -345,44 +393,29 @@ console.log(preProductName, "prepname")
 
                             <div className='flex flex-col justify-around items-center gap-6 w-full my-5' >
 
-                                <div className=" flex flex-row justify-between mx-5 items-center p-3 w-[80%] gap-4 bg-paszamine1 rounded-lg border-asliLight border" >
 
-                                <FormControlLabel control={<Checkbox />} label=" نام برند " />
+                                    {
+                                        addCateg?.features.map((i, index) => (
+                                            <div className=" flex flex-row justify-between mx-5 items-center p-3 w-[80%] gap-4 bg-paszamine1 rounded-lg border-asliLight border" >
 
+                                                <FormControlLabel control={<Checkbox  onChange={(e) => ToggleFeatures(e.target.checked, index)} />} label={i.name}  />
 
-                                    <Autocomplete
-                                        className='w-1/2 bg-white'
-                                        multiple
-                                        size='small'
-                                        noOptionsText=" موردی یافت نشد "
-                                        limitTags={2}
-                                        options={[{title:"کاشان"}]}
-                                        getOptionLabel={(option) => option.title}
-                                        defaultValue={[]}
-                                        renderInput={(params) => (
-                                            <TextField {...params} label=" انتخاب سمپل " placeholder="انتخاب کنید" />
-                                        )}
-                                    />
-                                </div>
-                                <div className=" flex flex-row justify-between mx-5 items-center p-3 w-[80%] gap-4 bg-paszamine1 rounded-lg border-asliLight border" >
+                                                <Autocomplete
+                                                    className='w-1/2 bg-white'
+                                                    size='small'
+                                                    noOptionsText=" موردی یافت نشد "
+                                                    options={sampleOptions.filter((s) => s.feature_data.id === i.id)}
+                                                    getOptionLabel={(option) =>  option.sample_data.main}
+                                                    onChange={(e, val) => ToggleFeatures(val.sample_data.id, index)}
+                                                    renderInput={(params) => (
+                                                        <TextField {...params} label=" انتخاب سمپل " placeholder="انتخاب کنید" />
+                                                    )}
+                                                />
+                                            </div>
+                                        ))
+                                    }
 
-                                    <FormControlLabel control={<Checkbox />} label=" نوع لعاب " />
-
-
-                                        <Autocomplete
-                                            className='w-1/2 bg-white'
-                                            multiple
-                                            size='small'
-                                            noOptionsText=" موردی یافت نشد "
-                                            limitTags={2}
-                                            options={[{title:"ساده"},{title:"طرح دار"}]}
-                                            getOptionLabel={(option) => option.title}
-                                            defaultValue={[]}
-                                            renderInput={(params) => (
-                                                <TextField {...params} label=" انتخاب سمپل " placeholder="انتخاب کنید" />
-                                            )}
-                                        />
-                                </div>
+                                
 
                             </div>
 
@@ -390,7 +423,7 @@ console.log(preProductName, "prepname")
                                 <div className='flex flex-row gap-3 w-full justify-end'>
                                     <button
                                         className='w-24 p-2 rounded-2xl bg-asliLight hover:bg-sky-600 text-white'
-                                        onClick={handleNext}
+                                        onClick={handleNextFeatureSample}
                                     >
                                     ادامه
                                     </button>

@@ -9,11 +9,11 @@ import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { Avatar, ListDivider, ListItemDecorator, Option, Select, Sheet } from '@mui/joy';
+import { Avatar, CircularProgress, ListDivider, ListItemDecorator, Option, Select, Sheet } from '@mui/joy';
 import { CheckRounded, CloudUpload, Delete, Edit, Numbers, ProductionQuantityLimits, ScaleRounded, StackedBarChart, StraightenRounded } from '@mui/icons-material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Autocomplete, Checkbox, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Slider, TextField } from '@mui/material';
+import { Alert, Autocomplete, Checkbox, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Slider, Snackbar, TextField } from '@mui/material';
 import Cookies from 'universal-cookie';
 
 
@@ -31,10 +31,18 @@ const AddPreProductPage = () => {
     const [width, setWidth] = useState(0)
     const [height, setHeight] = useState(0)
     const [weight, setWeight] = useState(0)
+    const [isPublic, setIsPublic] = useState(true)
     // ----------
     const [CategoryIdsForCheckbox, setCategoryIdsForCheckbox] = useState([])
     const [finalSampleFeatureIds, setFinalSampleFeatureIds] = useState([])
     const [sampleOptions, setSampleOptions] = useState([])
+    const [imgUrl, setImgUrl] = useState()
+    // ----------
+    const [message, setMessage] = useState();
+    const [alert, setAlert] = useState(false);
+    const [errorAlert, setErrorAlert] = useState(false);
+    const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
         setCategoryIdsForCheckbox(addCateg?.features.map((i) => i.id ))
@@ -95,7 +103,6 @@ const AddPreProductPage = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         let arr = finalSampleFeatureIds.filter(item => typeof item === "object");
         setFinalSampleFeatureIds(arr)
-        console.log(finalSampleFeatureIds, "finalllyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
     };
   
     const handleBack = () => {
@@ -153,15 +160,16 @@ const AddPreProductPage = () => {
     // ----------------------------------------------------
 
     // Add image and Name for pre-product-------------
-    const [image, setImage] = useState([])
+    const [imageL, setImage] = useState()
     const[fileName, setFileName] = useState("فایلی انتخاب نشده...")
   
     const DeleteImg = () => {
       setFileName("فایلی انتخاب نشده...")
-      setImage([])
+      setImage()
+      setImgUrl()
     }
 
-    // Draf and Drop image ---------------------------
+    // Drag and Drop image ---------------------------
 
     function DragHandler(e){
         e.preventDefault();
@@ -169,7 +177,7 @@ const AddPreProductPage = () => {
 
     function DropHandler(e){
         e.preventDefault();
-        setImage(e.dataTransfer.files)
+        setImage(e.dataTransfer.files[0])
     }
 
     // Checked Features and samples ----------------------------------------------------------------
@@ -183,8 +191,86 @@ const AddPreProductPage = () => {
         if(typeof e === 'string'){
             setFinalSampleFeatureIds([...finalSampleFeatureIds,finalSampleFeatureIds[i].sample_id = e])
         }
-        console.log(finalSampleFeatureIds, "finalllllllllllllll")
     }
+
+    // Upload Texture---------------------------------------------------------------------------------
+
+    const Auth = cookie.get('tokenDastResi')
+
+    const headers ={
+        'accept': 'application/json',
+        'Authorization': `Bearer ${Auth}`,
+        'Content-Type': ' multipart/form-data',
+        }
+
+    const formData = new FormData();
+
+    async function handleImageUpload() {
+
+        formData.append("file", imageL);
+
+        // setLoading(true);
+        await axios.post('https://supperapp-backend.chbk.run/upload/upload_texture', formData,
+        {
+          headers: headers
+        })
+        .then((response) => {
+            console.log(response)
+            setImgUrl(response?.data.address)
+            // setLoading(false)
+        })
+        .catch((error) => {
+          console.log(error, "Error");
+        //   setLoading(false)
+        });
+
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    // handle add pre-product ------------------------------------------------------------------------
+
+    const mainHeaders ={
+        'accept': 'application/json',
+        'Authorization': `Bearer ${Auth}`,
+        'Content-Type': 'application/json',
+        }
+
+    async function handleAddPreProduct() {
+
+        setLoading(true);
+        await axios.post('https://supperapp-backend.chbk.run/PreProduct/create', {
+            "category_id": addCateg.id,
+            "info": {
+              "weight": weight,
+              "width": width,
+              "height": height
+            },
+            "features": finalSampleFeatureIds,
+            "image_url": imgUrl,
+            "name": preProductName,
+            "is_public": isPublic,
+            "factory_id": "656756a2bfd41679b43f1102",
+            "only_in_Representation": []
+        },
+        {
+          headers: mainHeaders
+        })
+        .then((response) => {
+            console.log(response, "addddd preeeee product**********")
+            if(response.status === 200 && response.data.Done === true) {
+                setAlert(true)
+                setMessage(" پیش محصول جدید با موفقیت افزوده شد ")
+            }
+            setLoading(false)
+        })
+        .catch((error) => {
+          console.log(error, "Error");
+          setMessage(" متاسفیم،خطایی رخ داده است ")
+          setErrorAlert(true)
+          setLoading(false)
+        });
+
+    };
 
 
 
@@ -210,6 +296,7 @@ const AddPreProductPage = () => {
                                 noOptionsText=" داده ای موحود نیست "
                                 options={categoryList}
                                 getOptionLabel={(i)=> i.name}
+                                value={addCateg}
                                 onChange={(event, val) =>{
                                 setaddCategs(val);
                                 }}
@@ -224,6 +311,7 @@ const AddPreProductPage = () => {
                                     <Input
                                         className='p-1'
                                         id="input-with-icon-adornment"
+                                        required
                                         value={preProductName}
                                         onChange={(e) => setPreProductName(e.target.value)}
                                         startAdornment={
@@ -453,6 +541,7 @@ const AddPreProductPage = () => {
                                     onClick={() => document.getElementById("fileInput").click()}
                                     onDragOver={(e) => DragHandler(e)}
                                     onDrop={(e) => DropHandler(e)} 
+
                                     className='flex flex-col justify-center items-center border-2 cursor-pointer border-dashed border-asliLight w-64 h-44 rounded-3xl hover:animate-pulse' 
                                 >
                                 <input 
@@ -461,16 +550,14 @@ const AddPreProductPage = () => {
                                     multiple 
                                     hidden 
                                     accept='image/*'
-                                    onChange={({target: {files}}) =>{
-                                    files[0] && setFileName(files[0].name)
-                                    if(files){
-                                        setImage(URL.createObjectURL(files[0]))
-                                    } 
-                                    }           
+                                    onChange={ (e) =>{
+                                        setImage(e.target.files[0])
+                                        setFileName(e.target.files[0].name)
+                                    }
                                     }
                                 />
-                                {image.length!==0 ?
-                                    <img className='w-full h-full p-1 rounded-3xl' src={image} alt="تکسچر محصول"  />
+                                {imageL ?
+                                    <img className='w-full h-full p-1 rounded-3xl' src={imageL} alt="تکسچر محصول"  />
                                     :
                                     <div className='text-center'>
                                     <CloudUpload className='text-3xl text-asliLight'/>
@@ -489,10 +576,43 @@ const AddPreProductPage = () => {
                             <div>
                                 <div className='flex flex-row gap-3 w-full justify-end'>
                                     <button
-                                        className='w-32 p-2 rounded-2xl bg-khas hover:bg-orange-500 text-white hover:font-semibold transition-all duration-100'
-                                        // onClick={handleNext}
+                                        className='w-24 p-2 rounded-2xl bg-asliLight hover:bg-sky-600 text-white'
+                                        onClick={handleImageUpload}
                                     >
-                                      <CheckRounded/> ثبت کالا 
+                                    ادامه
+                                    </button>
+                                    <button
+                                    className='p-2 rounded-2xl  hover:bg-red-400 hover:text-white '
+                                    disabled={activeStep === 0}
+                                    onClick={handleBack}
+                                    >
+                                    بازگشت
+                                    </button>
+                                </div>
+                            </div>
+                        </StepContent>
+                    </Step>
+                    <Step className='border-b-4 py-3' >
+                        <StepLabel>
+                            <div className='text-xl font-bold text-right' >
+                                گام پنجم: وضعیت دسترسی پیش محصول        
+                            </div>
+                        </StepLabel>
+                        <StepContent className='flex flex-col gap-12 p-3 m-5' >
+
+                            <div className='flex flex-row justify-around items-center gap-6 w-full my-5' >
+                                
+                                <FormControlLabel checked={isPublic} onChange={() => setIsPublic(!isPublic) } control={<Checkbox defaultChecked />} label=" قابل استفاده برای همه " />
+
+                            </div>
+
+                            <div>
+                                <div className='flex flex-row gap-3 w-full justify-end'>
+                                    <button
+                                        className='w-32 p-2 rounded-2xl bg-khas hover:bg-orange-500 text-white hover:font-semibold transition-all duration-100'
+                                        onClick={handleAddPreProduct}
+                                    >
+                                        {loading ? <CircularProgress size="medium" /> : " ثبت پیش محصول" }
                                     </button>
                                     <button
                                     className='p-2 rounded-2xl  hover:bg-red-400 hover:text-white '
@@ -506,14 +626,23 @@ const AddPreProductPage = () => {
                         </StepContent>
                     </Step>
                 </Stepper>
-                {/* {activeStep === steps.length && (
-                <Paper square elevation={0} sx={{ p: 3 }}>
-                    <Typography>All steps completed - you&apos;re finished</Typography>
-                    <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-                    Reset
-                    </Button>
-                </Paper>
-                )} */}
+                <Snackbar
+                    open={alert}
+                    autoHideDuration={4000}
+                    onClose={() => setAlert(false)}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    >
+                    <Alert variant='filled' severity='success' className='text-lg text-white font-semibold' > {message} </Alert>
+                    </Snackbar>
+
+                    <Snackbar
+                    open={errorAlert}
+                    autoHideDuration={4000}
+                    onClose={() => setErrorAlert(false)}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    >
+                    <Alert variant='filled' severity='error' className='text-lg text-white font-semibold' > {message} </Alert>
+                </Snackbar>
             </div>
 
         </div>

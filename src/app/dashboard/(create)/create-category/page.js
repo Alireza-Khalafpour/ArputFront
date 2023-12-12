@@ -3,13 +3,13 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DetailsOutlined, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
+import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, EditRounded, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, Snackbar, TextField, Tooltip } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import ContextMenu from "@/utils/ContextMenu";
-import { ModalDialog } from "@mui/joy";
+import { CircularProgress, ModalDialog } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
 
 
@@ -30,6 +30,8 @@ export const CreateCategory = ()=> {
     const [addFeature, setAddFeatures] = useState([])
     const [featureIds, setFeatureIds] = useState([])
     const [addCategName, setAddCategName] = useState("")
+
+    const [DeleteCategoryIds, setDeleteCategoryIds] = useState()
 
 
     async function ListApi(Au) {
@@ -106,7 +108,46 @@ export const CreateCategory = ()=> {
   
     }
 
-      
+    // Update a category -----------------------------------------
+
+
+    // Delete a category -----------------------------------------
+
+    async function DeleteCategoryApi() {
+      setLoading(true);
+      await axios.delete('https://supperapp-backend.chbk.run/category/delete', {'ids':DeleteCategoryIds}, {
+          headers: headers
+        })
+        .then((response) => {
+          console.log(response)
+          setAlert(true)
+          setMessage(" دسته بندی حذف شد ")
+          setLoading(false)
+          ListApi(Auth)
+        })
+        .catch((error) => {
+          console.log(error, "Error");
+          setMessage(" متاسفیم،خطایی رخ داده است ")
+          setErrorAlert(true)
+          setLoading(false)
+        });
+  
+    }
+
+    const [DeleteCategName, setDeleteCategName] = useState("")
+
+    const GetRowIdForDelete = (row) => {
+      setDeleteCategoryIds([row.original.id])
+      setDeleteCategName(row.original.name)
+      setDeleteCategoryModal(true)
+      console.log(row)
+    }
+
+    const OmitRowIdForDelete = () => {
+      setDeleteCategoryIds([])
+      setDeleteCategoryModal(false)
+    }
+
 
 
 
@@ -146,6 +187,8 @@ const table = useMaterialReactTable({
   columnResizeMode:true,
   enableStickyHeader: true,
   enableStickyFooter: true,
+  enableRowActions: true,
+  renderRowActionMenuItems: true,
   muiTableBodyCellProps:{
     sx:{
       align: 'right',
@@ -195,12 +238,28 @@ const table = useMaterialReactTable({
       </Box>
     );
   },
+  renderRowActions: ({ row, table }) => {
+    return (
+      <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+        <IconButton
+          color="secondary"
+        >
+          <EditRounded />
+        </IconButton>
+        <IconButton
+          color="error"
+          onClick={() => GetRowIdForDelete(row)}
+        >
+          <DeleteRounded />
+        </IconButton>
+      </Box>
+    )
+  }
 });
 
   // modal part -------------------------------------------------------------
   const[addCategoryModal, setAddCategoryModal] = useState(false);
-  const[count, setCount] = useState(0);
-  const[price, setPrice] = useState(0);
+  const[deleteCategoryModal, setDeleteCategoryModal] = useState(false);
   const [image, setImage] = useState([])
   const[fileName, setFileName] = useState("فایلی انتخاب نشده...")
 
@@ -275,6 +334,31 @@ const table = useMaterialReactTable({
         </ModalDialog>
       </Modal>
 
+      <Modal open={deleteCategoryModal} onClose={() => OmitRowIdForDelete()}>
+        <ModalDialog variant="outlined" role="definition" className="p-0" >
+          <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
+             حذف دسته بندی
+          </DialogTitle>
+          <Divider />
+          <DialogContent className="flex flex-col justify-center items-center gap-10" >           
+
+            <div className='w-full flex flex-row justify-around items-center' >
+                <h2> آیااز حذف  <span className="font-semibold text-khas " > {DeleteCategName} </span> اطمینان دارید؟ </h2>
+            </div>
+
+
+          </DialogContent>
+          <DialogActions className="p-4 flex flex-row gap-4" >
+            <Button className='text-white bg-red-500 hover:bg-red-600 w-28' onClick={() => DeleteCategoryApi()}>
+              {loading ? <CircularProgress size="medium" /> : " حذف "}
+            </Button>
+            <Button variant="soft" color='danger'  onClick={() => OmitRowIdForDelete()}>
+              انصراف
+            </Button>
+          </DialogActions>
+        </ModalDialog>
+      </Modal>
+
       <Snackbar
       open={alert}
       autoHideDuration={4000}
@@ -304,102 +388,3 @@ const table = useMaterialReactTable({
 }
 
 export default CreateCategory;
-
-
-
-
-
-
-//       <MaterialReactTable
-//           // muiTableBodyCellProps={({ row }) => ({
-//           //     onContextMenu: (e) => handleContextMenu(e, row),
-//           //   })}
-//             renderTopToolbarCustomActions={({ table }) => {
-//               return (
-//                   <div className="flex gap-5">
-//                   <Button
-//                       className="bg-khas hover:bg-orange-500"
-//                       // onClick={handleClickAction}
-//                       variant="contained"
-//                   >
-//                       <AddCircleOutline />
-//                       افزودن دسته بندی جدید
-//                   </Button>
-
-//                   </div>
-//               );
-//             }}
-//           displayColumnDefOptions={{
-//           'mrt-row-actions': {
-//               muiTableHeadCellProps: {
-//               align: 'center',
-//               },
-//               size: 120,
-//           },
-//           }}
-//           enableGrouping
-//           initialState={{
-//             expanded: true,
-//             grouping: ['name']
-//           }}
-//           filterFromLeafRows= {true} //apply filtering to all rows instead of just parent rows
-//           paginateExpandedRows= {false}
-//           columns={columns}
-//           data={data}
-//           enableRowSelection // enable some features
-//           enableColumnOrdering
-//           enableGlobalFilter // turn off a feature
-//           enableRowActions
-//           manualPagination
-//           manualFiltering
-//           enableColumnResizing
-//           enableMultiRowSelection
-//           enableRowNumbers
-//           rowNumberMode="original"
-//           enableStickyHeader
-//           enableStickyFooter
-//           muiTableContainerProps={{
-//           sx: { maxHeight: '63vh',width: '98vw'},
-//           }}
-//           enableFullScreenToggle={false}
-//           positionActionsColumn="last"
-//           positionToolbarAlertBanner="none"
-//           localization={mrtLocalizationFa}
-//           getRowId={(originalRow) => originalRow.receiptChequeItemId}
-//           // onRowSelectionChange={setRowSelection}
-//           // onGlobalFilterChange={setGlobalFilter}
-//           // onColumnFiltersChange={setColumnFilters}
-//           // state={{
-//           // pagination,
-//           // columnFilters,
-//           // rowSelection,
-//           // showColumnFilters,
-//           // }} 
-//           // pass our managed row selection state to the table to use
-//           muiTableHeadCellProps={{
-//           sx: {
-//               fontWeight: '800',
-//               fontSize: '14px',
-//               backgroundColor: '#ECEFF1',
-//               alignItems: 'center',
-//               background: '#1D9BF0',
-//               borderRight: '1px solid rgba(224,224,224,1)',
-//               color: 'white',
-//           },
-//           }}
-//           muiTableBodyProps={{
-//           sx: {
-//               '& tr:nth-of-type(odd)': {
-//               backgroundColor: '#e6f9ff',
-//               },
-//               width: '100%',
-//           },
-//           }}
-//       />
-
-
-
-
-
-
-

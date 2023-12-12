@@ -3,8 +3,8 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DetailsOutlined, Edit, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
-import { Alert, Autocomplete, Box, Button, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, Snackbar, TextField, Tooltip } from "@mui/material";
+import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, Edit, EditRounded, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
+import { Alert, Autocomplete, Box, Button, CircularProgress, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, Snackbar, TextField, Tooltip } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
@@ -27,6 +27,7 @@ export const CreateFeature = ()=> {
     const [featureList, setFeatureList] = useState([])
     const [featureName, setFeatureName] = useState("")
     const [addFeatureType, setAddFeatureType] = useState("")
+    const [featureId, setFeatureId] = useState("")
 
 
     async function ListApi(Au) {
@@ -109,33 +110,38 @@ export const CreateFeature = ()=> {
 
     const [editFeatureModal, setEditFeatureModal] = useState(false)
 
-    const EditFeature = () => {
+    const EditFeature = (row) => {
 
-      console.log(contextMenuRowData)
+      // console.log(contextMenuRowData)
+      console.log(row)
 
-      setAddFeatureType(contextMenuRowData.original.name)
-      setFeatureName(contextMenuRowData.original.main)
+      setAddFeatureType(row?.original.name )
+      setFeatureName(row?.original.main)
+      setFeatureId(row?.original.id)
+
 
 
       setEditFeatureModal(true)
     }
 
 
-
-    async function EditFeatureApi(Au) {
-      // setLoading(true);
-      await axios.post('https://supperapp-backend.chbk.run/features/update', formData , {
+    // Edit Feature Part ----------------------------------------------
+    async function EditFeatureApi() {
+      setLoading(true);
+      await axios.put('https://supperapp-backend.chbk.run/features/update', { 
+        'name': addFeatureType, 'main': featureName, 'others': [], "id": "string","active": true } 
+      , {
         headers: headers
         })
         .then((response) => {
-          // setAlert(true)
           console.log(response)
-          // setMessage(" خوش آمدید ")
-          // setLoading(false)
+          setAlert(true)
+          setMessage(" ویژگی به روزرسانی شد ")
+          setLoading(false)
         })
         .catch(function (error) {
           console.log(error, "Error");
-        //   setLoading(false)
+          setLoading(false)
         });
   
     }
@@ -204,68 +210,79 @@ export const CreateFeature = ()=> {
   );
 
 
-const table = useMaterialReactTable({
-  columns,
-  data,
-  localization: mrtLocalizationFa,
-  columnResizeMode:true,
-  enableStickyHeader: true,
-  enableStickyFooter: true,
-  muiTableBodyCellProps:{
-    sx:{
-      align: 'right',
-      textAlign:'right',
-    }
-  },
-  muiTableHeadCellProps:{
-    sx:{
-      textAlign:"right",
-      fontWeight: '600',
-      fontSize: '14px',
-      backgroundColor: '#ECEFF1',
-      alignItems: 'center',
-      background: '#1D9BF0',
-      borderRight: '1px solid rgba(224,224,224,1)',
-      color: 'white',
-    }
-  },
-  muiTableContainerProps: { sx: { maxHeight: '500px' } },
-
-  muiTableBodyCellProps: ({ row }) => ({
-    onContextMenu: (e) => handleContextMenu(e, row),
-  }),
-
-  renderTopToolbar: ({ table }) => {
-
-    return (
-      <Box
-        sx={() => ({
-          display: 'flex',
-          gap: '0.5rem',
-          p: '8px',
-          justifyContent: 'space-between',
-        })}
-      >
-        <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          {/* import MRT sub-components */}
-          <MRT_GlobalFilterTextField table={table} />
-          <MRT_ToggleFiltersButton table={table} />
-        </Box>
-        <Box>
-          <Box sx={{ display: 'flex', gap: '0.5rem' }}>
-            <button
-              className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
-              onClick={() => setAddFeatureModal(true)}
-            >
-               ویژگی جدید <AddCircleOutline/> 
-            </button>
+  const table = useMaterialReactTable({
+    columns,
+    data,
+    localization: mrtLocalizationFa,
+    columnResizeMode:true,
+    enableStickyHeader: true,
+    enableStickyFooter: true,
+    enableRowActions: true,
+    renderRowActionMenuItems: true,
+    muiTableBodyCellProps:{
+      sx:{
+        align: 'right',
+        textAlign:'right',
+      }
+    },
+    muiTableHeadCellProps:{
+      sx:{
+        textAlign:"right",
+        fontWeight: '600',
+        fontSize: '14px',
+        backgroundColor: '#ECEFF1',
+        alignItems: 'center',
+        background: '#1D9BF0',
+        borderRight: '1px solid rgba(224,224,224,1)',
+        color: 'white',
+      }
+    },
+    muiTableContainerProps: { sx: { maxHeight: '500px' } },
+  
+    renderTopToolbar: ({ table }) => {
+  
+      return (
+        <Box
+          sx={() => ({
+            display: 'flex',
+            gap: '0.5rem',
+            p: '8px',
+            justifyContent: 'space-between',
+          })}
+        >
+          <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            {/* import MRT sub-components */}
+            <MRT_GlobalFilterTextField table={table} />
+            <MRT_ToggleFiltersButton table={table} />
+          </Box>
+          <Box>
+            <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+              <button
+                className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
+                onClick={() => setAddFeatureModal(true)}
+              >
+                 ویژگی جدید <AddCircleOutline/> 
+              </button>
+            </Box>
           </Box>
         </Box>
-      </Box>
-    );
-  },
-});
-
+      );
+    },
+    renderRowActions: ({ row, table }) => {
+      return (
+        <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+          <IconButton
+            color="secondary"
+            title="ویرایش ویژگی"
+            onClick={() => EditFeature(row)}
+          >
+            <EditRounded />
+          </IconButton>
+        </Box>
+      )
+    }
+  });
+  
   // modal part -------------------------------------------------------------
   const[addFeatureModal, setAddFeatureModal] = useState(false);
   const[count, setCount] = useState(0);
@@ -395,8 +412,8 @@ const table = useMaterialReactTable({
 
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4" >
-            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddFeatureApi()}>
-               ویرایش
+            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => EditFeatureApi()}>
+            {loading ? <CircularProgress className="text-black" size="medium" /> : " ویرایش "}
             </Button>
             <Button variant="soft" color='danger'  onClick={() => setAddFeatureModal(false)}>
               انصراف

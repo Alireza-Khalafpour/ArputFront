@@ -256,12 +256,20 @@ const AddPreProductPage = () => {
           headers: mainHeaders
         })
         .then((response) => {
-            console.log(response, "addddd preeeee product**********")
             if(response.status === 200 && response.data.Done === true) {
                 setAlert(true)
                 setMessage(" پیش محصول جدید با موفقیت افزوده شد ")
+                setLoading(false)
+                setTimeout(() => {
+                    window.location.reload()
+                }, 2000);
+            }else{
+                setMessage(" متاسفیم،خطایی رخ داده است ")
+                setErrorAlert(true)
+                setTimeout(() => {
+                    window.location.reload()
+                }, 2000);
             }
-            setLoading(false)
         })
         .catch((error) => {
           console.log(error, "Error");

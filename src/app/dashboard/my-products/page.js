@@ -1,39 +1,58 @@
 'use client'
 
 import axios from "axios";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DetailsOutlined, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
-import { Autocomplete, Box, Button, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, TextField, Tooltip } from "@mui/material";
+import { AddCircleOutline, AddCircleRounded, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DetailsOutlined, FilterAlt, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, Search, TableRowsRounded } from "@mui/icons-material";
+import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, InputAdornment, Modal, Slide, TextField, Tooltip } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import ContextMenu from "@/utils/ContextMenu";
-import { ModalDialog } from "@mui/joy";
+import { Input, ModalDialog, Textarea } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
+import Image from "next/image";
 
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 
 export const MyProducts = ()=> {
 
     const cookie = new Cookies();
 
+    const Auth = cookie.get('tokenDastResi')
+
     const [data, setData] = useState([])
-    const [featureList, setFeatureList] = useState([])
-    const [addFeature, setAddFeatures] = useState([])
-    const [addCategName, setAddCategName] = useState("")
+
+    const [openDetail, setOpenDetail] = useState(false);
+    const [info, setInfo] = useState([])
+    const [features, setFeatures] = useState([])
+    const [imageUrl, setImageUrl] = useState()
+    // add product states----------------------------
+    const [productName, setProductName] = useState('');
+    const [preProductId, setPreProductId] = useState('');
+    const [price, setPrice] = useState(0);
+    const [off, setOff] = useState(0);
+    const [postCost, setPostCost] = useState(0);
+    const [description, setDescription] = useState("");
+    const [productImgUrls, setProductImgUrls] = useState([]);
+    
 
 
     async function ListApi(Au) {
       
-      await axios.get('https://supperapp-backend.chbk.run/Product/', {
+      await axios.get('https://supperapp-backend.chbk.run/PreProduct/list/all', {
         headers:{
           'accept': 'application/json',
+          'Authorization': `Bearer ${Au}`,
         }
         })
         .then((response) => {
-          setData(response.data.data)
-          console.log(response)
+          setData(response.data.Data)
+          console.log(response,"bashe mane")
         })
         .catch((error) => {
           console.log(error, "Error");
@@ -45,13 +64,55 @@ export const MyProducts = ()=> {
       const Auth = cookie.get('tokenDastResi')
       ListApi(Auth);
     },[])
+
+    // Add product Api -------------------------------------------------------
+
+      const headers ={
+        'accept': 'application/json',
+        'Authorization': `Bearer ${Auth}`,
+        'Content-Type': 'application/json',
+        }
+      
+        const formData = new FormData();
+
+        formData.append("name", productName);
+        formData.append("pre_product", preProductId);
+        formData.append("price", price);
+        formData.append("off", off);
+        formData.append("cost_post", postCost);
+        formData.append("description", description);
+        formData.append("image_urls", productImgUrls);
+      
+        async function AddProductApi() {
+          // setLoading(true);
+          await axios.post('https://supperapp-backend.chbk.run/Product/create', {
+            formData
+          }, {
+              headers: headers
+            })
+            .then((response) => {
+              console.log(response)
+              // setAlert(true)
+              // setMessage(" دسته بندی جدید با موفقیت افزوده شد ")
+              // setLoading(false)
+              // setAddCategoryModal(false)
+              ListApi(Auth)
+            })
+            .catch(function (error) {
+              console.log(error, "Error");
+              setMessage(" متاسفیم،خطایی رخ داده است ")
+              // setErrorAlert(true)
+              // setLoading(false)
+            });
+      
+        }
     
 
   // columns and data =============================================
   const columns = useMemo(
     () => [
       {
-        header: ' نام ',
+        header: ' نام پیش محصول ',
         accessorKey: 'name',
         id: 'name',
       },
@@ -60,23 +121,39 @@ export const MyProducts = ()=> {
         accessorKey: 'category_name',
         id: 'category_name',
       },
-      {
-        header: ' قیمت ',
-        accessorKey: 'price',
-        id: 'price',
-        Cell: ({ cell }) => <span>{e2p(cell.getValue().toLocaleString())}</span>,
-      },
-      {
-        header: ' تخفیف ',
-        accessorKey: 'off',
-        id: 'off',
-        Cell: ({ cell }) => <span>{e2p(cell.getValue())}</span>,
-      },
+      
+      // {
+      //   header: ' قیمت ',
+      //   Cell: ({ cell }) => <span>{e2p(cell.getValue().toLocaleString())}</span>,
+      // },
+      // {
+      //   header: ' تخفیف ',
+      //   Cell: ({ cell }) => <span>{e2p(cell.getValue())}</span>,
+      // },
 
     ],
     []
   );
 
+  // --------------------------------------
+
+  const handleCloseDetail = () => {
+    setOpenDetail(false)
+  }
+
+  const handleDetailModal = (row) => {
+    console.log(row)
+    setInfo(row.original.info)
+    setFeatures(row.original.features)
+    setImageUrl(row.original.image_url)
+    setOpenDetail(true)
+  }
+
+  const handleAddProductModal = (row) => {
+    console.log(row)
+    setAddProductModal(true)
+    setPreProductId(row.original.pre_product_id)
+  }
 
 const table = useMaterialReactTable({
   columns,
@@ -85,6 +162,7 @@ const table = useMaterialReactTable({
   columnResizeMode:true,
   enableStickyHeader: true,
   enableStickyFooter: true,
+  enableRowActions: true,
   muiTableBodyCellProps:{
     sx:{
       align: 'right',
@@ -104,7 +182,21 @@ const table = useMaterialReactTable({
     }
   },
   muiTableContainerProps: { sx: { maxHeight: '500px' } },
-  enableRowNumbers: true,
+  // renderRowActionMenuItems
+  renderRowActions: ({ row, table }) => {
+    return (
+      <div className="w-auto">
+        <IconButton
+          onClick={() => handleAddProductModal(row)}
+        >
+          <AddCircleRounded className="text-khas" />
+        </IconButton>
+        <Button onClick={() => handleDetailModal(row)} size="small" className="rounded-xl bg-khas hover:bg-orange-600 p-1 text-white font-semibold "  >
+          جزییات
+        </Button>
+      </div>
+    )
+  }
 
   // renderTopToolbar: ({ table }) => {
 
@@ -137,10 +229,8 @@ const table = useMaterialReactTable({
   // },
 });
 
-  // modal part -------------------------------------------------------------
-  const[addCategoryModal, setAddCategoryModal] = useState(false);
-  const[count, setCount] = useState(0);
-  const[price, setPrice] = useState(0);
+  // add image in modal part -------------------------------------------------------------
+  const[AddProductModal, setAddProductModal] = useState(false);
   const [image, setImage] = useState([])
   const[fileName, setFileName] = useState("فایلی انتخاب نشده...")
 
@@ -152,7 +242,24 @@ const table = useMaterialReactTable({
     return (
 
 
-      <div>
+      <div className="flex flex-col gap-4" >
+
+        <p className="text-paszamine3 py-4">  لیست پیش محصول ها | برای ایجاد محصول بر روی پیش محصول مورد نظر کلیک راست کنید یا دکمه " افزودن کالا " را بفشارید.  </p>
+
+        <Divider/>
+
+        {/* <div className="p-0 md:w-5/12 w-full flex flex-row" >
+          <button onClick={() => setOpenFilter(true)} className="rounded-lg bg-khas text-white p-0 rounded-l-none hover:bg-orange-500 flex flex-row-reverse justify-center items-center px-1 " >
+              فیلتر <FilterAlt/>
+          </button>
+          <Input
+              className="w-full rounded-none"
+              startDecorator={<Search />}
+              placeholder="جستجوی نام یا کد"
+              size="lg"
+          />
+          <Button size="md" className="bg-khas hover:bg-orange-500 w-28 rounded-r-none text-white font-semibold"> جستجو </Button>
+      </div> */}
 
         <MaterialReactTable table={table}/>
 
@@ -164,21 +271,22 @@ const table = useMaterialReactTable({
             options={contextMenuOptions}
         /> */}
 
-      <Modal open={addCategoryModal} onClose={() => setAddCategoryModal(false)}>
-        <ModalDialog variant="outlined" role="definition" className="w-[40vw] h-[65vh] p-0" >
+      <Modal open={AddProductModal} onClose={() => setAddProductModal(false)}>
+        <ModalDialog variant="outlined" role="definition" className="w-[50vw] h-[70vh] p-0" >
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
-             ایجاد دسته بندی جدید
+              افزودن کالا
           </DialogTitle>
           <Divider />
           <DialogContent className="flex flex-col justify-center items-center gap-10" >           
 
-            <div className='w-full flex flex-row justify-around items-center' >
+            <div className='w-[90%] grid grid-cols-2 gap-2 justify-center mx-auto items-center' >
               <TextField
                 id="input-with-icon-textfield"
-                label=" نام دسته بندی "
-                placeholder=" نام دسته بندی  "
-                value={addCategName}
-                onChange={(e) => setAddCategName(e.target.value)}
+                className="w-[65%]"
+                label=" نام کالا  "
+                placeholder=" نام کالا  "
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="end">
@@ -188,33 +296,132 @@ const table = useMaterialReactTable({
                 }}
                 variant="standard"
               />
-            
-              <Autocomplete
-                disablePortal
-                multiple
-                noOptionsText=" داده ای موحود نیست "
-                options={featureList}
-                getOptionLabel={(i)=> i.feature_data.name}
-                onChange={(event, val) =>{
-                  setAddFeatures([...val]);
+
+              <TextField
+                id="input-with-icon-textfield"
+                className="w-[65%]"
+                label=" قیمت "
+                placeholder=" قیمت "
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="end">
+                      <Category className='text-asliLight' />
+                    </InputAdornment>
+                  ),
                 }}
-                sx={{ width:"190px"}}
-                renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن ویژگی " />}
+                variant="standard"
               />
+
+              <TextField
+                id="input-with-icon-textfield"
+                className="w-[65%]"
+                label=" تخفبف "
+                placeholder=" تخفبف "
+                value={off}
+                onChange={(e) => setOff(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="end">
+                      <Category className='text-asliLight' />
+                    </InputAdornment>
+                  ),
+                }}
+                variant="standard"
+              />
+
+              <TextField
+                id="input-with-icon-textfield"
+                className="w-[65%]"
+                label=" هزینه ارسال "
+                placeholder=" هزینه ارسال "
+                value={postCost}
+                onChange={(e) => setPostCost(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="end">
+                      <Category className='text-asliLight' />
+                    </InputAdornment>
+                  ),
+                }}
+                variant="standard"
+              />
+
             </div>
+
+            <Textarea
+                id="input-with-icon-textfield"
+                className="w-full border-1 border-black"
+                label=" توضیحات "
+                placeholder=" توضیحات "
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="end">
+                      <Category className='text-asliLight' />
+                    </InputAdornment>
+                  ),
+                }}
+                variant="standard"
+              />
 
 
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4" >
-            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddCategoryApi()}>
-               ثبت
+            <Button onClick={() => AddProductApi()} className='text-white bg-khas hover:bg-orange-600 w-28'>
+               افزودن محصول
             </Button>
-            <Button variant="soft" color='danger'  onClick={() => setAddCategoryModal(false)}>
+            <Button variant="soft" color='danger'  onClick={() => setAddProductModal(false)}>
               انصراف
             </Button>
           </DialogActions>
         </ModalDialog>
       </Modal>
+
+      <Dialog
+        open={openDetail}
+        TransitionComponent={Transition}
+        keepMounted
+        fullWidth
+        onClose={handleCloseDetail}
+        aria-describedby="alert-dialog-slide-description"
+        className="rounded-xl shadow-lg"
+      >
+
+        <DialogContent>
+
+          <div className="flex flex-col mx-auto gap-4 w-full" >
+
+            <h2  className="p-2 rounded-2xl bg-sky-200" > اطلاعات جانبی </h2>
+            <div className="flex flex-row gap-1 justify-center items-center w-full" >
+
+                <div className="w-1/3" > <Image src={imageUrl} width={150} height={150} /> </div>
+                <div className="w-2/3  grid grid-cols-2 gap-4 " >
+
+                  <p>طول : {e2p(`${info.height}`)} سانتی متر  </p>
+                  <p>عرض: {e2p(`${info.width}`)} سانتی متر  </p>
+                  <p>وزن: {e2p(`${info.weight}`)} کیلوگرم  </p>
+
+                </div>
+            </div>
+
+            <h2 className="p-2 rounded-2xl bg-sky-200" > ویژگی ها </h2>
+
+
+            <div className="grid grid-cols-2 gap-4 justify-around items-center w-full" >
+
+              {features.map((x) => (
+                <p> {x.feature_name} : {x.main_feature} </p>
+              ))} 
+
+            </div>
+
+          </div>
+
+        </DialogContent>
+      </Dialog>
 
 
       </div>

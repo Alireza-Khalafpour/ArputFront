@@ -14,7 +14,7 @@ import { e2p } from "@/utils/replaceNumbers";
 
 
 
-export const CreateCategory = ()=> {
+export const AddRepresentation = ()=> {
 
     const cookie = new Cookies();
 
@@ -36,17 +36,18 @@ export const CreateCategory = ()=> {
 
     async function ListApi(Au) {
       
-      await axios.get('https://supperapp-backend.chbk.run/category/list', {
+      await axios.get('https://supperapp-backend.chbk.run/branch/list', {
         headers:{
           'accept': 'application/json',
           'Authorization': `Bearer ${Au}`,
         }
         })
         .then((response) => {
-          setData(response.data.data)
+            console.log(response)
+            setData(response.data.data)
         })
         .catch((error) => {
-          console.log(error, "Error");
+            console.log(error, "Error");
         });
     }
 
@@ -54,7 +55,7 @@ export const CreateCategory = ()=> {
 
     async function FeatureListApi(Au) {
       
-      await axios.get('https://supperapp-backend.chbk.run/features/list', {
+      await axios.get('https://supperapp-backend.chbk.run/features_sample/list', {
         headers:{
           'accept': 'application/json',
           'Authorization': `Bearer ${Au}`,
@@ -69,7 +70,7 @@ export const CreateCategory = ()=> {
     }
 
     useEffect(() => {
-      setFeatureIds(addFeature.map((i) => i.id))
+      setFeatureIds(addFeature.map((i) => i.feature_data.id))
     },[addFeature])
 
     useEffect(() => {
@@ -78,13 +79,14 @@ export const CreateCategory = ()=> {
       FeatureListApi(Auth);
     },[])
     
-    // add new category-------------------------------------------------------
+    // -------------------------------------------------------
 
     const headers ={
     'accept': 'application/json',
     'Authorization': `Bearer ${Auth}`,
     'Content-Type': 'application/json',
     }
+  
   
     async function AddCategoryApi() {
       // setLoading(true);
@@ -114,8 +116,7 @@ export const CreateCategory = ()=> {
 
     async function DeleteCategoryApi() {
       setLoading(true);
-      console.log(DeleteCategoryIds, "idsssssss")
-      await axios.delete('https://supperapp-backend.chbk.run/category/delete', {'ids':[DeleteCategoryIds]}, {
+      await axios.delete('https://supperapp-backend.chbk.run/category/delete', {'ids':DeleteCategoryIds}, {
           headers: headers
         })
         .then((response) => {
@@ -312,7 +313,7 @@ const table = useMaterialReactTable({
                 multiple
                 noOptionsText=" داده ای موحود نیست "
                 options={featureList}
-                getOptionLabel={(i)=> i.name}
+                getOptionLabel={(i)=> i.feature_data.name}
                 onChange={(event, val) =>{
                   setAddFeatures([...val]);
                 }}
@@ -387,4 +388,4 @@ const table = useMaterialReactTable({
     );
 }
 
-export default CreateCategory;
+export default AddRepresentation;

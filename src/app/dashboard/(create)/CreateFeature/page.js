@@ -29,6 +29,9 @@ export const CreateFeature = ()=> {
     const [addFeatureType, setAddFeatureType] = useState("")
     const [featureId, setFeatureId] = useState("")
 
+    
+    const [FeaturesData, setFeaturesData] = useState({name : "" , main: "", others:[] })
+
 
     async function ListApi(Au) {
       
@@ -85,7 +88,7 @@ export const CreateFeature = ()=> {
   
     async function AddFeatureApi() {
       // setLoading(true);
-      await axios.post('https://supperapp-backend.chbk.run/features/create', { 'name': addFeatureType, 'main': featureName, 'others': [] } , {
+      await axios.post('https://supperapp-backend.chbk.run/features/create', FeaturesData , {
           headers: headers
         })
         .then((response) => {
@@ -105,21 +108,39 @@ export const CreateFeature = ()=> {
     }
 
 
+    // Add Other Feature --------------------------------------
 
-    // Edit Feature ---------------------------------------------
+    const changeHandler = (e, index) => {
+      const {value} = e.target;
+      const List = [...FeaturesData['others']]
+      List[index] = value;
+      setFeaturesData({...FeaturesData, ['others'] : List})
+    }
+
+    const addHandler = () => {
+        setFeaturesData({...FeaturesData, 'others': [...FeaturesData['others'],'']})
+    }
+
+    const deleteHandler = (index) => {
+        const List = [...FeaturesData['others']]
+        List.splice(index, 1)
+        setFeaturesData({...FeaturesData, ['others']: List})
+    }
+
+
+    // update Features ---------------------------------------------
 
     const [editFeatureModal, setEditFeatureModal] = useState(false)
 
     const EditFeature = (row) => {
 
-      // console.log(contextMenuRowData)
-      console.log(row)
-
-      setAddFeatureType(row?.original.name )
-      setFeatureName(row?.original.main)
-      setFeatureId(row?.original.id)
-
-
+      setFeaturesData({
+        "name" : row?.original.name,
+        "main": row?.original.main,
+        "others":row?.original.others,
+        "id": row?.original.id,
+        "active": row.original.active
+      })
 
       setEditFeatureModal(true)
     }
@@ -128,16 +149,21 @@ export const CreateFeature = ()=> {
     // Edit Feature Part ----------------------------------------------
     async function EditFeatureApi() {
       setLoading(true);
-      await axios.put('https://supperapp-backend.chbk.run/features/update', { 
-        'name': addFeatureType, 'main': featureName, 'others': [], "id": "string","active": true } 
+      await axios.put('https://supperapp-backend.chbk.run/features/update',
+        FeaturesData
       , {
         headers: headers
         })
         .then((response) => {
-          console.log(response)
-          setAlert(true)
-          setMessage(" ویژگی به روزرسانی شد ")
-          setLoading(false)
+          console.log(response.data)
+          if(response.data.Done === true){
+            setAlert(true)
+            setMessage(" ویژگی به روزرسانی شد ")
+            setLoading(false)
+          }else if(response.data.message.length > 1){
+            setMessage(response.data.message)
+            setErrorAlert(true)
+          }
         })
         .catch(function (error) {
           console.log(error, "Error");
@@ -311,7 +337,7 @@ export const CreateFeature = ()=> {
         />
 
       <Modal open={addFeatureModal} onClose={() => setAddFeatureModal(false)}>
-        <ModalDialog variant="outlined" role="definition" className="w-[40vw] h-[65vh] p-0" >
+        <ModalDialog variant="outlined" role="definition" className="w-[50vw] h-[75vh] p-0" >
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
              ایجاد ویژگی جدید
           </DialogTitle>
@@ -323,8 +349,8 @@ export const CreateFeature = ()=> {
                 id="input-with-icon-textfield"
                 label=" نوع ویژگی "
                 placeholder=" نوع ویژگی  "
-                value={addFeatureType}
-                onChange={(e) => setAddFeatureType(e.target.value)}
+                value={FeaturesData.name}
+                onChange={(e) => setFeaturesData({...FeaturesData, 'name' : e.target.value})}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="end">
@@ -339,8 +365,8 @@ export const CreateFeature = ()=> {
                 id="input-with-icon-textfield"
                 label=" نام ویژگی "
                 placeholder=" نام ویژگی  "
-                value={featureName}
-                onChange={(e) => setFeatureName(e.target.value)}
+                value={FeaturesData.main}
+                onChange={(e) => setFeaturesData({...FeaturesData, 'main' : e.target.value})}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="end">
@@ -350,6 +376,38 @@ export const CreateFeature = ()=> {
                 }}
                 variant="standard"
               />
+            </div>
+
+            <div className="w-full flex flex-col justify-center items-center gap-3" >
+
+
+            {
+              FeaturesData["others"].map((i,index)=> (
+                    <div className="w-full text-center flex flex-row justify-center gap-4 items-center " >
+                        <TextField
+                          id="input-with-icon-textfield"
+                          label=" ویژگی های بیشتر "
+                          value={i}
+                          onChange={e => changeHandler(e, index)}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="end">
+                                <Category className='text-asliLight' />
+                              </InputAdornment>
+                            ),
+                          }}
+                          variant="standard"
+                        />
+                        <button className=" px-1 text-red-500 " type='button' onClick={() => deleteHandler(index)} >
+                            <DeleteForeverOutlined/>
+                        </button>
+                    </div>
+                ))
+            }
+            <button className="w-56 p-2 border-b-asliLight border-dashed border-b-2 hover:border-b-asliDark  " onClick={ () => addHandler()} > <AddRounded/> افزودن ویژگی های بیشتر </button>
+
+
+
             </div>
 
 
@@ -375,13 +433,13 @@ export const CreateFeature = ()=> {
           <Divider />
           <DialogContent className="flex flex-col justify-center items-center gap-10" >           
 
-            <div className='w-full flex flex-row justify-around items-center' >
+          <div className='w-full flex flex-row justify-around items-center' >
               <TextField
                 id="input-with-icon-textfield"
                 label=" نوع ویژگی "
                 placeholder=" نوع ویژگی  "
-                value={addFeatureType}
-                onChange={(e) => setAddFeatureType(e.target.value)}
+                value={FeaturesData.name}
+                onChange={(e) => setFeaturesData({...FeaturesData, 'name' : e.target.value})}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="end">
@@ -396,8 +454,8 @@ export const CreateFeature = ()=> {
                 id="input-with-icon-textfield"
                 label=" نام ویژگی "
                 placeholder=" نام ویژگی  "
-                value={featureName}
-                onChange={(e) => setFeatureName(e.target.value)}
+                value={FeaturesData.main}
+                onChange={(e) => setFeaturesData({...FeaturesData, 'main' : e.target.value})}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="end">
@@ -407,6 +465,38 @@ export const CreateFeature = ()=> {
                 }}
                 variant="standard"
               />
+            </div>
+
+            <div className="w-full flex flex-col justify-center items-center gap-3" >
+
+
+            {
+              FeaturesData["others"].map((i,index)=> (
+                    <div className="w-full text-center flex flex-row justify-center gap-4 items-center " >
+                        <TextField
+                          id="input-with-icon-textfield"
+                          label=" ویژگی های بیشتر "
+                          value={i}
+                          onChange={e => changeHandler(e, index)}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="end">
+                                <Category className='text-asliLight' />
+                              </InputAdornment>
+                            ),
+                          }}
+                          variant="standard"
+                        />
+                        <button className=" px-1 text-red-500 " type='button' onClick={() => deleteHandler(index)} >
+                            <DeleteForeverOutlined/>
+                        </button>
+                    </div>
+                ))
+            }
+            <button className="w-56 p-2 border-b-asliLight border-dashed border-b-2 hover:border-b-asliDark  " onClick={ () => addHandler()} > <AddRounded/> افزودن ویژگی های بیشتر </button>
+
+
+
             </div>
 
 

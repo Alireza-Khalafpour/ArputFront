@@ -14,10 +14,11 @@ import lottie from "lottie-web";
 import { defineElement } from "@lordicon/element";
 import StepperModule from '../module/Stepper';
 import { Alert, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Snackbar, TextField, Typography } from '@mui/material';
-import { AccountCircle, MobileFriendly, Visibility, VisibilityOff } from '@mui/icons-material';
+import { AccountCircle, LoopOutlined, MobileFriendly, Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 import OtpInput from '../module/OtpInput';
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 
 
@@ -36,25 +37,29 @@ export default function SignUpPage() {
 
   const Otp = useSelector((state) => state.counter.Otp)
 
-// -------------------------------------------------------------------
+
+  // password part---------------------------------------------------
+
+  const [password, setPassword] = useState()
+  const [ConfirmPassword, setConfirmPassword] = useState()
 
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  // -------------------------------------------------------------------
+
+
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+  //   console.log({
+  //     email: data.get('email'),
+  //     password: data.get('password'),
+  //   });
+  // };
 
 
   const [value, setValue] = useState(0);
   const [showPassword, setShowPassword] = React.useState(false);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
   
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -74,7 +79,7 @@ export default function SignUpPage() {
 
   const handleNextOtp = () => {
 
-    if(phoneNum !== "") {
+    if(phoneNum.length === 11 && phoneNum !== "") {
 
       setLoading(true);
       axios.post('https://supperapp-backend.chbk.run/register/otp',{"phone": phoneNum }, {
@@ -85,9 +90,7 @@ export default function SignUpPage() {
           if(response.data.Done === true){
             setMessage(" کد با موفقیت ارسال شد ")
             setAlert(true)
-            setTimeout(() => {
-              setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            }, 1200);
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
           }
         })
         .catch(function (error) {
@@ -107,20 +110,27 @@ export default function SignUpPage() {
 
   const handleNextCodeValidation = () => {
 
-    if(phoneNum !== "") {
+    if( Otp.length === 4 && password === ConfirmPassword) {
 
     setLoading(true);
-    axios.post('https://supperapp-backend.chbk.run/register/otp',{"phone": phoneNum }, {
+    axios.post('https://supperapp-backend.chbk.run/register/shop',{ 
+      "phone": phoneNum,
+      "password": password,
+      "code": Otp
+     }, {
       'accept': 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
       })
       .then((response) => {
-        if(response.data.Done === true){
-          setMessage(" کد با موفقیت ارسال شد ")
+        console.log(response)
+        if( response.data.Done === true){
+          setMessage(" ثبت نام با موفقیت انجام شد. لطفا برای تکمیل اطلاعات وارد پروفایل خود شوید ")
           setAlert(true)
-          setTimeout(() => {
-            setActiveStep((prevActiveStep) => prevActiveStep + 1);
-          }, 1200);
+          // setTimeout(() => {
+          // }, 1700);
+        }else if(response.data.Done === false){
+          setMessage(response.data.Error_text)
+          setErrorAlert(true)
         }
       })
       .catch(function (error) {
@@ -130,13 +140,11 @@ export default function SignUpPage() {
       });
 
       }else{
-
-        setMessage(" شماره همراه خود را وارد کنید ")
+        setMessage(" لطفا اطلاعات را به درستی وارد کنید ")
         setErrorAlert(true)
-
       }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    // setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleNext = () => {
@@ -201,10 +209,13 @@ export default function SignUpPage() {
                 }
                 {
                   activeStep === 1 &&(
-                    <Grid className=' w-full my-8' >
-                      <OtpInput/>
+                    <Grid className=' w-full my-4 gap-2 justify-center items-center ' sx={{display:"flex", flexDirection:"column"}} >
+                      
+                      <Grid>
+                        <OtpInput/>
+                      </Grid>
 
-                      <Grid className=' w-full text-center my-8' >
+                      <Grid className=' w-full text-center my-4 flex flex-col ' sx={{display:"flex", flexDirection:"column"}} >
                         <FormControl
                           margin='normal' 
                           className=' mb-8'
@@ -218,6 +229,8 @@ export default function SignUpPage() {
                               size="small"
                               placeholder='رمز عبور'
                               type={!showPassword ? 'password' :'text' }
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value) }
                               
                               endAdornment={
                               <InputAdornment position="end">
@@ -247,6 +260,8 @@ export default function SignUpPage() {
                               size="small"
                               placeholder=' تکرار رمز عبور ' 
                               type={!showPassword ? 'password' :'text' }
+                              value={ConfirmPassword}
+                              onChange={(e) => setConfirmPassword(e.target.value) }
                               
                               endAdornment={
                               <InputAdornment position="end">
@@ -293,7 +308,7 @@ export default function SignUpPage() {
                     className='text-white p-2 w-full bg-gradient-to-r from-asliDark to-asliLight hover:from-asliLight hover:to-asliDark transition-colors duration-500 rounded-full'
                     type="button"
                     >
-                      {activeStep === 1 && ' تایید '} 
+                      { loading ? <LoopOutlined/> : ' ثبت نام '} 
                   </button>
                   )
                 }

@@ -9,8 +9,9 @@ import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable,
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import ContextMenu from "@/utils/ContextMenu";
-import { ModalDialog } from "@mui/joy";
+import { ModalDialog, Textarea } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
+import CustomNeshanMap from "@/components/module/NeshanMap";
 
 
 
@@ -116,8 +117,9 @@ export const CreateCategory = ()=> {
   
     }
 
-      
+    // Address Part  -----------------------------------
 
+    const [Address, setAddress] = useState()
 
 
   // columns and data =============================================
@@ -263,11 +265,17 @@ const table = useMaterialReactTable({
     setImage([])
   }
 
+  const CloseHandler = () => {
+    setAddCategoryModal(false)
+    window.location.reload();
+  }
+
     return (
 
-      <div>
+      <div className="w-full" >
 
         <MaterialReactTable table={table}/>
+
 
         {/* <ContextMenu
             open={showContextMenu}
@@ -277,99 +285,120 @@ const table = useMaterialReactTable({
             options={contextMenuOptions}
         /> */}
 
-      <Modal className="w-full" open={addCategoryModal} onClose={() => setAddCategoryModal(false)}>
-        <ModalDialog variant="outlined" role="definition" className="w-[60vw] h-[65vh] p-0" >
+      <Dialog fullWidth className="w-full" scroll="paper" maxWidth="md" open={addCategoryModal} onClose={() => CloseHandler()}>
+
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
              ایجاد کارخانه جدید و ثبت آدرس
           </DialogTitle>
           <Divider />
-          <DialogContent className="flex flex-col justify-center items-center gap-10" >           
+          <DialogContent className="flex flex-col items-center gap-10 mt-12 h-[90vh] " >           
 
-            <div className='w-full flex flex-row justify-around items-center' >
-              <TextField
-                className="md:w-[28%] w-[90%]"
-                id="input-with-icon-textfield"
-                label=" نام کارخانه  "
-                placeholder=" نام کارخانه   "
-                value={addFactoryName}
-                onChange={(e) => setaddFactoryName(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="standard"
-              />
-            
-              <Autocomplete
-                className="md:w-[28%] w-[90%]"
-                disablePortal
-                multiple
-                limitTags={1}
-                noOptionsText=" داده ای موحود نیست "
-                options={categoryList}
-                getOptionLabel={(i)=> i.name}
-                onChange={(event, val) =>{
-                  setaddCategs([...val]);
-                }}
-                sx={{ width:"190px"}}
-                renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن دسته بندی " />}
-              />
+            <div className="flex flex-col justify-center items-center gap-10 w-full" >
+              <div className='w-full flex flex-row justify-around items-center ' >
+                <TextField
+                  className="md:w-[28%] w-[90%]"
+                  id="input-with-icon-textfield"
+                  label=" نام کارخانه  "
+                  placeholder=" نام کارخانه   "
+                  value={addFactoryName}
+                  onChange={(e) => setaddFactoryName(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="end">
+                        <Category className='text-asliLight' />
+                      </InputAdornment>
+                    ),
+                  }}
+                  variant="standard"
+                />
+              
+                <Autocomplete
+                  className="md:w-[28%] w-[90%]"
+                  disablePortal
+                  multiple
+                  limitTags={1}
+                  noOptionsText=" داده ای موحود نیست "
+                  options={categoryList}
+                  getOptionLabel={(i)=> i.name}
+                  onChange={(event, val) =>{
+                    setaddCategs([...val]);
+                  }}
+                  sx={{ width:"190px"}}
+                  renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن دسته بندی " />}
+                />
+              </div>
+              <div className='w-full flex flex-row justify-around items-center' >
+                <TextField
+                  className="md:w-[28%] w-[90%]"
+                  id="input-with-icon-textfield"
+                  label=" شماره همراه "
+                  placeholder=" شماره همراه "
+                  value={e2p(addMobile)}
+                  onChange={(e) => setAddMobile(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="end">
+                        <SmartphoneOutlined className='text-asliLight' />
+                      </InputAdornment>
+                    ),
+                  }}
+                  variant="standard"
+                />
+
+                <TextField
+                  className="md:w-[28%] w-[90%]"
+                  id="input-with-icon-textfield"
+                  label=" تلفن "
+                  placeholder=" تلفن  "
+                  value={e2p(addTelephone)}
+                  onChange={(e) => setAddTelephone(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="end">
+                        <RingVolumeOutlined className='text-asliLight' />
+                      </InputAdornment>
+                    ),
+                  }}
+                  variant="standard"
+                />
+              
+
+              </div>
+
             </div>
-            <div className='w-full flex flex-row justify-around items-center' >
-              <TextField
-                className="md:w-[28%] w-[90%]"
-                id="input-with-icon-textfield"
-                label=" شماره همراه "
-                placeholder=" شماره همراه "
-                value={e2p(addMobile)}
-                onChange={(e) => setAddMobile(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <SmartphoneOutlined className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="standard"
+            <div>
+              <h2 className="border-t-2 w-[100%]  text-center pt-4 text-lg font-bold " > ثبت آدرس </h2>
+
+              <div>
+                <CustomNeshanMap setAddress={setAddress} />
+              </div>
+
+
+              <div className='w-full flex flex-col justify-center items-start gap-1 ' >
+                <h2 className="border-b-2 text-lg" > آدرس </h2>
+              <Textarea 
+                className="w-full" 
+                minRows={3}
+                value={Address === undefined ? " " : `${Address?.state} ${Address?.formatted_address}`}
+                onChange={(e) => setAddress(e.target.value)}
               />
 
-              <TextField
-                className="md:w-[28%] w-[90%]"
-                id="input-with-icon-textfield"
-                label=" تلفن "
-                placeholder=" تلفن  "
-                value={e2p(addTelephone)}
-                onChange={(e) => setAddTelephone(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <RingVolumeOutlined className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="standard"
-              />
-            
-
+              </div>
             </div>
 
+              
 
-            <h2 className="border-t-2 w-[100%] text-center pt-6 text-lg font-bold " > ثبت آدرس </h2>
 
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4" >
             <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddFactoryApi()}>
               {loading ? <CircularProgress size="medium" /> : " ثبت "}
             </Button>
-            <Button variant="soft" color='danger'  onClick={() => setAddCategoryModal(false)}>
+            <Button variant="soft" color='danger'  onClick={() => CloseHandler()}>
               انصراف
             </Button>
           </DialogActions>
-        </ModalDialog>
-      </Modal>
+      </Dialog>
 
         <Snackbar
         open={alert}

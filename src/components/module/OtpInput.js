@@ -9,6 +9,8 @@ const OtpInput = () => {
 
     const dispatch = useDispatch();
 
+    dispatch(OtpCode(otp.join("")))
+
     // const handleBackSpace = (e) => {
     //     console.log(e.key, "key")
     //     if(e.key === "Backspace") {
@@ -28,7 +30,6 @@ const OtpInput = () => {
              element.target.nextSibling.focus();
         }
 
-        dispatch(OtpCode(otp.join("")))
     }
 
 

@@ -1,5 +1,3 @@
-'use client'
-
 import { Navigation, Pagination, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -9,11 +7,11 @@ import 'swiper/css/pagination';
 import Image from 'next/image';
 
 
-const ProductSwiper = () => {
+const ProductSwiper = ({title}) => {
 
   return (
     <div>
-      <h1 className='border-b border-khas font-bold text-lg' > کاشی و سرامیک </h1>
+      <h1 className='border-b border-khas font-bold text-lg' > {title} </h1>
       <br />
       <Swiper
         className='!block'
@@ -22,7 +20,7 @@ const ProductSwiper = () => {
         breakpoints={{
           480: { slidesPerView: 2 },
           740: { slidesPerView: 3 },
-          1275: { slidesPerView: 7 },
+          1275: { slidesPerView: 8 },
         }}
         
       >
@@ -36,7 +34,7 @@ const ProductSwiper = () => {
                     <p className='text-sm'> ابعاد بزرگ </p>
                 </div>
             </div>
-            <span className='text-khas w-full' > Mad Max Film </span>
+            <span className='text-khas w-full' > Tile </span>
           </SwiperSlide>
           <SwiperSlide
             className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
@@ -47,7 +45,7 @@ const ProductSwiper = () => {
                     <p className='text-sm'> ابعاد بزرگ </p>
                 </div>
             </div>
-            <span className='text-khas w-full' > Mad Max Film </span>
+            <span className='text-khas w-full' > Tile </span>
           </SwiperSlide>
           <SwiperSlide
             className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
@@ -58,7 +56,7 @@ const ProductSwiper = () => {
                     <p className='text-sm'> ابعاد بزرگ </p>
                 </div>
             </div>
-            <span className='text-khas w-full' > Mad Max Film </span>
+            <span className='text-khas w-full' > Tile </span>
           </SwiperSlide>
           <SwiperSlide
             className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
@@ -69,7 +67,7 @@ const ProductSwiper = () => {
                     <p className='text-sm'> ابعاد بزرگ </p>
                 </div>
             </div>
-            <span className='text-khas w-full' > Mad Max Film </span>
+            <span className='text-khas w-full' > Tile </span>
           </SwiperSlide>
           <SwiperSlide
             className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
@@ -80,7 +78,7 @@ const ProductSwiper = () => {
                     <p className='text-sm'> ابعاد بزرگ </p>
                 </div>
             </div>
-            <span className='text-khas w-full' > Mad Max Film </span>
+            <span className='text-khas w-full' > Tile </span>
           </SwiperSlide>
           <SwiperSlide
             className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
@@ -91,7 +89,7 @@ const ProductSwiper = () => {
                     <p className='text-sm'> ابعاد بزرگ </p>
                 </div>
             </div>
-            <span className='text-khas w-full' > Mad Max Film </span>
+            <span className='text-khas w-full' > Tile </span>
           </SwiperSlide>
           <SwiperSlide
             className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
@@ -102,7 +100,7 @@ const ProductSwiper = () => {
                     <p className='text-sm'> ابعاد بزرگ </p>
                 </div>
             </div>
-            <span className='text-khas w-full' > Mad Max Film </span>
+            <span className='text-khas w-full' > Tile </span>
           </SwiperSlide>
           <SwiperSlide
             className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
@@ -113,7 +111,7 @@ const ProductSwiper = () => {
                     <p className='text-sm'> ابعاد بزرگ </p>
                 </div>
             </div>
-            <span className='text-khas w-full' > Mad Max Film </span>
+            <span className='text-khas w-full' > Tile </span>
           </SwiperSlide>
           <SwiperSlide
             className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
@@ -124,7 +122,7 @@ const ProductSwiper = () => {
                     <p className='text-sm'> ابعاد بزرگ </p>
                 </div>
             </div>
-            <span className='text-khas w-full' > Mad Max Film </span>
+            <span className='text-khas w-full' > Tile </span>
           </SwiperSlide>
           <SwiperSlide
             className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
@@ -135,7 +133,7 @@ const ProductSwiper = () => {
                     <p className='text-sm'> ابعاد بزرگ </p>
                 </div>
             </div>
-            <span className='text-khas w-full' > Mad Max Film </span>
+            <span className='text-khas w-full' > Tile </span>
           </SwiperSlide>
           <SwiperSlide
             className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
@@ -146,7 +144,7 @@ const ProductSwiper = () => {
                     <p className='text-sm'> ابعاد بزرگ </p>
                 </div>
             </div>
-            <span className='text-khas w-full' > Mad Max Film </span>
+            <span className='text-khas w-full' > Tile </span>
           </SwiperSlide>
 
       </Swiper>

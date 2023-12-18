@@ -15,11 +15,11 @@ export default function Example(props)
             description: "Probably the most random thing you have ever seen!"
         },
         {
-            image: img2,
+            image: img1,
             description: "Probably the most random thing you have ever seen!"
         },
         {
-            image: img3,
+            image: img1,
             description: "Probably the most random thing you have ever seen!"
         },
     ]

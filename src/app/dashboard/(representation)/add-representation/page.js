@@ -88,14 +88,14 @@ export const AddRepresentation = ()=> {
     }
   
   
-    async function AddCategoryApi() {
+    async function AddBranchApi() {
       // setLoading(true);
-      await axios.post('https://supperapp-backend.chbk.run/category/create', {'name': addCategName, 'features':featureIds}, {
+      await axios.post('https://supperapp-backend.chbk.run/branch/create', {'name': addCategName, 'features':featureIds}, {
           headers: headers
         })
         .then((response) => {
           setAlert(true)
-          setMessage(" دسته بندی جدید با موفقیت افزوده شد ")
+          setMessage("  نمایندگی جدید با موفقیت افزوده شد ")
           setLoading(false)
           setAddCategoryModal(false)
           ListApi(Auth)
@@ -232,7 +232,7 @@ const table = useMaterialReactTable({
               className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
               onClick={() => setAddCategoryModal(true)}
             >
-              دسته بندی جدید <AddCircleOutline/> 
+             نمایندگی جدید <AddCircleOutline/> 
             </button>
           </Box>
         </Box>
@@ -286,7 +286,7 @@ const table = useMaterialReactTable({
       <Modal open={addCategoryModal} onClose={() => setAddCategoryModal(false)}>
         <ModalDialog variant="outlined" role="definition" className="w-[40vw] h-[65vh] p-0" >
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
-             ایجاد دسته بندی جدید
+             ایجاد نمایندگی جدید
           </DialogTitle>
           <Divider />
           <DialogContent className="flex flex-col justify-center items-center gap-10" >           
@@ -294,8 +294,24 @@ const table = useMaterialReactTable({
             <div className='w-full flex flex-row justify-around items-center' >
               <TextField
                 id="input-with-icon-textfield"
-                label=" نام دسته بندی "
-                placeholder=" نام دسته بندی  "
+                label=" نام نمایندگی "
+                placeholder=" نام نمایندگی  "
+                value={addCategName}
+                onChange={(e) => setAddCategName(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="end">
+                      <Category className='text-asliLight' />
+                    </InputAdornment>
+                  ),
+                }}
+                variant="standard"
+              />
+
+              <TextField
+                id="input-with-icon-textfield"
+                label=" شماره تماس "
+                placeholder=" شماره تماس "
                 value={addCategName}
                 onChange={(e) => setAddCategName(e.target.value)}
                 InputProps={{
@@ -308,24 +324,12 @@ const table = useMaterialReactTable({
                 variant="standard"
               />
             
-              <Autocomplete
-                disablePortal
-                multiple
-                noOptionsText=" داده ای موحود نیست "
-                options={featureList}
-                getOptionLabel={(i)=> i.feature_data.name}
-                onChange={(event, val) =>{
-                  setAddFeatures([...val]);
-                }}
-                sx={{ width:"190px"}}
-                renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن ویژگی " />}
-              />
             </div>
 
 
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4" >
-            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddCategoryApi()}>
+            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddBranchApi()}>
               {loading ? <CircularProgress size="medium" /> : " ثبت "}
             </Button>
             <Button variant="soft" color='danger'  onClick={() => setAddCategoryModal(false)}>

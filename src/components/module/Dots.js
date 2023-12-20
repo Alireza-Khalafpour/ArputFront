@@ -21,10 +21,10 @@ const Dots = () => {
     },[])
 
     return (
-        <Link href="/" className="flex flex-wrap w-[90%] gap-24 mx-auto p-12 relative cursor-pointer border bg-slate-200 border-dotted border-khas rounded-lg" >
+        <Link href="/" className="lg:flex hidden flex-wrap w-[90%] gap-24 mx-auto p-12 relative cursor-pointer border bg-slate-200 border-dotted border-khas rounded-lg" >
             
             {
-                Array.from({length: 102}, (_, i) => (
+                Array.from({length: 55}, (_, i) => (
                     <Dot key={i} mousePos={mousePos}></Dot>
                 ))
             }

@@ -260,15 +260,15 @@ const AddPreProductPage = () => {
                 setAlert(true)
                 setMessage(" پیش محصول جدید با موفقیت افزوده شد ")
                 setLoading(false)
-                setTimeout(() => {
-                    window.location.reload()
-                }, 2000);
+                // setTimeout(() => {
+                //     window.location.reload()
+                // }, 2000);
             }else{
                 setMessage(" متاسفیم،خطایی رخ داده است ")
                 setErrorAlert(true)
-                setTimeout(() => {
-                    window.location.reload()
-                }, 2000);
+                // setTimeout(() => {
+                //     window.location.reload()
+                // }, 2000);
             }
         })
         .catch((error) => {

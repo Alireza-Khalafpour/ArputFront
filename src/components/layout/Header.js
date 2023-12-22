@@ -2,27 +2,29 @@
 
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import FormGroup from '@mui/material/FormGroup';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import { Alert, Divider } from '@mui/material';
-import { ExitToApp, LoginOutlined, NotificationsActive, Person, Settings, SpaceDashboard } from '@mui/icons-material';
+import { Divider } from '@mui/material';
+import { ExitToApp, Home, LoginOutlined, NotificationsActive, Person, Settings, ShoppingBasket, SpaceDashboard } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
+import { useRouter } from 'next/navigation';
+
 
 export default function Header() {
 
   const cookie = new Cookies();
 
+  const route = useRouter()
+
   const handleLogout = () => {
     cookie.remove("tokenDastResi");
     setTimeout(() => {
-      window.location.replace("/")
+      route.push("/")
     }, 1000);
   }
 
@@ -65,6 +67,10 @@ export default function Header() {
                       <NotificationsActive className='w-7 h-7' />
                     </IconButton>
 
+                    <IconButton color="inherit">
+                      <ShoppingBasket className='w-7 h-7' />
+                    </IconButton>
+
                     <IconButton
                       aria-controls="menu-appbar"
                       aria-haspopup="true"
@@ -91,6 +97,7 @@ export default function Header() {
                     >
                       <MenuItem onClick={handleClose}> کارخانه آرپوت سرام  </MenuItem>
                       <Divider/>
+                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200' onClick={handleClose}> <Link href="/" > <Home className='text-asliLight' /> خانه  </Link> </MenuItem>
                       <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200' onClick={handleClose}> <Link href="/profile" > <Person className='text-asliLight' /> پروفایل  </Link> </MenuItem>
                       <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200' onClick={handleClose}> <Link href="/dashboard"> <SpaceDashboard className='text-asliLight' /> داشبورد   </Link> </MenuItem>
                       {/* <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200' onClick={handleClose}> <ُ className='text-asliLight' /> سبد خرید  </MenuItem> */}
@@ -105,10 +112,10 @@ export default function Header() {
                 :
                 (
                 
-                  <IconButton className='text-base border-2 rounded-xl border-white text-paszamine1' onClick={() => window.location.replace("/signin")} >
+                  <Link href="/signin" className='text-base text-paszamine1' >
                       ورود / ثبت نام
                       <LoginOutlined className='w-7 h-7'  />
-                  </IconButton>
+                  </Link>
 
                 
                 )

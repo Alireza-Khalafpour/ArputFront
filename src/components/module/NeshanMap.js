@@ -1,15 +1,12 @@
 'use client'
 
-import {MapComponent, MapTypes} from "@neshan-maps-platform/mapbox-gl-react";
 import "@neshan-maps-platform/mapbox-gl-react/dist/style.css";
-import nmp_mapboxgl from '@neshan-maps-platform/mapbox-gl';
 import { useState } from "react";
 import NeshanMap from "react-neshan-map-leaflet";
 import axios from "axios";
 
 
 function CustomNeshanMap({setAddress}) {
-    // const marker = new nmp_mapboxgl.Marker()
 
     const [newPlace , setNewPlace] = useState()
 
@@ -31,22 +28,6 @@ function CustomNeshanMap({setAddress}) {
 
 
     return (
-
-        // <MapComponent 
-        //     className="w-96 h-96 "
-        //     options={{ 
-        //         mapKey: "web.e967046fce064ab6b60df0bdce8f50ed" , 
-        //         mapType: MapTypes.neshanRasterNight, 
-        //         interactive:true, 
-        //         poi: true,
-        //         center: [51.389, 35.6892],
-        //         zoom: 8,
-        //         fadeDuration:"200",
-                
-        //     }}
-            
-        // >
-        // </MapComponent>
 
         <div>
             <NeshanMap

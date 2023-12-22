@@ -336,13 +336,13 @@ export const CreateFeature = ()=> {
             options={contextMenuOptions}
         />
 
-      <Modal open={addFeatureModal} onClose={() => setAddFeatureModal(false)}>
+      <Modal className="h-[80vh]" open={addFeatureModal} onClose={() => setAddFeatureModal(false)}>
         <ModalDialog variant="outlined" role="definition" className="w-[50vw] h-[75vh] p-0" >
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
              ایجاد ویژگی جدید
           </DialogTitle>
           <Divider />
-          <DialogContent className="flex flex-col justify-center items-center gap-10" >           
+          <DialogContent className="flex flex-col justify-center items-center gap-10 h-full" >           
 
             <div className='w-full flex flex-row justify-around items-center' >
               <TextField

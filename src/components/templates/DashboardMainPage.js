@@ -4,8 +4,18 @@ import { Grid } from "@mui/material";
 import AdminCard from "../module/AdminCard";
 import { Chart } from "../module/Chart";
 import { Bars } from "../module/Bars";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const DashboardMainPage = () => {
+
+    const route = useRouter()
+
+    useEffect(() =>{
+        route.refresh()
+    },[])
+
+
     return (
         <div className="w-full gap-8 flex flex-col h-full" >
             <Grid className='w-full flex flex-row justify-between items-center gap-6' >

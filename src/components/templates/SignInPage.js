@@ -1,29 +1,24 @@
 'use client'
 
 
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-// import { cookies } from 'next/headers'
-import { Archive, BusinessRounded, Favorite, HowToRegRounded, LoginRounded, Person, Restore, StoreRounded, UsbRounded, VerifiedUserRounded, Visibility, VisibilityOff } from '@mui/icons-material';
-import { useState } from 'react';
+import { BusinessRounded, Person, Person3, StoreRounded, Visibility, VisibilityOff } from '@mui/icons-material';
+import { forwardRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Tabs } from '@mui/base/Tabs';
 import { TabsList as BaseTabsList } from '@mui/base/TabsList';
 import { TabPanel as BaseTabPanel } from '@mui/base/TabPanel';
 import { Tab as BaseTab } from '@mui/base/Tab';
-import lottie from "lottie-web";
-import { defineElement } from "@lordicon/element";
-import { Alert, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Snackbar } from '@mui/material';
+// import lottie from "lottie-web";
+// import { defineElement } from "@lordicon/element";
+import { Alert, CircularProgress, FormControl, IconButton, InputAdornment, OutlinedInput, Snackbar } from '@mui/material';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 
 
@@ -31,7 +26,7 @@ import Cookies from 'universal-cookie';
 
 export default function SignInPage() {
 
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const cookie = new Cookies()
   const [message, setMessage] = useState();
@@ -42,6 +37,7 @@ export default function SignInPage() {
   const [userName, setUserName] = useState();
   const [pass, setPass] = useState();
 
+  const route = useRouter();
  
   let formData = new FormData();
 
@@ -61,7 +57,7 @@ export default function SignInPage() {
         console.log(response)
         setMessage(" خوش آمدید ")
         setTimeout(() => {
-          window.location.replace("/dashboard")
+          route.push("/dashboard")
         }, 1700);
         setLoading(false)
       })
@@ -82,7 +78,7 @@ export default function SignInPage() {
   };
 
 // define "lord-icon" custom element with default properties
-  defineElement(lottie.loadAnimation);
+  // defineElement(lottie.loadAnimation);
 
   return (
 
@@ -95,7 +91,8 @@ export default function SignInPage() {
 
             <div className='text-center mx-auto gap-12 my-6'>
               <Avatar style={{backgroundColor:"#1D9BF0", width:66 , height:66}} className='mx-auto text-white'>
-                <lord-icon trigger="loop" src="https://cdn.lordicon.com/kthelypq.json" state="in-account" delay="700" className="w-full" ></lord-icon>
+                {/* <lord-icon trigger="loop" src="https://cdn.lordicon.com/kthelypq.json" state="in-account" delay="700" className="w-full" ></lord-icon> */}
+                <Person3/>
               </Avatar>
               <h1 className='mx-auto text-xl '>
                  ورود
@@ -426,7 +423,7 @@ export default function SignInPage() {
 
 const resolveSlotProps = (fn, args) => (typeof fn === 'function' ? fn(args) : fn);
 
-const TabsList = React.forwardRef((props, ref) => {
+const TabsList = forwardRef((props, ref) => {
   const { className, ...other } = props;
   return (
     <BaseTabsList
@@ -444,7 +441,7 @@ TabsList.propTypes = {
   className: PropTypes.string,
 };
 
-const Tab = React.forwardRef((props, ref) => {
+const Tab = forwardRef((props, ref) => {
   return (
     <BaseTab
       ref={ref}
@@ -487,7 +484,7 @@ Tab.propTypes = {
   }),
 };
 
-const TabPanel = React.forwardRef((props, ref) => {
+const TabPanel = forwardRef((props, ref) => {
   const { className, ...other } = props;
   return (
     <BaseTabPanel

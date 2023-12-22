@@ -5,20 +5,18 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { Tabs } from '@mui/base/Tabs';
 import { TabsList as BaseTabsList } from '@mui/base/TabsList';
 import { TabPanel as BaseTabPanel } from '@mui/base/TabPanel';
 import { Tab as BaseTab } from '@mui/base/Tab';
-import lottie from "lottie-web";
-import { defineElement } from "@lordicon/element";
+// import lottie from "lottie-web";
+// import { defineElement } from "@lordicon/element";
 import StepperModule from '../module/Stepper';
-import { Alert, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Snackbar, TextField, Typography } from '@mui/material';
-import { AccountCircle, LoopOutlined, MobileFriendly, Visibility, VisibilityOff } from '@mui/icons-material';
+import { Alert, FormControl, IconButton, InputAdornment, OutlinedInput, Snackbar, TextField} from '@mui/material';
+import { LoopOutlined, MobileFriendly, Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 import OtpInput from '../module/OtpInput';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+
 
 
 
@@ -58,7 +56,7 @@ export default function SignUpPage() {
 
 
   const [value, setValue] = useState(0);
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -68,11 +66,11 @@ export default function SignUpPage() {
   };
 
 // define "lord-icon" custom element with default properties
-  defineElement(lottie.loadAnimation);
+  // defineElement(lottie.loadAnimation);
 
   // Stepper Functions -----------------
 
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
 
   const [phoneNum, setPhoneNum] = useState("")
 

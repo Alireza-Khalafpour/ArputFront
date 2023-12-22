@@ -2,13 +2,6 @@
 
 import { Dns, Email, Smartphone } from "@mui/icons-material";
 import { FormControl, FormLabel, Input, Textarea } from "@mui/joy";
-import dynamic from "next/dynamic";
-import L from "leaflet"
-
-// import OpenStreetMap
-const GoogleMap = dynamic(() => import('../module/GoogleMap'), {
-    ssr: false,
-  })
 
 const CompleteInfoPage = () => {
 
@@ -63,11 +56,6 @@ const CompleteInfoPage = () => {
 
                         </div>
 
-                        <div className="flex md:flex-row flex-col justify-center items-center" >
-
-                            <GoogleMap/>
-
-                        </div>
 
                         <div className="flex flex-row justify-center items-center w-full" >
 

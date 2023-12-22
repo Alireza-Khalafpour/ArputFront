@@ -8,8 +8,7 @@ import { Alert, Autocomplete, Box, Button, CircularProgress, Dialog, DialogActio
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
-import ContextMenu from "@/utils/ContextMenu";
-import { ModalDialog, Textarea } from "@mui/joy";
+import {  Textarea } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
 import CustomNeshanMap from "@/components/module/NeshanMap";
 
@@ -267,7 +266,9 @@ const table = useMaterialReactTable({
 
   const CloseHandler = () => {
     setAddCategoryModal(false)
-    window.location.reload();
+    // useEffect(()=>{
+    //   window.location.reload();
+    // },[])
   }
 
     return (

@@ -6,6 +6,7 @@ import MobileSvg from "../../public/images/InstallMobileApp.svg"
 import Partnership from "../../public/images/Partnership.svg"
 import shoppingBag from "../../public/images/ShoppingBag.svg"
 import { ShoppingCart, VerifiedUser } from "@mui/icons-material";
+import Link from "next/link";
 
 
 export default function Home() {
@@ -46,7 +47,7 @@ export default function Home() {
         <div className="flex flex-row justify-center items-center gap-4 w-full">
           <div className="w-1/2 text-center flex flex-col justify-center items-center gap-5" >
             <h2 className="text-3xl" >  همین حالا کالای مورد نظرت رو سفارش بده </h2>
-            <button className="text-white bg-khas rounded-xl hover:bg-orange-600 w-52 p-3" > فروشگاه <ShoppingCart/> </button>
+            <Link href="/products"  className="text-white bg-khas rounded-xl hover:bg-orange-600 w-52 p-3" > فروشگاه <ShoppingCart/> </Link>
           </div>
           
           <div className="w-1/2 flex flex-col gap-4 text-center items-center">
@@ -65,7 +66,7 @@ export default function Home() {
           
           <div className="w-1/2 text-center flex flex-col justify-center items-center gap-5" >
             <h2 className="text-3xl" > کارخانه ها و نمایندگی ها و فروشگاه ها در سراسر ایران می توانند یک قروشگاه داشته باشند </h2>
-            <button className="text-white bg-khas rounded-xl hover:bg-orange-600 w-52 p-3" > ساخت فروشگاه <VerifiedUser/> </button>
+            <Link href="/signup" className="text-white bg-khas rounded-xl hover:bg-orange-600 w-52 p-3" > ساخت فروشگاه <VerifiedUser/> </Link>
           </div>
         </div>
 

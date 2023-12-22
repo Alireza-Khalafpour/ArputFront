@@ -17,11 +17,12 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
-import { Accordion, AccordionSummary } from '@mui/material';
-import { AddRounded, CheckCircleRounded, ExpandMore, Factory, FactoryOutlined, FeaturedPlayListOutlined, Home, HourglassBottomOutlined, ListAltOutlined, ManageAccountsOutlined, ManageSearchRounded, Payment, ShoppingBasket } from '@mui/icons-material';
+import { Accordion, AccordionSummary, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@mui/material';
+import { AddRounded, Check, CheckCircleRounded, CloseRounded, ExpandMore, Factory, FactoryOutlined, FeaturedPlayListOutlined, Home, HourglassBottomOutlined, KeyboardArrowRight, ListAltOutlined, ManageAccountsOutlined, ManageSearchRounded, Payment, ShoppingBasket } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import NotAllowedPage from './NotAllowedPage';
+import { Card, CardActions, Chip, ListItemDecorator } from '@mui/joy';
 
 
 const drawerWidth = 240;
@@ -57,6 +58,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   color:"#F2F2F2"
 }));
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+
 export default function DashbordSidebar({children}) {
 
   const cookie = new Cookies();
@@ -64,6 +70,7 @@ export default function DashbordSidebar({children}) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState(" داشبورد ")
+  const [openPurchaseModal, setOpenPurchaseModal] = React.useState(false)
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -73,11 +80,19 @@ export default function DashbordSidebar({children}) {
     setOpen(false);
   };
 
+  const handleClosePurchaseModal = () => {
+    setOpenPurchaseModal(false)
+  }
+
+  const handleOpenPurchaseModal = () => {
+    setOpenPurchaseModal(true)
+  }
+
 
   return (
     <div sx={{ display: 'flex' }}>
-      <AppBar position="relative" open={open}>
-        <Toolbar className='bg-asliLight !max-h-5 ' >
+      <AppBar position="relative" open={open} className='bg-asliLight' style={{maxHeight: "4rem"}} >
+        <Toolbar style={{maxHeight: '20px'}} >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -87,7 +102,7 @@ export default function DashbordSidebar({children}) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} clas component="div">
+          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
             { title } 
           </Typography>
         </Toolbar>
@@ -221,6 +236,9 @@ export default function DashbordSidebar({children}) {
                     کیف پول من
                     <Payment className='text-khas'/>
                 </Link>
+                <button onClick={() => handleOpenPurchaseModal()} className='text-right mr-4 p-3 w-full hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                  خرید اشتراک
+                </button>
               </Accordion>
             </ListItem>
 
@@ -256,11 +274,226 @@ export default function DashbordSidebar({children}) {
 
 
         <Link onClick={() => setTitle(" تیکت و پشتیبانی")} href="/dashboard/ticketChat" className=' absolute bottom-2 w-[90%] text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
-                      تیکت و پشتیبانی
-                    <ManageAccountsOutlined className='text-khas'/>
+          تیکت و پشتیبانی
+          <ManageAccountsOutlined className='text-khas'/>
         </Link>
 
       </Drawer>
+
+
+      <Dialog
+        open={openPurchaseModal}
+        TransitionComponent={Transition}
+        keepMounted
+        maxWidth="xl"
+        onClose={() => handleClosePurchaseModal}
+        className='h-[80vh]'
+      >
+        <DialogTitle className='w-full flex justify-between items-center' >
+            <span className='' >  خرید اشتراک  </span>
+           <button onClick={() => handleClosePurchaseModal()} className='bg-rose-600 hover:bg-rose-700 text-white rounded-full w-8 h-8' ><CloseRounded/></button>
+        </DialogTitle>
+        <DialogContent className='flex flex-row justify-center items-center gap-4' >
+
+
+          <Card
+          size="lg"
+          variant="solid"
+          color="neutral"
+          invertedColors
+          sx={{ bgcolor: 'neutral.900' }}
+          className="h-max"
+          >
+            <Chip size="lg" variant="outlined">
+              MOST POPULAR
+            </Chip>
+            <Typography level="h2">Unlimited</Typography>
+            <div className='w-full border-2 border-white' ></div>
+            <List
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                mx: 'calc(-1 * var(--ListItem-paddingX))',
+              }}
+            >
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                Virtual Credit Cards
+              </ListItem>
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                Financial Analytics
+              </ListItem>
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                Checking Account
+              </ListItem>
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                API Integration
+              </ListItem>
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                Cancel Anytime
+              </ListItem>
+            </List>
+            <div className='w-full border-2 border-white' ></div>
+            <CardActions>
+              <Typography level="title-lg" sx={{ mr: 'auto' }}>
+                5.990€{' '}
+                <Typography fontSize="sm" textColor="text.tertiary">
+                  / month
+                </Typography>
+              </Typography>
+              <Button className='bg-khas text-white' endDecorator={<KeyboardArrowRight />}>Start now</Button>
+            </CardActions>
+          </Card>
+
+          <Card
+          size="lg"
+          variant="solid"
+          color="neutral"
+          invertedColors
+          className="h-max bg-asliDark "
+          >
+            <Chip size="lg" variant="outlined">
+              MOST POPULAR
+            </Chip>
+            <Typography level="h2">Unlimited</Typography>
+            <div className='w-full border-2 border-white' ></div>
+            <List
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                mx: 'calc(-1 * var(--ListItem-paddingX))',
+              }}
+            >
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                Virtual Credit Cards
+              </ListItem>
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                Financial Analytics
+              </ListItem>
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                Checking Account
+              </ListItem>
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                API Integration
+              </ListItem>
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                Cancel Anytime
+              </ListItem>
+            </List>
+            <div className='w-full border-2 border-white' ></div>
+            <CardActions>
+              <Typography level="title-lg" sx={{ mr: 'auto' }}>
+                5.990€{' '}
+                <Typography fontSize="sm" textColor="text.tertiary">
+                  / month
+                </Typography>
+              </Typography>
+              <Button className='bg-khas text-white' endDecorator={<KeyboardArrowRight />}>Start now</Button>
+            </CardActions>
+          </Card>
+
+          <Card
+          size="lg"
+          variant="solid"
+          color="neutral"
+          invertedColors
+          className="h-max "
+          >
+            <Chip size="lg" variant="outlined">
+              MOST POPULAR
+            </Chip>
+            <Typography level="h2">Unlimited</Typography>
+            <div className='w-full border-2 border-white' ></div>
+            <List
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                mx: 'calc(-1 * var(--ListItem-paddingX))',
+              }}
+            >
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                Virtual Credit Cards
+              </ListItem>
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                Financial Analytics
+              </ListItem>
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                Checking Account
+              </ListItem>
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                API Integration
+              </ListItem>
+              <ListItem>
+                <ListItemDecorator>
+                  <Check />
+                </ListItemDecorator>
+                Cancel Anytime
+              </ListItem>
+            </List>
+            <div className='w-full border-2 border-white' ></div>
+            <CardActions>
+              <Typography level="title-lg" sx={{ mr: 'auto' }}>
+                5.990€{' '}
+                <Typography fontSize="sm" textColor="text.tertiary">
+                  / month
+                </Typography>
+              </Typography>
+              <Button className='bg-khas text-white' endDecorator={<KeyboardArrowRight />}>Start now</Button>
+            </CardActions>
+          </Card>
+
+
+
+        </DialogContent>
+
+        <DialogActions className='w-full flex justify-start items-center' >
+          <span className='text-lg' > برای استفاده از خدمات داشبورد ابتدا اشتراک تهیه کنید. </span>
+        </DialogActions>
+      </Dialog>
+
+
+
     </div>
   );
 }

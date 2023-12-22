@@ -7,7 +7,7 @@ import img1 from "../../../public/images/b1.jpg"
 import img2 from "../../../public/images/b2.jpg"
 import img3 from "../../../public/images/b3.jpg"
 
-export default function Example()
+export default function MyCarousel()
 {
     var items = [
         {

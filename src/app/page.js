@@ -1,5 +1,4 @@
 import Dots from "@/components/module/Dots";
-import Example from "@/components/module/carousel";
 import ProductSwiper from "@/components/templates/ProductSwiper";
 import Image from "next/image";
 import MobileSvg from "../../public/images/InstallMobileApp.svg"
@@ -7,6 +6,8 @@ import Partnership from "../../public/images/Partnership.svg"
 import shoppingBag from "../../public/images/ShoppingBag.svg"
 import { ShoppingCart, VerifiedUser } from "@mui/icons-material";
 import Link from "next/link";
+import MyCarousel from "@/components/module/MyCarousel";
+
 
 
 export default function Home() {
@@ -15,7 +16,7 @@ export default function Home() {
       <div className="flex flex-col gap-28 p-8 " >
 
         <div className="w-full max-h-96 flex justify-center items-center" >
-          <Example/>
+          <MyCarousel/>
         </div>
 
         <div className="flex flex-row justify-center items-center gap-4 w-full">

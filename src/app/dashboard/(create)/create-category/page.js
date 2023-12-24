@@ -334,6 +334,58 @@ const table = useMaterialReactTable({
         </ModalDialog>
       </Modal>
 
+      <Modal open={addCategoryModal} onClose={() => setAddCategoryModal(false)}>
+        <ModalDialog variant="outlined" role="definition" className="w-[40vw] h-[65vh] p-0" >
+          <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
+              افزودن ویژگی به {}
+          </DialogTitle>
+          <Divider />
+          <DialogContent className="flex flex-col justify-center items-center gap-10" >           
+
+            <div className='w-full flex flex-row justify-around items-center' >
+              <TextField
+                id="input-with-icon-textfield"
+                label=" نام دسته بندی "
+                placeholder=" نام دسته بندی  "
+                value={addCategName}
+                onChange={(e) => setAddCategName(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="end">
+                      <Category className='text-asliLight' />
+                    </InputAdornment>
+                  ),
+                }}
+                variant="standard"
+              />
+            
+              <Autocomplete
+                disablePortal
+                multiple
+                noOptionsText=" داده ای موحود نیست "
+                options={featureList}
+                getOptionLabel={(i)=> i.name}
+                onChange={(event, val) =>{
+                  setAddFeatures([...val]);
+                }}
+                sx={{ width:"190px"}}
+                renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن ویژگی " />}
+              />
+            </div>
+
+
+          </DialogContent>
+          <DialogActions className="p-4 flex flex-row gap-4" >
+            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddCategoryApi()}>
+              {loading ? <CircularProgress size="medium" /> : " ثبت "}
+            </Button>
+            <Button variant="soft" color='danger'  onClick={() => setAddCategoryModal(false)}>
+              انصراف
+            </Button>
+          </DialogActions>
+        </ModalDialog>
+      </Modal>
+
       <Modal open={deleteCategoryModal} onClose={() => OmitRowIdForDelete()}>
         <ModalDialog variant="outlined" role="definition" className="p-0" >
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">

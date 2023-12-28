@@ -34,6 +34,35 @@ export const AddRepresentation = ()=> {
     const [DeleteCategoryIds, setDeleteCategoryIds] = useState()
 
 
+    const currentUserHeaders ={
+      'accept': 'application/json',
+      'Authorization': `Bearer ${Auth}`,
+      }
+
+    async function GetCurrentUser() {
+      
+      await axios.get('https://supperapp-backend.chbk.run/register/current_user', {
+        headers:currentUserHeaders
+        })
+        .then((response) => {
+            console.log(response)
+        })
+        .catch((error) => {
+            console.log(error, "Error");
+        });
+      }
+
+      
+      // get current user on modal open-------------------------
+  
+      const handleOpen = () => {
+        GetCurrentUser()
+        setAddCategoryModal(true)
+      }
+
+
+
+
     async function ListApi(Au) {
       
       await axios.get('https://supperapp-backend.chbk.run/branch/list', {
@@ -51,33 +80,13 @@ export const AddRepresentation = ()=> {
         });
     }
 
-    
-
-    async function FeatureListApi(Au) {
-      
-      await axios.get('https://supperapp-backend.chbk.run/features_sample/list', {
-        headers:{
-          'accept': 'application/json',
-          'Authorization': `Bearer ${Au}`,
-        }
-        })
-        .then((response) => {
-          setFeatureList(response.data.data)
-        })
-        .catch((error) => {
-          console.log(error, "Error");
-        });
-    }
-
-    useEffect(() => {
-      setFeatureIds(addFeature.map((i) => i.feature_data.id))
-    },[addFeature])
 
     useEffect(() => {
       const Auth = cookie.get('tokenDastResi')
       ListApi(Auth);
-      FeatureListApi(Auth);
     },[])
+
+
     
     // -------------------------------------------------------
 
@@ -90,7 +99,7 @@ export const AddRepresentation = ()=> {
   
     async function AddBranchApi() {
       // setLoading(true);
-      await axios.post('https://supperapp-backend.chbk.run/branch/create', {'name': addCategName, 'features':featureIds}, {
+      await axios.post('https://supperapp-backend.chbk.run/branch/create', {"factory_id": "",'name': addCategName, 'features':featureIds}, {
           headers: headers
         })
         .then((response) => {
@@ -112,42 +121,42 @@ export const AddRepresentation = ()=> {
     // Update a category -----------------------------------------
 
 
-    // Delete a category -----------------------------------------
+    // // Delete a category -----------------------------------------
 
-    async function DeleteCategoryApi() {
-      setLoading(true);
-      await axios.delete('https://supperapp-backend.chbk.run/category/delete', {'ids':DeleteCategoryIds}, {
-          headers: headers
-        })
-        .then((response) => {
-          console.log(response)
-          setAlert(true)
-          setMessage(" دسته بندی حذف شد ")
-          setLoading(false)
-          ListApi(Auth)
-        })
-        .catch((error) => {
-          console.log(error, "Error");
-          setMessage(" متاسفیم،خطایی رخ داده است ")
-          setErrorAlert(true)
-          setLoading(false)
-        });
+    // async function DeleteCategoryApi() {
+    //   setLoading(true);
+    //   await axios.delete('https://supperapp-backend.chbk.run/category/delete', {'ids':DeleteCategoryIds}, {
+    //       headers: headers
+    //     })
+    //     .then((response) => {
+    //       console.log(response)
+    //       setAlert(true)
+    //       setMessage(" دسته بندی حذف شد ")
+    //       setLoading(false)
+    //       ListApi(Auth)
+    //     })
+    //     .catch((error) => {
+    //       console.log(error, "Error");
+    //       setMessage(" متاسفیم،خطایی رخ داده است ")
+    //       setErrorAlert(true)
+    //       setLoading(false)
+    //     });
   
-    }
+    // }
 
-    const [DeleteCategName, setDeleteCategName] = useState("")
+    // const [DeleteCategName, setDeleteCategName] = useState("")
 
-    const GetRowIdForDelete = (row) => {
-      setDeleteCategoryIds([row.original.id])
-      setDeleteCategName(row.original.name)
-      setDeleteCategoryModal(true)
-      console.log(row)
-    }
+    // const GetRowIdForDelete = (row) => {
+    //   setDeleteCategoryIds([row.original.id])
+    //   setDeleteCategName(row.original.name)
+    //   setDeleteCategoryModal(true)
+    //   console.log(row)
+    // }
 
-    const OmitRowIdForDelete = () => {
-      setDeleteCategoryIds([])
-      setDeleteCategoryModal(false)
-    }
+    // const OmitRowIdForDelete = () => {
+    //   setDeleteCategoryIds([])
+    //   setDeleteCategoryModal(false)
+    // }
 
 
 
@@ -230,7 +239,7 @@ const table = useMaterialReactTable({
           <Box sx={{ display: 'flex', gap: '0.5rem' }}>
             <button
               className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
-              onClick={() => setAddCategoryModal(true)}
+              onClick={() => handleOpen()}
             >
              نمایندگی جدید <AddCircleOutline/> 
             </button>
@@ -348,7 +357,7 @@ const table = useMaterialReactTable({
           <DialogContent className="flex flex-col justify-center items-center gap-10" >           
 
             <div className='w-full flex flex-row justify-around items-center' >
-                <h2> آیااز حذف  <span className="font-semibold text-khas " > {DeleteCategName} </span> اطمینان دارید؟ </h2>
+                <h2> آیااز حذف  <span className="font-semibold text-khas " > DeleteCategName </span> اطمینان دارید؟ </h2>
             </div>
 
 

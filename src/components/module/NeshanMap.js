@@ -6,7 +6,7 @@ import NeshanMap from "react-neshan-map-leaflet";
 import axios from "axios";
 
 
-function CustomNeshanMap({setAddress}) {
+function CustomNeshanMap({setAddress, setLatLang}) {
 
     const [newPlace , setNewPlace] = useState()
 
@@ -48,6 +48,7 @@ function CustomNeshanMap({setAddress}) {
                     myMap.on('click', function (e) {
                     marker.setLatLng(e.latlng)
                     setNewPlace(e.latlng)
+                    setLatLang(e.latlng)
                     setTimeout(() => {
                         GetAddress(e.latlng)
                     }, 1000);

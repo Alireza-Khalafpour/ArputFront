@@ -68,7 +68,9 @@ export default function Header() {
                     </IconButton>
 
                     <IconButton color="inherit">
-                      <ShoppingBasket className='w-7 h-7' />
+                      <Link href="/buying_basket">
+                        <ShoppingBasket className='w-7 h-7' />
+                      </Link>
                     </IconButton>
 
                     <IconButton

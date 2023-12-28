@@ -9,7 +9,7 @@ import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable,
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import ContextMenu from "@/utils/ContextMenu";
-import { CircularProgress, ModalDialog } from "@mui/joy";
+import { CircularProgress, ModalDialog, Typography } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
 
 
@@ -49,8 +49,6 @@ export const CreateCategory = ()=> {
           console.log(error, "Error");
         });
     }
-
-    
 
     async function FeatureListApi(Au) {
       
@@ -179,10 +177,8 @@ const table = useMaterialReactTable({
   data,
   enableExpandAll: false, //hide expand all double arrow in column header
   enableExpanding: true,
-  filterFromLeafRows: true, //apply filtering to all rows instead of just parent rows
   initialState: { expanded: false }, //expand all rows by default
   paginateExpandedRows: false, //When rows are expanded, do not count sub-rows as number of rows on the page towards pagination
-  getSubRows: (originalRow) => originalRow.features,
   localization: mrtLocalizationFa,
   columnResizeMode:true,
   enableStickyHeader: true,
@@ -254,7 +250,37 @@ const table = useMaterialReactTable({
         </IconButton>
       </Box>
     )
-  }
+  },
+  renderDetailPanel: ({ row }) => (
+
+    <div className="bg-paszamine1 p-2">
+        <h3 className="w-full text-start font-extrabold mb-2" > <span className="border-b-2 p-1 text-base" > ویژگی ها </span> </h3>
+        <Box
+          sx={{
+              display: 'grid',
+              margin: 'auto',
+              gridTemplateColumns: '1fr 1fr 1fr 1fr',
+              width: '100%',
+              textAlign:"justify",
+              gap: "15px"
+          }}
+        >
+
+          {
+  
+            row?.original?.features.map((item) => ( 
+              <>
+                <Typography> نوع ویژگی : {item.name} </Typography>
+                <Typography> نام ویژگی : {item.main}  </Typography>
+                <Typography className="flex flex-row gap-1 items-center">  <p>وضعیت فعال  : </p>{item.active === true ? <p className="rounded-full p-2 bg-green-700 w-2 h-2" ></p> : <p className="rounded-full p-2 bg-rose-700 w-2 h-2"></p>}  </Typography>
+                <Typography>  id : {item.id}   </Typography>
+              </>
+             ))
+          } 
+
+        </Box>
+    </div>
+  ),
 });
 
   // modal part -------------------------------------------------------------

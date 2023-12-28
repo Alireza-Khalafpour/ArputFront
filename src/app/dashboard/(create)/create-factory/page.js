@@ -3,14 +3,14 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DetailsOutlined, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, RingVolume, RingVolumeOutlined, SmartphoneOutlined, TableRowsRounded } from "@mui/icons-material";
-import { Alert, Autocomplete, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, Snackbar, TextField, Tooltip, Typography } from "@mui/material";
+import { AddCircleOutline, Category, LocationCity, LocationOnRounded, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
+import { Alert, Autocomplete, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Snackbar, TextField, Typography } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
-import {  Textarea } from "@mui/joy";
-import { e2p } from "@/utils/replaceNumbers";
+import {  IconButton, Textarea } from "@mui/joy";
 import CustomNeshanMap from "@/components/module/NeshanMap";
+import { useRouter } from "next/navigation";
 
 
 
@@ -19,6 +19,8 @@ export const CreateCategory = ()=> {
     const cookie = new Cookies();
 
     const Auth = cookie.get('tokenDastResi')
+
+    const route = useRouter();
 
     const [message, setMessage] = useState();
     const [alert, setAlert] = useState(false);
@@ -100,7 +102,6 @@ export const CreateCategory = ()=> {
           headers: headers
         })
         .then((response) => {
-            console.log(response)
           setAlert(true)
           setMessage("  کارخانه جدید با موفقیت افزوده شد، آدرس را اضافه کنید. ")
           setLoading(false)
@@ -119,6 +120,64 @@ export const CreateCategory = ()=> {
     // Address Part  -----------------------------------
 
     const [Address, setAddress] = useState()
+    const [latLang, setLatLang] = useState()
+    const [factoryIdForAddress, setFactoryIdForAddress] = useState()
+    const [addAddressModal, setAddAddressModal] = useState(false)
+    const [street, setStreet] = useState()
+    const [alley, setAlley] = useState()
+    const [number, setNumber] = useState()
+    const [zipcode, setZipcode] = useState()
+
+
+
+    const CloseAddressModal = () => {
+      setAddAddressModal(false)
+      setTimeout(() => {
+        // route.refresh()
+        window.location.reload();
+      }, 300);
+    }
+
+    function GetRowIdForPatchAddress(row) {
+      setFactoryIdForAddress(row.original.id)
+      setAddAddressModal(true)
+    }
+
+    async function AddFactoryAddress() {
+      setLoading(true);
+      await axios.patch(`https://supperapp-backend.chbk.run/factory/set_address?factory_id=${factoryIdForAddress}`, {
+        "lat": latLang?.lat,
+        "lng": latLang?.lng,
+        "main_address": Address.formatted_address,
+        "street": street,
+        "alley": alley,
+        "number": number,
+        "remain": "",
+        "zip_code": zipcode
+      }, 
+      {
+        headers: headers
+      })
+      .then((response) => {
+        console.log(response.data.Done)
+        setAlert(true)
+        setMessage(" آدرس با موفقیت ثبت شد ")
+        setLoading(false)
+      //   setAddCategoryModal(false)
+        ListApi(Auth)
+        // setTimeout(() => {
+        //   // route.refresh()
+        //   window.location.reload()
+        // }, 700);
+      })
+      .catch(function (error) {
+        console.log(error, "Error");
+        setMessage(" متاسفیم،خطایی رخ داده است ")
+        setErrorAlert(true)
+        setLoading(false)
+      });
+
+  }
 
 
   // columns and data =============================================
@@ -138,13 +197,13 @@ export const CreateCategory = ()=> {
         header: ' موبایل ',
         accessorKey: 'mobile',
         id: 'mobile',
-        Cell: ({ cell }) => <span>{e2p(cell.getValue())}</span>,
+        Cell: ({ cell }) => <span>{cell.getValue()}</span>,
       },
       {
         header: ' تلفن ',
         accessorKey: 'telephone',
         id: 'telephone',
-        Cell: ({ cell }) => <span>{e2p(cell.getValue())}</span>,
+        Cell: ({ cell }) => <span>{cell.getValue()}</span>,
       },
     ],
     []
@@ -158,11 +217,7 @@ const table = useMaterialReactTable({
   columnResizeMode:true,
   enableStickyHeader: true,
   enableStickyFooter: true,
-  muiDetailPanelProps:{
-    sx:{
-        backgroundColor:"rgba(249,115,22,0.3)"
-    }
-  },
+  enableRowActions: true,
   muiTableBodyCellProps:{
     sx:{
       align: 'right',
@@ -212,6 +267,18 @@ const table = useMaterialReactTable({
       </Box>
     );
   },
+  renderRowActions: ({ row }) => {
+    return (
+      <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+        <IconButton
+          color="error"
+          onClick={() => GetRowIdForPatchAddress(row)}
+        >
+          <LocationOnRounded />
+        </IconButton>
+      </Box>
+    )
+  },
   renderDetailPanel: ({ row }) => (
 
     <>
@@ -225,6 +292,7 @@ const table = useMaterialReactTable({
             width: '100%',
             textAlign:"justify",
         }}
+        className="bg-paszamine1"
         >
 
         
@@ -233,7 +301,7 @@ const table = useMaterialReactTable({
                 <Typography> آدرس : {i.main_address} </Typography>
                 <Typography> خیابان : {i.street}  </Typography>
                 <Typography> کوچه : {i.alley} </Typography>
-                <Typography> کد پستی : {e2p(i.zip_code)} </Typography>
+                <Typography> کد پستی : {(i.zip_code)} </Typography>
             </>
         ) )}
         <Divider/>
@@ -266,9 +334,6 @@ const table = useMaterialReactTable({
 
   const CloseHandler = () => {
     setAddCategoryModal(false)
-    // useEffect(()=>{
-    //   window.location.reload();
-    // },[])
   }
 
     return (
@@ -289,7 +354,7 @@ const table = useMaterialReactTable({
       <Dialog fullWidth className="w-full" scroll="paper" maxWidth="md" open={addCategoryModal} onClose={() => CloseHandler()}>
 
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
-             ایجاد کارخانه جدید و ثبت آدرس
+            ایجاد کارخانه جدید
           </DialogTitle>
           <Divider />
           <DialogContent className="flex flex-col items-center gap-10 mt-12 h-[90vh] " >           
@@ -334,7 +399,7 @@ const table = useMaterialReactTable({
                   id="input-with-icon-textfield"
                   label=" شماره همراه "
                   placeholder=" شماره همراه "
-                  value={e2p(addMobile)}
+                  value={addMobile}
                   onChange={(e) => setAddMobile(e.target.value)}
                   InputProps={{
                     startAdornment: (
@@ -351,7 +416,7 @@ const table = useMaterialReactTable({
                   id="input-with-icon-textfield"
                   label=" تلفن "
                   placeholder=" تلفن  "
-                  value={e2p(addTelephone)}
+                  value={addTelephone}
                   onChange={(e) => setAddTelephone(e.target.value)}
                   InputProps={{
                     startAdornment: (
@@ -367,28 +432,6 @@ const table = useMaterialReactTable({
               </div>
 
             </div>
-            <div>
-              <h2 className="border-t-2 w-[100%]  text-center pt-4 text-lg font-bold " > ثبت آدرس </h2>
-
-              <div>
-                <CustomNeshanMap setAddress={setAddress} />
-              </div>
-
-
-              <div className='w-full flex flex-col justify-center items-start gap-1 ' >
-                <h2 className="border-b-2 text-lg" > آدرس </h2>
-              <Textarea 
-                className="w-full" 
-                minRows={3}
-                value={Address === undefined ? " " : `${Address?.state} ${Address?.formatted_address}`}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-
-              </div>
-            </div>
-
-              
-
 
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4" >
@@ -399,6 +442,114 @@ const table = useMaterialReactTable({
               انصراف
             </Button>
           </DialogActions>
+      </Dialog>
+
+
+
+
+      <Dialog fullWidth className="w-full" scroll="paper" maxWidth="md" open={addAddressModal} onClose={() => CloseAddressModal()}>
+
+        <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
+            ثبت آدرس برای کارخانه ی 
+        </DialogTitle>
+        <Divider />
+        <DialogContent className="flex flex-col items-center gap-10 mt-12 h-[90vh] " >           
+
+          <div className="flex flex-col justify-center items-center gap-10 w-full" >
+
+              <div>
+                <CustomNeshanMap setAddress={setAddress} setLatLang={setLatLang} />
+              </div>
+
+
+              <div className='w-full flex flex-col justify-center items-start gap-1 ' >
+                <div className="w-full grid grid-cols-2 gap-2 justify-center items-center" >
+                  <TextField
+                    className="w-[90%]"
+                    id="input-with-icon-textfield"
+                    label="  خیابان  "
+                    placeholder=" خیابان  "
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="end">
+                          <Category className='text-asliLight' />
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="standard"
+                  />
+                  <TextField
+                    className="w-[90%]"
+                    id="input-with-icon-textfield"
+                    label=" کوچه "
+                    placeholder=" کوچه  "
+                value={alley}
+                    onChange={(e) => setAlley(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="end">
+                          <Category className='text-asliLight' />
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="standard"
+                  />
+                  <TextField
+                    className="w-[90%]"
+                    id="input-with-icon-textfield"
+                    label=" پلاک "
+                    placeholder=" پلاک  "
+                    value={number}
+                    onChange={(e) => setNumber(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="end">
+                          <Category className='text-asliLight' />
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="standard"
+                  />
+                  <TextField
+                    className="w-[90%]"
+                    id="input-with-icon-textfield"
+                    label=" کدپستی "
+                    placeholder=" کدپستی  "
+                    value={zipcode}
+                    onChange={(e) => setZipcode(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="end">
+                          <Category className='text-asliLight' />
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="standard"
+                  />
+                </div>
+                <h2 className="border-b-2 text-lg" > آدرس </h2>
+              <Textarea 
+                className="w-full" 
+                minRows={3}
+                value={Address === undefined ? " " : `${Address?.state} ${Address?.formatted_address}`}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+
+              </div>
+
+          </div>
+
+        </DialogContent>
+        <DialogActions className="p-4 flex flex-row gap-4" >
+          <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddFactoryAddress()}>
+            {loading ? <CircularProgress size="medium" /> : " ثبت آدرس "}
+          </Button>
+          <Button variant="soft" color='danger'  onClick={() => CloseAddressModal()}>
+            انصراف
+          </Button>
+        </DialogActions>
       </Dialog>
 
         <Snackbar

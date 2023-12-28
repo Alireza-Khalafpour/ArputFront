@@ -3,15 +3,23 @@ import proimg from "../../../../public/images/b2.jpg"
 import proimgDet from "../../../../public/images/b3.jpg"
 import { e2p, sp } from "@/utils/replaceNumbers";
 import { Badge, Rating } from "@mui/material";
-import { Button, Card, CardActions, CardContent, Chip, CircularProgress, Divider, Input, SvgIcon, Textarea, Typography } from "@mui/joy";
+import { Chip, Divider} from "@mui/joy";
 import CommentTextArea from "@/components/module/CommentTextArea";
 import axios from "axios";
-import { AddRounded, ShoppingCartCheckout } from "@mui/icons-material";
+import { cookies } from 'next/headers'
+import AddProductCard from "@/components/module/AddProductCard";
 
-async function SingleProduct() {
+async function SingleProduct({params:{single_product}}) {
 
 
-    const res = await axios.get('https://supperapp-backend.chbk.run/Product/product/658705815c1876c59f9c1a0d', {
+    const Auth = cookies().get("tokenDastResi").value
+
+    const headers ={
+        'accept': 'application/json',
+        'Authorization': `Bearer ${Auth}`,
+    }
+
+    const res = await axios.get(`https://supperapp-backend.chbk.run/Product/product/${single_product}`, {
         headers:{
           'accept': 'application/json',
         }
@@ -22,6 +30,12 @@ async function SingleProduct() {
     const productList = res.data
 
     console.log(productList)
+
+    const Rate = axios.get(`https://supperapp-backend.chbk.run/rate_pre_product/pre_product/star_rate/${single_product}`, {
+        headers: headers
+        }).catch((error) => {
+          console.log(error, "Errnooooooooooooommmmmmmmor");
+        });
 
 
 
@@ -95,31 +109,9 @@ async function SingleProduct() {
                         <Image width={140} height={140} src={proimgDet} className="rounded-xl" />
                         <Image width={140} height={140} src={proimgDet} className="rounded-xl" />
                     </div>
-                    <Card variant="solid" invertedColors className="w-full bg-asliDark">
-        
-        <CardContent className="flex flex-row gap-6 items-center justify-between w-full">
-            <div className=" flex flex-row justify-start items-center">
-              <CircularProgress size="lg" determinate value={0}>
-                <SvgIcon>
-                  <ShoppingCartCheckout/>
-                </SvgIcon>
-              </CircularProgress>
-              <h2 className="text-4xl"> {e2p(sp(productList.seller_info[0].price))} <span className="text-base" > ریال </span> </h2>
-            </div>
-          <Chip color="warning" className="p-2 text-sm w-full" > تخفیف {e2p(productList.seller_info[0].off)}% </Chip>
-          <div className="flex flex-row-reverse justify-center items-center">
-                <button className="w-1/5 border-2 bg-mainBlack rounded-lg rounded-r-none h-9 text-lg " > - </button>
-                    <Input placeholder="0" className="w-1/5 h-[30px] rounded-none bg-white text-black "/>
-                <button className="w-1/5 border-2 bg-mainBlack rounded-lg rounded-l-none h-9 text-lg " > + </button>
-            </div>
-        </CardContent>
 
-      <CardActions className="w-full text-center flex justify-center items-center" >
-        <button className="w-[80%] bg-khas rounded-xl p-2 hover:bg-orange-600 transition-colors duration-300">
-          افزودن به سبد خرید <AddRounded/>
-        </button>
-      </CardActions>
-    </Card>
+                    <AddProductCard productList={productList} />
+
                 </div>
 
 
@@ -132,31 +124,21 @@ async function SingleProduct() {
                 </div>
 
                 <ul className="md:w-[90%] w-full flex flex-col gap-6 " >
-                    <li className="w-full flex flex-row justify-between items-center p-4 odd:bg-slate-200 border-2 border-asliDark rounded-xl border-dashed " >
-                        <h2> نام فروشنده </h2>
-                        <span> نحوه عملکرد و امتیاز </span>
-                        <h3 > {e2p(sp(45000000))} </h3>
-                        <button className="p-3 rounded-xl bg-khas text-white hover:bg-orange-600 duration-200 transition-colors" >
-                            افزودن به سبد خرید
-                        </button>
-                    </li>
-                    <li className="w-full flex flex-row justify-between items-center p-4 border-2 border-asliDark rounded-xl border-dashed " >
-                        <h2> نام فروشنده </h2>
-                        <span> نحوه عملکرد و امتیاز </span>
-                        <h3 > {e2p(sp(45000000))} </h3>
-                        <button className="p-3 rounded-xl bg-khas text-white hover:bg-orange-600 duration-200 transition-colors" >
-                            افزودن به سبد خرید
-                        </button>
-                    </li>
-                    <li className="w-full flex flex-row justify-between items-center p-4 border-2 border-asliDark rounded-xl border-dashed " >
-                        <h2> نام فروشنده </h2>
-                        <span> نحوه عملکرد و امتیاز </span>
-                        <h3 > {e2p(sp(45000000))} </h3>
-                        <button className="p-3 rounded-xl bg-khas text-white hover:bg-orange-600 duration-200 transition-colors" >
-                            افزودن به سبد خرید
-                        </button>
-                    </li>
+                    {
+                        productList.seller_info.map((s) => (
 
+                            <li className="w-full flex flex-row justify-between items-center p-4 odd:bg-slate-200 border border-asliDark rounded-xl border-dashed " >
+                                <h2> {s.seller_name} </h2>
+                                <span> نحوه عملکرد و امتیاز </span>
+                                <h3 > قیمت {e2p(sp(s.price))} ریال </h3>
+                                <Chip className="p-1 px-3 bg-rose-700 text-white rounded-xl" > تخفبف {e2p(s.off)} % </Chip>
+                                <button className="p-3 rounded-xl bg-khas text-white hover:bg-orange-600 duration-200 transition-colors" >
+                                     خرید از این فروشگاه
+                                </button>
+                            </li>
+                        ))
+                    }
+        
                 </ul>
 
             </div>

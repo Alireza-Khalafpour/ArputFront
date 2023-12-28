@@ -9,7 +9,7 @@ import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable,
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import ContextMenu from "@/utils/ContextMenu";
-import { Input, ModalDialog, Textarea } from "@mui/joy";
+import { Alert, Input, ModalDialog, Snackbar, Textarea } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
 import Image from "next/image";
 
@@ -32,14 +32,20 @@ export const MyProducts = ()=> {
     const [features, setFeatures] = useState([])
     const [imageUrl, setImageUrl] = useState()
     // add product states----------------------------
+    const[AddProductModal, setAddProductModal] = useState(false);
+
     const [productName, setProductName] = useState('');
     const [preProductId, setPreProductId] = useState('');
     const [price, setPrice] = useState(0);
     const [off, setOff] = useState(0);
-    const [postCost, setPostCost] = useState(0);
     const [description, setDescription] = useState("");
     const [productImgUrls, setProductImgUrls] = useState([]);
     
+    // Alerts---------------------------------------
+    const [message, setMessage] = useState();
+    const [alert, setAlert] = useState(false);
+    const [errorAlert, setErrorAlert] = useState(false);
+    const [loading, setLoading] = useState(false);
 
 
     async function ListApi(Au) {
@@ -52,7 +58,7 @@ export const MyProducts = ()=> {
         })
         .then((response) => {
           setData(response.data.Data)
-          console.log(response,"bashe mane")
+          console.log(response)
         })
         .catch((error) => {
           console.log(error, "Error");
@@ -72,40 +78,92 @@ export const MyProducts = ()=> {
         'Authorization': `Bearer ${Auth}`,
         'Content-Type': 'application/json',
         }
-      
-        const formData = new FormData();
 
-        formData.append("name", productName);
-        formData.append("pre_product", preProductId);
-        formData.append("price", price);
-        formData.append("off", off);
-        formData.append("cost_post", postCost);
-        formData.append("description", description);
-        formData.append("image_urls", productImgUrls);
       
         async function AddProductApi() {
           // setLoading(true);
           await axios.post('https://supperapp-backend.chbk.run/Product/create', {
-            formData
+            "name": productName,
+            "pre_product": preProductId,
+            "price": price,
+            "off": off,
+            "description": description,
+            "image_urls": productImgUrls
           }, {
               headers: headers
             })
             .then((response) => {
               console.log(response)
-              // setAlert(true)
-              // setMessage(" دسته بندی جدید با موفقیت افزوده شد ")
-              // setLoading(false)
+              setAlert(true)
+              setMessage(" کالا ایجاد شد ")
+              setLoading(false)
               // setAddCategoryModal(false)
               ListApi(Auth)
             })
             .catch(function (error) {
               console.log(error, "Error");
               setMessage(" متاسفیم،خطایی رخ داده است ")
-              // setErrorAlert(true)
+              setErrorAlert(true)
               // setLoading(false)
             });
       
         }
+
+
+            // Add image and Name for product-------------
+            const [imageL, setImage] = useState()
+            const[fileName, setFileName] = useState("فایلی انتخاب نشده...")
+          
+            const DeleteImg = () => {
+              setFileName("فایلی انتخاب نشده...")
+              setImage()
+              setImgUrl()
+            }
+
+            // Drag and Drop image ---------------------------
+
+            function DragHandler(e){
+                e.preventDefault();
+            }
+
+            function DropHandler(e){
+                e.preventDefault();
+                setImage(e.dataTransfer.files[0])
+            }
+
+            // handle upload image and get url-----------------------------
+
+            const ImgHeaders ={
+              'accept': 'application/json',
+              'Authorization': `Bearer ${Auth}`,
+              'Content-Type': 'multipart/form-data'
+              }
+
+            async function handleImageUpload(e) {
+
+                setImage(e.target.files[0])
+                setFileName(e.target.files[0].name)
+        
+                // setLoading(true);
+                await axios.post('https://supperapp-backend.chbk.run/upload/upload_texture', {"file" : e.target.files[0]},
+                {
+                  headers: ImgHeaders
+                })
+                .then((response) => {
+                    console.log(response)
+                    setProductImgUrls([response?.data.address])
+                    // setLoading(false)
+                })
+                .catch((error) => {
+                  console.log(error, "Error");
+                //   setLoading(false)
+                });
+        
+                setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            };
+        
+
+
     
 
   // columns and data =============================================
@@ -153,6 +211,7 @@ export const MyProducts = ()=> {
     console.log(row)
     setAddProductModal(true)
     setPreProductId(row.original.pre_product_id)
+    console.log(row.original.pre_product_id)
   }
 
 const table = useMaterialReactTable({
@@ -188,6 +247,7 @@ const table = useMaterialReactTable({
       <div className="w-auto">
         <IconButton
           onClick={() => handleAddProductModal(row)}
+          title=" افزودن کالا "
         >
           <AddCircleRounded className="text-khas" />
         </IconButton>
@@ -229,15 +289,10 @@ const table = useMaterialReactTable({
   // },
 });
 
-  // add image in modal part -------------------------------------------------------------
-  const[AddProductModal, setAddProductModal] = useState(false);
-  const [image, setImage] = useState([])
-  const[fileName, setFileName] = useState("فایلی انتخاب نشده...")
 
-  const DeleteImg = () => {
-    setFileName("فایلی انتخاب نشده...")
-    setImage([])
-  }
+
+
+
 
     return (
 
@@ -279,7 +334,7 @@ const table = useMaterialReactTable({
           <Divider />
           <DialogContent className="flex flex-col justify-center items-center gap-10" >           
 
-            <div className='w-[90%] grid grid-cols-2 gap-2 justify-center mx-auto items-center' >
+            <div className='w-[90%] grid grid-cols-2 gap-8 justify-center mx-auto items-center' >
               <TextField
                 id="input-with-icon-textfield"
                 className="w-[65%]"
@@ -331,7 +386,7 @@ const table = useMaterialReactTable({
                 variant="standard"
               />
 
-              <TextField
+              {/* <TextField
                 id="input-with-icon-textfield"
                 className="w-[65%]"
                 label=" هزینه ارسال "
@@ -346,13 +401,48 @@ const table = useMaterialReactTable({
                   ),
                 }}
                 variant="standard"
-              />
+              /> */}
+
+              <div>
+                <form 
+                    onClick={() => document.getElementById("fileInput").click()}
+                    onDragOver={(e) => DragHandler(e)}
+                    onDrop={(e) => DropHandler(e)} 
+
+                    className='flex flex-col justify-center items-center border-2 cursor-pointer border-dashed border-asliLight w-64 h-24 rounded-3xl hover:animate-pulse' 
+                >
+                <input 
+                    type='file' 
+                    id='fileInput' 
+                    multiple 
+                    hidden 
+                    accept='image/*'
+                    onChange={ (e) =>{
+                      handleImageUpload(e)
+                    }
+                    }
+                />
+                {imageL ?
+                    <img className='w-full h-full p-1 rounded-3xl' src={imageL} alt="تکسچر محصول"  />
+                    :
+                    <div className='text-center'>
+                    <CloudUpload className='text-3xl text-asliLight'/>
+                    <p> آپلود تکسچر </p>
+                    </div>
+                }
+                </form>
+                <div className='w-52 flex flex-row justify-between items-center mt-1 p-1 text-sm' >
+                    <Delete  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg()}/>
+                    <p>{fileName}</p>
+                </div>
+              </div>
 
             </div>
 
             <Textarea
                 id="input-with-icon-textfield"
-                className="w-full border-1 border-black"
+                className="w-full border-2 border-gray-500"
+                minRows={3}
                 label=" توضیحات "
                 placeholder=" توضیحات "
                 value={description}
@@ -422,6 +512,26 @@ const table = useMaterialReactTable({
 
         </DialogContent>
       </Dialog>
+
+      <Snackbar
+          className="bg-green-700 text-white"
+          open={alert}
+          autoHideDuration={4000}
+          onClose={() => setAlert(false)}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >
+          <Alert variant='filled' severity='success' className='text-lg text-white font-semibold bg-green-700' > {message} </Alert>
+          </Snackbar>
+
+          <Snackbar
+          className="bg-rose-700 text-white"
+          open={errorAlert}
+          autoHideDuration={4000}
+          onClose={() => setErrorAlert(false)}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >
+          <Alert variant='filled' severity='error' className='text-lg text-white font-semibold bg-rose-700 ' > {message} </Alert>
+      </Snackbar>
 
 
       </div>

@@ -4,6 +4,8 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { images } from "../../../next.config";
+import { Rating } from "@mui/material";
+
 
 async function Products() {
 
@@ -18,8 +20,6 @@ async function Products() {
 
     const productList = res.data.data
 
-    console.log(productList)
-
     
 
     return (
@@ -30,7 +30,7 @@ async function Products() {
                     <button className="text-sm text-khas" > حذف فیلتر </button>
                 </div>
             </div>
-            <div id="productsPart" className="flex flex-row justify-start items-center flex-wrap w-5/6" >
+            <div id="productsPart" className="flex flex-row justify-start items-center gap-3 w-5/6" >
 
             {productList?.length > 0 || res === undefined ? null : (
 
@@ -48,8 +48,8 @@ async function Products() {
 
                 productList?.map((i) => (
 
-                    <Link href={`/products/${i.id}`} className="w-full h-full" key={i.id} >
-                        <Card className="md:w-1/4 w-full h-full hover:shadow-2xl">
+                    <Link href={`/products/${i.id}`} className="md:w-1/4 w-full h-full" key={i.id} >
+                        <Card className=" w-full h-full hover:shadow-2xl">
                             <CardOverflow>
                                 <AspectRatio>
                                 <Image
@@ -68,6 +68,7 @@ async function Products() {
                                 >
                                 {i.name}
                                 </span>
+                                <div className="flex flex-row gap-1 items-center"> <span> امتیاز : </span> <Rating value={3} readOnly /> </div>
                                 <Chip component="span" size="sm" variant="soft" color={i.has_bundle === true ? "success" : "danger"}>
                                     {i.has_bundle === true ? "باندل دارد" : "باندل ندارد"}
                                 </Chip>

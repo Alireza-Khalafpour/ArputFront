@@ -1,10 +1,11 @@
-import { ArrowOutward, ArrowOutwardOutlined } from "@mui/icons-material";
-import { AspectRatio, Button, Card, CardContent, CardOverflow, Chip, Typography } from "@mui/joy";
+import { ArrowOutward, ArrowOutwardOutlined, Favorite, Share } from "@mui/icons-material";
+import { AspectRatio, Button, Card, CardActions, CardContent, CardOverflow, Chip, Typography } from "@mui/joy";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { images } from "../../../next.config";
 import { Rating } from "@mui/material";
+import { e2p } from "@/utils/replaceNumbers";
+import AddToFavoriteAndShare from "@/components/module/AddToFavoriteAndShare";
 
 
 async function Products() {
@@ -18,7 +19,9 @@ async function Products() {
           console.log(error, "Error");
         });
 
-    const productList = res.data.data
+    const productList = res?.data.data
+
+
 
     
 
@@ -36,7 +39,7 @@ async function Products() {
 
                 <>
                     <h2>
-                        Reload please be patient ...
+                        Reloading please be patient ...
                     </h2>
                 </>
 
@@ -48,36 +51,40 @@ async function Products() {
 
                 productList?.map((i) => (
 
-                    <Link href={`/products/${i.id}`} className="md:w-1/4 w-full h-full" key={i.id} >
-                        <Card className=" w-full h-full hover:shadow-2xl">
-                            <CardOverflow>
-                                <AspectRatio>
-                                <Image
-                                    src={i.image_url}
-                                    loading="lazy"
-                                    fill
-                                    alt=""
-                                />
-                                
-                                </AspectRatio>
-                            </CardOverflow>
-                            <CardContent>
-                                <Typography level="body-xs"> دسته بندی </Typography>
-                                <span
-                                endDecorator={<ArrowOutwardOutlined />}
-                                >
-                                {i.name}
-                                </span>
-                                <div className="flex flex-row gap-1 items-center"> <span> امتیاز : </span> <Rating value={3} readOnly /> </div>
-                                <Chip component="span" size="sm" variant="soft" color={i.has_bundle === true ? "success" : "danger"}>
-                                    {i.has_bundle === true ? "باندل دارد" : "باندل ندارد"}
-                                </Chip>
-                                <Typography level="body-sm">
-                                {i.seller_number} سلر نامبر
-                                </Typography>
-                            </CardContent>
+                        <Card className="md:w-1/4 w-full h-full hover:shadow-2xl" key={i.id}>
+                            <Link href={`/products/${i.id}`} className=" w-full h-full" key={i.id} >
+                                <CardOverflow>
+                                    <AspectRatio>
+                                    <Image
+                                        src={i.image_url}
+                                        loading="lazy"
+                                        fill
+                                        alt=""
+                                    />
+                                    
+                                    </AspectRatio>
+                                    
+                                </CardOverflow>
+                                <CardContent className="gap-2 mt-3" >
+                                    <Typography level="body-xs"> دسته بندی </Typography>
+                                    <span
+                                    endDecorator={<ArrowOutwardOutlined />}
+                                    >
+                                    {i.name}
+                                    </span>
+                                    <div className="flex flex-row gap-1 items-center"> <span> امتیاز : </span> <Rating value={3} readOnly /> </div>
+                                    <Chip component="span" size="sm" variant="soft" color={i.has_bundle === true ? "success" : "danger"}>
+                                        {i.has_bundle === true ? "باندل دارد" : "باندل ندارد"}
+                                    </Chip>
+                                    <Typography level="body-sm">
+                                    {e2p(i.seller_number)} فروشگاه برای این کالا
+                                    </Typography>
+                                </CardContent>
+                            </Link>
+                            <CardActions>
+                                <AddToFavoriteAndShare pId={i.id} />
+                            </CardActions>
                         </Card>
-                    </Link>
 
                 ))
 

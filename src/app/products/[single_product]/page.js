@@ -29,7 +29,6 @@ async function SingleProduct({params:{single_product}}) {
 
     const productList = res.data
 
-    console.log(productList)
 
     const Rate = axios.get(`https://supperapp-backend.chbk.run/rate_pre_product/pre_product/star_rate/${single_product}`, {
         headers: headers

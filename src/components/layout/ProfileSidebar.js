@@ -33,7 +33,7 @@ const ProfileSidebar = ({children}) => {
                     </Link>
                     </ListItem>
                     <ListItem disablePadding focusRipple className="mb-6" >
-                    <Link href="/profile" className='  w-full shadow-none border-l-4 hover:border-khas hover:bg-paszamine2 text-paszamine3 hover:text-black transition-all duration-200 flex justify-start mr-4 cursor-pointer p-4 rounded-md gap-2' >
+                    <Link href="/profile/favorites" className='  w-full shadow-none border-l-4 hover:border-khas hover:bg-paszamine2 text-paszamine3 hover:text-black transition-all duration-200 flex justify-start mr-4 cursor-pointer p-4 rounded-md gap-2' >
                         <FavoriteBorder />
                         <span className="md:block hidden" > لیست علاقه مندی ها </span>
                     </Link>

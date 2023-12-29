@@ -158,11 +158,6 @@ export const CreateCategory = ()=> {
         id: 'name',
       },
       {
-        header: ' نام ویژگی ',
-        accessorKey: 'main',
-        id: 'main',
-      },
-      {
         header: ' id ',
         accessorKey: 'id',
         id: 'id',

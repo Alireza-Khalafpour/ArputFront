@@ -1,44 +1,81 @@
+'use client'
+
 import { e2p, sp } from "@/utils/replaceNumbers";
-import { DiscountRounded, Money, PriceCheck, StoreMallDirectoryRounded } from "@mui/icons-material";
+import { Delete, DeleteForeverOutlined, DiscountRounded, Money, PriceCheck, StoreMallDirectoryRounded } from "@mui/icons-material";
 import { Chip, Divider, Input } from "@mui/joy";
 import axios from "axios";
-import { cookies } from "next/headers";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import Cookies from "universal-cookie";
 
 
 
-async function BuyingBasket() {
+function BuyingBasket() {
 
+    const cookie = new Cookies();
 
-
-    const Auth = cookies().get("tokenDastResi").value
+    const Auth = cookie.get("tokenDastResi")
 
     const headers ={
         'accept': 'application/json',
         'Authorization': `Bearer ${Auth}`,
     }
 
-    const res = await axios.get('https://supperapp-backend.chbk.run/user_basket/list', {
-        headers: headers
-        }).catch((error) => {
-          console.log(error, "Error");
-        });
+    const [res, setRes] = useState()
 
-        console.log(res.data)
+    useEffect(() => {
+        axios.get('https://supperapp-backend.chbk.run/user_basket/list', {
+            headers: headers
+            }).then((response)=>{
+                setRes(response)
+            }).catch((error) => {
+              console.log(error, "Error");
+            });
+    },[])
 
         const BasketList = res?.data.data
+
+    // -Delete------------------------------------------------------
+
+        const DeleteHeaders = {
+            'accept': 'application/json',
+            'Authorization': `Bearer ${Auth}`,
+            'Content-Type': 'application/json'
+        }
+
+
+        
+        const handleDeleteFromBasket = (i) => {
+
+            console.log(i)
+
+            const data = {
+                "product_id": i.product_id, 
+                "numbers": i.number   
+            }
+
+        axios.delete('https://supperapp-backend.chbk.run/user_basket/delete', {
+            headers : DeleteHeaders
+        }, data)
+        .then((response) => {
+            console.log(response)
+        }).catch((err) => {
+            console.log(err, "Error")
+        });
+
+    }
 
 
     return (
         <>
         
             {
-                res.data.detail?.login === false 
-                ?
-                (
-                    <div className="w-full h-[70vh] text-2xl text-center flex flex-col justify-center items-center"> ابتدا وارد شوید </div>
-                )
-                :
+                // res.data.detail?.login === false 
+                // ?
+                // (
+                //     <div className="w-full h-[70vh] text-2xl text-center flex flex-col justify-center items-center"> ابتدا وارد شوید </div>
+                // )
+                // :
                 (
                     <div className="flex flex-col justify-center w-full" >
 
@@ -50,7 +87,13 @@ async function BuyingBasket() {
         
                             {
                                 BasketList?.map((i) => (
-                                    <div className="w-full gap-2 border-2 rounded-xl flex md:flex-row flex-col justify-center items-start p-4 shadow-md" >
+                                    <div key={i.product_id} className="w-full gap-2 border-2 rounded-xl flex md:flex-row flex-col justify-center items-start p-4 shadow-md relative" >
+
+                                        <div className=" absolute bottom-11 left-6 " >
+
+                                            <button onClick={() => handleDeleteFromBasket(i)} title="حذف از سبد" className="w-full bg-rose-500 text-white rounded-full p-2 hover:bg-rose-700 transition-colors duration-150"> <DeleteForeverOutlined/> </button>
+
+                                        </div>
         
                                         <div className="md:w-1/5 w-full relative " >
                                             <Image src={i.image} width={250} height={250} title={i.product_name} className="rounded-xl" />

@@ -6,13 +6,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
 import { Divider } from '@mui/material';
-import { ExitToApp, Home, LoginOutlined, NotificationsActive, Person, Settings, ShoppingBasket, SpaceDashboard } from '@mui/icons-material';
+import { ArrowCircleDownTwoTone, ArrowDownward, ExitToApp, ExpandCircleDown, Home, InstallMobileOutlined, LoginOutlined, NotificationsActive, Payment, Person, Settings, ShoppingBasket, SpaceDashboard, Store } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
+import { Avatar, Dropdown, ListItemDecorator, Menu, MenuButton, MenuItem } from '@mui/joy';
 
 
 export default function Header() {
@@ -20,15 +19,17 @@ export default function Header() {
   const cookie = new Cookies();
 
   const route = useRouter()
+  
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleLogout = () => {
     cookie.remove("tokenDastResi");
     setTimeout(() => {
       route.push("/")
-    }, 1000);
+    }, 500);
+    setAnchorEl(null);
   }
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,10 +39,12 @@ export default function Header() {
     setAnchorEl(null);
   };
 
+  const [productsList, setProductsList] = React.useState(false)
+
   return (
     <div className='w-full' >
       <AppBar position="static" className='bg-asliDark' >
-        <Toolbar className='flex flex-row justify-between w-full items-center' >
+        <Toolbar className='flex flex-row justify-between w-full h-full items-center' >
           {/* <IconButton
             size="large"
             edge="start"
@@ -51,11 +54,76 @@ export default function Header() {
           >
             <MenuIcon />
           </IconButton> */}
-          <Typography variant='h4' >
-            لوگو
-          </Typography>
+          <div className='w-4/5 flex flex-row justify-start h-full items-center gap-20'>
+            <Typography variant='h4' >
+              لوگو
+            </Typography>
 
-            <div>
+            <ul className='flex flex-row justify-center items-center h-full gap-6' >
+              <Dropdown>
+                <MenuButton
+                  slots={{ root: IconButton }}
+                  slotProps={{ root: { variant: 'plain', color: 'neutral' } }}
+                  sx={{ borderRadius: 40 }}
+                >
+                  <h3 onClick={() => setProductsList(true)}  className=' text-white pb-2 hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer ' > محصولات <ExpandCircleDown className='text-khas animate-bounce ' /></h3>
+                </MenuButton>
+                <Menu
+                  className='bg-paszamine2'
+                  variant="soft"
+                  invertedColors
+                  aria-labelledby="apps-menu-demo"
+                  sx={{
+                    '--List-padding': '0.5rem',
+                    '--ListItemDecorator-size': '3rem',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(3, 100px)',
+                    gridAutoRows: '100px',
+                    gap: 1,
+                  }}
+                >
+                  <MenuItem orientation="vertical" className='font-bold'>
+                    <ListItemDecorator>
+                      <Avatar className="bg-asliLight text-white font-bold" >س</Avatar>
+                    </ListItemDecorator>
+                    سرامیک
+                  </MenuItem>
+                  <MenuItem orientation="vertical" className='font-bold'>
+                    <ListItemDecorator>
+                      <Avatar className="bg-asliLight text-white font-bold" >ک</Avatar>
+                    </ListItemDecorator>
+                    کاشی
+                  </MenuItem>
+                  <MenuItem orientation="vertical" className='font-bold'>
+                    <ListItemDecorator>
+                      <Avatar className="bg-asliLight text-white font-bold" >م</Avatar>
+                    </ListItemDecorator>
+                    موزاییک
+                  </MenuItem>
+                  <MenuItem orientation="vertical" className='font-bold'>
+                    <ListItemDecorator>
+                      <Avatar className="bg-asliLight text-white font-bold" >س</Avatar>
+                    </ListItemDecorator>
+                    سفال
+                  </MenuItem>
+                  <MenuItem orientation="vertical" className='font-bold'>
+                    <ListItemDecorator>
+                      <Avatar className="bg-asliLight text-white font-bold" >گ</Avatar>
+                    </ListItemDecorator>
+                    گل
+                  </MenuItem>
+                </Menu>
+              </Dropdown>
+              <h3 className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' >اپ موبایل <InstallMobileOutlined className='text-khas' /> </h3>
+              <Link href="/signup" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > ثبت فروشگاه <Store className='text-khas'/> </Link>
+              <h3 className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > لیست هزینه اشتراک <Payment className='text-khas' /> </h3>
+            </ul>
+
+
+
+          </div>
+
+            <div className='w-1/5 flex justify-end items-center'>
 
             {
                 cookie.get('tokenDastResi')

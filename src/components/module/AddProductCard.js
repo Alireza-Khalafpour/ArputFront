@@ -84,7 +84,7 @@ const AddProductCard = ({productList}) => {
 
     return (
         <>
-            <Card variant="solid" invertedColors className="w-full bg-asliDark">
+            <Card variant="solid" invertedColors className="w-full max-w-lg bg-asliDark relative">
         
                 <CardContent className="flex flex-row gap-6 items-center justify-normal w-full">
                     <div className=" flex flex-row justify-start items-center flex-nowrap">
@@ -93,9 +93,9 @@ const AddProductCard = ({productList}) => {
                                 <ShoppingCartCheckout/>
                             </SvgIcon>
                         </CircularProgress>
-                        <h2 className="text-4xl"> {e2p(sp(productList.seller_info[0].price))} <span className="text-base" > ریال </span> </h2>
+                        <h2 className="text-3xl"> {e2p(sp(productList.seller_info[0].price))} <span className="text-base" > ریال </span> </h2>
                     </div>
-                    <Chip color="danger" className="p-2 text-sm w-full bg-rose-900" > تخفیف {e2p(productList.seller_info[0].off)}% </Chip>
+                    <Chip color="danger" className="p-2 text-sm w-full bg-rose-900 absolute top-0 left-0" > تخفیف {e2p(productList.seller_info[0].off)}% </Chip>
 
                     <div className="flex flex-row-reverse justify-center items-center">
                         <button onClick={() => DecrementCount()} className="w-1/5 border-2 bg-mainBlack rounded-lg rounded-r-none h-10 text-lg " > - </button>

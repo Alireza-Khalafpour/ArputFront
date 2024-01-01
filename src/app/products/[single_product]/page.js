@@ -29,6 +29,9 @@ async function SingleProduct({params:{single_product}}) {
 
     const productList = res.data
 
+    console.log(productList)
+
+
 
     const Rate = axios.get(`https://supperapp-backend.chbk.run/rate_pre_product/pre_product/star_rate/${single_product}`, {
         headers: headers
@@ -95,14 +98,16 @@ async function SingleProduct({params:{single_product}}) {
                 </div>
 
                 <div className="md:w-1/3 w-full flex flex-col justify-center items-center gap-2 h-full" >
-                    <div id="main-Image" className="w-full h-2/3 " >
+                    <div id="main-Image" className="w-full h-2/3 max-w-lg max-h-lg " >
                         <Image
                             className="w-full h-full rounded-xl"
-                            src={proimg}
+                            src={productList.image_url[0]}
+                            width={300}
+                            height={300}
                             priority
                         />
                     </div>
-                    <div className="flex flex-row gap-2 justify-center items-center max-h-1/3 overflow-y-scroll w-full mx-auto" >
+                    <div className="flex flex-row gap-2 justify-center items-center max-h-1/3 overflow-y-scroll w-full mx-auto max-w-lg" >
                         <Image width={140} height={140} src={proimgDet} className="rounded-xl" />
                         <Image width={140} height={140} src={proimgDet} className="rounded-xl" />
                         <Image width={140} height={140} src={proimgDet} className="rounded-xl" />

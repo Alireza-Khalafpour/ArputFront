@@ -160,7 +160,25 @@ export default function DashbordSidebar({children}) {
                   id="panel1a-header"
                   className='hover:bg-slate-700 rounded-lg'
                 >
-                  <Typography>  ایجاد </Typography>
+                  <Typography> باندل  </Typography>
+                </AccordionSummary>
+                <Link  onClick={() => setTitle(" ایجاد باندل ")} href="/dashboard" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                    ایجاد باندل
+                    <ListAltOutlined className='text-khas'/>
+                </Link>
+              </Accordion>
+            </ListItem>
+            <Divider className='bg-slate-500' />
+
+            <ListItem  disablePadding >
+              <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
+                <AccordionSummary
+                  expandIcon={<ExpandMore style={{color:"white"}} />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  className='hover:bg-slate-700 rounded-lg'
+                >
+                  <Typography>  پنل ادمین </Typography>
                 </AccordionSummary>
                 <Link  onClick={() => setTitle(" ایجاد و لیست دسته بندی ها ")} href="/dashboard/create-category" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
                       ایجاد و لیست دسته بندی ها  
@@ -173,6 +191,10 @@ export default function DashbordSidebar({children}) {
                 <Link onClick={() => setTitle(" ایحاد و لیست کارخانه ها ")} href="/dashboard/create-factory" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
                       ایحاد و لیست کارخانه ها    
                     <FactoryOutlined className='text-khas'/>
+                </Link>
+                <Link onClick={() => setTitle(" مدیریت محصولات ادمین ")} href="/dashboard/my-products"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                    مدیریت محصولات ادمین
+                    <InboxIcon  className='text-khas'/>
                 </Link>
               </Accordion>
             </ListItem>
@@ -213,7 +235,7 @@ export default function DashbordSidebar({children}) {
                     لیست پیش محصولات
                     <ManageSearchRounded className='text-khas'/>
                 </Link>
-                <Link onClick={() => setTitle(" مدیریت محصولات من ")} href="/dashboard/my-products"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                <Link onClick={() => setTitle(" مدیریت محصولات من ")} href="/dashboard/my-products-shop"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
                     مدیریت محصولات من
                     <InboxIcon  className='text-khas'/>
                 </Link>

@@ -26,10 +26,10 @@ export const AddRepresentation = ()=> {
     const [loading, setLoading] = useState(false);
 
     const [data, setData] = useState([])
-    const [featureList, setFeatureList] = useState([])
-    const [addFeature, setAddFeatures] = useState([])
-    const [featureIds, setFeatureIds] = useState([])
-    const [addCategName, setAddCategName] = useState("")
+    const [representationName, setRepresentationName] = useState()
+    const [repNumber, setRepNumber] = useState()
+
+    const [currentId, setCurrentId] = useState()
 
     const [DeleteCategoryIds, setDeleteCategoryIds] = useState()
 
@@ -46,6 +46,8 @@ export const AddRepresentation = ()=> {
         })
         .then((response) => {
             console.log(response)
+            setCurrentId(response.data.data[0].id)
+            ListApi(response.data.data[0].id)
         })
         .catch((error) => {
             console.log(error, "Error");
@@ -61,19 +63,20 @@ export const AddRepresentation = ()=> {
       }
 
 
+      const RepresentationListHeaders = {
+        'accept': 'application/json',
+        'Authorization': `Bearer ${Auth}`
+      }
 
 
-    async function ListApi(Au) {
+    async function ListApi(currentid) {
       
-      await axios.get('https://supperapp-backend.chbk.run/branch/list', {
-        headers:{
-          'accept': 'application/json',
-          'Authorization': `Bearer ${Au}`,
-        }
+      await axios.get(`https://supperapp-backend.chbk.run/branch/branch_list_by_factory_id?factory_id=${currentid}`, {
+        headers:RepresentationListHeaders
         })
         .then((response) => {
             console.log(response)
-            setData(response.data.data)
+            setData(response.data.data[0].branch_data)
         })
         .catch((error) => {
             console.log(error, "Error");
@@ -82,8 +85,9 @@ export const AddRepresentation = ()=> {
 
 
     useEffect(() => {
-      const Auth = cookie.get('tokenDastResi')
-      ListApi(Auth);
+      // const Auth = cookie.get('tokenDastResi')
+      // ListApi(Auth);
+      GetCurrentUser()
     },[])
 
 
@@ -99,10 +103,11 @@ export const AddRepresentation = ()=> {
   
     async function AddBranchApi() {
       // setLoading(true);
-      await axios.post('https://supperapp-backend.chbk.run/branch/create', {"factory_id": "",'name': addCategName, 'features':featureIds}, {
+      await axios.post('https://supperapp-backend.chbk.run/branch/create', {"factory_id": currentId,'name': representationName, 'features':repNumber}, {
           headers: headers
         })
         .then((response) => {
+          console.log(response)
           setAlert(true)
           setMessage("  نمایندگی جدید با موفقیت افزوده شد ")
           setLoading(false)
@@ -165,19 +170,14 @@ export const AddRepresentation = ()=> {
   const columns = useMemo(
     () => [
       {
-        header: ' نام دسته بندی ',
-        accessorKey: 'name',
-        id: 'name',
+        header: ' نام نمایندگی ',
+        accessorKey: 'branch_name',
+        id: 'branch_name',
       },
       {
-        header: ' نام ویژگی ',
-        accessorKey: 'main',
-        id: 'main',
-      },
-      {
-        header: ' id ',
-        accessorKey: 'id',
-        id: 'id',
+        header: ' آیدی ',
+        accessorKey: 'branch_id',
+        id: 'branch_id',
       },
     ],
     []
@@ -305,8 +305,8 @@ const table = useMaterialReactTable({
                 id="input-with-icon-textfield"
                 label=" نام نمایندگی "
                 placeholder=" نام نمایندگی  "
-                value={addCategName}
-                onChange={(e) => setAddCategName(e.target.value)}
+                value={representationName}
+                onChange={(e) => setRepresentationName(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="end">
@@ -321,8 +321,8 @@ const table = useMaterialReactTable({
                 id="input-with-icon-textfield"
                 label=" شماره تماس "
                 placeholder=" شماره تماس "
-                value={addCategName}
-                onChange={(e) => setAddCategName(e.target.value)}
+                value={repNumber}
+                onChange={(e) => setRepNumber(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="end">

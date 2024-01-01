@@ -110,27 +110,59 @@ export const CreateCategory = ()=> {
 
     // Delete a category -----------------------------------------
 
-    async function DeleteCategoryApi() {
-      setLoading(true);
-      console.log(DeleteCategoryIds, "idsssssss")
-      await axios.delete('https://supperapp-backend.chbk.run/category/delete', {'ids':[DeleteCategoryIds]}, {
-          headers: headers
-        })
-        .then((response) => {
-          console.log(response)
-          setAlert(true)
-          setMessage(" دسته بندی حذف شد ")
-          setLoading(false)
-          ListApi(Auth)
-        })
-        .catch((error) => {
-          console.log(error, "Error");
-          setMessage(" متاسفیم،خطایی رخ داده است ")
-          setErrorAlert(true)
-          setLoading(false)
-        });
+    const DeleteCategoryApi = (i) => {
+
+      const data = {
+        ids:DeleteCategoryIds
+      }
+
+      const deleteMethod = {
+          method: 'Delete',
+          headers: {
+              'accept': 'application/json',
+              'Authorization': `Bearer ${Auth}`,
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data) 
+         }
+         
+         // make the HTTP delete request using fetch api
+         fetch('https://supperapp-backend.chbk.run/category/delete', deleteMethod)
+         .then((response) => {
+              response.json()
+          })
+         .then((d) => {
+              console.log(d)
+              route.refresh();
+              // setTimeout(() => {
+              //     window.location.reload();
+              // }, 300);
+          }) 
+         .catch(err => console.log(err)) 
+
+  }
+
+    // async function DeleteCategoryApi() {
+    //   setLoading(true);
+    //   console.log(DeleteCategoryIds, "idsssssss")
+    //   await axios.delete('https://supperapp-backend.chbk.run/category/delete', {'ids':[DeleteCategoryIds]}, {
+    //       headers: headers
+    //     })
+    //     .then((response) => {
+    //       console.log(response)
+    //       setAlert(true)
+    //       setMessage(" دسته بندی حذف شد ")
+    //       setLoading(false)
+    //       ListApi(Auth)
+    //     })
+    //     .catch((error) => {
+    //       console.log(error, "Error");
+    //       setMessage(" متاسفیم،خطایی رخ داده است ")
+    //       setErrorAlert(true)
+    //       setLoading(false)
+    //     });
   
-    }
+    // }
 
     const [DeleteCategName, setDeleteCategName] = useState("")
 
@@ -267,7 +299,7 @@ const table = useMaterialReactTable({
               <>
                 <Typography> نوع ویژگی : {item.name} </Typography>
                 <Typography> نام ویژگی : {item.main}  </Typography>
-                <Typography className="flex flex-row gap-1 items-center">  <p>وضعیت فعال  : </p>{item.active === true ? <p className="rounded-full p-2 bg-green-700 w-2 h-2" ></p> : <p className="rounded-full p-2 bg-rose-700 w-2 h-2"></p>}  </Typography>
+                <Typography className="flex flex-row gap-1 items-center">  <p>وضعیت   : </p>{item.active === true ? <p className="rounded-full p-2 bg-green-700 w-2 h-2" ></p> : <p className="rounded-full p-2 bg-rose-700 w-2 h-2"></p>}  </Typography>
                 <Typography>  id : {item.id}   </Typography>
               </>
              ))
@@ -389,6 +421,7 @@ const table = useMaterialReactTable({
                 onChange={(event, val) =>{
                   setAddFeatures([...val]);
                 }}
+                limitTags={1}
                 sx={{ width:"190px"}}
                 renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن ویژگی " />}
               />

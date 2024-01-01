@@ -1,10 +1,12 @@
 'use client'
 
 import { e2p, sp } from "@/utils/replaceNumbers";
-import { Delete, DeleteForeverOutlined, DiscountRounded, Money, PriceCheck, StoreMallDirectoryRounded } from "@mui/icons-material";
+import { Delete, DeleteForeverOutlined, DiscountRounded, Money, PriceCheck, ShoppingCart, StoreMallDirectoryRounded } from "@mui/icons-material";
 import { Chip, Divider, Input } from "@mui/joy";
 import axios from "axios";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 
@@ -15,6 +17,8 @@ function BuyingBasket() {
     const cookie = new Cookies();
 
     const Auth = cookie.get("tokenDastResi")
+
+    const route = useRouter();
 
     const headers ={
         'accept': 'application/json',
@@ -28,6 +32,7 @@ function BuyingBasket() {
             headers: headers
             }).then((response)=>{
                 setRes(response)
+                console.log(response)
             }).catch((error) => {
               console.log(error, "Error");
             });
@@ -35,47 +40,56 @@ function BuyingBasket() {
 
         const BasketList = res?.data.data
 
-    // -Delete------------------------------------------------------
-
-        const DeleteHeaders = {
-            'accept': 'application/json',
-            'Authorization': `Bearer ${Auth}`,
-            'Content-Type': 'application/json'
-        }
-
-
+    // -Delete basket item------------------------------------------------------
         
         const handleDeleteFromBasket = (i) => {
 
-            console.log(i)
-
             const data = {
-                "product_id": i.product_id, 
-                "numbers": i.number   
+                product_id: i.product_id, 
+                numbers: i.number   
             }
 
-        axios.delete('https://supperapp-backend.chbk.run/user_basket/delete', {
-            headers : DeleteHeaders
-        }, data)
-        .then((response) => {
-            console.log(response)
-        }).catch((err) => {
-            console.log(err, "Error")
-        });
+            const deleteMethod = {
+                method: 'Delete',
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': `Bearer ${Auth}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data) 
+               }
+               
+               // make the HTTP delete request using fetch api
+               fetch('https://supperapp-backend.chbk.run/user_basket/delete', deleteMethod)
+               .then((response) => {
+                    response.json()
+                })
+               .then((d) => {
+                    console.log(d)
+                    route.refresh();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 300);
+                }) 
+               .catch(err => console.log(err)) 
 
-    }
+        }
 
 
     return (
         <>
         
             {
-                // res.data.detail?.login === false 
-                // ?
-                // (
-                //     <div className="w-full h-[70vh] text-2xl text-center flex flex-col justify-center items-center"> ابتدا وارد شوید </div>
-                // )
-                // :
+                res?.data.number <= 0
+                ?
+                (
+                    <div className="w-full h-[70vh] text-2xl text-center flex flex-col justify-center items-center gap-3">
+                      سبد خرید شما خالی است  
+                      <Link href="/products" className="px-4 p-2 bg-khas text-white rounded-xl "  > فروشگاه  <ShoppingCart/></Link>
+                    </div>
+
+                )
+                :
                 (
                     <div className="flex flex-col justify-center w-full" >
 

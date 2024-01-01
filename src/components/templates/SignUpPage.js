@@ -89,6 +89,7 @@ export default function SignUpPage() {
             setMessage(" کد با موفقیت ارسال شد ")
             setAlert(true)
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            setLoading(false)
           }
         })
         .catch(function (error) {

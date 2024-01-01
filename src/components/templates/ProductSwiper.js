@@ -23,6 +23,7 @@ const ProductSwiper = ({title}) => {
         spaceBetween={1}
         allowSlideNext={true}
         breakpoints={{
+          280: { slidesPerView: 2 },
           480: { slidesPerView: 3 },
           740: { slidesPerView: 4 },
           1275: { slidesPerView: 7 },

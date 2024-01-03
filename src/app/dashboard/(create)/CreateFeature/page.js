@@ -96,13 +96,17 @@ export const CreateFeature = ()=> {
           setMessage(" ویژگی جدید با موفقیت افزوده شد ")
           setLoading(false)
           setAddFeatureModal(false)
+          setFeaturesData({name : "" , main: "", others:[] })
+          setAddFeatureModal(false)
           ListApi(Auth)
         })
         .catch(function (error) {
           console.log(error, "Error");
           setMessage(" متاسفیم،خطایی رخ داده است ")
           setErrorAlert(true)
+          setFeaturesData({name : "" , main: "", others:[] })
           setLoading(false)
+          setAddFeatureModal(false)
         });
   
     }
@@ -160,14 +164,20 @@ export const CreateFeature = ()=> {
             setAlert(true)
             setMessage(" ویژگی به روزرسانی شد ")
             setLoading(false)
+            setEditFeatureModal(false)
+            setFeaturesData({name : "" , main: "", others:[] })
           }else if(response.data.message.length > 1){
             setMessage(response.data.message)
             setErrorAlert(true)
+            setEditFeatureModal(false)
+            setFeaturesData({name : "" , main: "", others:[] })
           }
         })
         .catch(function (error) {
           console.log(error, "Error");
           setLoading(false)
+          setEditFeatureModal(false)
+          setFeaturesData({name : "" , main: "", others:[] })
         });
   
     }

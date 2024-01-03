@@ -97,13 +97,20 @@ export const MyProducts = ()=> {
               setAlert(true)
               setMessage(" کالا ایجاد شد ")
               setLoading(false)
-              // setAddCategoryModal(false)
+              setAddProductModal(false)
+              setPreProductId('')
+              setProductName('')
+              setPrice(0)
+              setOff(0)
+              setDescription('')
+              setProductImgUrls([])
               ListApi(Auth)
             })
             .catch(function (error) {
               console.log(error, "Error");
               setMessage(" متاسفیم،خطایی رخ داده است ")
               setErrorAlert(true)
+              setAddProductModal(false)
               // setLoading(false)
             });
       
@@ -257,41 +264,19 @@ const table = useMaterialReactTable({
       </div>
     )
   }
-
-  // renderTopToolbar: ({ table }) => {
-
-  //   return (
-  //     <Box
-  //       sx={() => ({
-  //         display: 'flex',
-  //         gap: '0.5rem',
-  //         p: '8px',
-  //         justifyContent: 'space-between',
-  //       })}
-  //     >
-  //       <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-  //         {/* import MRT sub-components */}
-  //         <MRT_GlobalFilterTextField table={table} />
-  //         <MRT_ToggleFiltersButton table={table} />
-  //       </Box>
-  //       <Box>
-  //         <Box sx={{ display: 'flex', gap: '0.5rem' }}>
-  //           <button
-  //             className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
-  //             onClick={() => setAddCategoryModal(true)}
-  //           >
-  //             دسته بندی جدید <AddCircleOutline/> 
-  //           </button>
-  //         </Box>
-  //       </Box>
-  //     </Box>
-  //   );
-  // },
 });
 
 
 
-
+function handleCloseProductModal() {
+  setPreProductId('')
+  setProductName('')
+  setPrice(0)
+  setOff(0)
+  setDescription('')
+  setProductImgUrls([])
+  setAddProductModal(false)
+}
 
 
     return (
@@ -326,7 +311,7 @@ const table = useMaterialReactTable({
             options={contextMenuOptions}
         /> */}
 
-      <Modal open={AddProductModal} onClose={() => setAddProductModal(false)}>
+      <Modal open={AddProductModal} onClose={() => handleCloseProductModal()}>
         <ModalDialog variant="outlined" role="definition" className="w-[50vw] h-[70vh] p-0" >
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
               افزودن کالا
@@ -463,7 +448,7 @@ const table = useMaterialReactTable({
             <Button onClick={() => AddProductApi()} className='text-white bg-khas hover:bg-orange-600 w-28'>
                افزودن محصول
             </Button>
-            <Button variant="soft" color='danger'  onClick={() => setAddProductModal(false)}>
+            <Button variant="soft" color='danger'  onClick={() => handleCloseProductModal()}>
               انصراف
             </Button>
           </DialogActions>

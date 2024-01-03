@@ -105,14 +105,23 @@ export const CreateCategory = ()=> {
           setAlert(true)
           setMessage("  کارخانه جدید با موفقیت افزوده شد، آدرس را اضافه کنید. ")
           setLoading(false)
-        //   setAddCategoryModal(false)
+          setAddCategoryModal(false)
+          setaddFactoryName()
+          setaddCategs([])
+          setAddTelephone()
+          setAddMobile()
           ListApi(Auth)
         })
         .catch(function (error) {
           console.log(error, "Error");
           setMessage(" متاسفیم،خطایی رخ داده است ")
           setErrorAlert(true)
+          setaddFactoryName()
+          setaddCategs([])
+          setAddTelephone()
+          setAddMobile()
           setLoading(false)
+          setAddCategoryModal(false)
         });
   
     }
@@ -163,7 +172,7 @@ export const CreateCategory = ()=> {
         setAlert(true)
         setMessage(" آدرس با موفقیت ثبت شد ")
         setLoading(false)
-      //   setAddCategoryModal(false)
+        setAddAddressModal(false)
         ListApi(Auth)
         // setTimeout(() => {
         //   // route.refresh()
@@ -174,6 +183,7 @@ export const CreateCategory = ()=> {
         console.log(error, "Error");
         setMessage(" متاسفیم،خطایی رخ داده است ")
         setErrorAlert(true)
+        setAddAddressModal(false)
         setLoading(false)
       });
 
@@ -195,16 +205,16 @@ export const CreateCategory = ()=> {
       },
       {
         header: ' موبایل ',
-        accessorKey: 'mobile',
-        id: 'mobile',
-        Cell: ({ cell }) => <span>{cell.getValue()}</span>,
-      },
-      {
-        header: ' تلفن ',
         accessorKey: 'telephone',
         id: 'telephone',
         Cell: ({ cell }) => <span>{cell.getValue()}</span>,
       },
+      // {
+      //   header: ' تلفن ',
+      //   accessorKey: 'telephone',
+      //   id: 'telephone',
+      //   Cell: ({ cell }) => <span>{cell.getValue()}</span>,
+      // },
     ],
     []
   );
@@ -397,8 +407,8 @@ const table = useMaterialReactTable({
                 <TextField
                   className="md:w-[28%] w-[90%]"
                   id="input-with-icon-textfield"
-                  label=" شماره همراه "
-                  placeholder=" شماره همراه "
+                  label=" نام کاربری "
+                  placeholder=" نام کاربری "
                   value={addMobile}
                   onChange={(e) => setAddMobile(e.target.value)}
                   InputProps={{
@@ -447,7 +457,7 @@ const table = useMaterialReactTable({
 
 
 
-      <Dialog fullWidth className="w-full" scroll="paper" maxWidth="md" open={addAddressModal} onClose={() => CloseAddressModal()}>
+      <Dialog fullWidth className="w-full" scroll="body" maxWidth="md" open={addAddressModal} onClose={() => CloseAddressModal()}>
 
         <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
             ثبت آدرس برای کارخانه ی 
@@ -455,14 +465,14 @@ const table = useMaterialReactTable({
         <Divider />
         <DialogContent className="flex flex-col items-center gap-10 mt-12 h-[90vh] " >           
 
-          <div className="flex flex-col justify-center items-center gap-10 w-full" >
+          <div className="flex flex-col justify-center items-center gap-10 w-full h-full" >
 
-              <div>
+              <div className="" >
                 <CustomNeshanMap setAddress={setAddress} setLatLang={setLatLang} />
               </div>
 
 
-              <div className='w-full flex flex-col justify-center items-start gap-1 ' >
+              <div className='w-full flex flex-col justify-center items-start gap-1' >
                 <div className="w-full grid grid-cols-2 gap-2 justify-center items-center" >
                   <TextField
                     className="w-[90%]"

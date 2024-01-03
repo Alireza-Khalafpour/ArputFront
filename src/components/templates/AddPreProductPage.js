@@ -726,7 +726,8 @@ const AddPreProductPage = () => {
     const [alert, setAlert] = useState(false);
     const [errorAlert, setErrorAlert] = useState(false);
     const [loading, setLoading] = useState(false);
-
+    //-------------
+    const [branchList, setBranchList] = useState([])
     // ------------
     const [tempFeatureSample,setTempFeatureSample] = useState()
     const [preProductData, setPreProductData] = useState(
@@ -966,15 +967,47 @@ const AddPreProductPage = () => {
                 setAlert(true)
                 setMessage(" پیش محصول جدید با موفقیت افزوده شد ")
                 setLoading(false)
-                // setTimeout(() => {
-                //     window.location.reload()
-                // }, 2000);
+                // setPreProductData(
+                //     {
+                //         "category_id": "",
+                //         "info": {
+                //             "width": 0,
+                //             "height": 0,
+                //             "weight": 0
+                //         },
+                //         "features": [],
+                //         "image_url": "",
+                //         "name":"",
+                //         "is_public": true,
+                //         "factory_id": "",
+                //         "only_in_Representation": []
+                //     }
+                // )
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1500);
             }else{
                 setMessage(" متاسفیم،خطایی رخ داده است ")
                 setErrorAlert(true)
-                // setTimeout(() => {
-                //     window.location.reload()
-                // }, 2000);
+                // setPreProductData(
+                //     {
+                //         "category_id": "",
+                //         "info": {
+                //             "width": 0,
+                //             "height": 0,
+                //             "weight": 0
+                //         },
+                //         "features": [],
+                //         "image_url": "",
+                //         "name":"",
+                //         "is_public": true,
+                //         "factory_id": "",
+                //         "only_in_Representation": []
+                //     }
+                // )
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1500);
             }
         })
         .catch((error) => {
@@ -1006,11 +1039,37 @@ const AddPreProductPage = () => {
               console.log(error, "Error");
           });
         }
+
+        // Get Branches Lisrt ---------------------------------------
+
+        async function GetBranches() {
+        
+            await axios.get('https://supperapp-backend.chbk.run/branch/factory_branch', {
+              headers:currentUserHeaders
+              })
+              .then((response) => {
+                  console.log(response.data.data[0].branch_data, "branch list")
+                  setBranchList(response.data.data[0].branch_data)
+              })
+              .catch((error) => {
+                  console.log(error, "Error");
+              });
+        }
+
+
+
   
         useEffect(() => {
             GetCurrentUser()
+            GetBranches()
         },[])
 
+
+        //  handle only in representation----------------------------
+
+        const handleAddBranchIds = (val) => {
+            setPreProductData({...preProductData, "only_in_Representation" : val.map((i) => i.branch_id)})
+        }
 
 
   
@@ -1211,6 +1270,7 @@ const AddPreProductPage = () => {
 
                             <div className='flex flex-col justify-around items-center gap-6 w-full my-5' >
 
+                                    <p>توجه: ابتدا از منو انتخاب سمپل یک گزینه را انتخاب کنید و کلید ثبت را فشار دهید. پس از آن به سرا ویژگی بعد بروید</p>
 
                                     {
                                         addCateg?.features.map((i, index) => (
@@ -1229,7 +1289,7 @@ const AddPreProductPage = () => {
                                                         <TextField {...params} label=" انتخاب سمپل " placeholder="انتخاب کنید" />
                                                     )}
                                                 />
-                                                <button onClick={() => changeHandler(i, index)} > انتخاب  </button>
+                                                <button className='bg-green-600 text-white rounded-xl hover:bg-green-700 px-8 py-2' onClick={() => changeHandler(i, index)} > ثبت  </button>
                                             </div>
                                         ))
                                     }
@@ -1333,7 +1393,25 @@ const AddPreProductPage = () => {
 
                             <div className='flex flex-row justify-around items-center gap-6 w-full my-5' >
                                 
-                                <FormControlLabel checked={preProductData.is_public} onChange={() => setPreProductData({...preProductData, is_public: !preProductData.is_public}) } control={<Checkbox defaultChecked />} label=" قابل استفاده برای همه " />
+                                <FormControlLabel checked={preProductData.is_public} onChange={() => setPreProductData({...preProductData, is_public: !preProductData.is_public, only_in_Representation: []}) } control={<Checkbox defaultChecked />} label=" قابل استفاده برای همه " />
+
+                                {
+                                    !preProductData.is_public &&
+                                    <Autocomplete
+                                    className="md:w-[28%] w-[90%]"
+                                    noOptionsText=" داده ای موحود نیست "
+                                    multiple
+                                    limitTags={1}
+                                    options={branchList}
+                                    getOptionLabel={(i)=> i.branch_name}
+                                    // value={preProductData.only_in_Representation}
+                                    onChange={(event, val) => handleAddBranchIds(val) }
+                                    // sx={{ width:"190px"}}
+                                    renderInput={(params) => <TextField {...params} variant="standard" label=" نمایندگی های مجاز " />}
+                                />
+                                }
+
+
 
                             </div>
 

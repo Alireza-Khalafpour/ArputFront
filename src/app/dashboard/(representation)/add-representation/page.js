@@ -58,7 +58,7 @@ export const AddRepresentation = ()=> {
       // get current user on modal open-------------------------
   
       const handleOpen = () => {
-        GetCurrentUser()
+        // GetCurrentUser()
         setAddCategoryModal(true)
       }
 
@@ -97,22 +97,36 @@ export const AddRepresentation = ()=> {
     const headers ={
     'accept': 'application/json',
     'Authorization': `Bearer ${Auth}`,
-    'Content-Type': 'application/json',
     }
   
+
+    const addBranchData= {
+      "factory_id": currentId,
+      'name': representationName,
+      'mobile':repNumber
+    }
   
     async function AddBranchApi() {
       // setLoading(true);
-      await axios.post('https://supperapp-backend.chbk.run/branch/create', {"factory_id": currentId,'name': representationName, 'features':repNumber}, {
+      console.log(addBranchData)
+      await axios.post('https://supperapp-backend.chbk.run/branch/create', addBranchData, {
           headers: headers
         })
         .then((response) => {
-          console.log(response)
-          setAlert(true)
-          setMessage("  نمایندگی جدید با موفقیت افزوده شد ")
-          setLoading(false)
-          setAddCategoryModal(false)
-          ListApi(Auth)
+          if (response.data.Done === true) {
+            console.log(response)
+            setAlert(true)
+            setMessage(" نمایندگی جدید با موفقیت افزوده شد ")
+            setLoading(false)
+            setAddCategoryModal(false)
+            setTimeout(() => {
+              window.location.reload()
+            }, 500);
+          } else if (response.data.Done === false) {
+            setMessage(response.data.Message)
+            setErrorAlert(true)
+            setLoading(false)
+          }
         })
         .catch(function (error) {
           console.log(error, "Error");

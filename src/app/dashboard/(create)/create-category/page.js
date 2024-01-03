@@ -126,43 +126,22 @@ export const CreateCategory = ()=> {
           body: JSON.stringify(data) 
          }
          
-         // make the HTTP delete request using fetch api
          fetch('https://supperapp-backend.chbk.run/category/delete', deleteMethod)
          .then((response) => {
               response.json()
           })
          .then((d) => {
-              console.log(d)
-              route.refresh();
-              // setTimeout(() => {
-              //     window.location.reload();
-              // }, 300);
+            console.log(d)
+            // route.refresh();
+            setAlert(true)
+            setMessage(" دسته بندی حذف شد ")
+            setLoading(false)
+            ListApi(Auth)
+            setDeleteCategoryModal(false)
           }) 
          .catch(err => console.log(err)) 
 
-  }
-
-    // async function DeleteCategoryApi() {
-    //   setLoading(true);
-    //   console.log(DeleteCategoryIds, "idsssssss")
-    //   await axios.delete('https://supperapp-backend.chbk.run/category/delete', {'ids':[DeleteCategoryIds]}, {
-    //       headers: headers
-    //     })
-    //     .then((response) => {
-    //       console.log(response)
-    //       setAlert(true)
-    //       setMessage(" دسته بندی حذف شد ")
-    //       setLoading(false)
-    //       ListApi(Auth)
-    //     })
-    //     .catch((error) => {
-    //       console.log(error, "Error");
-    //       setMessage(" متاسفیم،خطایی رخ داده است ")
-    //       setErrorAlert(true)
-    //       setLoading(false)
-    //     });
-  
-    // }
+    }
 
     const [DeleteCategName, setDeleteCategName] = useState("")
 

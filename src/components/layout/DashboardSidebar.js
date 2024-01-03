@@ -192,8 +192,8 @@ export default function DashbordSidebar({children}) {
                       ایحاد و لیست کارخانه ها    
                     <FactoryOutlined className='text-khas'/>
                 </Link>
-                <Link onClick={() => setTitle(" مدیریت محصولات ادمین ")} href="/dashboard/my-products"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
-                    مدیریت محصولات ادمین
+                <Link onClick={() => setTitle(" مدیریت پیش محصول و محصولات (Admin)")} href="/dashboard/my-products"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                    مدیریت پیش محصول و محصولات (Admin)
                     <InboxIcon  className='text-khas'/>
                 </Link>
               </Accordion>

@@ -33,7 +33,7 @@ async function Products() {
                     <button className="text-sm text-khas" > حذف فیلتر </button>
                 </div>
             </div>
-            <div id="productsPart" className="flex flex-row justify-start items-center gap-3 w-5/6" >
+            <div id="productsPart" className="flex flex-row justify-center items-center gap-5 w-5/6 flex-wrap" >
 
             {productList?.length > 0 || res === undefined ? null : (
 
@@ -51,13 +51,13 @@ async function Products() {
 
                 productList?.map((i) => (
 
-                        <Card className="md:w-1/4 w-full h-full hover:shadow-2xl" key={i.id}>
+                        <Card className="md:w-1/5 w-full h-full hover:shadow-2xl" key={i.id}>
                             <Link href={`/products/${i.id}`} className=" w-full h-full" key={i.id} >
                                 <CardOverflow>
                                     <AspectRatio>
                                     <Image
                                         src={i.image_url}
-                                        loading="lazy"
+                                        loading="eager"
                                         fill
                                         alt=""
                                     />

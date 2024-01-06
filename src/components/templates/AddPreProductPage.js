@@ -694,7 +694,7 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Avatar, CircularProgress, ListDivider, ListItemDecorator, Option, Select, Sheet } from '@mui/joy';
-import { CheckRounded, CloudUpload, Delete, Edit, Numbers, ProductionQuantityLimits, ScaleRounded, StackedBarChart, StraightenRounded } from '@mui/icons-material';
+import { CheckRounded, CloudUpload, Delete, DeleteForeverRounded, Edit, Numbers, ProductionQuantityLimits, ScaleRounded, StackedBarChart, StraightenRounded } from '@mui/icons-material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Alert, Autocomplete, Checkbox, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Slider, Snackbar, TextField } from '@mui/material';
@@ -763,10 +763,10 @@ const AddPreProductPage = () => {
               setFeaturesData({...FeaturesData, 'others': [...FeaturesData['others'],{}]})
           }
       
-          const deleteHandler = (index) => {
-              const List = [...FeaturesData['others']]
-              List.splice(index, 1)
-              setFeaturesData({...FeaturesData, ['others']: List})
+          const deleteHandler = (e, index) => {
+              const List = [...preProductData['features']]
+              List.splice(index, 1, undefined)
+              setPreProductData({...preProductData, ['features'] : List})
           }
 
           // ----------------------------------------------
@@ -956,9 +956,7 @@ const AddPreProductPage = () => {
     async function handleAddPreProduct() {
 
         setLoading(true);
-        await axios.post('https://supperapp-backend.chbk.run/PreProduct/create', {
-            preProductData
-        },
+        await axios.post('https://supperapp-backend.chbk.run/PreProduct/create',preProductData,
         {
           headers: mainHeaders
         })
@@ -1270,7 +1268,7 @@ const AddPreProductPage = () => {
 
                             <div className='flex flex-col justify-around items-center gap-6 w-full my-5' >
 
-                                    <p>توجه: ابتدا از منو انتخاب سمپل یک گزینه را انتخاب کنید و کلید ثبت را فشار دهید. پس از آن به سرا ویژگی بعد بروید</p>
+                                    <p> توجه: ابتدا از منو انتخاب سمپل یک گزینه را انتخاب کنید و سپس حتما کلید ثبت را فشار دهید تا ویژگی مورد نظر به رنگ سبز درآید</p>
 
                                     {
                                         addCateg?.features.map((i, index) => (
@@ -1289,7 +1287,13 @@ const AddPreProductPage = () => {
                                                         <TextField {...params} label=" انتخاب سمپل " placeholder="انتخاب کنید" />
                                                     )}
                                                 />
-                                                <button className='bg-green-600 text-white rounded-xl hover:bg-green-700 px-8 py-2' onClick={() => changeHandler(i, index)} > ثبت  </button>
+
+                                                <div className='flex flex-row gap-4' >
+                                                    <button className='bg-green-600 text-white rounded-xl hover:bg-green-700 px-8 py-2' onClick={() => changeHandler(i, index)} > ثبت  </button>
+                                                    <button className='bg-rose-600 text-white rounded-full hover:bg-rose-700 p-1' onClick={() => deleteHandler(i, index)} > <DeleteForeverRounded/>  </button>
+                                                </div>
+
+
                                             </div>
                                         ))
                                     }

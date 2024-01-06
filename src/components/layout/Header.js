@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Divider } from '@mui/material';
-import { ArrowCircleDownTwoTone, ArrowDownward, ExitToApp, ExpandCircleDown, Home, InstallMobileOutlined, LoginOutlined, NotificationsActive, Payment, Person, Settings, ShoppingBasket, SpaceDashboard, Store } from '@mui/icons-material';
+import { Apps, ArrowCircleDownTwoTone, ArrowDownward, ExitToApp, ExpandCircleDown, Home, InstallMobileOutlined, LoginOutlined, NotificationsActive, Payment, Person, Settings, ShoppingBasket, SpaceDashboard, Store } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
@@ -114,6 +114,7 @@ export default function Header() {
                   </MenuItem>
                 </Menu>
               </Dropdown>
+              <Link href="/products" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > فروشگاه <Apps className='text-khas'/> </Link>
               <h3 className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' >اپ موبایل <InstallMobileOutlined className='text-khas' /> </h3>
               <Link href="/signup" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > ثبت فروشگاه <Store className='text-khas'/> </Link>
               <h3 className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > لیست هزینه اشتراک <Payment className='text-khas' /> </h3>

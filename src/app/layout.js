@@ -2,6 +2,7 @@
 import Header from '@/components/layout/Header'
 import './globals.css'
 import { Providers } from './GlobalRedux/provider'
+import Footer from '@/components/layout/Footer'
 
 
 export const metadata = {
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <Header/>
             {children}
+          <Footer/>
         </Providers>
       </body>
     </html>

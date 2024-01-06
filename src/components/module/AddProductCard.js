@@ -87,34 +87,32 @@ const AddProductCard = ({productList}) => {
             <Card variant="solid" invertedColors className="w-full max-w-lg bg-asliDark relative">
         
                 <CardContent className="flex flex-row gap-6 items-center justify-normal w-full">
-                    <div className=" flex flex-row justify-start items-center flex-nowrap">
-                        <CircularProgress size="md" determinate value={0}>
+                    <div className=" flex flex-row justify-start items-center flex-nowrap w-2/3">
+                        <CircularProgress size="lg" determinate value={0}>
                             <SvgIcon>
                                 <ShoppingCartCheckout/>
                             </SvgIcon>
                         </CircularProgress>
                         <h2 className="text-3xl"> {e2p(sp(productList.seller_info[0].price))} <span className="text-base" > ریال </span> </h2>
                     </div>
-                    <Chip color="danger" className="p-2 text-sm w-full bg-rose-900 absolute top-0 left-0" > تخفیف {e2p(productList.seller_info[0].off)}% </Chip>
+                    <Chip color="danger" className="p-2 text-sm w-full bg-rose-900 w-1/3 " > تخفیف {e2p(productList.seller_info[0].off)}% </Chip>
 
-                    <div className="flex flex-row-reverse justify-center items-center">
+
+
+                </CardContent>
+
+                <CardActions className="w-full text-center flex justify-center items-center" >
+
+                    <button onClick={() => AddProductToBasketApi(productId.seller_info[0].product_id)} className="w-1/2 bg-khas rounded-xl p-2 hover:bg-orange-600 transition-colors duration-300">
+                        { loading ? <GeneralLoader/> :('افزودن به سبد خرید') } {loading ? "" : <AddRounded/>}
+                    </button>
+
+                    <div className="flex flex-row-reverse justify-center items-center w-1/2">
                         <button onClick={() => DecrementCount()} className="w-1/5 border-2 bg-mainBlack rounded-lg rounded-r-none h-10 text-lg " > - </button>
                             <Input value={e2p(count)}  className="w-1/5 h-[32px] rounded-none bg-white text-black text-lg "/>
                         <button onClick={() => IncrementCount()} className="w-1/5 border-2 bg-mainBlack rounded-lg rounded-l-none h-10 text-lg " > + </button>
                     </div>
 
-                </CardContent>
-
-                <CardActions className="w-full text-center flex justify-center items-center" >
-                    {
-                        loading 
-                        ?
-                        <GeneralLoader/>
-                        :
-                        <button onClick={() => AddProductToBasketApi(productId.seller_info[0].product_id)} className="w-[80%] bg-khas rounded-xl p-2 hover:bg-orange-600 transition-colors duration-300">
-                            افزودن به سبد خرید <AddRounded/>
-                        </button>
-                    }
                 </CardActions>
             </Card>
 

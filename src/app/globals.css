@@ -92,8 +92,11 @@ li{
   background-size: cover;
 }
 
+/* No scroll bar main page carousel ---------------------- */
 
-
+#noScroll::-webkit-scrollbar{
+  display: none !important;
+}
 
 
 

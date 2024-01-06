@@ -1,6 +1,4 @@
 import Image from "next/image";
-import proimg from "../../../../public/images/b2.jpg"
-import proimgDet from "../../../../public/images/b3.jpg"
 import { e2p, sp } from "@/utils/replaceNumbers";
 import { Badge, Rating } from "@mui/material";
 import { Chip, Divider} from "@mui/joy";
@@ -8,6 +6,7 @@ import CommentTextArea from "@/components/module/CommentTextArea";
 import axios from "axios";
 import { cookies } from 'next/headers'
 import AddProductCard from "@/components/module/AddProductCard";
+import { ExitToApp, Favorite, Share } from "@mui/icons-material";
 
 async function SingleProduct({params:{single_product}}) {
 
@@ -29,14 +28,12 @@ async function SingleProduct({params:{single_product}}) {
 
     const productList = res.data
 
-    console.log(productList)
-
 
 
     const Rate = axios.get(`https://supperapp-backend.chbk.run/rate_pre_product/pre_product/star_rate/${single_product}`, {
         headers: headers
         }).catch((error) => {
-          console.log(error, "Errnooooooooooooommmmmmmmor");
+          console.log(error, "Erroooooooor");
         });
 
 
@@ -48,11 +45,17 @@ async function SingleProduct({params:{single_product}}) {
 
                 <div className="w-2/3 h-full px-4 flex flex-col gap-6" >
                     
-                <Divider className="text-asliLight" sx={{ '--Divider-childPosition': "10%" }}>
+                <Divider className="text-asliLight text-base" sx={{ '--Divider-childPosition': "10%" }}>
                     {productList.category_name}
                 </Divider>
-
-                <h1 className="text-2xl p-1" >{productList.name}</h1>
+                <div className="flex flex-row justify-between items-center" >
+                    <h1 className="text-2xl p-1" >{productList.name}</h1>
+                    <div className="w-1/3 flex flex-row itemsc gap-4 justify-end" >
+                        <Favorite className="text-rose-600 hover:text-rose-700 cursor-pointer "/>
+                        <Share className="text-blue-400 cursor-pointer" />
+                        <ExitToApp className="text-khas cursor-pointer" />
+                    </div>
+                </div>
 
                 <div className="flex flex-row gap-1 items-center"> <span> امتیاز : </span> <Rating value={3} readOnly /> </div>
 
@@ -61,9 +64,9 @@ async function SingleProduct({params:{single_product}}) {
                 {
                     productList.features.map((i) => (
                         <div>
-                            <h4 className="text-lg"> feature name: {i.feature_name} </h4>
-                            <h4 className="text-lg" > main_name: {i.main_name} </h4>
-                            <h4 className="text-lg" > sample_name {i.main_sample} </h4>
+                            <h4 className="text-lg"> نام ویژگی: <span className="text-xl mx-4" > {i.feature_name} </span>  </h4>
+                            <h4 className="text-lg" > مین ویژگی: <span className="text-xl mx-4" > {i.main_name} </span>  </h4>
+                            <h4 className="text-lg" > نام سمپل : <span className="text-xl mx-4" > {i.main_sample} </span> </h4>
                         </div>
                     ))
                 }
@@ -80,19 +83,11 @@ async function SingleProduct({params:{single_product}}) {
 
                 <h2> {productList.seller_info[0].description} </h2>
 
-                <Divider className="text-asliLight" sx={{ '--Divider-childPosition': "8%" }}>
+                <Divider className="text-asliLight text-base" sx={{ '--Divider-childPosition': "8%" }}>
                     مشخصات فروشنده
                 </Divider>
 
-                {
-                    productList.features.map((i) => (
-                        <div>
-                            <h4 className="text-lg"> feature name: {i.feature_name} </h4>
-                            <h4 className="text-lg" > main_name: {i.main_name} </h4>
-                            <h4 className="text-lg" > sample_name {i.main_sample} </h4>
-                        </div>
-                    ))
-                }
+                    <p>  مشخصات فروشنده ( پیشنهاد )  </p>
 
 
                 </div>
@@ -108,10 +103,13 @@ async function SingleProduct({params:{single_product}}) {
                         />
                     </div>
                     <div className="flex flex-row gap-2 justify-center items-center max-h-1/3 overflow-y-scroll w-full mx-auto max-w-lg" >
-                        <Image width={140} height={140} src={proimgDet} className="rounded-xl" />
-                        <Image width={140} height={140} src={proimgDet} className="rounded-xl" />
-                        <Image width={140} height={140} src={proimgDet} className="rounded-xl" />
-                        <Image width={140} height={140} src={proimgDet} className="rounded-xl" />
+                        <Image width={140} height={140} src={productList.image_url[1]} className="rounded-xl" />
+                        <Image width={140} height={140} src={productList.image_url[2]} className="rounded-xl" />
+                        <Image width={140} height={140} src={productList.image_url[3]} className="rounded-xl" />
+                        <Image width={140} height={140} src={productList.image_url[4]} className="rounded-xl" />
+                        <Image width={140} height={140} src={productList.image_url[5]} className="rounded-xl" />
+                        <Image width={140} height={140} src={productList.image_url[6]} className="rounded-xl" />
+                        <Image width={140} height={140} src={productList.image_url[7]} className="rounded-xl" />
                     </div>
 
                     <AddProductCard productList={productList} />
@@ -132,8 +130,8 @@ async function SingleProduct({params:{single_product}}) {
                         productList.seller_info.map((s) => (
 
                             <li className="w-full flex flex-row justify-between items-center p-4 odd:bg-slate-200 border border-asliDark rounded-xl border-dashed " >
-                                <h2> {s.seller_name} </h2>
-                                <span> نحوه عملکرد و امتیاز </span>
+                                    <h2> {s.seller_name} </h2>
+                                {/* <span> نحوه عملکرد و امتیاز </span> */}
                                 <h3 > قیمت {e2p(sp(s.price))} ریال </h3>
                                 <Chip className="p-1 px-3 bg-rose-700 text-white rounded-xl" > تخفبف {e2p(s.off)} % </Chip>
                                 <button className="p-3 rounded-xl bg-khas text-white hover:bg-orange-600 duration-200 transition-colors" >
@@ -155,7 +153,7 @@ async function SingleProduct({params:{single_product}}) {
                 </div>
 
                 <div className="md:w-[90%] w-full" >
-                    <CommentTextArea/>
+                    <CommentTextArea single_product={single_product} />
                 </div>
 
                 <ul className="w-full flex flex-col gap-6 justify-center items-center " >

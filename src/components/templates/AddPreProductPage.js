@@ -242,6 +242,8 @@ const AddPreProductPage = () => {
 
     async function handleImageUpload() {
 
+        
+
         formData.append("file", imageL);
 
         // setLoading(true);
@@ -258,6 +260,8 @@ const AddPreProductPage = () => {
         //   setLoading(false)
         });
 
+        setPreProductData({...preProductData, ['features'] : preProductData.features.filter((i) => i !== null && i !== undefined )})
+
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
 
@@ -268,6 +272,13 @@ const AddPreProductPage = () => {
         'Authorization': `Bearer ${Auth}`,
         'Content-Type': 'application/json',
         }
+
+    // delete null elements in feature array -------
+
+        // const DeleteNullFeatures = () => {
+        //     setPreProductData({...preProductData, ['features'] : preProductData.features.filter((i) => i !== null && i !== undefined )})
+        //     console.log(preProductData , "testttttttttttttttttttttttttttttttttttttttttttttttttttttt")
+        // }
 
     async function handleAddPreProduct() {
 

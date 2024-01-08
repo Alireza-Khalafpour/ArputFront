@@ -15,6 +15,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Alert, Autocomplete, Checkbox, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Slider, Snackbar, TextField } from '@mui/material';
 import Cookies from 'universal-cookie';
+import GeneralLoader from '../module/GeneralLoader';
 
 
 
@@ -72,8 +73,6 @@ const AddPreProductPage = () => {
             setPreProductData({...preProductData, ['features'] : List})
             setTempFeatureSample()
         }
-        console.log(preProductData)
-        console.log(tempFeatureSample, "temprary")
       
           const addHandler = () => {
               setFeaturesData({...FeaturesData, 'others': [...FeaturesData['others'],{}]})
@@ -147,6 +146,9 @@ const AddPreProductPage = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         let arr = finalSampleFeatureIds.filter(item => typeof item === "object");
         setFinalSampleFeatureIds(arr)
+        setTimeout(() => {
+            setPreProductData({...preProductData, ['features'] : preProductData.features.filter((i) => i !== null && i !== undefined )})
+        }, 300);
     };
 
     const handleStep1 = (e) => {
@@ -240,29 +242,26 @@ const AddPreProductPage = () => {
 
     const formData = new FormData();
 
-    async function handleImageUpload() {
-
-        
+    async function handleImageUpload() {        
 
         formData.append("file", imageL);
 
-        // setLoading(true);
+        setLoading(true);
         await axios.post('https://supperapp-backend.chbk.run/upload/upload_texture', formData,
         {
           headers: headers
         })
         .then((response) => {
-            setPreProductData({...preProductData, image_url: response?.data.address})
-            // setLoading(false)
+            setPreProductData({...preProductData, "image_url": response?.data.address})
+            setLoading(false)
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
         })
         .catch((error) => {
           console.log(error, "Error");
-        //   setLoading(false)
+          setLoading(false)
         });
 
-        setPreProductData({...preProductData, ['features'] : preProductData.features.filter((i) => i !== null && i !== undefined )})
-
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        
     };
 
     // handle add pre-product ------------------------------------------------------------------------
@@ -357,7 +356,6 @@ const AddPreProductPage = () => {
           headers:currentUserHeaders
           })
           .then((response) => {
-              console.log(response.data.data[0].id, "current user")
               setPreProductData({...preProductData, "factory_id": response?.data.data[0].id})
           })
           .catch((error) => {
@@ -365,7 +363,7 @@ const AddPreProductPage = () => {
           });
         }
 
-        // Get Branches Lisrt ---------------------------------------
+        // Get Branches List ---------------------------------------
 
         async function GetBranches() {
         
@@ -373,7 +371,6 @@ const AddPreProductPage = () => {
               headers:currentUserHeaders
               })
               .then((response) => {
-                  console.log(response.data.data[0].branch_data, "branch list")
                   setBranchList(response.data.data[0].branch_data)
               })
               .catch((error) => {
@@ -701,7 +698,7 @@ const AddPreProductPage = () => {
                                         className='w-24 p-2 rounded-2xl bg-asliLight hover:bg-sky-600 text-white'
                                         onClick={handleImageUpload}
                                     >
-                                    ادامه
+                                    {loading ? <GeneralLoader/> : "ادامه"}
                                     </button>
                                     <button
                                     className='p-2 rounded-2xl  hover:bg-red-400 hover:text-white '

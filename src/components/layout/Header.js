@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Divider } from '@mui/material';
-import { Apps, ArrowCircleDownTwoTone, ArrowDownward, ExitToApp, ExpandCircleDown, Home, InstallMobileOutlined, LoginOutlined, NotificationsActive, Payment, Person, Settings, ShoppingBasket, SpaceDashboard, Store } from '@mui/icons-material';
+import { Apps, ArrowCircleDownTwoTone, ArrowDownward, ExitToApp, ExpandCircleDown, Home, InstallMobileOutlined, LoginOutlined, NotificationsActive, Payment, Person, Phone, Settings, ShoppingBasket, SpaceDashboard, Store, ThreePRounded } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
@@ -60,13 +60,17 @@ export default function Header() {
             </Typography>
 
             <ul className='flex flex-row justify-center items-center h-full gap-6' >
+
+            <Link href="/products" className='hover:border-b-2 border-b-khas text-xl transition-all duration-75 cursor-pointer pb-2 ' > فروشگاه <Apps className='text-khas'/> </Link>
+
+
               <Dropdown>
                 <MenuButton
                   slots={{ root: IconButton }}
                   slotProps={{ root: { variant: 'plain', color: 'neutral' } }}
                   sx={{ borderRadius: 40 }}
                 >
-                  <h3 onClick={() => setProductsList(true)}  className=' text-white pb-2 hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer ' > محصولات <ExpandCircleDown className='text-khas animate-bounce ' /></h3>
+                  <h3 onClick={() => setProductsList(true)}  className=' text-white text-base pb-2 hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer ' > محصولات <ExpandCircleDown className='text-khas animate-bounce ' /></h3>
                 </MenuButton>
                 <Menu
                   className='bg-paszamine2'
@@ -114,10 +118,9 @@ export default function Header() {
                   </MenuItem>
                 </Menu>
               </Dropdown>
-              <Link href="/products" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > فروشگاه <Apps className='text-khas'/> </Link>
               <h3 className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' >اپ موبایل <InstallMobileOutlined className='text-khas' /> </h3>
-              <Link href="/signup" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > ثبت فروشگاه <Store className='text-khas'/> </Link>
-              <h3 className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > لیست هزینه اشتراک <Payment className='text-khas' /> </h3>
+              <Link href="/aboutus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > درباره ما <ThreePRounded className='text-khas'/> </Link>
+              <Link href="/contactus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' >   تماس با ما <Phone className='text-khas' /> </Link>
             </ul>
 
 

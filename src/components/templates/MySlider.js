@@ -21,13 +21,6 @@ const MySlider = ({title}) => {
 
             <div id="noScroll" className={`w-full flex flex-row justify-start items-center ${expand ? "overflow-scroll" : "overflow-hidden"} gap-10 flex-wrap !max-h-[70vh] ${expand ? "h-[70vh]" : "h-52"} transition-all duration-700 `} >
 
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
 
                 <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
                     {content && <h2> نام محصول </h2>}

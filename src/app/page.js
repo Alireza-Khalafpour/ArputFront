@@ -15,6 +15,10 @@ import MySlider from "@/components/templates/MySlider";
 
 export default function Home() {
 
+
+
+
+
   return (
       <div className="flex flex-col gap-28 p-8 max-w-[90%] mx-auto " >
 

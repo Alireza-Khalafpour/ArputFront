@@ -152,7 +152,7 @@ export default function DashbordSidebar({children}) {
             
             <Divider className='bg-slate-500' />
 
-            <ListItem  disablePadding >
+            {/* <ListItem  disablePadding >
               <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
                 <AccordionSummary
                   expandIcon={<ExpandMore style={{color:"white"}} />}
@@ -167,41 +167,52 @@ export default function DashbordSidebar({children}) {
                     <ListAltOutlined className='text-khas'/>
                 </Link>
               </Accordion>
-            </ListItem>
+            </ListItem> */}
             <Divider className='bg-slate-500' />
 
-            <ListItem  disablePadding >
-              <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
-                <AccordionSummary
-                  expandIcon={<ExpandMore style={{color:"white"}} />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  className='hover:bg-slate-700 rounded-lg'
-                >
-                  <Typography>  پنل ادمین </Typography>
-                </AccordionSummary>
-                <Link  onClick={() => setTitle(" ایجاد و لیست دسته بندی ها ")} href="/dashboard/create-category" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
-                      ایجاد و لیست دسته بندی ها  
-                    <ListAltOutlined className='text-khas'/>
-                </Link>
-                <Link  onClick={() => setTitle(" ایحاد و لیست ویژگی ها ")} href="/dashboard/CreateFeature" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
-                      ایحاد و لیست ویژگی ها    
-                    <FeaturedPlayListOutlined className='text-khas'/>
-                </Link>
-                <Link onClick={() => setTitle(" ایحاد و لیست کارخانه ها ")} href="/dashboard/create-factory" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
-                      ایحاد و لیست کارخانه ها    
-                    <FactoryOutlined className='text-khas'/>
-                </Link>
-                <Link onClick={() => setTitle(" مدیریت پیش محصول و محصولات (Admin)")} href="/dashboard/my-products"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
-                    مدیریت پیش محصول و محصولات (Admin)
-                    <InboxIcon  className='text-khas'/>
-                </Link>
-              </Accordion>
-            </ListItem>
+              {
+                cookie.get("role") === "admin" && 
+                <>
+                                  <ListItem  disablePadding >
+                <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
+                  <AccordionSummary
+                    expandIcon={<ExpandMore style={{color:"white"}} />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    className='hover:bg-slate-700 rounded-lg'
+                  >
+                    <Typography>  پنل ادمین </Typography>
+                  </AccordionSummary>
+                  <Link  onClick={() => setTitle(" ایجاد و لیست دسته بندی ها ")} href="/dashboard/create-category" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                        ایجاد و لیست دسته بندی ها  
+                      <ListAltOutlined className='text-khas'/>
+                  </Link>
+                  <Link  onClick={() => setTitle(" ایحاد و لیست ویژگی ها ")} href="/dashboard/CreateFeature" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                        ایحاد و لیست ویژگی ها    
+                      <FeaturedPlayListOutlined className='text-khas'/>
+                  </Link>
+                  <Link onClick={() => setTitle(" ایحاد و لیست کارخانه ها ")} href="/dashboard/create-factory" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                        ایحاد و لیست کارخانه ها    
+                      <FactoryOutlined className='text-khas'/>
+                  </Link>
+                  <Link onClick={() => setTitle(" مدیریت پیش محصول و محصولات (Admin)")} href="/dashboard/my-products"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                      مدیریت پیش محصول و محصولات (Admin)
+                      <InboxIcon  className='text-khas'/>
+                  </Link>
+                </Accordion>
+              </ListItem>
+              <Divider className='bg-slate-500' />
+                
+                </>
+
+              }
 
 
-            <Divider className='bg-slate-500' />
+              {
+                cookie.get("role") === "factory" &&
 
+                <>
+                
                 <ListItem  disablePadding >
                   <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
                     <AccordionSummary
@@ -216,8 +227,37 @@ export default function DashbordSidebar({children}) {
                     </Link>
                   </Accordion>
                 </ListItem>
+
+                <Divider className='bg-slate-500' />
+
+                </>
+              }
+                            {
+                cookie.get("role") === "admin" &&
+
+                <>
+                
+                <ListItem  disablePadding >
+                  <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
+                    <AccordionSummary
+                      expandIcon={<ExpandMore style={{color:"white"}} />}
+                      className='hover:bg-slate-700 rounded-lg'
+                    >
+                      <Typography>  مدیریت نمایندگی ها </Typography>
+                    </AccordionSummary>
+                    <Link onClick={() => setTitle("  ایجاد و لیست نمایندگی ها  ")} href="/dashboard/add-representation" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                        ایجاد و لیست نمایندگی ها
+                        <AddRounded className='text-khas'/>
+                    </Link>
+                  </Accordion>
+                </ListItem>
+
+                <Divider className='bg-slate-500' />
+
+                </>
+              }
+
             
-            <Divider className='bg-slate-500' />
 
             <ListItem  disablePadding >
               <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
@@ -227,14 +267,24 @@ export default function DashbordSidebar({children}) {
                 >
                   <Typography>  محصولات </Typography>
                 </AccordionSummary>
-                <Link onClick={() => setTitle(" ایجاد پیش محصول ")} href="/dashboard/add-pre-product" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
-                    ایجاد پیش محصول
-                    <AddRounded className='text-khas'/>
-                </Link>
-                <Link onClick={() => setTitle(" لیست پیش محصولات ")} href="/dashboard/pre-product-list" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                {
+                  cookie.get("role") === "factory"  &&
+                  <Link onClick={() => setTitle(" ایجاد پیش محصول ")} href="/dashboard/add-pre-product" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                      ایجاد پیش محصول
+                      <AddRounded className='text-khas'/>
+                  </Link>
+                }
+                                {
+                  cookie.get("role") === "admin" &&
+                  <Link onClick={() => setTitle(" ایجاد پیش محصول ")} href="/dashboard/add-pre-product" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                      ایجاد پیش محصول
+                      <AddRounded className='text-khas'/>
+                  </Link>
+                }
+                {/* <Link onClick={() => setTitle(" لیست پیش محصولات ")} href="/dashboard/pre-product-list" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
                     لیست پیش محصولات
                     <ManageSearchRounded className='text-khas'/>
-                </Link>
+                </Link> */}
                 <Link onClick={() => setTitle(" مدیریت محصولات من ")} href="/dashboard/my-products-shop"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
                     مدیریت محصولات من
                     <InboxIcon  className='text-khas'/>

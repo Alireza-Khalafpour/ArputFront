@@ -12,10 +12,11 @@ import { Tab as BaseTab } from '@mui/base/Tab';
 // import { defineElement } from "@lordicon/element";
 import StepperModule from '../module/Stepper';
 import { Alert, FormControl, IconButton, InputAdornment, OutlinedInput, Snackbar, TextField} from '@mui/material';
-import { LoopOutlined, MobileFriendly, Visibility, VisibilityOff } from '@mui/icons-material';
+import { Apartment, LoopOutlined, MobileFriendly, People, Person, Store, Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 import OtpInput from '../module/OtpInput';
 import { useSelector } from 'react-redux';
+import { Checkbox, List, ListItem, ListItemDecorator, Radio, RadioGroup, Typography } from '@mui/joy';
 
 
 
@@ -107,7 +108,7 @@ export default function SignUpPage() {
 
   };
 
-  const handleNextCodeValidation = () => {
+  const handleNextCodeValidationShop = () => {
 
     if( Otp.length === 4 && password === ConfirmPassword) {
 
@@ -127,6 +128,46 @@ export default function SignUpPage() {
           setAlert(true)
           // setTimeout(() => {
           // }, 1700);
+        }else if(response.data.Done === false){
+          setMessage(response.data.Error_text)
+          setErrorAlert(true)
+        }
+      })
+      .catch(function (error) {
+        console.log(error, "Error");
+        setMessage(" مشکلی پیش آمده است! ")
+
+      });
+
+      }else{
+        setMessage(" لطفا اطلاعات را به درستی وارد کنید ")
+        setErrorAlert(true)
+      }
+
+    // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleNextCodeValidationClient = () => {
+
+    if( Otp.length === 4 && password === ConfirmPassword) {
+
+    setLoading(true);
+    axios.post('https://supperapp-backend.chbk.run/register/create_client',{ 
+      "phone": phoneNum,
+      "password": password,
+      "code": Otp
+     }, {
+      'accept': 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+      })
+      .then((response) => {
+        console.log(response)
+        if( response.data.Done === true){
+          setMessage(" ثبت نام با موفقیت انجام شد. ")
+          setAlert(true)
+          setTimeout(() => {
+            window.location.replace("/signin")
+          }, 1700);
         }else if(response.data.Done === false){
           setMessage(response.data.Error_text)
           setErrorAlert(true)
@@ -166,7 +207,7 @@ export default function SignUpPage() {
     <>
 
       <div className='w-full h-screen flex justify-center items-center' >
-        <div className='flex flex-col gap-10 justify-center items-center max-w-7xl md:w-[60vw] w-full md:h-[80vh] h-full min-w-7xl shadow-[0_35px_60px_-12px_rgba(0,0,0,0.65)] bg-[#EEF0F0] rounded-2xl p-8' >
+        <div className='flex flex-col gap-10 justify-center items-center md:w-[70vw] w-full md:h-[80vh] h-full min-w-7xl shadow-[0_35px_60px_-12px_rgba(0,0,0,0.65)] bg-[#EEF0F0] rounded-2xl p-8' >
 
         <div style={{direction:"ltr"}} className='md:w-[45vw] w-full' >
           <StepperModule activeStep={activeStep} />
@@ -201,6 +242,7 @@ export default function SignUpPage() {
                             ),
                           }}
                           />
+                          
 
                     </Grid>
 
@@ -208,6 +250,9 @@ export default function SignUpPage() {
                 }
                 {
                   activeStep === 1 &&(
+
+                    <>
+                    
                     <Grid className=' w-full my-4 gap-2 justify-center items-center ' sx={{display:"flex", flexDirection:"column"}} >
                       
                       <Grid>
@@ -280,20 +325,24 @@ export default function SignUpPage() {
                         </FormControl>
                       </Grid>
 
-
-
                     </Grid>
+
+                    
+                    </>
+
 
                   )
                 }
+
+                
               </div>
-              <Grid className='sm:w-28 w-[50vw] text-center' >
+              <Grid className='sm:w-full w-[50vw] text-center' >
 
                 {
                   activeStep===0 &&(
                   <button
                     onClick={ () => handleNextOtp()}
-                    className='text-white p-2 w-full bg-gradient-to-r from-asliDark to-asliLight hover:from-asliLight hover:to-asliDark transition-colors duration-500 rounded-full'
+                    className='text-white p-2 w-40 bg-gradient-to-r from-asliDark to-asliLight hover:from-asliLight hover:to-asliDark transition-colors duration-500 rounded-full'
                     >
                        ارسال کد
                   </button>
@@ -302,13 +351,25 @@ export default function SignUpPage() {
 
                 {
                   activeStep===1 &&(
-                  <button
-                    onClick={() => handleNextCodeValidation()}
-                    className='text-white p-2 w-full bg-gradient-to-r from-asliDark to-asliLight hover:from-asliLight hover:to-asliDark transition-colors duration-500 rounded-full'
+
+                    <div className='w-full justify-center items-center flex flex-row gap-2'>
+                      <button
+                      onClick={() => handleNextCodeValidationClient()}
+                      className='text-white p-2 w-48 bg-khas transition-colors hover:bg-orange-600 duration-300 rounded-full'
+                      type="button"
+                      >
+                        { loading ? <Person/> : <div>  <Person/>  ثبت نام کاربر  </div> } 
+                    </button>
+
+                    <button
+                    onClick={() => handleNextCodeValidationShop()}
+                    className='text-white p-2 w-48 bg-khas transition-colors hover:bg-orange-600 duration-300 rounded-full'
                     type="button"
                     >
-                      { loading ? <LoopOutlined/> : ' ثبت نام '} 
-                  </button>
+                      { loading ? <Store/> :  <div> <Store/> ثبت نام فروشگاه </div>} 
+                    </button>
+                    </div>
+
                   )
                 }
 

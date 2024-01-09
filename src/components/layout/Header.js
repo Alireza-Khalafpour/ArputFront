@@ -12,20 +12,46 @@ import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
 import { Avatar, Dropdown, ListItemDecorator, Menu, MenuButton, MenuItem } from '@mui/joy';
+import axios from 'axios';
 
 
 export default function Header() {
 
   const cookie = new Cookies();
 
+  const Au = cookie.get("tokenDastResi") ? cookie.get("tokenDastResi") : null 
+
   const route = useRouter()
   
   const [anchorEl, setAnchorEl] = React.useState(null);
 
+  const [name , setName] = React.useState("");
+
+  React.useEffect(() =>{
+    getUSer(Au)
+  },[])
+
+  function getUSer(Auth) {
+    axios.get('https://supperapp-backend.chbk.run/register/current_user', {
+      headers:{
+        'accept': 'application/json',
+        'Authorization': `Bearer ${Auth}`,
+      }
+      })
+      .then((response) => {
+        setName(response.data.data[0].name)
+      })
+      .catch((error) => {
+        console.log(error, "Error");
+      });
+  }
+
+
   const handleLogout = () => {
     cookie.remove("tokenDastResi");
+    cookie.remove("role");
     setTimeout(() => {
-      route.push("/")
+      window.location.replace("/")
     }, 500);
     setAnchorEl(null);
   }
@@ -154,30 +180,31 @@ export default function Header() {
                       <AccountCircle className='w-7 h-7' />
                     </IconButton>
                     <Menu
-                      className='top-14 '
+                      className='top-14 min-w-[140px] '
                       id="menu-appbar"
                       anchorEl={anchorEl}
                       anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                       }}
-                      keepMounted
+                      
                       transformOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                       }}
                       open={Boolean(anchorEl)}
                       onClose={handleClose}
+                      onClick={handleClose}
                     >
-                      <MenuItem onClick={handleClose}> کارخانه آرپوت سرام  </MenuItem>
+                      <MenuItem onClick={handleClose}> {name} </MenuItem>
                       <Divider/>
-                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200' onClick={handleClose}> <Link href="/" > <Home className='text-asliLight' /> خانه  </Link> </MenuItem>
-                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200' onClick={handleClose}> <Link href="/profile" > <Person className='text-asliLight' /> پروفایل  </Link> </MenuItem>
-                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200' onClick={handleClose}> <Link href="/dashboard"> <SpaceDashboard className='text-asliLight' /> داشبورد   </Link> </MenuItem>
+                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full' onClick={handleClose}> <Link href="/" > <Home className='text-asliLight' /> خانه  </Link> </MenuItem>
+                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full ' onClick={handleClose}> <Link href="/profile" > <Person className='text-asliLight' /> پروفایل  </Link> </MenuItem>
+                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full ' onClick={handleClose}> <Link href="/dashboard"> <SpaceDashboard className='text-asliLight' /> داشبورد   </Link> </MenuItem>
                       {/* <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200' onClick={handleClose}> <ُ className='text-asliLight' /> سبد خرید  </MenuItem> */}
-                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200' onClick={handleClose}> <Settings className='text-asliLight' /> تنظیمات  </MenuItem>
+                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full ' onClick={handleClose}> <Settings className='text-asliLight' /> تنظیمات  </MenuItem>
                       <Divider/>
-                      <MenuItem className='text-rose-800 hover:bg-rose-200 gap-2 transition-colors duration-200 font-bold' onClick={() => handleLogout() }> <ExitToApp/> خروج </MenuItem>
+                      <MenuItem className='text-rose-800 hover:bg-rose-200 gap-2 transition-colors duration-200 font-bold w-full ' onClick={() => handleLogout() }> <ExitToApp/> خروج </MenuItem>
                     </Menu>
 
                   </div>

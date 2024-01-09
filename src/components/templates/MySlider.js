@@ -1,12 +1,39 @@
 "use client"
 
 import { KeyboardDoubleArrowDown, KeyboardDoubleArrowUp } from "@mui/icons-material";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import "../styles/MySlider.css"
+import Image from "next/image";
+import { e2p } from "@/utils/replaceNumbers";
+import Link from "next/link";
+
+
 
 const MySlider = ({title}) => {
-
+    
     const [expand, setExpand] = useState(false)
-    const [content, setContent] = useState(false)
+    const [items, setItems] = useState([])
+
+    useEffect(() =>{
+        GetItems()
+    },[])
+
+    async function GetItems () {
+        await axios.get('https://supperapp-backend.chbk.run/Product/products?page=0&limit=12', {
+            headers:{
+              'accept': 'application/json',
+            }
+            })
+            .then((response) => {
+              setItems(response.data.data)
+            })
+            .catch((error) => {
+              console.log(error, "Error");
+            });
+    }
+
+
 
     function handleExpand() {
         setExpand((p) => !p)
@@ -22,80 +49,16 @@ const MySlider = ({title}) => {
             <div id="noScroll" className={`w-full flex flex-row justify-start items-center ${expand ? "overflow-scroll" : "overflow-hidden"} gap-10 flex-wrap !max-h-[70vh] ${expand ? "h-[70vh]" : "h-52"} transition-all duration-700 `} >
 
 
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-                <div onMouseEnter={() => setTimeout(() => setContent(true), 300)} onMouseLeave={() => setTimeout(() => setContent(false), 300)} className=" h-52 bg-[url('../../public/images/b1.jpg')] bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] " >
-                    {content && <h2> نام محصول </h2>}
-                </div>
-
-
-
+            {
+                items?.map((i) => (
+                    <Link href={`/products/${i.id}`} style={{backgroundImage: `url(${i.image_url})`}} className="sliderCard h-52 bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] relative before:rounded-xl">
+                        <div id="info" className=" transition-all duration-700 text-xl text-white absolute bottom-5 right-3 gap-5 ">
+                            <h2> {i.name} </h2> 
+                            <h3 className="text-sm"> موجود در {e2p(i.seller_number)} فروشگاه </h3>
+                        </div>
+                    </Link>
+                ))
+            }
 
 
 

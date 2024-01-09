@@ -52,9 +52,9 @@ export default function SignInPage() {
       'Content-Type': 'application/x-www-form-urlencoded',
       })
       .then((response) => {
-        cookie.set("tokenDastResi", response.data.access_token, {secure:true, maxAge: 60 * 60 * 24 * 365 } );
+        cookie.set("tokenDastResi", response.data.access_token, {secure:true, maxAge: 60 * 60 * 4  } );
+        cookie.set("role", response.data.role, {secure:true, maxAge: 60 * 60 * 4  } );
         setAlert(true)
-        console.log(response)
         setMessage(" خوش آمدید ")
         setTimeout(() => {
           route.push("/dashboard")

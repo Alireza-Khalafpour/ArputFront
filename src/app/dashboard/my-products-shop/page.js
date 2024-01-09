@@ -244,13 +244,15 @@ const table = useMaterialReactTable({
   // renderRowActionMenuItems
   renderRowActions: ({ row, table }) => {
     return (
-      <div className="w-auto">
-        <IconButton
+      <div className="w-max gap-3 flex flex-row justify-center items-center">
+        <Button
+          size="small" 
+          className="rounded-xl bg-khas hover:bg-orange-600 p-1 text-white font-semibold "
           onClick={() => handleAddProductModal(row)}
           title=" افزودن کالا "
         >
-          <AddCircleRounded className="text-khas" />
-        </IconButton>
+          افزودن کالا 
+        </Button>
         <Button onClick={() => handleDetailModal(row)} size="small" className="rounded-xl bg-khas hover:bg-orange-600 p-1 text-white font-semibold "  >
           جزییات
         </Button>

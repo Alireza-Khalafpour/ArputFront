@@ -63,11 +63,11 @@ export default function Home() {
 
 
         <div>
-          <MySlider title="سرامیک" />
+          <MySlider title=" پرفروش ها " />
         </div>
 
         <div>
-          <MySlider title=" سنگ " />
+          <MySlider title=" سرامیک " />
         </div>
 
           {/* <div className="w-full " >

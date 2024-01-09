@@ -125,7 +125,7 @@ export default function CommentTextArea({single_product}) {
       })
       .catch(function (error) {
           console.log(error, "Error");
-          setMessage(" متاسفیم،خطایی رخ داده است ")
+          setMessage(" متاسفیم،خطایی رخ داده است یا وارد حساب خود شوید ")
           setErrorAlert(true)
           setLoading(false)
       });

@@ -38,7 +38,7 @@ const AddProductCard = ({productList}) => {
 
     const cookie = new Cookies();
 
-    const Auth = cookie.get('tokenDastResi')
+    const Auth = cookie.get('tokenDastResi') ? cookie.get('tokenDastResi') : null
 
     const headers ={
         'accept': 'application/json',
@@ -67,7 +67,7 @@ const AddProductCard = ({productList}) => {
                 })
                 .catch(function (error) {
                     console.log(error, "Error");
-                    setMessage(" متاسفیم،خطایی رخ داده است ")
+                    setMessage(" متاسفیم،خطایی رخ داده است یا وارد حساب کاربری شوید ")
                     setErrorAlert(true)
                     setLoading(false)
                 });
@@ -123,7 +123,7 @@ const AddProductCard = ({productList}) => {
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 className="bg-green-800"
                 >
-                <Alert variant='filled' severity='success' className='text-lg text-white font-semibold bg-green-800' > {message} </Alert>
+                <Alert variant='filled' severity='success' className='text-lg text-white font-semibold bg-green-800 text-center' > {message} </Alert>
                 </Snackbar>
 
                 <Snackbar
@@ -134,7 +134,7 @@ const AddProductCard = ({productList}) => {
                 className="bg-rose-700"
                 invertedColors
                 >
-                <Alert variant='filled' severity='error' invertedColors className='text-lg text-white font-semibold bg-rose-700' > {message} </Alert>
+                <Alert variant='filled' severity='error' invertedColors className='text-lg text-white font-semibold bg-rose-700 text-center' > {message} </Alert>
             </Snackbar>
         </>
     );

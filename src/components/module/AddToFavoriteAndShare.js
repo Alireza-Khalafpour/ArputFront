@@ -14,7 +14,7 @@ const AddToFavoriteAndShare = ({pId}) => {
 
     const cookie = new Cookies();
 
-    const Auth = cookie.get('tokenDastResi')
+    const Auth = cookie.get('tokenDastResi') || null
 
     const [message, setMessage] = useState();
     const [alert, setAlert] = useState(false);
@@ -42,7 +42,7 @@ const AddToFavoriteAndShare = ({pId}) => {
         })
         .catch(function (error) {
             console.log(error, "Error");
-            setMessage(" متاسفیم،خطایی رخ داده است ")
+            setMessage(" متاسفیم،خطایی رخ داده است یا وارد حساب خود شوید ")
             setErrorAlert(true)
             setLoading(false)
         });
@@ -69,10 +69,10 @@ const AddToFavoriteAndShare = ({pId}) => {
                 autoHideDuration={4000}
                 onClose={() => setAlert(false)}
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                className="bg-rose-700"
+                className="bg-green-700"
                 se
                 >
-                <Alert variant='filled' className='text-lg text-white font-semibold bg-rose-700 ' > {message} <Favorite/> </Alert>
+                <Alert variant='filled' className='text-lg text-white font-semibold bg-green-700 text-center ' > {message} <Favorite className="text-rose-600"/> </Alert>
                 </Snackbar>
 
                 <Snackbar
@@ -83,7 +83,7 @@ const AddToFavoriteAndShare = ({pId}) => {
                 className="bg-rose-950"
                 se
                 >
-                <Alert variant='filled' className='text-lg text-white font-semibold bg-rose-950' > {message} </Alert>
+                <Alert variant='filled' className='text-lg text-white font-semibold bg-rose-950 text-center' > {message} </Alert>
             </Snackbar>
         </>
     );

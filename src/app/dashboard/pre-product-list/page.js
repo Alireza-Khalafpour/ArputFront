@@ -1,11 +1,11 @@
-import PreProductListPage from "@/components/templates/PreProductListPage";
+// import PreProductListPage from "@/components/templates/PreProductListPage";
 
-const PreProductList = () => {
-    return (
-        <div>
-            <PreProductListPage/>
-        </div>
-    );
-}
+// const PreProductList = () => {
+//     return (
+//         <div>
+//             <PreProductListPage/>
+//         </div>
+//     );
+// }
 
-export default PreProductList;
+// export default PreProductList;

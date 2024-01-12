@@ -7,6 +7,7 @@ import "../styles/MySlider.css"
 import Image from "next/image";
 import { e2p } from "@/utils/replaceNumbers";
 import Link from "next/link";
+import { Badge } from "@mui/joy";
 
 
 
@@ -20,7 +21,7 @@ const MySlider = ({title}) => {
     },[])
 
     async function GetItems () {
-        await axios.get('https://supperapp-backend.chbk.run/Product/products?page=0&limit=12', {
+        await axios.get('https://supperapp-backend.chbk.run/Product/products?page=0&limit=18', {
             headers:{
               'accept': 'application/json',
             }
@@ -51,22 +52,23 @@ const MySlider = ({title}) => {
 
             {
                 items?.map((i) => (
-                    <Link href={`/products/${i.id}`} style={{backgroundImage: `url(${i.image_url})`}} className="sliderCard h-52 bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] relative before:rounded-xl">
-                        <div id="info" className=" transition-all duration-700 text-xl text-white absolute bottom-5 right-3 gap-5 ">
-                            <h2> {i.name} </h2> 
-                            <h3 className="text-sm"> موجود در {e2p(i.seller_number)} فروشگاه </h3>
-                        </div>
-                    </Link>
+                        <Link href={`/products/${i.id}`} style={{backgroundImage: `url(${i.image_url})`}} className=" relative sliderCard h-52 bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] relative before:rounded-xl">
+                            <div id="info" className=" transition-all duration-700 text-xl text-white absolute bottom-5 right-3 gap-5 ">
+                                <h2> {i.name} </h2> 
+                                <h3 className="text-sm"> موجود در {e2p(i.seller_number)} فروشگاه </h3>
+                            </div>
+                            <div className="absolute top-3 left-3 !bg-transparent" > {i.has_bundle == true ? <div className="rounded-full w-4 h-4 bg-green-700 text-white " ></div> : null } </div>
+                        </Link>
                 ))
             }
 
 
 
             </div>
-
-            <div className="w-full text-center my-6 border-b border-paszamine3 rounded-b-3xl" >
-                <button onClick={() => handleExpand()} className="w-14 h-14 rounded-full bg-khas text-white transition-all duration-700" > {expand ? <KeyboardDoubleArrowUp/> : <KeyboardDoubleArrowDown/>} </button>
+            <div className="w-full text-center my-6 border-b border-paszamine3 rounded-3xl relative mt-16 " >
+                <button onClick={() => handleExpand()} className="w-14 h-14 rounded-full bg-khas text-white transition-all duration-700 absolute bottom-[-25px] " > {expand ? <KeyboardDoubleArrowUp/> : <KeyboardDoubleArrowDown/>} </button>
             </div>
+
             
         </>
     );

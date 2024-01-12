@@ -3,9 +3,10 @@ import React from 'react';
 import Image from 'next/image';
 import Carousel from 'react-material-ui-carousel'
 import { Paper, Button } from '@mui/material'
-import img1 from "../../../public/images/b1.jpg"
-import img2 from "../../../public/images/b2.jpg"
-import img3 from "../../../public/images/b3.jpg"
+import img1 from "../../../public/images/Slider1.jpg"
+import img2 from "../../../public/images/Slider2.jpg"
+import img3 from "../../../public/images/Slider3.jpg"
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 export default function MyCarousel()
 {
@@ -27,10 +28,10 @@ export default function MyCarousel()
 
     return (
 
-        <div className='w-full' >
-        <Carousel NextIcon="<" PrevIcon=">" animation='slide' className='w-full' >
+        <div className='w-full mx-auto' >
+        <Carousel NextIcon={<ChevronRight className='text-khas w-10 h-10' />} PrevIcon={<ChevronLeft className='text-khas w-10 h-10' />} animation='slide' className='w-[90%] relative h-[500px] rounded-xl text-center mx-auto' >
             {
-                items.map( (item, i) => <Image key={i} className='w-full h-96 rounded-xl'  src={item.image} /> )
+                items.map( (item, i) => <Image key={i} fill quality={100} placeholder='blur' sizes='100vw' style={{objectFit:"cover"}} src={item.image} /> )
             }
         </Carousel>
         </div>

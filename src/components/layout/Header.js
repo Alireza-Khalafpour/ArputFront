@@ -13,6 +13,7 @@ import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
 import { Avatar, Dropdown, ListItemDecorator, Menu, MenuButton, MenuItem } from '@mui/joy';
 import axios from 'axios';
+import Image from 'next/image';
 
 
 export default function Header() {
@@ -81,16 +82,16 @@ export default function Header() {
             <MenuIcon />
           </IconButton> */}
           <div className='w-4/5 flex flex-row justify-start h-full items-center gap-20'>
-            <Typography variant='h4' >
-              لوگو
-            </Typography>
+            <Link href="/" className='cursor-pointer'  >
+              <Image src="/favicon.ico" width={52} height={52} />
+            </Link>
 
             <ul className='flex flex-row justify-center items-center h-full gap-6' >
 
             <Link href="/products" className='hover:border-b-2 border-b-khas text-xl transition-all duration-75 cursor-pointer pb-2 ' > فروشگاه <Apps className='text-khas'/> </Link>
 
 
-              <Dropdown>
+              {/* <Dropdown>
                 <MenuButton
                   slots={{ root: IconButton }}
                   slotProps={{ root: { variant: 'plain', color: 'neutral' } }}
@@ -143,7 +144,7 @@ export default function Header() {
                     گل
                   </MenuItem>
                 </Menu>
-              </Dropdown>
+              </Dropdown> */}
               <h3 className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' >اپ موبایل <InstallMobileOutlined className='text-khas' /> </h3>
               <Link href="/aboutus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > درباره ما <ThreePRounded className='text-khas'/> </Link>
               <Link href="/contactus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' >   تماس با ما <Phone className='text-khas' /> </Link>

@@ -1,10 +1,67 @@
 'use client'
 
+import GeneralLoader from "@/components/module/GeneralLoader";
 import { Facebook, Instagram, Send, Telegram, WhatsApp } from "@mui/icons-material";
-import { Input, Textarea } from "@mui/joy";
+import { Alert, Input, Snackbar, Textarea } from "@mui/joy";
+import axios from "axios";
+import { useState } from "react";
 
 
 const ContactUs = () => {
+
+    const [message, setMessage] = useState();
+    const [alert, setAlert] = useState(false);
+    const [errorAlert, setErrorAlert] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const [phone, setPhone] = useState()
+    const [email, setEmail] = useState()
+    const [content, setContent] = useState()
+
+
+    const headers ={
+        'accept': 'application/json',
+        'Content-Type': 'application/json',
+    }
+
+    async function MakeContact() {
+        setLoading(true);
+        if (phone !== "" || email !== "" || content !==""){
+            await axios.post('https://supperapp-backend.chbk.run/contact_us_form/create', {
+                "mobile": phone,
+                "email": email,
+                "content": content},
+                {
+                    headers: headers
+                })
+                .then((response) => {
+                if(response.data.Done === true){
+                    setAlert(true)
+                    setMessage(response.data.Message)
+                    setAddCategoryModal(false)
+                }else{
+                    setMessage(" متاسفیم،خطایی رخ داده است ")
+                    setErrorAlert(true)
+                }
+              })
+              .catch(function (error) {
+                console.log(error, "Error");
+              });
+              setLoading(false)
+              setPhone("")
+              setContent("")
+              setEmail("")
+        }else{
+            setMessage(" همه فیلد ها را پر کنید ")
+            setErrorAlert(true)
+        }
+      }
+
+
+
+
+
+
     return (
         <div className="w-full h-[90vh] flex justify-end items-center relative" >
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5549.386359235215!2d52.46493949044171!3d29.722570322303692!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3fb21a115caa0311%3A0xc9f48e432ab44733!2zRmFycyBQcm92aW5jZSwgU2hpcmF6LCBEaXN0cmljdCAxMNiMINm-2KfYsdqpINi52YTZhSDZiCDZgdmG2KfZiNix24wg2YHYp9ix2LMsIElyYW4!5e0!3m2!1sen!2sfr!4v1704699095426!5m2!1sen!2sfr"
@@ -17,17 +74,18 @@ const ContactUs = () => {
 
                 <h3  className="text-white text-2xl border-b-2 p-1 border-khas " > فرم ارتباط با ما </h3>
 
-                <Input className="w-[90%]" placeholder=" شماره تماس " />
-                <Input className="w-[90%]" placeholder=" ایمیل " />
+                <Input value={phone} onChange={(e) => setPhone(e.target.value)} className="w-[90%]" placeholder=" شماره تماس " />
+                <Input value={email} onChange={(e) => setEmail(e.target.value)} className="w-[90%]" placeholder=" ایمیل " />
 
                 <Textarea  
                     className="w-[90%]"
                     minRows={5}
                     placeholder="پیام خود را اینجا وارد کنید"
-                
+                    value={content} 
+                    onChange={(e) => setContent(e.target.value)}
                 />
 
-                <button className="w-1/3 p-3 bg-khas text-white rounded-2xl text-xl hover:animate-pulse " > <Send/> ارسال </button>
+                <button className="w-1/3 p-3 bg-khas text-white rounded-2xl text-xl hover:animate-pulse " onClick={() => MakeContact()} > {loading ? <GeneralLoader/> : <div><Send/> ارسال </div> } </button>
 
                 <div className="flex flex-row justify-between items-center gap-4" >
                         <span className="w-12 h-12 rounded-full flex justify-center items-center border-2 border-white hover:text-khas text-white hover:bg-paszamine1 m-auto cursor-pointer transition-all duration-100" > <Instagram/> </span>
@@ -38,6 +96,29 @@ const ContactUs = () => {
                 
 
             </div>
+
+
+
+            <Snackbar
+                open={alert}
+                autoHideDuration={4000}
+                onClose={() => setAlert(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                className="bg-green-700"
+                >
+                <Alert variant='filled' severity='success' className='text-lg text-white font-semibold bg-green-700 ' > {message} </Alert>
+            </Snackbar>
+
+            <Snackbar
+                open={errorAlert}
+                autoHideDuration={4000}
+                onClose={() => setErrorAlert(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                className="bg-rose-700"
+                >
+                <Alert variant='filled' severity='error' className='text-lg text-white font-semibold bg-rose-700 ' > {message} </Alert>
+            </Snackbar>
+
 
         </div>
     );

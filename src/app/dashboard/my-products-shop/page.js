@@ -81,7 +81,12 @@ export const MyProductsShop = ()=> {
 
       
         async function AddProductApi() {
-          // setLoading(true);
+
+          if(productName === "" || price === 0 ){
+            setMessage(" فیلد های خالی را تکمیل کنید ")
+            setErrorAlert(true)
+          }else{
+                      // setLoading(true);
           await axios.post('https://supperapp-backend.chbk.run/Product/create', {
             "name": productName,
             "pre_product": preProductId,
@@ -97,8 +102,14 @@ export const MyProductsShop = ()=> {
               setAlert(true)
               setMessage(" کالا ایجاد شد ")
               setLoading(false)
-              // setAddCategoryModal(false)
               ListApi(Auth)
+              setProductName("")
+              setPreProductId("")
+              setPrice(0)
+              setOff(0)
+              setDescription("")
+              setImageUrl([])
+              setAddProductModal(false)
             })
             .catch(function (error) {
               console.log(error, "Error");
@@ -106,6 +117,8 @@ export const MyProductsShop = ()=> {
               setErrorAlert(true)
               // setLoading(false)
             });
+          }
+
       
         }
 
@@ -192,6 +205,18 @@ export const MyProductsShop = ()=> {
     ],
     []
   );
+
+  // handle close modal add product--------------------------
+
+    const handleCloseAddProductModal = () =>{
+      setProductName("")
+      setPreProductId("")
+      setPrice(0)
+      setOff(0)
+      setDescription("")
+      setImageUrl([])
+      setAddProductModal(false)
+    }
 
   // --------------------------------------
 
@@ -328,7 +353,7 @@ const table = useMaterialReactTable({
             options={contextMenuOptions}
         /> */}
 
-      <Modal open={AddProductModal} onClose={() => setAddProductModal(false)}>
+      <Modal open={AddProductModal} onClose={() => handleCloseAddProductModal()}>
         <ModalDialog variant="outlined" role="definition" className="w-[50vw] h-[70vh] p-0" >
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
               افزودن کالا
@@ -465,7 +490,7 @@ const table = useMaterialReactTable({
             <Button onClick={() => AddProductApi()} className='text-white bg-khas hover:bg-orange-600 w-28'>
                افزودن محصول
             </Button>
-            <Button variant="soft" color='danger'  onClick={() => setAddProductModal(false)}>
+            <Button variant="soft" color='danger'  onClick={() => handleCloseAddProductModal()}>
               انصراف
             </Button>
           </DialogActions>
@@ -505,7 +530,7 @@ const table = useMaterialReactTable({
             <div className="grid grid-cols-2 gap-4 justify-around items-center w-full" >
 
               {features.map((x) => (
-                <p> {x.feature_name} : {x.main_feature} </p>
+                <p> {x.main_feature} : {x.main_sample} </p>
               ))} 
 
             </div>
@@ -516,23 +541,23 @@ const table = useMaterialReactTable({
       </Dialog>
 
       <Snackbar
-          className="bg-green-700 text-white"
+          className="bg-green-700 text-white text-center"
           open={alert}
           autoHideDuration={4000}
           onClose={() => setAlert(false)}
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
-          <Alert variant='filled' severity='success' className='text-lg text-white font-semibold bg-green-700' > {message} </Alert>
+          <Alert variant='filled' severity='success' className='text-lg text-white font-semibold bg-green-700 mx-auto' > {message} </Alert>
           </Snackbar>
 
           <Snackbar
-          className="bg-rose-700 text-white"
+          className="bg-rose-700 text-white text-center"
           open={errorAlert}
           autoHideDuration={4000}
           onClose={() => setErrorAlert(false)}
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
-          <Alert variant='filled' severity='error' className='text-lg text-white font-semibold bg-rose-700 ' > {message} </Alert>
+          <Alert variant='filled' severity='error' className='text-lg text-white font-semibold bg-rose-700 mx-auto ' > {message} </Alert>
       </Snackbar>
 
 

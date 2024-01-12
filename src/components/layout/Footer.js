@@ -1,11 +1,7 @@
-'use client'
-
-import { e2p } from "@/utils/replaceNumbers";
 import { Facebook, Instagram, Telegram, WhatsApp } from "@mui/icons-material";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import Image from "next/image";
-import Link from "next/link";
-import Enamad from "../../../public/images/Enamd.png"
+import LogoAR from "../../../public/images/Final Light Blur Transparented.png"
 
 const Footer = () => {
     return (
@@ -31,7 +27,10 @@ const Footer = () => {
 
                 <div className="flex flex-col md:w-1/4 w-full text-center gap-4 text-white justify-around items-center h-full" >
                     <h5> شیراز شهرک آرین پارک علم و فناوری شیراز </h5>
-                    <h5> شماره تماس: <span> ۰۹۱۷۰۴۵۶۲۰۰ </span> </h5>
+                    <div className="flex flex-col gap-4 justify-center items-center" >
+                        <h5> شماره تماس: <span> ۰۹۱۷۰۴۵۶۲۰۰ </span> </h5>
+                        <h5> شماره دفتر: <span> ۰۷۱۳۶۳۶۴۴۷۰ </span> </h5>
+                    </div>
 
                 </div>
 
@@ -44,17 +43,17 @@ const Footer = () => {
                 </div>
 
                 <div className="flex flex-col md:w-1/4 w-full text-center gap-4 text-white text-xl justify-around items-center h-full" >
-                    <Link className="border-2 border-paszamine1 p-2 px-5 rounded-2xl hover:scale-110 transition-all duration-300" href="#" onClick={() => window.location.href="mailto: alirezakhalafpour98@gmail.com"} > ایمیل  <AlternateEmailIcon/> </Link>
+                    <a className="border-2 border-paszamine1 p-2 px-5 rounded-2xl hover:scale-110 transition-all duration-300" href="mailto:info@arputmarket.com" > ایمیل  <AlternateEmailIcon/> </a>
                     <div className="flex flex-row justify-between items-center gap-4" >
-                        <span className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-khas hover:text-white hover:bg-orange-700 m-auto cursor-pointer transition-all duration-100" > <Instagram/> </span>
-                        <span className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-blue-600 hover:text-white hover:bg-blue-700 m-auto cursor-pointer transition-all duration-100" > <Facebook/> </span>
-                        <span className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-green-600 hover:text-white hover:bg-green-700 m-auto cursor-pointer transition-all duration-100" > <WhatsApp/> </span>
-                        <span className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-blue-700 hover:text-white hover:bg-blue-700 m-auto cursor-pointer transition-all duration-100" > <Telegram/> </span>
+                        <a href='https://www.instagram.com/' target="_blank" className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-khas hover:text-white hover:bg-orange-700 m-auto cursor-pointer transition-all duration-100" > <Instagram/> </a>
+                        <a href="https://www.facebook.com/" target="_blank" className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-blue-600 hover:text-white hover:bg-blue-700 m-auto cursor-pointer transition-all duration-100" > <Facebook/> </a>
+                        <a href="https://www.whatsapp.com/" target="_blank" className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-green-600 hover:text-white hover:bg-green-700 m-auto cursor-pointer transition-all duration-100" > <WhatsApp/> </a>
+                        <a href="https://web.telegram.org/" target="_blank" className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-blue-700 hover:text-white hover:bg-blue-700 m-auto cursor-pointer transition-all duration-100" > <Telegram/> </a>
                     </div>
                 </div>
 
                 <div className="flex flex-col md:w-1/4 w-full text-center gap-4 text-white text-xl justify-around items-center h-full" >
-                    <Image src={Enamad} width={70} height={70} />
+                    <Image src={LogoAR} width={130} height={130} />
                 </div>
                     
                 </div>

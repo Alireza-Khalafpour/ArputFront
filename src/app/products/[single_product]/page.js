@@ -29,6 +29,8 @@ async function SingleProduct({params:{single_product}}) {
 
     const productList = res.data
 
+    console.log(productList.features)
+
 
 
     const Rate = axios.get(`https://supperapp-backend.chbk.run/rate_pre_product/pre_product/star_rate/${single_product}`, {
@@ -81,7 +83,7 @@ async function SingleProduct({params:{single_product}}) {
                         {
                             productList.features.map((i) => (
                                 <div>
-                                    <h4 className="text-lg"> {i.main_name} <span className="text-xl mx-4" > {i.main_sample} </span>  </h4>
+                                    <h4 className="text-lg"> {i.main_name} : <span className="text-xl mx-4" > {i.main_sample} </span>  </h4>
         
                                 </div>
                             ))

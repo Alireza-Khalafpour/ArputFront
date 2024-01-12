@@ -281,10 +281,7 @@ export default function DashbordSidebar({children}) {
                       <AddRounded className='text-khas'/>
                   </Link>
                 }
-                {/* <Link onClick={() => setTitle(" لیست پیش محصولات ")} href="/dashboard/pre-product-list" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
-                    لیست پیش محصولات
-                    <ManageSearchRounded className='text-khas'/>
-                </Link> */}
+
                 <Link onClick={() => setTitle(" مدیریت محصولات من ")} href="/dashboard/my-products-shop"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
                     مدیریت محصولات من
                     <InboxIcon  className='text-khas'/>

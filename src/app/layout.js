@@ -3,12 +3,15 @@ import Header from '@/components/layout/Header'
 import './globals.css'
 import { Providers } from './GlobalRedux/provider'
 import Footer from '@/components/layout/Footer'
+import Head from 'next/head'
 
 
 export const metadata = {
-  title: 'آرپوت سرام',
+  title: 'آرپوت مارکت',
   description: ' فروشگاه سرامیک و کاشی' ,
 }
+
+
 
 // const customTheme = createTheme({
 //   components: {

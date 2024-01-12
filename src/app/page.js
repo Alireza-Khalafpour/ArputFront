@@ -20,16 +20,16 @@ export default function Home() {
 
 
   return (
-      <div className="flex flex-col gap-28 p-8 max-w-[90%] mx-auto " >
+      <div className="flex flex-col gap-20 p-8 max-w-[90%] mx-auto " >
 
 
         <div className="flex flex-row justify-center items-center w-full gap-4 bg-gradient-to-r from-asliDark to-blue-900 rounded-2xl rounded-tr-[190px] " >
 
           <div className=" flex flex-col gap-10 text-center items-center w-1/2  ">
             {/* <Image src={MobileSvg} width={300} height={300}  /> */}
-            <h1 className="text-5xl font-bold text-white " > با موبایلت توی دنیای واقعی ببینش !!! </h1>
+            <h1 className="text-5xl font-bold text-white leading-relaxed " > نمایش محصول در محیط واقعی با گوشی همراه !!! </h1>
             <h2 className="text-3xl text-white " > اپ آرپوت رو دانلود کن </h2>
-            <button className="rounded-full bg-paszamine1 text-khas p-2 w-16 h-16 outline-dashed outline-khas" > <Download className="animate-bounce text-4xl" /> </button>
+            <Link href="https://superapp-storage.storage.iran.liara.space/ARPutMarketApp.apk"className="rounded-full bg-paszamine1 text-khas p-2 w-16 h-16 outline-dashed outline-khas" > <Download className="animate-bounce text-4xl" /> </Link>
 
           </div>
 
@@ -40,7 +40,7 @@ export default function Home() {
         </div>
 
 
-        <div className="w-full max-h-96 flex justify-center items-center" >
+        <div className="w-full mx-auto text-center">
           <MyCarousel/>
         </div>
 

@@ -91,7 +91,7 @@ function BuyingBasket() {
                 )
                 :
                 (
-                    <div className="flex flex-col justify-center w-full" >
+                    <div className="flex flex-col justify-start w-full min-h-[72vh] " >
 
                     <Divider className="text-asliDark text-xl mt-1 mb-4 font-semibold" sx={{ '--Divider-childPosition': "15%" }} > سبد خرید </Divider>
         

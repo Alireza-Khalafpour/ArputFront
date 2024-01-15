@@ -6,8 +6,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Divider } from '@mui/material';
-import { Apps, ArrowCircleDownTwoTone, ArrowDownward, ExitToApp, ExpandCircleDown, Home, InstallMobileOutlined, LoginOutlined, NotificationsActive, Payment, Person, Phone, Settings, ShoppingBasket, SpaceDashboard, Store, ThreePRounded } from '@mui/icons-material';
+import { Divider, MenuList } from '@mui/material';
+import { Apps, ArrowCircleDownTwoTone, ArrowDownward, Close, ExitToApp, ExpandCircleDown, Home, InstallMobileOutlined, LoginOutlined, MenuOpen, MenuRounded, NotificationsActive, Payment, Person, Phone, Settings, ShoppingBasket, SpaceDashboard, Store, ThreePRounded } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
@@ -27,6 +27,8 @@ export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [name , setName] = React.useState("");
+
+  const [dropMenu, setDrpMenu] = React.useState(false)
 
   React.useEffect(() =>{
     getUSer(Au)
@@ -86,7 +88,7 @@ export default function Header() {
               <Image src="/favicon.ico" width={52} height={52} />
             </Link>
 
-            <ul className='flex flex-row justify-center items-center h-full gap-6' >
+            <ul className='md:flex hidden flex-row justify-center items-center h-full gap-6' >
 
             <Link href="/products" className='hover:border-b-2 border-b-khas text-xl transition-all duration-75 cursor-pointer pb-2 ' > فروشگاه <Apps className='text-khas'/> </Link>
 
@@ -160,7 +162,7 @@ export default function Header() {
                 cookie.get('tokenDastResi')
                 ?
                 (
-                  <div>
+                  <div className='flex flex-row justify-center items-center gap-1' >
                   
                     <IconButton color="inherit">
                       <NotificationsActive className='w-7 h-7' />
@@ -208,18 +210,69 @@ export default function Header() {
                       <MenuItem className='text-rose-800 hover:bg-rose-200 gap-2 transition-colors duration-200 font-bold w-full ' onClick={() => handleLogout() }> <ExitToApp/> خروج </MenuItem>
                     </Menu>
 
+                    
+                  {
+                    dropMenu
+                    ?
+                    (<Close onClick={() => setDrpMenu((p) => !p )} className='w-8 h-8 text-white mx-2' />)
+                    :
+                    (<MenuRounded onClick={() => setDrpMenu((p) => !p )} className='w-8 h-8 text-white mx-2 md:hidden block' />)
+                  }
+
+                  {
+                    dropMenu && 
+                    (
+                      <div onClick={() => setTimeout(() => { setDrpMenu(false) }, 500)} className="absolute bottom-[-265px] left-[-5px] w-[100vw] h-max bg-gradient-to-r from-blue-900 to-asliDark z-50 md:hidden block ">
+                        <ul className="dropdown-content z-50 menu p-4 gap-6 w-[100vw] left-0 transition-all duration-700 flex flex-col ">
+                          <Link href="/products" className='hover:border-b-2 border-b-khas text-xl transition-all duration-75 cursor-pointer p-3  border-b-2 w-full flex flex-row justify-between ' > فروشگاه <Apps className='text-khas'/> </Link>
+
+                          <h3 className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 border-b-2  w-full flex flex-row justify-between ' >اپ موبایل <InstallMobileOutlined className='text-khas' /> </h3>
+                          <Link href="/aboutus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' > درباره ما <ThreePRounded className='text-khas'/> </Link>
+                          <Link href="/contactus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' >   تماس با ما <Phone className='text-khas' /> </Link>
+
+                        </ul>
+                      </div>
+                    )
+                  }
+
                   </div>
                 )
 
                 :
                 (
                 
+                <div className='relative flex flex-row items-center '>
+                
                   <Link href="/signin" className='text-base text-paszamine1' >
-                      ورود / ثبت نام
-                      <LoginOutlined className='w-7 h-7'  />
+                      <p className='md:block hidden' > ورود / ثبت نام </p>
+                      <LoginOutlined className='w-7 h-7 md:hidden block'  />
                   </Link>
 
-                
+                  {
+                    dropMenu
+                    ?
+                    (<Close onClick={() => setDrpMenu((p) => !p )} className='w-8 h-8 text-white mx-2' />)
+                    :
+                    (<MenuRounded onClick={() => setDrpMenu((p) => !p )} className='w-8 h-8 text-white mx-2 md:hidden block' />)
+                  }
+                  
+                  {
+                    dropMenu && 
+                    (
+                      <div onClick={() => setTimeout(() => { setDrpMenu(false) }, 500)} className="absolute bottom-[-265px] left-[-5px] w-[100vw] h-max bg-gradient-to-r from-blue-900 to-asliDark z-50 md:hidden block ">
+                        <ul className="dropdown-content z-50 menu p-4 gap-6 w-[100vw] left-0 transition-all duration-700 flex flex-col ">
+                          <Link href="/products" className='hover:border-b-2 border-b-khas text-xl transition-all duration-75 cursor-pointer p-3  border-b-2 w-full flex flex-row justify-between ' > فروشگاه <Apps className='text-khas'/> </Link>
+
+                          <h3 className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 border-b-2  w-full flex flex-row justify-between ' >اپ موبایل <InstallMobileOutlined className='text-khas' /> </h3>
+                          <Link href="/aboutus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' > درباره ما <ThreePRounded className='text-khas'/> </Link>
+                          <Link href="/contactus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' >   تماس با ما <Phone className='text-khas' /> </Link>
+
+                        </ul>
+                      </div>
+                    )
+                  }
+
+                </div>
                 )
               }
 

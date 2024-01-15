@@ -6,7 +6,7 @@ import LogoAR from "../../../public/images/Final Light Blur Transparented.png"
 const Footer = () => {
     return (
         <>
-            <div className=" mt-20 w-full md:h-[35vh] h-full p-5 flex flex-col justify-center items-center bg-gradient-to-bl from-asliDark to-blue-900 rounded-tl-[150px] rounded-sm " >
+            <div className=" mt-20 w-full md:h-[35vh] h-full p-5 flex flex-col justify-center  items-center bg-gradient-to-bl from-asliDark to-blue-900 rounded-tl-[150px] rounded-sm " >
 
                 <div className="md:flex hidden flex-row justify-between items-start w-full h-16" >
                     <div className="w-1/4 " >
@@ -23,7 +23,7 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <div className="flex md:flex-row flex-col md:gap-12 justify-between items-center w-full h-full" >
+                <div className="flex md:flex-row flex-col md:gap-0 gap-12 justify-between items-center w-full h-full" >
 
                 <div className="flex flex-col md:w-1/4 w-full text-center gap-4 text-white justify-around items-center h-full" >
                     <h5> شیراز شهرک آرین پارک علم و فناوری شیراز </h5>

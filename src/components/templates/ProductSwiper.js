@@ -8,9 +8,34 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import Image from 'next/image';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 
 const ProductSwiper = ({title}) => {
+
+
+  const [items, setItems] = useState([])
+
+  useEffect(() =>{
+      GetItems()
+  },[])
+
+  async function GetItems () {
+      await axios.get('https://supperapp-backend.chbk.run/Product/products?page=0&limit=18', {
+          headers:{
+            'accept': 'application/json',
+          }
+          })
+          .then((response) => {
+            setItems(response.data.data)
+          })
+          .catch((error) => {
+            console.log(error, "Error");
+          });
+  }
+
 
   return (
     <div className='w-full text-center' >
@@ -25,133 +50,27 @@ const ProductSwiper = ({title}) => {
         breakpoints={{
           280: { slidesPerView: 2 },
           480: { slidesPerView: 3 },
-          740: { slidesPerView: 4 },
-          1275: { slidesPerView: 7 },
         }}
         
       >
 
-          <SwiperSlide
-            className=' !flex flex-col gap-1 justify-center items-center cursor-pointer '
-          >
-            <div className='test border-2 rounded-lg overflow-hidden w-[130px] h-[150px] hover:w-[210px] hover:z-50 transition-all duration-500 flex justify-center items-center bg-red-500 '>
-                <div className='w-[210px] hover:z-50 h-[150px] flex flex-col justify-center items-end p-4 text-transparent hover:text-white transition-all duration-500 bg-transparent hover:bg-[#09090993]  ' >
-                    <h2 className='text-lg'> نام کالای کاشی یا تایل آرپوت سرام </h2>
-                    <p className='text-sm'> ابعاد بزرگ </p>
+        {
+          items?.map((i) => 
+          (
+            <Link href={`/products/${i.id}`} className='w-full h-full z-10'>
+
+              <SwiperSlide
+                className=' !flex flex-col gap-1 justify-center items-center cursor-pointer '
+              >
+                <div style={{backgroundImage: `url(${i.image_url})`}} className='bg-[auto 100%] bg-center bg-no-repeat border-2 rounded-lg overflow-hidden w-[130px] h-[150px] transition-all duration-500 flex justify-center items-center bg-red-100 '>
                 </div>
-            </div>
-            <span className='text-khas w-full' > Tile </span>
-          </SwiperSlide>
-          <SwiperSlide
-            className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
-          >
-            <div className='test border-2 rounded-lg overflow-hidden w-[130px] h-[150px] hover:w-[210px] hover:z-50 transition-all duration-500 flex justify-center items-center bg-red-500 '>
-                <div className='w-[210px] hover:z-50 h-[150px] flex flex-col justify-center items-end p-4 text-transparent hover:text-white transition-all duration-500 bg-transparent hover:bg-[#09090993]  ' >
-                    <h2 className='text-lg'> نام کالای کاشی یا تایل آرپوت سرام </h2>
-                    <p className='text-sm'> ابعاد بزرگ </p>
-                </div>
-            </div>
-            <span className='text-khas w-full' > Tile </span>
-          </SwiperSlide>
-          <SwiperSlide
-            className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
-          >
-            <div className='test border-2 rounded-lg overflow-hidden w-[130px] h-[150px] hover:w-[210px] hover:z-50 transition-all duration-500 flex justify-center items-center bg-red-500 '>
-                <div className='w-[210px] hover:z-50 h-[150px] flex flex-col justify-center items-end p-4 text-transparent hover:text-white transition-all duration-500 bg-transparent hover:bg-[#09090993]  ' >
-                    <h2 className='text-lg'> نام کالای کاشی یا تایل آرپوت سرام </h2>
-                    <p className='text-sm'> ابعاد بزرگ </p>
-                </div>
-            </div>
-            <span className='text-khas w-full' > Tile </span>
-          </SwiperSlide>
-          <SwiperSlide
-            className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
-          >
-            <div className='test border-2 rounded-lg overflow-hidden w-[130px] h-[150px] hover:w-[210px] hover:z-50 transition-all duration-500 flex justify-center items-center bg-red-500 '>
-                <div className='w-[210px] hover:z-50 h-[150px] flex flex-col justify-center items-end p-4 text-transparent hover:text-white transition-all duration-500 bg-transparent hover:bg-[#09090993]  ' >
-                    <h2 className='text-lg'> نام کالای کاشی یا تایل آرپوت سرام </h2>
-                    <p className='text-sm'> ابعاد بزرگ </p>
-                </div>
-            </div>
-            <span className='text-khas w-full' > Tile </span>
-          </SwiperSlide>
-          <SwiperSlide
-            className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
-          >
-            <div className='test border-2 rounded-lg overflow-hidden w-[130px] h-[150px] hover:w-[210px] hover:z-50 transition-all duration-500 flex justify-center items-center bg-red-500 '>
-                <div className='w-[210px] hover:z-50 h-[150px] flex flex-col justify-center items-end p-4 text-transparent hover:text-white transition-all duration-500 bg-transparent hover:bg-[#09090993]  ' >
-                    <h2 className='text-lg'> نام کالای کاشی یا تایل آرپوت سرام </h2>
-                    <p className='text-sm'> ابعاد بزرگ </p>
-                </div>
-            </div>
-            <span className='text-khas w-full' > Tile </span>
-          </SwiperSlide>
-          <SwiperSlide
-            className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
-          >
-            <div className='test border-2 rounded-lg overflow-hidden w-[130px] h-[150px] hover:w-[210px] hover:z-50 transition-all duration-500 flex justify-center items-center bg-red-500 '>
-                <div className='w-[210px] hover:z-50 h-[150px] flex flex-col justify-center items-end p-4 text-transparent hover:text-white transition-all duration-500 bg-transparent hover:bg-[#09090993]  ' >
-                    <h2 className='text-lg'> نام کالای کاشی یا تایل آرپوت سرام </h2>
-                    <p className='text-sm'> ابعاد بزرگ </p>
-                </div>
-            </div>
-            <span className='text-khas w-full' > Tile </span>
-          </SwiperSlide>
-          <SwiperSlide
-            className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
-          >
-            <div className='test border-2 rounded-lg overflow-hidden w-[130px] h-[150px] hover:w-[210px] hover:z-50 transition-all duration-500 flex justify-center items-center bg-red-500 '>
-                <div className='w-[210px] hover:z-50 h-[150px] flex flex-col justify-center items-end p-4 text-transparent hover:text-white transition-all duration-500 bg-transparent hover:bg-[#09090993]  ' >
-                    <h2 className='text-lg'> نام کالای کاشی یا تایل آرپوت سرام </h2>
-                    <p className='text-sm'> ابعاد بزرگ </p>
-                </div>
-            </div>
-            <span className='text-khas w-full' > Tile </span>
-          </SwiperSlide>
-          <SwiperSlide
-            className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
-          >
-            <div className='test border-2 rounded-lg overflow-hidden w-[130px] h-[150px] hover:w-[210px] hover:z-50 transition-all duration-500 flex justify-center items-center bg-red-500 '>
-                <div className='w-[210px] hover:z-50 h-[150px] flex flex-col justify-center items-end p-4 text-transparent hover:text-white transition-all duration-500 bg-transparent hover:bg-[#09090993]  ' >
-                    <h2 className='text-lg'> نام کالای کاشی یا تایل آرپوت سرام </h2>
-                    <p className='text-sm'> ابعاد بزرگ </p>
-                </div>
-            </div>
-            <span className='text-khas w-full' > Tile </span>
-          </SwiperSlide>
-          <SwiperSlide
-            className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
-          >
-            <div className='test border-2 rounded-lg overflow-hidden w-[130px] h-[150px] hover:w-[210px] hover:z-50 transition-all duration-500 flex justify-center items-center bg-red-500 '>
-                <div className='w-[210px] hover:z-50 h-[150px] flex flex-col justify-center items-end p-4 text-transparent hover:text-white transition-all duration-500 bg-transparent hover:bg-[#09090993]  ' >
-                    <h2 className='text-lg'> نام کالای کاشی یا تایل آرپوت سرام </h2>
-                    <p className='text-sm'> ابعاد بزرگ </p>
-                </div>
-            </div>
-            <span className='text-khas w-full' > Tile </span>
-          </SwiperSlide>
-          <SwiperSlide
-            className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
-          >
-            <div className='test border-2 rounded-lg overflow-hidden w-[130px] h-[150px] hover:w-[210px] hover:z-50 transition-all duration-500 flex justify-center items-center bg-red-500 '>
-                <div className='w-[210px] hover:z-50 h-[150px] flex flex-col justify-center items-end p-4 text-transparent hover:text-white transition-all duration-500 bg-transparent hover:bg-[#09090993]  ' >
-                    <h2 className='text-lg'> نام کالای کاشی یا تایل آرپوت سرام </h2>
-                    <p className='text-sm'> ابعاد بزرگ </p>
-                </div>
-            </div>
-            <span className='text-khas w-full' > Tile </span>
-          </SwiperSlide>
-          <SwiperSlide
-            className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
-          >
-            <div className='test border-2 rounded-lg overflow-hidden w-[130px] h-[150px] hover:w-[210px] hover:z-50 transition-all duration-500 flex justify-center items-center bg-red-500 '>
-                <div className='w-[210px] hover:z-50 h-[150px] flex flex-col justify-center items-end p-4 text-transparent hover:text-white transition-all duration-500 bg-transparent hover:bg-[#09090993]  ' >
-                    <h2 className='text-lg'> نام کالای کاشی یا تایل آرپوت سرام </h2>
-                    <p className='text-sm'> ابعاد بزرگ </p>
-                </div>
-            </div>
-            <span className='text-khas w-full' > Tile </span>
-          </SwiperSlide>
+                <span className='font-semibold text-asliDark w-full' > {i.name} </span>
+              </SwiperSlide>
+            </Link>
+          ))
+        }
+
+
 
       </Swiper>
     </div>

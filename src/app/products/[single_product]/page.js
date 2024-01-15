@@ -6,7 +6,7 @@ import CommentTextArea from "@/components/module/CommentTextArea";
 import axios from "axios";
 import { cookies } from 'next/headers'
 import AddProductCard from "@/components/module/AddProductCard";
-import { ExitToApp, Favorite, Share } from "@mui/icons-material";
+import { ExitToApp, Favorite, Share, ShoppingCart } from "@mui/icons-material";
 import Link from "next/link";
 
 async function SingleProduct({params:{single_product}}) {
@@ -28,8 +28,6 @@ async function SingleProduct({params:{single_product}}) {
         });
 
     const productList = res.data
-
-    console.log(productList.features)
 
 
 
@@ -62,7 +60,7 @@ async function SingleProduct({params:{single_product}}) {
 
                     <div className="flex md:flex-row flex-col-reverse gap-2 w-full h-full" >
         
-                        <div className="w-2/3 h-full px-4 flex flex-col gap-6" >
+                        <div className="md:w-2/3 w-full h-full px-4 flex flex-col gap-6" >
                             
                         <Divider className="text-asliLight text-base" sx={{ '--Divider-childPosition': "10%" }}>
                             {productList.category_name}
@@ -156,7 +154,8 @@ async function SingleProduct({params:{single_product}}) {
                                         <Chip className="p-1 px-3 bg-rose-700 text-white rounded-xl" > تخفبف {e2p(s.off)} % </Chip>
                                         {/* <Link href={`/products/${s.product_id}`} className="p-3 rounded-xl bg-khas text-white hover:bg-orange-600 duration-200 transition-colors" > */}
                                         <button href={`/products/${s.product_id}`} className="p-3 rounded-xl bg-khas text-white hover:bg-orange-600 duration-200 transition-colors" >
-                                             خرید از این فروشگاه
+                                             <span className="md:block hidden" > خرید از این فروشگاه </span>
+                                             <ShoppingCart className="md:hidden block" />
                                         </button>
                                         {/* </Link> */}
                                     </li>

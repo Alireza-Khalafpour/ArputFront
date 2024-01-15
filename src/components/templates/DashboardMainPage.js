@@ -19,16 +19,16 @@ const DashboardMainPage = () => {
     return (
         <div className="w-full gap-8 flex flex-col h-full" >
             <Grid className='w-full flex flex-row justify-between items-center gap-6' >
-                <div className='w-1/5' >
+                <div className='md:w-1/5 w-full' >
                     <AdminCard/>
                 </div>
-                <div className='w-1/5' >
+                <div className='w-1/5 md:block hidden ' >
                     <AdminCard/>
                 </div>
-                <div className='w-1/5' >
+                <div className='w-1/5 md:block hidden ' >
                     <AdminCard/>
                 </div>
-                <div className='w-1/5' >
+                <div className='w-1/5 md:block hidden' >
                     <AdminCard/>
                 </div>
             </Grid>

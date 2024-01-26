@@ -3,6 +3,7 @@
 import { Favorite, Share } from "@mui/icons-material";
 import { Alert, IconButton, Snackbar } from "@mui/joy";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Cookies from "universal-cookie";
 
@@ -14,12 +15,15 @@ const AddToFavoriteAndShare = ({pId}) => {
 
     const cookie = new Cookies();
 
+    const route = useRouter();
+
     const Auth = cookie.get('tokenDastResi') || null
 
     const [message, setMessage] = useState();
     const [alert, setAlert] = useState(false);
     const [errorAlert, setErrorAlert] = useState(false);
     const [loading, setLoading] = useState(false);
+
 
 
     const headers ={
@@ -48,21 +52,45 @@ const AddToFavoriteAndShare = ({pId}) => {
         });
     }
 
+    // -----------------------------
+
+    async function FindIpAddress(id) {
+        const date = new Date();
+       
+        await axios.get("https://geolocation-db.com/json/0daad5e0-82e7-11ee-92e0-f5d620c7dcb4").then((response) => {
+            console.log(response.data.IPv4, "ip address")
+        });
+        console.log(date.toLocaleString(), "Time")
+
+        console.log(id ,"Pre-ProductID")
+
+        // route.push(`/products/${id}`)
+
+    }
+
 
 
     return (
         <>
-            <IconButton
-                className="rounded-full z-10 text-rose-700 "
-                onClick={() => AddToFavorites(pId)}
-            >
-                <Favorite />
-            </IconButton>
-            <IconButton
-                className="rounded-full z-10 text-asliLight"
-                >
-            <Share />
-            </IconButton>
+
+            <div className="w-full flex flex-col justify-center items-center gap-4" >
+                <div className="w-full flex flex-row justify-start items-center gap-4 ">
+                    <IconButton
+                        className="rounded-full z-10 text-rose-700 "
+                        onClick={() => AddToFavorites(pId)}
+                    >
+                        <Favorite />
+                    </IconButton>
+                    <IconButton
+                        className="rounded-full z-10 text-asliLight"
+                        >
+                    <Share />
+                    </IconButton>
+                </div>
+                <button className="w-full bg-khas rounded-md text-white h-10" onClick={() => FindIpAddress(pId)} >
+                    دیدن محصول
+                </button>
+            </div>
 
             <Snackbar
                 open={alert}

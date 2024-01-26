@@ -70,6 +70,19 @@ export default function SignInPage() {
 
   }
 
+  function handleLoginWithEnterKey(e) {
+    if(e.key == "Enter"){
+      document.getElementById("LoginBtn").focus();
+      HandleSubmit()
+    }
+  }
+
+  function handleFocusNextField(e) {
+    if(e.key == "Enter"){
+      document.getElementById("passField").focus();
+    }
+  }
+
   
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -105,6 +118,7 @@ export default function SignInPage() {
                         <TextField
                             value={userName}
                             onChange={(e) => setUserName(e.target.value)}
+                            onKeyDown={(e) => handleFocusNextField(e)}
                             size="small"
                             className="mt-8 w-full"
                             fullWidth
@@ -149,9 +163,10 @@ export default function SignInPage() {
                             <OutlinedInput
                                 value={pass}
                                 onChange={(e) => setPass(e.target.value)}
+                                onKeyDown={(e) => handleLoginWithEnterKey(e)}
+                                id='passField'
                                 size="small"
                                 placeholder='رمز عبور'
-                                id="outlined-adornment-password"
                                 type={!showPassword ? 'password' :'text' }
                                 
                                 endAdornment={
@@ -176,6 +191,7 @@ export default function SignInPage() {
                           <button
                             className='text-white p-2 w-1/2 bg-gradient-to-r from-asliDark to-asliLight hover:from-asliLight hover:to-asliDark transition-colors duration-500 rounded-full'  
                             type="submit"
+                            id='LoginBtn'
                             fullWidth
                             variant="contained"
                             onClick={() => HandleSubmit()}

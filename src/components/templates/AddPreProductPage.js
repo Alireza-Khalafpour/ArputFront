@@ -1,22 +1,17 @@
 'use client'
 
 
-import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import StepContent from '@mui/material/StepContent';
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import { Avatar, CircularProgress, ListDivider, ListItemDecorator, Option, Select, Sheet } from '@mui/joy';
-import { CheckRounded, CloudUpload, Delete, DeleteForeverRounded, Edit, Numbers, ProductionQuantityLimits, ScaleRounded, StackedBarChart, StraightenRounded } from '@mui/icons-material';
+import { CircularProgress} from '@mui/joy';
+import { CloudUpload, Delete, DeleteForeverRounded, ProductionQuantityLimits, ScaleRounded, StraightenRounded } from '@mui/icons-material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Alert, Autocomplete, Checkbox, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Slider, Snackbar, TextField } from '@mui/material';
 import Cookies from 'universal-cookie';
 import GeneralLoader from '../module/GeneralLoader';
-
 
 
 
@@ -66,13 +61,24 @@ const AddPreProductPage = () => {
 
         // Add FeatureSample ids --------------------------------------
 
-        const changeHandler = (e, index) => {
+        const [tempIndex, setTempIndex] = useState()
+
+        function handleSetTempFeature(i,index,val){
+            setTempFeatureSample({"feature_id": i.id,"sample_id":val.sample_data.id})
+            setTempIndex(index)
+        }
+
+        function changeHandler(index) {
             const value = tempFeatureSample
             const List = [...preProductData['features']]
             List[index] = value;
             setPreProductData({...preProductData, ['features'] : List})
             setTempFeatureSample()
         }
+
+        useEffect(() => {
+            changeHandler(tempIndex)
+        },[tempIndex])
       
           const addHandler = () => {
               setFeaturesData({...FeaturesData, 'others': [...FeaturesData['others'],{}]})
@@ -198,6 +204,8 @@ const AddPreProductPage = () => {
     // Add image and Name for pre-product-------------
     const [imageL, setImage] = useState()
     const[fileName, setFileName] = useState("فایلی انتخاب نشده...")
+
+    console.log(imageL)
   
     const DeleteImg = () => {
       setFileName("فایلی انتخاب نشده...")
@@ -217,18 +225,7 @@ const AddPreProductPage = () => {
         setImage(e.dataTransfer.files[0])
     }
 
-    // // Checked Features and samples ----------------------------------------------------------------
 
-    // function ToggleFeatures(e, i) {
-    //     console.log(e)
-    //     console.log(i)
-    //     if(e === true && typeof e === 'boolean') {
-    //         setFinalSampleFeatureIds([...finalSampleFeatureIds,{'feature_id': CategoryIdsForCheckbox[i], 'sample_id':''}])
-    //     }
-    //     if(typeof e === 'string'){
-    //         setFinalSampleFeatureIds([...finalSampleFeatureIds,finalSampleFeatureIds[i].sample_id = e])
-    //     }
-    // }
 
     // Upload Texture---------------------------------------------------------------------------------
 
@@ -272,12 +269,6 @@ const AddPreProductPage = () => {
         'Content-Type': 'application/json',
         }
 
-    // delete null elements in feature array -------
-
-        // const DeleteNullFeatures = () => {
-        //     setPreProductData({...preProductData, ['features'] : preProductData.features.filter((i) => i !== null && i !== undefined )})
-        //     console.log(preProductData , "testttttttttttttttttttttttttttttttttttttttttttttttttttttt")
-        // }
 
     async function handleAddPreProduct() {
 
@@ -412,7 +403,7 @@ const AddPreProductPage = () => {
                             <div className='w-full flex flex-row gap-2 justify-around items-center my-8'>
                             <Autocomplete
                                 className="md:w-[28%] w-[90%]"
-                                noOptionsText=" داده ای موحود نیست "
+                                noOptionsText=" داده ای موجود نیست "
                                 options={categoryList}
                                 getOptionLabel={(i)=> i.name}
                                 value={addCateg}
@@ -592,28 +583,27 @@ const AddPreProductPage = () => {
 
                             <div className='flex flex-col justify-around items-center gap-6 w-full my-5' >
 
-                                    <p> توجه: ابتدا از منو انتخاب سمپل یک گزینه را انتخاب کنید و سپس حتما کلید ثبت را فشار دهید تا ویژگی مورد نظر به رنگ سبز درآید</p>
+                                    <p> ویژگی های انتخابی شما،موارد نشان شده به رنگ سبز هستند. </p>
 
                                     {
                                         addCateg?.features.map((i, index) => (
-                                            <div className={` flex flex-row justify-between mx-5 items-center p-3 w-[80%] gap-4 ${preProductData.features[index]?.feature_id === i.id ? "bg-green-200" : "bg-paszamine1"   } rounded-lg border-asliLight border`} >
+                                            <div className={` flex flex-row justify-between mx-5 items-center p-3 md:w-[60%] w-full gap-4 ${preProductData.features[index]?.feature_id === i.id ? "bg-green-200" : "bg-paszamine1"   } rounded-lg border-asliLight border`} >
 
-                                                <span> {i.name} </span>
+                                                <span className='w-1/4'> {i.name} </span>
 
                                                 <Autocomplete
-                                                    className='w-1/3 bg-white'
+                                                    className='w-2/4 bg-white'
                                                     size='small'
                                                     noOptionsText=" موردی یافت نشد "
                                                     options={sampleOptions.filter((s) => s.feature_data.id === i.id)}
                                                     getOptionLabel={(option) =>  option.sample_data.main}
-                                                    onChange={(e, val) => setTempFeatureSample({"feature_id": i.id,"sample_id":val.sample_data.id})}
+                                                    onChange={(e, val) => handleSetTempFeature(i, index, val)}
                                                     renderInput={(params) => (
                                                         <TextField {...params} label=" انتخاب سمپل " placeholder="انتخاب کنید" />
                                                     )}
                                                 />
 
-                                                <div className='flex flex-row gap-4' >
-                                                    <button className='bg-green-600 text-white rounded-xl hover:bg-green-700 px-8 py-2' onClick={() => changeHandler(i, index)} > ثبت  </button>
+                                                <div className='flex flex-row gap-4 w-1/4 justify-end items-center' >
                                                     <button className='bg-rose-600 text-white rounded-full hover:bg-rose-700 p-1' onClick={() => deleteHandler(i, index)} > <DeleteForeverRounded/>  </button>
                                                 </div>
 
@@ -669,9 +659,10 @@ const AddPreProductPage = () => {
                                     multiple 
                                     hidden 
                                     accept='image/*'
-                                    onChange={ (e) =>{
-                                        setImage(e.target.files[0])
-                                        setFileName(e.target.files[0].name)
+                                    onChange={ ({target:{files}}) =>{
+                                        files &&
+                                        setImage(URL.createObjectURL(files[0]))
+                                        setFileName(files[0].name)
                                     }
                                     }
                                 />

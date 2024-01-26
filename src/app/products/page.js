@@ -26,17 +26,17 @@ async function Products() {
     
 
     return (
-        <div className="md:flex hidden flex-row w-full h-full justify-center items-start gap-2 p-4" >
-            <div id="filterPart" className="w-1/6 h-96 border-asliLight rounded-xl border-2 border-solid p-3 flex flex-col gap-4" >
+        <div className="flex flex-row w-full h-full justify-center items-start gap-2 p-4" >
+            <div id="filterPart" className="w-1/6 md:flex hidden h-96 border-asliLight rounded-xl border-2 border-solid p-3 flex-col gap-4" >
                 <div className="w-full flex flex-row justify-between items-center" >
                     <span className="text-xl" > فیلتر ها </span>
                     <button className="text-sm text-khas" > حذف فیلتر </button>
                 </div>
-                <div>
+                {/* <div>
                     filter
-                </div>
+                </div> */}
             </div>
-            <div id="productsPart" className="flex flex-row justify-center items-center gap-5 w-5/6 flex-wrap" >
+        <div id="productsPart" className="flex flex-row justify-center items-center gap-5 w-5/6 flex-wrap" >
 
             {productList?.length > 0 || res === undefined ? null : (
 
@@ -55,7 +55,7 @@ async function Products() {
                 productList?.map((i) => (
 
                         <Card className="md:w-1/5 w-full h-full hover:shadow-2xl" key={i.id}>
-                            <Link href={`/products/${i.id}`} className=" w-full h-full" key={i.id} >
+                            <div className=" w-full h-full" key={i.id} >
                                 <CardOverflow>
                                     <AspectRatio>
                                     <Image
@@ -83,7 +83,7 @@ async function Products() {
                                     {e2p(i.seller_number)} فروشگاه برای این کالا
                                     </Typography>
                                 </CardContent>
-                            </Link>
+                            </div>
                             <CardActions>
                                 <AddToFavoriteAndShare pId={i.id} />
                             </CardActions>
@@ -94,7 +94,7 @@ async function Products() {
             }
 
 
-            </div>
+        </div>
             
         </div>
     );

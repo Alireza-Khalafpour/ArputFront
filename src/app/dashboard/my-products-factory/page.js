@@ -3,23 +3,27 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, AddCircleRounded, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DetailsOutlined, FilterAlt, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, Search, TableRowsRounded } from "@mui/icons-material";
-import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, InputAdornment, Modal, Slide, TextField, Tooltip } from "@mui/material";
-import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import { Category, CloudUpload, Delete} from "@mui/icons-material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Modal, Slide, TextField,  } from "@mui/material";
+import {  MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
-import ContextMenu from "@/utils/ContextMenu";
-import { Alert, Input, ModalDialog, Snackbar, Textarea } from "@mui/joy";
+import { Alert, ModalDialog, Snackbar, Textarea } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
 import Image from "next/image";
 
 
+
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
 
 
-export const MyProducts = ()=> {
+
+
+
+const MyProductsFactory = () => {
+
 
     const cookie = new Cookies();
 
@@ -50,7 +54,7 @@ export const MyProducts = ()=> {
 
     async function ListApi(Au) {
       
-      await axios.get('https://supperapp-backend.chbk.run/PreProduct/list/all', {
+      await axios.get('https://supperapp-backend.chbk.run/PreProduct/list/factory_products', {
         headers:{
           'accept': 'application/json',
           'Authorization': `Bearer ${Au}`,
@@ -81,7 +85,12 @@ export const MyProducts = ()=> {
 
       
         async function AddProductApi() {
-          // setLoading(true);
+
+          if(productName === "" || price === 0 ){
+            setMessage(" فیلد های خالی را تکمیل کنید ")
+            setErrorAlert(true)
+          }else{
+                      // setLoading(true);
           await axios.post('https://supperapp-backend.chbk.run/Product/create', {
             "name": productName,
             "pre_product": preProductId,
@@ -97,22 +106,23 @@ export const MyProducts = ()=> {
               setAlert(true)
               setMessage(" کالا ایجاد شد ")
               setLoading(false)
-              setAddProductModal(false)
-              setPreProductId('')
-              setProductName('')
+              ListApi(Auth)
+              setProductName("")
+              setPreProductId("")
               setPrice(0)
               setOff(0)
-              setDescription('')
-              setProductImgUrls([])
-              ListApi(Auth)
+              setDescription("")
+              setImageUrl([])
+              setAddProductModal(false)
             })
             .catch(function (error) {
               console.log(error, "Error");
               setMessage(" متاسفیم،خطایی رخ داده است ")
               setErrorAlert(true)
-              setAddProductModal(false)
               // setLoading(false)
             });
+          }
+
       
         }
 
@@ -200,6 +210,18 @@ export const MyProducts = ()=> {
     []
   );
 
+  // handle close modal add product--------------------------
+
+    const handleCloseAddProductModal = () =>{
+      setProductName("")
+      setPreProductId("")
+      setPrice(0)
+      setOff(0)
+      setDescription("")
+      setImageUrl([])
+      setAddProductModal(false)
+    }
+
   // --------------------------------------
 
   const handleCloseDetail = () => {
@@ -251,32 +273,56 @@ const table = useMaterialReactTable({
   // renderRowActionMenuItems
   renderRowActions: ({ row, table }) => {
     return (
-      <div className="w-auto">
-        <IconButton
+      <div className="w-max gap-3 flex flex-row justify-center items-center">
+        <Button
+          size="small" 
+          className="rounded-xl bg-khas hover:bg-orange-600 p-1 text-white font-semibold "
           onClick={() => handleAddProductModal(row)}
           title=" افزودن کالا "
         >
-          <AddCircleRounded className="text-khas" />
-        </IconButton>
+          افزودن کالا 
+        </Button>
         <Button onClick={() => handleDetailModal(row)} size="small" className="rounded-xl bg-khas hover:bg-orange-600 p-1 text-white font-semibold "  >
           جزییات
         </Button>
       </div>
     )
   }
+
+  // renderTopToolbar: ({ table }) => {
+
+  //   return (
+  //     <Box
+  //       sx={() => ({
+  //         display: 'flex',
+  //         gap: '0.5rem',
+  //         p: '8px',
+  //         justifyContent: 'space-between',
+  //       })}
+  //     >
+  //       <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+  //         {/* import MRT sub-components */}
+  //         <MRT_GlobalFilterTextField table={table} />
+  //         <MRT_ToggleFiltersButton table={table} />
+  //       </Box>
+  //       <Box>
+  //         <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+  //           <button
+  //             className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
+  //             onClick={() => setAddCategoryModal(true)}
+  //           >
+  //             دسته بندی جدید <AddCircleOutline/> 
+  //           </button>
+  //         </Box>
+  //       </Box>
+  //     </Box>
+  //   );
+  // },
 });
 
 
 
-function handleCloseProductModal() {
-  setPreProductId('')
-  setProductName('')
-  setPrice(0)
-  setOff(0)
-  setDescription('')
-  setProductImgUrls([])
-  setAddProductModal(false)
-}
+
 
 
     return (
@@ -311,7 +357,7 @@ function handleCloseProductModal() {
             options={contextMenuOptions}
         /> */}
 
-      <Modal open={AddProductModal} onClose={() => handleCloseProductModal()}>
+      <Modal open={AddProductModal} onClose={() => handleCloseAddProductModal()}>
         <ModalDialog variant="outlined" role="definition" className="w-[50vw] h-[70vh] p-0" >
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
               افزودن کالا
@@ -403,7 +449,9 @@ function handleCloseProductModal() {
                     hidden 
                     accept='image/*'
                     onChange={ (e) =>{
-                      handleImageUpload(e)
+                        files &&
+                        setImage(URL.createObjectURL(files[0]))
+                        handleImageUpload(e)
                     }
                     }
                 />
@@ -448,7 +496,7 @@ function handleCloseProductModal() {
             <Button onClick={() => AddProductApi()} className='text-white bg-khas hover:bg-orange-600 w-28'>
                افزودن محصول
             </Button>
-            <Button variant="soft" color='danger'  onClick={() => handleCloseProductModal()}>
+            <Button variant="soft" color='danger'  onClick={() => handleCloseAddProductModal()}>
               انصراف
             </Button>
           </DialogActions>
@@ -499,31 +547,30 @@ function handleCloseProductModal() {
       </Dialog>
 
       <Snackbar
-          className="bg-green-700 text-white"
+          className="bg-green-700 text-white text-center"
           open={alert}
           autoHideDuration={4000}
           onClose={() => setAlert(false)}
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
-          <Alert variant='filled' severity='success' className='text-lg text-white font-semibold bg-green-700' > {message} </Alert>
+          <Alert variant='filled' severity='success' className='text-lg text-white font-semibold bg-green-700 mx-auto' > {message} </Alert>
           </Snackbar>
 
           <Snackbar
-          className="bg-rose-700 text-white"
+          className="bg-rose-700 text-white text-center"
           open={errorAlert}
           autoHideDuration={4000}
           onClose={() => setErrorAlert(false)}
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
-          <Alert variant='filled' severity='error' className='text-lg text-white font-semibold bg-rose-700 ' > {message} </Alert>
+          <Alert variant='filled' severity='error' className='text-lg text-white font-semibold bg-rose-700 mx-auto ' > {message} </Alert>
       </Snackbar>
 
 
       </div>
 
 
-
     );
 }
 
-export default MyProducts;
+export default MyProductsFactory;

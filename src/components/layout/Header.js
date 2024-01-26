@@ -11,7 +11,7 @@ import { Apps, ArrowCircleDownTwoTone, ArrowDownward, Close, ExitToApp, ExpandCi
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
-import { Avatar, Dropdown, ListItemDecorator, Menu, MenuButton, MenuItem } from '@mui/joy';
+import { Avatar, Dropdown, ListItemDecorator, Menu, MenuButton, MenuItem, Modal, ModalDialog } from '@mui/joy';
 import axios from 'axios';
 import Image from 'next/image';
 
@@ -29,6 +29,8 @@ export default function Header() {
   const [name , setName] = React.useState("");
 
   const [dropMenu, setDrpMenu] = React.useState(false)
+
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() =>{
     getUSer(Au)
@@ -85,7 +87,7 @@ export default function Header() {
           </IconButton> */}
           <div className='w-4/5 flex flex-row justify-start h-full items-center gap-20'>
             <Link href="/" className='cursor-pointer'  >
-              <Image src="/favicon.ico" width={52} height={52} />
+              <Image src="/favicon.ico" width={66} height={66} />
             </Link>
 
             <ul className='md:flex hidden flex-row justify-center items-center h-full gap-6' >
@@ -147,7 +149,9 @@ export default function Header() {
                   </MenuItem>
                 </Menu>
               </Dropdown> */}
-              <h3 className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' >اپ موبایل <InstallMobileOutlined className='text-khas' /> </h3>
+              <button className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' onClick={() => setOpen(true) } >
+                <Link href="https://superapp-storage.storage.iran.liara.space/ARPutMarketApp.apk" >اپ موبایل <InstallMobileOutlined className='text-khas' /> </Link>
+              </button>              
               <Link href="/aboutus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > درباره ما <ThreePRounded className='text-khas'/> </Link>
               <Link href="/contactus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' >   تماس با ما <Phone className='text-khas' /> </Link>
             </ul>
@@ -196,16 +200,16 @@ export default function Header() {
                         horizontal: 'right',
                       }}
                       open={Boolean(anchorEl)}
-                      onClose={handleClose}
-                      onClick={handleClose}
+                      onClose={() => handleClose()}
+                      onClick={() => handleClose()}
                     >
                       <MenuItem onClick={handleClose}> {name} </MenuItem>
                       <Divider/>
-                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full' onClick={handleClose}> <Link href="/" > <Home className='text-asliLight' /> خانه  </Link> </MenuItem>
-                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full ' onClick={handleClose}> <Link href="/profile" > <Person className='text-asliLight' /> پروفایل  </Link> </MenuItem>
-                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full ' onClick={handleClose}> <Link href="/dashboard"> <SpaceDashboard className='text-asliLight' /> داشبورد   </Link> </MenuItem>
-                      {/* <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200' onClick={handleClose}> <ُ className='text-asliLight' /> سبد خرید  </MenuItem> */}
-                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full ' onClick={handleClose}> <Settings className='text-asliLight' /> تنظیمات  </MenuItem>
+                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full'> <Link href="/" > <Home className='text-asliLight' /> خانه  </Link> </MenuItem>
+                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full '> <Link href="/profile" > <Person className='text-asliLight' /> پروفایل  </Link> </MenuItem>
+                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full '> <Link href="/dashboard"> <SpaceDashboard className='text-asliLight' /> داشبورد   </Link> </MenuItem>
+                      {/* <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200'> <ُ className='text-asliLight' /> سبد خرید  </MenuItem> */}
+                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full '> <Settings className='text-asliLight' /> تنظیمات  </MenuItem>
                       <Divider/>
                       <MenuItem className='text-rose-800 hover:bg-rose-200 gap-2 transition-colors duration-200 font-bold w-full ' onClick={() => handleLogout() }> <ExitToApp/> خروج </MenuItem>
                     </Menu>
@@ -226,7 +230,9 @@ export default function Header() {
                         <ul className="dropdown-content z-50 menu p-4 gap-6 w-[100vw] left-0 transition-all duration-700 flex flex-col ">
                           <Link href="/products" className='hover:border-b-2 border-b-khas text-xl transition-all duration-75 cursor-pointer p-3  border-b-2 w-full flex flex-row justify-between ' > فروشگاه <Apps className='text-khas'/> </Link>
 
-                          <h3 className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 border-b-2  w-full flex flex-row justify-between ' >اپ موبایل <InstallMobileOutlined className='text-khas' /> </h3>
+                          <button className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 border-b-2 w-full flex flex-row justify-between ' onClick={() => setOpen(true) } >
+                            <Link href="https://superapp-storage.storage.iran.liara.space/ARPutMarketApp.apk" >اپ موبایل <InstallMobileOutlined className='text-khas' /> </Link>
+                          </button>
                           <Link href="/aboutus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' > درباره ما <ThreePRounded className='text-khas'/> </Link>
                           <Link href="/contactus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' >   تماس با ما <Phone className='text-khas' /> </Link>
 
@@ -243,7 +249,7 @@ export default function Header() {
                 
                 <div className='relative flex flex-row items-center '>
                 
-                  <Link href="/signin" className='text-base text-paszamine1' >
+                  <Link href="/signin" className='text-base text-paszamine1 border p-2 rounded-xl bg-khas ' >
                       <p className='md:block hidden' > ورود / ثبت نام </p>
                       <LoginOutlined className='w-7 h-7 md:hidden block'  />
                   </Link>
@@ -262,8 +268,9 @@ export default function Header() {
                       <div onClick={() => setTimeout(() => { setDrpMenu(false) }, 500)} className="absolute bottom-[-265px] left-[-5px] w-[100vw] h-max bg-gradient-to-r from-blue-900 to-asliDark z-50 md:hidden block ">
                         <ul className="dropdown-content z-50 menu p-4 gap-6 w-[100vw] left-0 transition-all duration-700 flex flex-col ">
                           <Link href="/products" className='hover:border-b-2 border-b-khas text-xl transition-all duration-75 cursor-pointer p-3  border-b-2 w-full flex flex-row justify-between ' > فروشگاه <Apps className='text-khas'/> </Link>
-
-                          <h3 className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 border-b-2  w-full flex flex-row justify-between ' >اپ موبایل <InstallMobileOutlined className='text-khas' /> </h3>
+                          <button className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' onClick={() => setOpen(true) } >
+                            <Link href="https://superapp-storage.storage.iran.liara.space/ARPutMarketApp.apk" >اپ موبایل <InstallMobileOutlined className='text-khas' /> </Link>
+                          </button>
                           <Link href="/aboutus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' > درباره ما <ThreePRounded className='text-khas'/> </Link>
                           <Link href="/contactus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' >   تماس با ما <Phone className='text-khas' /> </Link>
 
@@ -278,8 +285,40 @@ export default function Header() {
 
             </div>
 
+
+        <Modal open={open} onClose={() => setOpen(false)}>
+        <ModalDialog
+          aria-labelledby="nested-modal-title"
+          aria-describedby="nested-modal-description"
+          sx={(theme) => ({
+            [theme.breakpoints.only('xs')]: {
+              top: 'unset',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              borderRadius: 0,
+              transform: 'none',
+              maxWidth: 'unset',
+            },
+          })}
+        >
+          <Typography id="nested-modal-title" level="h2">
+            پیش نیاز
+          </Typography>
+          <Divider></Divider>
+          <Typography id="nested-modal-description"  className="font-semibold py-5">
+             قبل از نصب برنامه اطمینان حاصل فرمایید که برنامه ی google play services for Ar بر روی گوشی همراه شما نصب و بروزرسانی شده باشد.
+          </Typography>
+          <div className='w-full mt-4 mb-2 text-center' >
+            <Link href="https://superapp-storage.storage.iran.liara.space/Google-Play-Services-for-AR-1.41.233110983.apk" className="rounded-lg bg-khas text-white p-3 w-full border  " > دانلود google play services for Ar </Link>
+
+          </div>
+        </ModalDialog>
+      </Modal>
+
         </Toolbar>
       </AppBar>
+
     </div>
   );
 }

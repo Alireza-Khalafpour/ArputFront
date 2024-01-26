@@ -5,12 +5,13 @@ import MobileSvg from "../../public/images/InstallMobileApp.svg"
 import AppDownloadGif from "../../public/images/DownloadAppGif.gif"
 import Partnership from "../../public/images/Partnership.svg"
 import shoppingBag from "../../public/images/ShoppingBag.svg"
-import { Download, ShoppingCart, VerifiedUser } from "@mui/icons-material";
+import { ArrowForward, ColorLensRounded, Download, ShoppingCart, VerifiedUser } from "@mui/icons-material";
 import Link from "next/link";
 import MyCarousel from "@/components/module/MyCarousel";
 import BrandSlider from "@/components/module/BrandSlider";
 import MySlider from "@/components/templates/MySlider";
 import GoogleArAppModal from "@/components/module/GoogleArAppModal";
+import { Box, Button, Divider, IconButton, Sheet, Typography } from "@mui/joy";
 
 
 
@@ -36,6 +37,59 @@ export default function Home() {
 
         </div>
 
+        {/* <div className="w-[35vw]" >
+          <Sheet
+            variant="solid"
+            color="primary"
+            invertedColors
+            sx={{
+              flexGrow: 1,
+              display: 'flex',
+              p: { xs: '36px', md: '70px' },
+              pt: { xs: '24px', md: '60px' },
+              borderRadius: 'lg',
+              overflow: 'hidden',
+              '& button': { borderRadius: 'xl' },
+            }}
+            className="bg-asliDark"
+          >
+            <Box sx={{ zIndex: 1, position: 'relative' }}>
+              <Typography level="h2">Get started</Typography>
+              <Typography sx={{ mt: 0.5, mb: 2 }}>
+                Instant access to the power of the Joy UI library.
+              </Typography>
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 1,
+                  flexWrap: 'wrap',
+                  maxWidth: 'max-content',
+                  '& > *': { flexGrow: 1, fontWeight: 'lg' },
+                }}
+              >
+                <button className="p-2 rounded-xl bg-khas text-white min-w-[100px] w-32 hover:scale-105 duration-150 "> دانلود </button>
+                <Button
+                  variant="plain"
+                  endDecorator={<ArrowForward fontSize="md" />}
+                  sx={{
+                    '&:hover': { '--Button-gap': '0.625rem' },
+                    '& span': { transition: '0.15s' },
+                  }}
+                >
+                  See the docs
+                </Button>
+              </Box>
+            </Box>
+            <Box
+              component="img"
+              alt=""
+              src="https://storage.googleapis.com/cms-storage-bucket/72521e62275b24d3c37d.png"
+              sx={{ position: 'absolute', height: '100%', top: 0, right: 0 }}
+            />
+          </Sheet>
+        </div> */}
+
+        
         <div className="w-full mx-auto text-center">
           <MyCarousel/>
         </div>
@@ -74,6 +128,8 @@ export default function Home() {
           
         </div>
 
+        <Divider/>
+
         <div className="flex md:flex-row flex-col justify-center items-center gap-4 w-full">
           
           <div className="md:w-1/2 w-full flex flex-col gap-4 text-center items-center">
@@ -82,12 +138,12 @@ export default function Home() {
           </div>
           
           <div className="md:w-1/2 w-full text-center flex flex-col justify-center items-center gap-14" >
-            <h2 className="md:text-3xl text-xl " > کارخانه ها و نمایندگی ها و فروشگاه ها در سراسر ایران می توانند یک قروشگاه داشته باشند </h2>
+            <h2 className="md:text-3xl text-xl " > کارخانه ها و نمایندگی ها و فروشگاه ها در سراسر ایران می توانند یک فروشگاه داشته باشند </h2>
             <Link href="/signup" className="text-white bg-khas rounded-xl hover:bg-orange-600 w-52 p-3" > ساخت فروشگاه <VerifiedUser/> </Link>
           </div>
         </div>
 
-        <div className="w-full text-center mx-auto text-3xl gap-4" > <span className="h-full w-[2px] border-2 border-khas mx-3" ></span>  همکاری با کارخانه ها و فروشگاه ها  <span className="h-full w-[2px] border-2 border-khas mx-3" ></span> </div>
+        <div className="w-full text-center mx-auto md:text-3xl text-xl  gap-4" > <span className="h-full w-[2px] border-2 border-khas mx-3" ></span>  همکاری با کارخانه ها و فروشگاه ها  <span className="h-full w-[2px] border-2 border-khas mx-3" ></span> </div>
 
 
         <div className="w-full h-max" >

@@ -57,16 +57,16 @@ const ProductSwiper = ({title}) => {
         {
           items?.map((i) => 
           (
-            <Link href={`/products/${i.id}`} className='w-full h-full z-10'>
+            // <Link href={`/products/${i.id}`} className='w-full h-full z-10'>
 
               <SwiperSlide
                 className=' !flex flex-col gap-1 justify-center items-center cursor-pointer '
               >
-                <div style={{backgroundImage: `url(${i.image_url})`}} className='bg-[auto 100%] bg-center bg-no-repeat border-2 rounded-lg overflow-hidden w-[130px] h-[150px] transition-all duration-500 flex justify-center items-center bg-red-100 '>
-                </div>
+                <Link href={`/products/${i.id}`}style={{backgroundImage: `url(${i.image_url})`}} className='bg-[auto 100%] bg-center bg-no-repeat border-2 rounded-lg overflow-hidden w-[130px] h-[150px] transition-all duration-500 flex justify-center items-center bg-red-100 '>
+                </Link>
                 <span className='font-semibold text-asliDark w-full' > {i.name} </span>
               </SwiperSlide>
-            </Link>
+            // </Link>
           ))
         }
 

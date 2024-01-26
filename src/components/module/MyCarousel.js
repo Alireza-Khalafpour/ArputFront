@@ -7,6 +7,7 @@ import img1 from "../../../public/images/Slider1.jpg"
 import img2 from "../../../public/images/Slider2.jpg"
 import img3 from "../../../public/images/Slider3.jpg"
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { Fade } from 'react-reveal';
 
 export default function MyCarousel()
 {
@@ -29,11 +30,13 @@ export default function MyCarousel()
     return (
 
         <div className='w-full mx-auto' >
-        <Carousel NextIcon={<ChevronRight className='text-khas w-10 h-10' />} PrevIcon={<ChevronLeft className='text-khas w-10 h-10' />} animation='slide' className='w-[90%] relative h-[500px] rounded-xl text-center mx-auto' >
-            {
-                items.map( (item, i) => <Image key={i} fill quality={100} placeholder='blur' sizes='100vw' style={{objectFit:"cover"}} src={item.image} /> )
-            }
-        </Carousel>
+            <Fade bottom cascade>
+                <Carousel NextIcon={<ChevronRight className='text-khas w-10 h-10' />} PrevIcon={<ChevronLeft className='text-khas w-10 h-10' />} animation='slide' className='w-[90%] relative h-[500px] rounded-xl text-center mx-auto' >
+                    {
+                        items.map( (item, i) => <Image key={i} fill quality={100} placeholder='blur' sizes='100vw' style={{objectFit:"cover"}} src={item.image} /> )
+                    }
+                </Carousel>
+            </Fade>
         </div>
 
     )

@@ -3,13 +3,12 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, AddCircleRounded, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DetailsOutlined, FilterAlt, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, Search, TableRowsRounded } from "@mui/icons-material";
-import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, InputAdornment, Modal, Slide, TextField, Tooltip } from "@mui/material";
-import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import { Category, CloudUpload, Delete} from "@mui/icons-material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Modal, Slide, TextField,  } from "@mui/material";
+import {  MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
-import ContextMenu from "@/utils/ContextMenu";
-import { Alert, Input, ModalDialog, Snackbar, Textarea } from "@mui/joy";
+import { Alert, ModalDialog, Snackbar, Textarea } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
 import Image from "next/image";
 
@@ -98,7 +97,6 @@ export const MyProductsShop = ()=> {
               headers: headers
             })
             .then((response) => {
-              console.log(response)
               setAlert(true)
               setMessage(" کالا ایجاد شد ")
               setLoading(false)
@@ -163,7 +161,6 @@ export const MyProductsShop = ()=> {
                   headers: ImgHeaders
                 })
                 .then((response) => {
-                    console.log(response)
                     setProductImgUrls([response?.data.address])
                     // setLoading(false)
                 })
@@ -191,6 +188,12 @@ export const MyProductsShop = ()=> {
         header: ' نام دسته بندی ',
         accessorKey: 'category_name',
         id: 'category_name',
+      },
+      {
+        header: ' وضعیت دسترسی ',
+        accessorKey: 'is_public',
+        id: 'is_public',
+        Cell: ({ cell }) => <span>{cell.getValue() === true ? "تمام فروشگاه ها" : "فقط در نمایندگی ها"}</span>,
       },
       
       // {
@@ -225,15 +228,16 @@ export const MyProductsShop = ()=> {
   }
 
   const handleDetailModal = (row) => {
-    console.log(row)
+
     setInfo(row.original.info)
     setFeatures(row.original.features)
     setImageUrl(row.original.image_url)
     setOpenDetail(true)
+
   }
 
   const handleAddProductModal = (row) => {
-    console.log(row)
+
     setAddProductModal(true)
     setPreProductId(row.original.pre_product_id)
     console.log(row.original.pre_product_id)
@@ -266,10 +270,10 @@ const table = useMaterialReactTable({
     }
   },
   muiTableContainerProps: { sx: { maxHeight: '500px' } },
-  // renderRowActionMenuItems
+  
   renderRowActions: ({ row, table }) => {
     return (
-      <div className="w-max gap-3 flex flex-row justify-center items-center">
+      <div className="max-w-min gap-3 flex flex-row">
         <Button
           size="small" 
           className="rounded-xl bg-khas hover:bg-orange-600 p-1 text-white font-semibold "
@@ -283,37 +287,15 @@ const table = useMaterialReactTable({
         </Button>
       </div>
     )
-  }
+  },
 
-  // renderTopToolbar: ({ table }) => {
+  displayColumnDefOptions: {
+    'mrt-row-actions': {
+      size: 80,
+    },
+  },
 
-  //   return (
-  //     <Box
-  //       sx={() => ({
-  //         display: 'flex',
-  //         gap: '0.5rem',
-  //         p: '8px',
-  //         justifyContent: 'space-between',
-  //       })}
-  //     >
-  //       <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-  //         {/* import MRT sub-components */}
-  //         <MRT_GlobalFilterTextField table={table} />
-  //         <MRT_ToggleFiltersButton table={table} />
-  //       </Box>
-  //       <Box>
-  //         <Box sx={{ display: 'flex', gap: '0.5rem' }}>
-  //           <button
-  //             className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
-  //             onClick={() => setAddCategoryModal(true)}
-  //           >
-  //             دسته بندی جدید <AddCircleOutline/> 
-  //           </button>
-  //         </Box>
-  //       </Box>
-  //     </Box>
-  //   );
-  // },
+ 
 });
 
 

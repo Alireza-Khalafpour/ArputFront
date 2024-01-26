@@ -102,18 +102,28 @@ export const CreateCategory = ()=> {
           headers: headers
         })
         .then((response) => {
-          setAlert(true)
-          setMessage("  کارخانه جدید با موفقیت افزوده شد، آدرس را اضافه کنید. ")
-          setLoading(false)
-          setAddCategoryModal(false)
-          setaddFactoryName()
-          setaddCategs([])
-          setAddTelephone()
-          setAddMobile()
-          ListApi(Auth)
+          if(response.data.Done === true){
+            setAlert(true)
+            setMessage("  کارخانه جدید با موفقیت افزوده شد، آدرس را اضافه کنید. ")
+            setLoading(false)
+            setAddCategoryModal(false)
+            setaddFactoryName()
+            setaddCategs([])
+            setAddTelephone()
+            setAddMobile()
+            ListApi(Auth)
+          }else {
+            setMessage(response.data.Message)
+            setErrorAlert(true)
+            setaddFactoryName()
+            setaddCategs([])
+            setAddTelephone()
+            setAddMobile()
+            setLoading(false)
+            setAddCategoryModal(false)
+          }
         })
         .catch(function (error) {
-          console.log(error, "Error");
           setMessage(" متاسفیم،خطایی رخ داده است ")
           setErrorAlert(true)
           setaddFactoryName()
@@ -153,39 +163,49 @@ export const CreateCategory = ()=> {
     }
 
     async function AddFactoryAddress() {
-      setLoading(true);
-      await axios.patch(`https://supperapp-backend.chbk.run/factory/set_address?factory_id=${factoryIdForAddress}`, {
-        "lat": latLang?.lat,
-        "lng": latLang?.lng,
-        "main_address": Address.formatted_address,
-        "street": street,
-        "alley": alley,
-        "number": number,
-        "remain": "",
-        "zip_code": zipcode
-      }, 
-      {
-        headers: headers
-      })
-      .then((response) => {
-        console.log(response.data.Done)
-        setAlert(true)
-        setMessage(" آدرس با موفقیت ثبت شد ")
-        setLoading(false)
-        setAddAddressModal(false)
-        ListApi(Auth)
-        // setTimeout(() => {
-        //   // route.refresh()
-        //   window.location.reload()
-        // }, 700);
-      })
-      .catch(function (error) {
-        console.log(error, "Error");
-        setMessage(" متاسفیم،خطایی رخ داده است ")
+
+      if(zipcode == null || zipcode == '') {
+        setMessage(" کدپستی را به درستی وارد کنید ")
         setErrorAlert(true)
-        setAddAddressModal(false)
-        setLoading(false)
-      });
+      }else{
+        setLoading(true);
+        await axios.patch(`https://supperapp-backend.chbk.run/factory/set_address?factory_id=${factoryIdForAddress}`, {
+          "lat": latLang?.lat,
+          "lng": latLang?.lng,
+          "main_address": Address.formatted_address,
+          "street": street,
+          "alley": alley,
+          "number": number,
+          "remain": "",
+          "zip_code": zipcode
+        }, 
+        {
+          headers: headers
+        })
+        .then((response) => {
+          console.log(response.data.Done)
+          setAlert(true)
+          setMessage(" آدرس با موفقیت ثبت شد ")
+          setLoading(false)
+          setAddAddressModal(false)
+          ListApi(Auth)
+          setTimeout(() => {
+            // route.refresh()
+            window.location.reload();
+          }, 800);
+        })
+        .catch(function (error) {
+          console.log(error, "Error");
+          setMessage(" متاسفیم،خطایی رخ داده است ")
+          setErrorAlert(true)
+          setAddAddressModal(false)
+          setLoading(false)
+          setTimeout(() => {
+            // route.refresh()
+            window.location.reload();
+          }, 800);
+        });
+      }
 
   }
 
@@ -224,6 +244,7 @@ const table = useMaterialReactTable({
   columns,
   data,
   localization: mrtLocalizationFa,
+  rowNumberDisplayMode: true,
   columnResizeMode:true,
   enableStickyHeader: true,
   enableStickyFooter: true,
@@ -281,10 +302,10 @@ const table = useMaterialReactTable({
     return (
       <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
         <IconButton
-          color="error"
           onClick={() => GetRowIdForPatchAddress(row)}
         >
           <LocationOnRounded />
+          آدرس
         </IconButton>
       </Box>
     )
@@ -367,10 +388,10 @@ const table = useMaterialReactTable({
             ایجاد کارخانه جدید
           </DialogTitle>
           <Divider />
-          <DialogContent className="flex flex-col items-center gap-10 mt-12 h-[90vh] " >           
+          <DialogContent className="flex flex-col items-center gap-10 mt-12 h-full " >           
 
             <div className="flex flex-col justify-center items-center gap-10 w-full" >
-              <div className='w-full flex flex-row justify-around items-center ' >
+              <div className='w-full flex md:flex-row flex-col gap-7 justify-around items-center ' >
                 <TextField
                   className="md:w-[28%] w-[90%]"
                   id="input-with-icon-textfield"
@@ -403,12 +424,12 @@ const table = useMaterialReactTable({
                   renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن دسته بندی " />}
                 />
               </div>
-              <div className='w-full flex flex-row justify-around items-center' >
+              <div className='w-full flex md:flex-row flex-col gap-7 justify-around items-center' >
                 <TextField
                   className="md:w-[28%] w-[90%]"
                   id="input-with-icon-textfield"
-                  label=" نام کاربری "
-                  placeholder=" نام کاربری "
+                  label=" نام کاربری و رمزعبور "
+                  placeholder="  نام کاربری و رمزعبور "
                   value={addMobile}
                   onChange={(e) => setAddMobile(e.target.value)}
                   InputProps={{
@@ -444,7 +465,7 @@ const table = useMaterialReactTable({
             </div>
 
           </DialogContent>
-          <DialogActions className="p-4 flex flex-row gap-4" >
+          <DialogActions className="p-4 flex flex-row gap-4 mt-10" >
             <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddFactoryApi()}>
               {loading ? <CircularProgress size="medium" /> : " ثبت "}
             </Button>
@@ -473,11 +494,10 @@ const table = useMaterialReactTable({
 
 
               <div className='w-full flex flex-col justify-center items-start gap-1' >
-                <div className="w-full grid grid-cols-2 gap-2 justify-center items-center" >
+                <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-2 justify-center items-center" >
                   <TextField
-                    className="w-[90%]"
+                    className="md:w-[90%] w-full p-3"
                     id="input-with-icon-textfield"
-                    label="  خیابان  "
                     placeholder=" خیابان  "
                     value={street}
                     onChange={(e) => setStreet(e.target.value)}
@@ -491,9 +511,8 @@ const table = useMaterialReactTable({
                     variant="standard"
                   />
                   <TextField
-                    className="w-[90%]"
+                    className="md:w-[90%] w-full p-3 "
                     id="input-with-icon-textfield"
-                    label=" کوچه "
                     placeholder=" کوچه  "
                 value={alley}
                     onChange={(e) => setAlley(e.target.value)}
@@ -507,9 +526,9 @@ const table = useMaterialReactTable({
                     variant="standard"
                   />
                   <TextField
-                    className="w-[90%]"
+                    className="md:w-[90%] w-full p-3 "
                     id="input-with-icon-textfield"
-                    label=" پلاک "
+
                     placeholder=" پلاک  "
                     value={number}
                     onChange={(e) => setNumber(e.target.value)}
@@ -523,9 +542,8 @@ const table = useMaterialReactTable({
                     variant="standard"
                   />
                   <TextField
-                    className="w-[90%]"
+                    className="md:w-[90%] w-full p-3 "
                     id="input-with-icon-textfield"
-                    label=" کدپستی "
                     placeholder=" کدپستی  "
                     value={zipcode}
                     onChange={(e) => setZipcode(e.target.value)}
@@ -581,7 +599,6 @@ const table = useMaterialReactTable({
         >
         <Alert variant='filled' severity='error' className='text-lg text-white font-semibold' > {message} </Alert>
         </Snackbar>
-
 
     </div>
 

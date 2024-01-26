@@ -14,7 +14,7 @@ import { e2p } from "@/utils/replaceNumbers";
 
 
 
-export const AddRepresentation = ()=> {
+export const BranchListAdmin = ()=> {
 
     const cookie = new Cookies();
 
@@ -29,36 +29,12 @@ export const AddRepresentation = ()=> {
     const [representationName, setRepresentationName] = useState()
     const [repNumber, setRepNumber] = useState()
 
-    const [currentId, setCurrentId] = useState()
 
     const [DeleteCategoryIds, setDeleteCategoryIds] = useState()
 
-
-    const currentUserHeaders ={
-      'accept': 'application/json',
-      'Authorization': `Bearer ${Auth}`,
-      }
-
-    async function GetCurrentUser() {
       
-      await axios.get('https://supperapp-backend.chbk.run/register/current_user', {
-        headers:currentUserHeaders
-        })
-        .then((response) => {
-            console.log(response)
-            setCurrentId(response.data.data[0].id)
-            ListApi(response.data.data[0].id)
-        })
-        .catch((error) => {
-            console.log(error, "Error");
-        });
-      }
-
-      
-      // get current user on modal open-------------------------
   
       const handleOpen = () => {
-        // GetCurrentUser()
         setAddCategoryModal(true)
       }
 
@@ -69,132 +45,37 @@ export const AddRepresentation = ()=> {
       }
 
 
-    async function ListApi(currentid) {
+    async function ListApi() {
       
-      await axios.get(`https://supperapp-backend.chbk.run/branch/branch_list_by_factory_id?factory_id=${currentid}`, {
+      await axios.get('https://supperapp-backend.chbk.run/branch/branch_list_admin', {
         headers:RepresentationListHeaders
         })
         .then((response) => {
             console.log(response)
-            setData(response.data.data[0].branch_data)
+            setData(response.data.data)
         })
         .catch((error) => {
             console.log(error, "Error");
         });
     }
 
-
     useEffect(() => {
-      // const Auth = cookie.get('tokenDastResi')
-      // ListApi(Auth);
-      GetCurrentUser()
+        ListApi();
     },[])
 
 
     
-    // -------------------------------------------------------
-
-    const headers ={
-    'accept': 'application/json',
-    'Authorization': `Bearer ${Auth}`,
-    }
-  
-
-    const addBranchData= {
-      "factory_id": currentId,
-      'name': representationName,
-      'mobile':repNumber
-    }
-  
-    async function AddBranchApi() {
-      // setLoading(true);
-      console.log(addBranchData)
-      await axios.post('https://supperapp-backend.chbk.run/branch/create', addBranchData, {
-          headers: headers
-        })
-        .then((response) => {
-          if (response.data.Done === true) {
-            console.log(response)
-            setAlert(true)
-            setMessage(" نمایندگی جدید با موفقیت افزوده شد ")
-            setLoading(false)
-            setAddCategoryModal(false)
-            setTimeout(() => {
-              window.location.reload()
-            }, 500);
-          } else if (response.data.Done === false) {
-            setMessage(response.data.Message)
-            setErrorAlert(true)
-            setLoading(false)
-          }
-        })
-        .catch(function (error) {
-          console.log(error, "Error");
-          setMessage(" متاسفیم،خطایی رخ داده است ")
-          setErrorAlert(true)
-          setLoading(false)
-        });
-  
-    }
-
-    // Update a category -----------------------------------------
-
-
-    // // Delete a category -----------------------------------------
-
-    // async function DeleteCategoryApi() {
-    //   setLoading(true);
-    //   await axios.delete('https://supperapp-backend.chbk.run/category/delete', {'ids':DeleteCategoryIds}, {
-    //       headers: headers
-    //     })
-    //     .then((response) => {
-    //       console.log(response)
-    //       setAlert(true)
-    //       setMessage(" دسته بندی حذف شد ")
-    //       setLoading(false)
-    //       ListApi(Auth)
-    //     })
-    //     .catch((error) => {
-    //       console.log(error, "Error");
-    //       setMessage(" متاسفیم،خطایی رخ داده است ")
-    //       setErrorAlert(true)
-    //       setLoading(false)
-    //     });
-  
-    // }
-
-    // const [DeleteCategName, setDeleteCategName] = useState("")
-
-    // const GetRowIdForDelete = (row) => {
-    //   setDeleteCategoryIds([row.original.id])
-    //   setDeleteCategName(row.original.name)
-    //   setDeleteCategoryModal(true)
-    //   console.log(row)
-    // }
-
-    // const OmitRowIdForDelete = () => {
-    //   setDeleteCategoryIds([])
-    //   setDeleteCategoryModal(false)
-    // }
-
-
 
 
   // columns and data =============================================
   const columns = useMemo(
     () => [
       {
-        header: ' نام نمایندگی ',
-        accessorKey: 'branch_name',
-        id: 'branch_name',
-        size: 100
+        header: ' کارخانه ',
+        accessorKey: 'factory_name',
+        id: 'factory_name',
       },
-      {
-        header: ' آدرس ',
-        accessorKey: '#',
-        id: '#',
-        size: 330
-      },
+      
     ],
     []
   );
@@ -203,18 +84,11 @@ export const AddRepresentation = ()=> {
 const table = useMaterialReactTable({
   columns,
   data,
-  enableExpandAll: false, //hide expand all double arrow in column header
-  enableExpanding: true,
-  filterFromLeafRows: true, //apply filtering to all rows instead of just parent rows
-  initialState: { expanded: false }, //expand all rows by default
-  paginateExpandedRows: false, //When rows are expanded, do not count sub-rows as number of rows on the page towards pagination
-  getSubRows: (originalRow) => originalRow.features,
   localization: mrtLocalizationFa,
   columnResizeMode:true,
   enableStickyHeader: true,
   enableStickyFooter: true,
-  enableRowActions: true,
-  renderRowActionMenuItems: true,
+  enableGrouping: true,
   muiTableBodyCellProps:{
     sx:{
       align: 'right',
@@ -264,23 +138,37 @@ const table = useMaterialReactTable({
       </Box>
     );
   },
-  renderRowActions: ({ row, table }) => {
-    return (
-      <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-        <IconButton
-          color="secondary"
+
+  renderDetailPanel: ({ row }) => (
+
+    <div className="bg-paszamine1 p-2">
+        <h3 className="w-full text-start font-extrabold mb-2" > <span className=" p-1 text-base" >  لیست نمایندگی ها </span> </h3>
+        <Divider/>
+        <Box
+          sx={{
+              display: 'grid',
+              margin: 'auto',
+              gridTemplateColumns: '1fr 1fr 1fr 1fr',
+              width: '100%',
+              textAlign:"justify",
+              gap: "12px"
+          }}
         >
-          <EditRounded />
-        </IconButton>
-        <IconButton
-          color="error"
-          onClick={() => GetRowIdForDelete(row)}
-        >
-          <DeleteRounded />
-        </IconButton>
-      </Box>
-    )
-  }
+
+          {
+  
+            row?.original?.branch_data.map((item) => ( 
+              <>
+                <p className="text-lg p-2" > {item.branch_name} </p>
+              </>
+             ))
+          } 
+
+
+        </Box>
+    </div>
+  ),
+
 });
 
   // modal part -------------------------------------------------------------
@@ -417,4 +305,4 @@ const table = useMaterialReactTable({
     );
 }
 
-export default AddRepresentation;
+export default BranchListAdmin;

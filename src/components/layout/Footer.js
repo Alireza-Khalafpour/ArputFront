@@ -2,11 +2,12 @@ import { Facebook, Instagram, Telegram, WhatsApp } from "@mui/icons-material";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import Image from "next/image";
 import LogoAR from "../../../public/images/Final Light Blur Transparented.png"
+import Link from "next/link";
 
 const Footer = () => {
     return (
         <>
-            <div className=" mt-20 w-full md:h-[35vh] h-full p-5 flex flex-col justify-center  items-center bg-gradient-to-bl from-asliDark to-blue-900 rounded-tl-[150px] rounded-sm " >
+            <div className=" mt-20 w-full md:h-[40vh] h-full p-5 flex flex-col justify-center  items-center bg-gradient-to-bl from-asliDark to-blue-900 rounded-tl-[150px] rounded-sm " >
 
                 <div className="md:flex hidden flex-row justify-between items-start w-full h-16" >
                     <div className="w-1/4 " >
@@ -35,11 +36,10 @@ const Footer = () => {
                 </div>
 
                 <div className="flex flex-col md:w-1/4 w-full text-center gap-2 text-white  justify-around items-center h-full" >
-                    <h5> دانلود اپ </h5>
-                    <h5> صفحه محصولات</h5>
-                    <h5> ثبت نام به عنوان فروشگاه </h5>
-                    <h5> تماس با ما </h5>
-                    <h5> درباره ما </h5>
+                    <Link href="/products" className=" cursor-pointer hover:text-khas" ><h5> گالری محصولات</h5></Link>
+                    <Link href="/signin" className=" cursor-pointer hover:text-khas"><h5> ثبت نام به عنوان فروشگاه </h5></Link>
+                    <Link href="/contactus" className=" cursor-pointer hover:text-khas" ><h5> تماس با ما </h5></Link>
+                    <Link href="/aboutus" className=" cursor-pointer hover:text-khas" ><h5> درباره ما </h5></Link>
                 </div>
 
                 <div className="flex flex-col md:w-1/4 w-full text-center gap-4 text-white text-xl justify-around items-center h-full" >
@@ -56,6 +56,11 @@ const Footer = () => {
                     <Image src={LogoAR} width={130} height={130} />
                 </div>
                     
+                </div>
+
+                <div className=" justify-center items-center gap-2 text-center flex flex-col pt-7" >
+                    <p className="text-white opacity-40" > کلیه حقوق این وبسایت متعلق به شرکت آرپوت مارکت(سپهر پنداران نیک سگال) می باشد. </p>
+                    <p className="text-white opacity-40" > copyright 2024 &copy; ArputMarket </p>
                 </div>
 
             </div>

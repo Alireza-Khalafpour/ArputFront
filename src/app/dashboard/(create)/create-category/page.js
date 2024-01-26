@@ -3,18 +3,19 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, EditRounded, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
+import { AddCircleOutline, Category, DeleteRounded, DetailsOutlined, EditRounded} from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, Snackbar, TextField, Tooltip } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import ContextMenu from "@/utils/ContextMenu";
-import { CircularProgress, ModalDialog, Typography } from "@mui/joy";
+import { ModalDialog, Typography } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
 
 
 
-export const CreateCategory = ()=> {
+export const CreateFactory = ()=> {
 
     const cookie = new Cookies();
 
@@ -85,19 +86,25 @@ export const CreateCategory = ()=> {
     }
   
     async function AddCategoryApi() {
-      // setLoading(true);
+      setLoading(true);
       await axios.post('https://supperapp-backend.chbk.run/category/create', {'name': addCategName, 'features':featureIds}, {
           headers: headers
         })
         .then((response) => {
-          setAlert(true)
-          setMessage(" دسته بندی جدید با موفقیت افزوده شد ")
-          setLoading(false)
-          setAddCategoryModal(false)
-          ListApi(Auth)
+          if (response.data.Done=== true) {
+            setAlert(true)
+            setMessage(" دسته بندی جدید با موفقیت افزوده شد ")
+            setLoading(false)
+            setAddCategoryModal(false)
+            ListApi(Auth)
+            setAddCategName("")
+          }else {
+            setMessage(response.data.message)
+            setErrorAlert(true)
+            setLoading(false)
+          }
         })
         .catch(function (error) {
-          console.log(error, "Error");
           setMessage(" متاسفیم،خطایی رخ داده است ")
           setErrorAlert(true)
           setLoading(false)
@@ -112,6 +119,8 @@ export const CreateCategory = ()=> {
     // Delete a category -----------------------------------------
 
     const DeleteCategoryApi = (i) => {
+
+      setLoading(true);
 
       const data = {
         ids:DeleteCategoryIds
@@ -158,7 +167,12 @@ export const CreateCategory = ()=> {
       setDeleteCategoryModal(false)
     }
 
+    // handle close category modal--------------------------------------------------
 
+    function OnCloseModal() {
+      setAddCategoryModal(false)
+      setAddCategName("")
+    }
 
 
   // columns and data =============================================
@@ -323,11 +337,12 @@ const table = useMaterialReactTable({
           <Divider />
           <DialogContent className="flex flex-col justify-center items-center gap-10" >           
 
-            <div className='w-full flex flex-row justify-around items-center' >
+            <div className='w-full flex md:flex-row flex-col gap-6 justify-around items-center' >
               <TextField
                 id="input-with-icon-textfield"
                 label=" نام دسته بندی "
                 placeholder=" نام دسته بندی  "
+                className="w-full"
                 value={addCategName}
                 onChange={(e) => setAddCategName(e.target.value)}
                 InputProps={{
@@ -343,6 +358,7 @@ const table = useMaterialReactTable({
               <Autocomplete
                 disablePortal
                 multiple
+                className="w-full"
                 noOptionsText=" داده ای موحود نیست "
                 options={featureList}
                 getOptionLabel={(i)=> i.name}
@@ -358,7 +374,7 @@ const table = useMaterialReactTable({
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4" >
             <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddCategoryApi()}>
-              {loading ? <CircularProgress size="medium" /> : " ثبت "}
+              {loading ? <CircularProgress size="medium" className="text-white w-12 h-12" /> : " ثبت "}
             </Button>
             <Button variant="soft" color='danger'  onClick={() => setAddCategoryModal(false)}>
               انصراف
@@ -367,7 +383,7 @@ const table = useMaterialReactTable({
         </ModalDialog>
       </Modal>
 
-      <Modal open={addCategoryModal} onClose={() => setAddCategoryModal(false)}>
+      <Modal open={addCategoryModal} onClose={() => OnCloseModal()}>
         <ModalDialog variant="outlined" role="definition" className="w-[40vw] h-[65vh] p-0" >
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
               افزودن ویژگی به {}
@@ -413,7 +429,7 @@ const table = useMaterialReactTable({
             <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddCategoryApi()}>
               {loading ? <CircularProgress size="medium" /> : " ثبت "}
             </Button>
-            <Button variant="soft" color='danger'  onClick={() => setAddCategoryModal(false)}>
+            <Button variant="soft" color='danger'  onClick={() => OnCloseModal()}>
               انصراف
             </Button>
           </DialogActions>
@@ -473,4 +489,4 @@ const table = useMaterialReactTable({
     );
 }
 
-export default CreateCategory;
+export default CreateFactory;

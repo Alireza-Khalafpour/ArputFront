@@ -54,7 +54,7 @@ async function Products() {
 
                 productList?.map((i) => (
 
-                        <Card className="md:w-1/5 w-full h-full hover:shadow-2xl" key={i.id}>
+                        <Card className="md:w-1/5 w-full h-[400px] hover:shadow-2xl" key={i.id}>
                             <div className=" w-full h-full" key={i.id} >
                                 <CardOverflow>
                                     <AspectRatio>

@@ -12,7 +12,9 @@ const DashboardMainPage = () => {
     const route = useRouter()
 
     useEffect(() =>{
-        route.refresh()
+        setTimeout(() => {
+            route.refresh()
+        }, 200);
     },[])
 
 

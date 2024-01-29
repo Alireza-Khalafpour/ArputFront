@@ -7,13 +7,14 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Divider, MenuList } from '@mui/material';
-import { Apps, ArrowCircleDownTwoTone, ArrowDownward, Close, ExitToApp, ExpandCircleDown, Home, InstallMobileOutlined, LoginOutlined, MenuOpen, MenuRounded, NotificationsActive, Payment, Person, Phone, Settings, ShoppingBasket, SpaceDashboard, Store, ThreePRounded } from '@mui/icons-material';
+import { Apps, ArrowCircleDownTwoTone, ArrowDownward, Close, CloseFullscreen, CloseRounded, ExitToApp, ExpandCircleDown, Home, InstallMobileOutlined, LoginOutlined, MenuOpen, MenuRounded, NotificationsActive, Payment, Person, Phone, Settings, ShoppingBasket, SpaceDashboard, Store, ThreePRounded, VideoLabel } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
 import { Avatar, Dropdown, ListItemDecorator, Menu, MenuButton, MenuItem, Modal, ModalDialog } from '@mui/joy';
 import axios from 'axios';
 import Image from 'next/image';
+import ReactPlayer from 'react-player';
 
 
 export default function Header() {
@@ -31,6 +32,8 @@ export default function Header() {
   const [dropMenu, setDrpMenu] = React.useState(false)
 
   const [open, setOpen] = React.useState(false);
+
+  const [videoModal, setVideoModal] = React.useState(false);
 
   React.useEffect(() =>{
     getUSer(Au)
@@ -70,7 +73,6 @@ export default function Header() {
     setAnchorEl(null);
   };
 
-  const [productsList, setProductsList] = React.useState(false)
 
   return (
     <div className='w-full' >
@@ -154,6 +156,7 @@ export default function Header() {
               </button>              
               <Link href="/aboutus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > درباره ما <ThreePRounded className='text-khas'/> </Link>
               <Link href="/contactus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' >   تماس با ما <Phone className='text-khas' /> </Link>
+              <button onClick={() => setVideoModal(true)} className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > ویدیو <VideoLabel className='text-khas' /> </button>
             </ul>
 
 
@@ -215,15 +218,15 @@ export default function Header() {
                     </Menu>
 
                     
-                  {
+                  {/* {
                     dropMenu
                     ?
                     (<Close onClick={() => setDrpMenu((p) => !p )} className='w-8 h-8 text-white mx-2' />)
                     :
                     (<MenuRounded onClick={() => setDrpMenu((p) => !p )} className='w-8 h-8 text-white mx-2 md:hidden block' />)
-                  }
+                  } */}
 
-                  {
+                  {/* {
                     dropMenu && 
                     (
                       <div onClick={() => setTimeout(() => { setDrpMenu(false) }, 500)} className="absolute bottom-[-265px] left-[-5px] w-[100vw] h-max bg-gradient-to-r from-blue-900 to-asliDark z-50 md:hidden block ">
@@ -235,11 +238,13 @@ export default function Header() {
                           </button>
                           <Link href="/aboutus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' > درباره ما <ThreePRounded className='text-khas'/> </Link>
                           <Link href="/contactus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' >   تماس با ما <Phone className='text-khas' /> </Link>
+                          <button onClick={() => setVideoModal(true)} className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > ویدیو <VideoLabel className='text-khas' /> </button>
 
+                        
                         </ul>
                       </div>
                     )
-                  }
+                  } */}
 
                   </div>
                 )
@@ -247,14 +252,17 @@ export default function Header() {
                 :
                 (
                 
-                <div className='relative flex flex-row items-center '>
+                <div className='relative flex flex-row items-center justify-center gap-2 '>
                 
-                  <Link href="/signin" className='text-base text-paszamine1 border p-2 rounded-xl bg-khas ' >
+                  <Link href="/signin" className='text-base text-paszamine1 border p-1 rounded-xl bg-khas ' >
                       <p className='md:block hidden' > ورود / ثبت نام </p>
-                      <LoginOutlined className='w-7 h-7 md:hidden block'  />
+                      <LoginOutlined className='w-6 h-6 md:hidden block'  />
                   </Link>
 
-                  {
+                  <button onClick={() => setVideoModal(true)} className=' md:hidden block text-base text-paszamine1 border p-1 rounded-xl bg-khas ' > <VideoLabel className='text-white w-6 h-6 ' /> </button>
+
+
+                  {/* {
                     dropMenu
                     ?
                     (<Close onClick={() => setDrpMenu((p) => !p )} className='w-8 h-8 text-white mx-2' />)
@@ -273,11 +281,11 @@ export default function Header() {
                           </button>
                           <Link href="/aboutus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' > درباره ما <ThreePRounded className='text-khas'/> </Link>
                           <Link href="/contactus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' >   تماس با ما <Phone className='text-khas' /> </Link>
-
+                          <button onClick={() => setVideoModal(true)} className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > ویدیو <VideoLabel className='text-khas' /> </button>
                         </ul>
                       </div>
                     )
-                  }
+                  } */}
 
                 </div>
                 )
@@ -314,6 +322,37 @@ export default function Header() {
 
           </div>
         </ModalDialog>
+      </Modal>
+
+
+      <Modal open={videoModal} onClose={() => setVideoModal(false)} >
+          <div className='w-full h-full flex justify-center items-center text-center' >
+              {/* <ReactPlayer
+                url={"https://www.aparat.com/v/cY0jN"}
+                height='70vh'
+                width="70vw"
+                controls={true}
+                className=" overflow-hidden rounded-xl"
+              ></ReactPlayer> */}
+
+              <button className='bg-red-600 rounded-full p-3 absolute top-[9%] right-[15%] font-bold hover:bg-red-700 transition-all duration-150 ' onClick={() => setVideoModal(false)} >
+                <CloseRounded className="text-white font-bold" />
+              </button>
+              
+              <div className="w-[70vw] h-[70vh]">
+                <span className='block m-auto' ></span>
+                <iframe 
+                  className='w-full h-full'
+                  src="https://www.aparat.com/video/video/embed/videohash/cY0jN/vt/frame?titleShow=true&autoplay=true" 
+                  allow="autoplay" 
+                  allowFullScreen="true" 
+                  webkitallowfullscreen="true" 
+                  mozallowfullscreen="true"
+                ></iframe>
+              </div>
+
+
+          </div>
       </Modal>
 
         </Toolbar>

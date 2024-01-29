@@ -64,7 +64,7 @@ const AddToFavoriteAndShare = ({pId}) => {
 
         console.log(id ,"Pre-ProductID")
 
-        // route.push(`/products/${id}`)
+        route.push(`/products/${id}`)
 
     }
 

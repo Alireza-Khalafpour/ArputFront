@@ -19,6 +19,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import GeneralLoader from '../module/GeneralLoader';
 
 
 
@@ -54,6 +55,7 @@ export default function SignInPage() {
       .then((response) => {
         cookie.set("tokenDastResi", response.data.access_token, {secure:true, maxAge: 14400  } );
         cookie.set("role", response.data.role, {secure:true, maxAge: 14400  } );
+        cookie.remove('activeList');
         setAlert(true)
         setMessage(" خوش آمدید ")
         setTimeout(() => {
@@ -196,7 +198,7 @@ export default function SignInPage() {
                             variant="contained"
                             onClick={() => HandleSubmit()}
                           >
-                            {loading ? <CircularProgress size="medium" /> : "ورود"}
+                            {loading ? <span className='text-sm' > <GeneralLoader/>  </span>: "ورود"}
                           </button>
                           <span className='w-1/2 hover:text-[#443DC0] hover:font-semibold hover:cursor-pointer hover:border-b-[3px]' > فراموشی رمز </span>
                         </Grid>

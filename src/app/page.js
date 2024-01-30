@@ -40,19 +40,20 @@ export default function Home() {
 
         </div>
 
-        <div className="flex flex-row justify-center items-center  w-full gap-4 bg-gradient-to-r from-asliDark to-blue-900 rounded-2xl md:rounded-tr-[190px] rounded-tr-2xl p-6 " >
+        <div className="flex flex-row justify-center items-center relative  w-full max-h-[60vh] gap-4 bg-gradient-to-r from-asliDark to-blue-900 rounded-2xl md:rounded-tr-[190px] rounded-tr-2xl p-6 " >
 
-          <div className=" flex flex-col gap-10 text-center justify-around items-center md:w-1/2 w-full md:h-auto  h-[50vh] md:mr-10 mr-0 ">
-            {/* <Image src={MobileSvg} width={300} height={300}  /> */}
-            <h1 className="md:text-5xl text-xl font-bold text-white leading-relaxed " > نمایش محصول در محیط واقعی با گوشی همراه !!! </h1>
+            <div className="absolute w-full h-full top-0 left-0 bg-black opacity-30 rounded-2xl md:rounded-tr-[190px] rounded-tr-2xl " ></div>
+            <video src="https://superapp-storage.storage.iran.liara.space/video/1.mp4" className="object-cover w-full h-[60vh] rounded-2xl md:rounded-tr-[190px] rounded-tr-2xl " autoPlay loop muted />
+          <div className=" flex flex-col gap-10 text-center justify-around items-center w-full max-h-[60vh] absolute top-10 ">
+            <h1 className="md:text-4xl text-xl font-bold text-white leading-relaxed " > نمایش محصول در محیط واقعی با گوشی همراه !!! </h1>
             <h2 className="md:text-3xl text-xl text-white " > اپ آرپوت رو دانلود کن </h2>
             <GoogleArAppModal/>
           </div>
 
-          <div className="md:flex hidden justify-end items-center w-1/2 rounded-2xl " style={{clipPath:"polygon(0 0, 65% 0, 100% 100%, 0% 100%)"}} >
-            {/* <Image src={AppDownloadGif} width={450} height={450} className="rounded-l-2xl"  /> */}
+
+          {/* <div className="md:flex hidden justify-end items-center w-1/2 rounded-2xl " style={{clipPath:"polygon(0 0, 65% 0, 100% 100%, 0% 100%)"}} >
             <BackgroundVideo/>
-          </div>
+          </div> */}
 
         </div>
 

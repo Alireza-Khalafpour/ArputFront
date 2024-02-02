@@ -102,7 +102,6 @@ const MyProductsFactory = () => {
               headers: headers
             })
             .then((response) => {
-              console.log(response)
               setAlert(true)
               setMessage(" کالا ایجاد شد ")
               setLoading(false)
@@ -237,10 +236,10 @@ const MyProductsFactory = () => {
   }
 
   const handleAddProductModal = (row) => {
-    console.log(row)
+    console.log(row.original)
     setAddProductModal(true)
     setPreProductId(row.original.pre_product_id)
-    console.log(row.original.pre_product_id)
+    setProductName(row.original.name)
   }
 
 const table = useMaterialReactTable({
@@ -365,8 +364,8 @@ const table = useMaterialReactTable({
           <Divider />
           <DialogContent className="flex flex-col justify-center items-center gap-10" >           
 
-            <div className='w-[90%] grid grid-cols-2 gap-8 justify-center mx-auto items-center' >
-              <TextField
+            <div className='w-full grid grid-cols-2 gap-8 justify-center mx-auto text-center items-center' >
+              {/* <TextField
                 id="input-with-icon-textfield"
                 className="w-[65%]"
                 label=" نام کالا  "
@@ -381,11 +380,11 @@ const table = useMaterialReactTable({
                   ),
                 }}
                 variant="standard"
-              />
+              /> */}
 
               <TextField
                 id="input-with-icon-textfield"
-                className="w-[65%]"
+                className="w-[50%] mx-auto"
                 label=" قیمت "
                 placeholder=" قیمت "
                 value={price}
@@ -402,7 +401,7 @@ const table = useMaterialReactTable({
 
               <TextField
                 id="input-with-icon-textfield"
-                className="w-[65%]"
+                className="w-[50%] mx-auto "
                 label=" تخفبف "
                 placeholder=" تخفبف "
                 value={off}
@@ -434,7 +433,9 @@ const table = useMaterialReactTable({
                 variant="standard"
               /> */}
 
-              <div>
+            </div>
+
+            <div className="w-full flex flex-col justify-center items-center text-center">
                 <form 
                     onClick={() => document.getElementById("fileInput").click()}
                     onDragOver={(e) => DragHandler(e)}
@@ -469,8 +470,6 @@ const table = useMaterialReactTable({
                     <p>{fileName}</p>
                 </div>
               </div>
-
-            </div>
 
             <Textarea
                 id="input-with-icon-textfield"

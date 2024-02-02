@@ -3,8 +3,8 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, Category, LocationCity, LocationOnRounded, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
-import { Alert, Autocomplete, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Snackbar, TextField, Typography } from "@mui/material";
+import { AddCircleOutline, Category, Edit, LocationCity, LocationOnRounded, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
+import { Alert, Autocomplete, Box, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, InputAdornment, Snackbar, TextField, Typography } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
@@ -134,6 +134,19 @@ export const CreateCategory = ()=> {
           setAddCategoryModal(false)
         });
   
+    }
+
+    // Edit and Update factory part -------------------
+
+    const[factoryIdForEditFactory, setFactoryIdForEditFactory] = useState("");
+    const [editFactoryModal, setEditFactoryModal] = useState(false);
+    const [editFactoryInfo, setEditFactoryInfo] = useState("");
+
+     
+    function GetRowIdForUpdateFactory(row) {
+      setEditFactoryInfo(row.original)
+      setFactoryIdForEditFactory(row.original.id)
+      setEditFactoryModal(true)
     }
 
     // Address Part  -----------------------------------
@@ -302,10 +315,18 @@ const table = useMaterialReactTable({
     return (
       <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
         <IconButton
+          className=" hover:bg-slate-300 p-1 rounded-xl"
           onClick={() => GetRowIdForPatchAddress(row)}
         >
           <LocationOnRounded />
           آدرس
+        </IconButton>
+        <IconButton
+          className=" hover:bg-slate-300 p-1 rounded-xl "
+          onClick={() => GetRowIdForUpdateFactory(row)}
+        >
+          <Edit />
+          ویرایش
         </IconButton>
       </Box>
     )
@@ -579,6 +600,110 @@ const table = useMaterialReactTable({
           </Button>
         </DialogActions>
       </Dialog>
+
+
+
+      
+      <Dialog fullWidth className="w-full" scroll="paper" maxWidth="md" open={editFactoryModal} onClose={() => setEditFactoryModal(false)}>
+
+        <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
+            ویرایش <span className="text-khas mx-2" > {editFactoryInfo.name} </span>
+        </DialogTitle>
+        <Divider />
+        <DialogContent className="flex flex-col items-center gap-10 mt-12 " >           
+
+          <div className="flex flex-col justify-center items-center gap-10 w-full h-full" >
+              <div className='w-full flex flex-col justify-center items-start gap-1' >
+                <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-2 justify-center items-center" >
+                  <TextField
+                    className="md:w-[90%] w-full p-3"
+                    id="input-with-icon-textfield"
+                    placeholder=" نام  "
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="end">
+                          <Category className='text-asliLight' />
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="standard"
+                  />
+
+                  <TextField
+                    className="md:w-[90%] w-full p-3"
+                    id="input-with-icon-textfield"
+                    placeholder=" رمزعبور  "
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="end">
+                          <Category className='text-asliLight' />
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="standard"
+                  />
+
+                  <TextField
+                    className="md:w-[90%] w-full p-3"
+                    id="input-with-icon-textfield"
+                    placeholder=" تلفن  "
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="end">
+                          <Category className='text-asliLight' />
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="standard"
+                  />
+
+                  <TextField
+                    className="md:w-[90%] w-full p-3"
+                    id="input-with-icon-textfield"
+                    placeholder=" موبایل  "
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="end">
+                          <Category className='text-asliLight' />
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="standard"
+                  />
+
+                  <FormControlLabel 
+                  control={<Checkbox/>
+                  } 
+                  label=" تکمیل شده " />
+
+                  <FormControlLabel control={<Checkbox />} label=" فعال " />
+
+                </div>
+
+              </div>
+
+          </div>
+
+        </DialogContent>
+        <DialogActions className="p-4 flex flex-row gap-4" >
+          <Button className='text-white bg-khas hover:bg-orange-600 w-28' >
+            {loading ? <CircularProgress size="medium" /> : " ثبت تغییرات "}
+          </Button>
+          <Button variant="soft" color='danger'  onClick={() => setEditFactoryInfo(false)}>
+            انصراف
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
 
         <Snackbar
         open={alert}

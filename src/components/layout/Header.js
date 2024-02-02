@@ -7,14 +7,13 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Divider, MenuList } from '@mui/material';
-import { Apps, ArrowCircleDownTwoTone, ArrowDownward, Close, CloseFullscreen, CloseRounded, ExitToApp, ExpandCircleDown, Home, InstallMobileOutlined, LoginOutlined, MenuOpen, MenuRounded, NotificationsActive, Payment, Person, Phone, Settings, ShoppingBasket, SpaceDashboard, Store, ThreePRounded, VideoLabel } from '@mui/icons-material';
+import { Apps, CloseRounded, ExitToApp, Home, InstallMobileOutlined, LoginOutlined, NotificationsActive, Person, Phone, Settings, ShoppingBasket, SpaceDashboard, ThreePRounded, VideoLabel } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
-import { Avatar, Dropdown, ListItemDecorator, Menu, MenuButton, MenuItem, Modal, ModalDialog } from '@mui/joy';
+import { Menu, MenuItem, Modal, ModalDialog } from '@mui/joy';
 import axios from 'axios';
 import Image from 'next/image';
-import ReactPlayer from 'react-player';
 
 
 export default function Header() {
@@ -35,6 +34,8 @@ export default function Header() {
 
   const [videoModal, setVideoModal] = React.useState(false);
 
+
+
   React.useEffect(() =>{
     getUSer(Au)
   },[])
@@ -50,7 +51,7 @@ export default function Header() {
         setName(response.data.data[0].name)
       })
       .catch((error) => {
-        console.log(error, "Error");
+        console.log("Error on getting current user");
       });
   }
 
@@ -75,7 +76,7 @@ export default function Header() {
 
 
   return (
-    <div className='w-full' >
+    <div className='w-full'>
       <AppBar position="static" className='bg-asliDark' >
         <Toolbar className='flex flex-row justify-between w-full h-full items-center' >
           {/* <IconButton
@@ -96,61 +97,6 @@ export default function Header() {
 
             <Link href="/products" className='hover:border-b-2 border-b-khas text-xl transition-all duration-75 cursor-pointer pb-2 ' > فروشگاه <Apps className='text-khas'/> </Link>
 
-
-              {/* <Dropdown>
-                <MenuButton
-                  slots={{ root: IconButton }}
-                  slotProps={{ root: { variant: 'plain', color: 'neutral' } }}
-                  sx={{ borderRadius: 40 }}
-                >
-                  <h3 onClick={() => setProductsList(true)}  className=' text-white text-base pb-2 hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer ' > محصولات <ExpandCircleDown className='text-khas animate-bounce ' /></h3>
-                </MenuButton>
-                <Menu
-                  className='bg-paszamine2'
-                  variant="soft"
-                  invertedColors
-                  aria-labelledby="apps-menu-demo"
-                  sx={{
-                    '--List-padding': '0.5rem',
-                    '--ListItemDecorator-size': '3rem',
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 100px)',
-                    gridAutoRows: '100px',
-                    gap: 1,
-                  }}
-                >
-                  <MenuItem orientation="vertical" className='font-bold'>
-                    <ListItemDecorator>
-                      <Avatar className="bg-asliLight text-white font-bold" >س</Avatar>
-                    </ListItemDecorator>
-                    سرامیک
-                  </MenuItem>
-                  <MenuItem orientation="vertical" className='font-bold'>
-                    <ListItemDecorator>
-                      <Avatar className="bg-asliLight text-white font-bold" >ک</Avatar>
-                    </ListItemDecorator>
-                    کاشی
-                  </MenuItem>
-                  <MenuItem orientation="vertical" className='font-bold'>
-                    <ListItemDecorator>
-                      <Avatar className="bg-asliLight text-white font-bold" >م</Avatar>
-                    </ListItemDecorator>
-                    موزاییک
-                  </MenuItem>
-                  <MenuItem orientation="vertical" className='font-bold'>
-                    <ListItemDecorator>
-                      <Avatar className="bg-asliLight text-white font-bold" >س</Avatar>
-                    </ListItemDecorator>
-                    سفال
-                  </MenuItem>
-                  <MenuItem orientation="vertical" className='font-bold'>
-                    <ListItemDecorator>
-                      <Avatar className="bg-asliLight text-white font-bold" >گ</Avatar>
-                    </ListItemDecorator>
-                    گل
-                  </MenuItem>
-                </Menu>
-              </Dropdown> */}
               <button className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' onClick={() => setOpen(true) } >
                 <Link href="https://superapp-storage.storage.iran.liara.space/ARPutMarketApp.apk" >اپ موبایل <InstallMobileOutlined className='text-khas' /> </Link>
               </button>              
@@ -203,48 +149,19 @@ export default function Header() {
                         horizontal: 'right',
                       }}
                       open={Boolean(anchorEl)}
-                      onClose={() => handleClose()}
-                      onClick={() => handleClose()}
+                      onClose={handleClose}
+                      onClick={handleClose}
                     >
-                      <MenuItem onClick={handleClose}> {name} </MenuItem>
+                      <MenuItem> {name} </MenuItem>
                       <Divider/>
-                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full'> <Link href="/" > <Home className='text-asliLight' /> خانه  </Link> </MenuItem>
-                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full '> <Link href="/profile" > <Person className='text-asliLight' /> پروفایل  </Link> </MenuItem>
-                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full '> <Link href="/dashboard"> <SpaceDashboard className='text-asliLight' /> داشبورد   </Link> </MenuItem>
-                      {/* <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200'> <ُ className='text-asliLight' /> سبد خرید  </MenuItem> */}
-                      <MenuItem className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full '> <Settings className='text-asliLight' /> تنظیمات  </MenuItem>
+                      <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full'> <Link href="/" > <Home className='text-asliLight' /> خانه  </Link> </MenuItem>
+                      <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full '> <Link href="/profile" > <Person className='text-asliLight' /> پروفایل  </Link> </MenuItem>
+                      <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full '> <Link href="/dashboard"> <SpaceDashboard className='text-asliLight' /> داشبورد   </Link> </MenuItem>
+                      <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200'><Settings className='text-asliLight' /> برروزرسانی رمزعبور </MenuItem>
                       <Divider/>
                       <MenuItem className='text-rose-800 hover:bg-rose-200 gap-2 transition-colors duration-200 font-bold w-full ' onClick={() => handleLogout() }> <ExitToApp/> خروج </MenuItem>
                     </Menu>
 
-                    
-                  {/* {
-                    dropMenu
-                    ?
-                    (<Close onClick={() => setDrpMenu((p) => !p )} className='w-8 h-8 text-white mx-2' />)
-                    :
-                    (<MenuRounded onClick={() => setDrpMenu((p) => !p )} className='w-8 h-8 text-white mx-2 md:hidden block' />)
-                  } */}
-
-                  {/* {
-                    dropMenu && 
-                    (
-                      <div onClick={() => setTimeout(() => { setDrpMenu(false) }, 500)} className="absolute bottom-[-265px] left-[-5px] w-[100vw] h-max bg-gradient-to-r from-blue-900 to-asliDark z-50 md:hidden block ">
-                        <ul className="dropdown-content z-50 menu p-4 gap-6 w-[100vw] left-0 transition-all duration-700 flex flex-col ">
-                          <Link href="/products" className='hover:border-b-2 border-b-khas text-xl transition-all duration-75 cursor-pointer p-3  border-b-2 w-full flex flex-row justify-between ' > فروشگاه <Apps className='text-khas'/> </Link>
-
-                          <button className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 border-b-2 w-full flex flex-row justify-between ' onClick={() => setOpen(true) } >
-                            <Link href="https://superapp-storage.storage.iran.liara.space/ARPutMarketApp.apk" >اپ موبایل <InstallMobileOutlined className='text-khas' /> </Link>
-                          </button>
-                          <Link href="/aboutus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' > درباره ما <ThreePRounded className='text-khas'/> </Link>
-                          <Link href="/contactus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' >   تماس با ما <Phone className='text-khas' /> </Link>
-                          <button onClick={() => setVideoModal(true)} className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > ویدیو <VideoLabel className='text-khas' /> </button>
-
-                        
-                        </ul>
-                      </div>
-                    )
-                  } */}
 
                   </div>
                 )
@@ -260,32 +177,6 @@ export default function Header() {
                   </Link>
 
                   <button onClick={() => setVideoModal(true)} className=' md:hidden block text-base text-paszamine1 border p-1 rounded-xl bg-khas ' > <VideoLabel className='text-white w-6 h-6 ' /> </button>
-
-
-                  {/* {
-                    dropMenu
-                    ?
-                    (<Close onClick={() => setDrpMenu((p) => !p )} className='w-8 h-8 text-white mx-2' />)
-                    :
-                    (<MenuRounded onClick={() => setDrpMenu((p) => !p )} className='w-8 h-8 text-white mx-2 md:hidden block' />)
-                  }
-                  
-                  {
-                    dropMenu && 
-                    (
-                      <div onClick={() => setTimeout(() => { setDrpMenu(false) }, 500)} className="absolute bottom-[-265px] left-[-5px] w-[100vw] h-max bg-gradient-to-r from-blue-900 to-asliDark z-50 md:hidden block ">
-                        <ul className="dropdown-content z-50 menu p-4 gap-6 w-[100vw] left-0 transition-all duration-700 flex flex-col ">
-                          <Link href="/products" className='hover:border-b-2 border-b-khas text-xl transition-all duration-75 cursor-pointer p-3  border-b-2 w-full flex flex-row justify-between ' > فروشگاه <Apps className='text-khas'/> </Link>
-                          <button className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' onClick={() => setOpen(true) } >
-                            <Link href="https://superapp-storage.storage.iran.liara.space/ARPutMarketApp.apk" >اپ موبایل <InstallMobileOutlined className='text-khas' /> </Link>
-                          </button>
-                          <Link href="/aboutus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' > درباره ما <ThreePRounded className='text-khas'/> </Link>
-                          <Link href="/contactus" className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer p-3 w-full border-b-2 flex flex-row justify-between ' >   تماس با ما <Phone className='text-khas' /> </Link>
-                          <button onClick={() => setVideoModal(true)} className='hover:border-b-2 border-b-khas transition-all duration-75 cursor-pointer pb-2 ' > ویدیو <VideoLabel className='text-khas' /> </button>
-                        </ul>
-                      </div>
-                    )
-                  } */}
 
                 </div>
                 )
@@ -327,13 +218,6 @@ export default function Header() {
 
       <Modal open={videoModal} onClose={() => setVideoModal(false)} >
           <div className='w-full h-full flex justify-center items-center text-center' >
-              {/* <ReactPlayer
-                url={"https://www.aparat.com/v/cY0jN"}
-                height='70vh'
-                width="70vw"
-                controls={true}
-                className=" overflow-hidden rounded-xl"
-              ></ReactPlayer> */}
 
               <button className='bg-red-600 rounded-full p-3 absolute top-[9%] right-[15%] font-bold hover:bg-red-700 transition-all duration-150 ' onClick={() => setVideoModal(false)} >
                 <CloseRounded className="text-white font-bold" />

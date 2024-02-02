@@ -40,10 +40,10 @@ export default function Home() {
 
         </div>
 
-        <div className="flex flex-row justify-center items-center relative  w-full max-h-[60vh] gap-4 bg-gradient-to-r from-asliDark to-blue-900 rounded-2xl md:rounded-tr-[190px] rounded-tr-2xl p-6 " >
+        <div className="flex flex-row justify-center items-center relative  w-full max-h-[60vh] gap-4 bg-gradient-to-r from-asliDark to-blue-900 rounded-2xl md:rounded-tr-[190px] rounded-tr-2xl  md:rounded-bl-[190px] rounded-bl-2xl " >
 
-            <div className="absolute w-full h-full top-0 left-0 bg-black opacity-30 rounded-2xl md:rounded-tr-[190px] rounded-tr-2xl " ></div>
-            <video src="https://superapp-storage.storage.iran.liara.space/video/1.mp4" className="object-cover w-full h-[60vh] rounded-2xl md:rounded-tr-[190px] rounded-tr-2xl " autoPlay loop muted />
+            <div className="absolute w-full h-full top-0 left-0 bg-black opacity-10 rounded-2xl md:rounded-tr-[190px]  rounded-tr-2xl md:rounded-bl-[190px] rounded-bl-2xl " ></div>
+            <video src="https://superapp-storage.storage.iran.liara.space/video/1.mp4" className="object-cover w-full h-[60vh] rounded-2xl md:rounded-tr-[190px] rounded-tr-2xl  md:rounded-bl-[190px] rounded-bl-2xl " autoPlay loop muted />
           <div className=" flex flex-col gap-10 text-center justify-around items-center w-full max-h-[60vh] absolute top-10 ">
             <h1 className="md:text-4xl text-xl font-bold text-white leading-relaxed " > نمایش محصول در محیط واقعی با گوشی همراه !!! </h1>
             <h2 className="md:text-3xl text-xl text-white " > اپ آرپوت رو دانلود کن </h2>

@@ -3,8 +3,39 @@
 import { Dns, Edit, EditAttributes, Email, Person2, Smartphone } from "@mui/icons-material";
 import { Avatar, FormControl, FormHelperText, FormLabel, Input, Textarea } from "@mui/joy";
 import { Badge } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Cookies from "universal-cookie";
 
 const ProfileMainPage = () => {
+
+    const cookie = new Cookies();
+    const Au = cookie.get("tokenDastResi") ? cookie.get("tokenDastResi") : null 
+
+    const [userInfo, setUserInfo] =useState();
+    const {id, last_login, active, address, complete, email, family, image, national_code , name} = userInfo ? userInfo : "";
+
+
+    async function getUSer(Auth) {
+        await axios.get('https://supperapp-backend.chbk.run/register/current_user', {
+          headers:{
+            'accept': 'application/json',
+            'Authorization': `Bearer ${Auth}`,
+          }
+          })
+          .then((response) => {
+            setUserInfo(response.data.data[0])
+          })
+          .catch((error) => {
+            console.log("Error on getting current user");
+          });
+      }
+      
+      useEffect(() =>{
+        getUSer(Au)
+      },[])
+
+
     return (
         <div className="flex flex-col gap-14 md:w-[80%] w-full p-12">
             <div className="flex md:flex-row flex-col justify-around items-center gap-6" >
@@ -23,8 +54,8 @@ const ProfileMainPage = () => {
                 </Badge>
 
                 <div className="gap-3 flex flex-col">
-                    <h2 className="text-2xl font-bold"> 2Afm آرمین زارعی </h2>
-                    <p> <Email className="text-khas"/> www.email@gmail.com </p>
+                    <h2 className="text-2xl font-bold"> {id}</h2>
+                    <p> <Email className="text-khas"/> {email}</p>
                 </div>
 
             </div>
@@ -33,13 +64,13 @@ const ProfileMainPage = () => {
 
                 <FormControl className="w-full">
                     <FormLabel> نام </FormLabel>
-                    <Input className="md:w-[70%] w-full shadow-lg " endDecorator={<Dns/>} size="lg" placeholder=" نام " />
+                    <Input className="md:w-[70%] w-full shadow-lg " value={name} endDecorator={<Dns/>} size="lg" placeholder=" نام " />
                     {/* <FormHelperText>This is a helper text.</FormHelperText> */}
                 </FormControl>
 
                 <FormControl className="w-full" >
                     <FormLabel> نام خانوادگی </FormLabel>
-                    <Input className="md:w-[70%] w-full shadow-lg " size="lg" endDecorator={<Dns/>} placeholder="  نام خانوادگی" />
+                    <Input className="md:w-[70%] w-full shadow-lg " size="lg" value={family} endDecorator={<Dns/>} placeholder="  نام خانوادگی" />
                     {/* <FormHelperText>This is a helper text.</FormHelperText> */}
                 </FormControl>
 
@@ -49,13 +80,13 @@ const ProfileMainPage = () => {
 
                 <FormControl className="w-full" >
                     <FormLabel> شماره همراه </FormLabel>
-                    <Input className="md:w-[70%] w-full shadow-lg " endDecorator={<Smartphone/>} size="lg" placeholder="   شماره همراه  " />
+                    <Input className="md:w-[70%] w-full shadow-lg "  endDecorator={<Smartphone/>} size="lg" placeholder="   شماره همراه  " />
                     {/* <FormHelperText>This is a helper text.</FormHelperText> */}
                 </FormControl>
 
                 <FormControl className="w-full">
                     <FormLabel> ایمیل </FormLabel>
-                    <Input className="md:w-[70%] w-full shadow-lg " endDecorator={<Email/>} size="lg" placeholder=" ایمیل " />
+                    <Input className="md:w-[70%] w-full shadow-lg " value={email} endDecorator={<Email/>} size="lg" placeholder=" ایمیل " />
                     {/* <FormHelperText>This is a helper text.</FormHelperText> */}
                 </FormControl>
 

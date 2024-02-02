@@ -58,9 +58,15 @@ export default function SignInPage() {
         cookie.remove('activeList');
         setAlert(true)
         setMessage(" خوش آمدید ")
-        setTimeout(() => {
-          route.push("/dashboard")
-        }, 1700);
+        if(response.data.role == 'client') {
+          setTimeout(() => {
+            route.push("/")
+          }, 1700);
+        }else{
+          setTimeout(() => {
+            route.push("/dashboard")
+          }, 1700);
+        }
         setLoading(false)
       })
       .catch(function (error) {

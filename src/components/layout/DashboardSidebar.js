@@ -184,15 +184,15 @@ export default function DashbordSidebar({children}) {
                     <Typography>  پنل ادمین </Typography>
                   </AccordionSummary>
                   <Link  onClick={() => setTitle(" ایجاد و لیست دسته بندی ها ")} href="/dashboard/create-category" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
-                        ایجاد و لیست دسته بندی ها  
+                        دسته بندی ها
                       <ListAltOutlined className='text-khas'/>
                   </Link>
                   <Link  onClick={() => setTitle(" ایجاد و لیست ویژگی ها ")} href="/dashboard/CreateFeature" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
-                        ایجاد و لیست ویژگی ها    
+                          ویژگی ها    
                       <FeaturedPlayListOutlined className='text-khas'/>
                   </Link>
                   <Link onClick={() => setTitle(" ایجاد و لیست کارخانه ها ")} href="/dashboard/create-factory" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
-                        ایجاد و لیست کارخانه ها    
+                         کارخانه ها    
                       <FactoryOutlined className='text-khas'/>
                   </Link>
                   <Link onClick={() => setTitle(" لیست تمام نمایندگی ها  ")} href="/dashboard/branches-list-Admin" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
@@ -202,6 +202,10 @@ export default function DashbordSidebar({children}) {
                   <Link onClick={() => setTitle(" مدیریت پیش محصول و محصولات (Admin)")} href="/dashboard/my-products"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
                       مدیریت پیش محصول و محصولات (Admin)
                       <InboxIcon  className='text-khas'/>
+                  </Link>
+                  <Link  onClick={() => setTitle(" ایجاد و لیست دپارتمان ها ")} href="/dashboard/create-department" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                        دپارتمان ها  
+                      <ListAltOutlined className='text-khas'/>
                   </Link>
                 </Accordion>
               </ListItem>

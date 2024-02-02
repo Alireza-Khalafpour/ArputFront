@@ -193,7 +193,7 @@ export const MyProductsShop = ()=> {
         header: ' وضعیت دسترسی ',
         accessorKey: 'is_public',
         id: 'is_public',
-        Cell: ({ cell }) => <span>{cell.getValue() === true ? "تمام فروشگاه ها" : "فقط در نمایندگی ها"}</span>,
+        Cell: ({ cell }) => <span>{cell.getValue() === true ? "در تمام فروشگاه ها" : "فقط در نمایندگی ها"}</span>,
       },
       
       // {

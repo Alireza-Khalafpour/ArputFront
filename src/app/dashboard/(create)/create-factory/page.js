@@ -11,6 +11,7 @@ import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/l
 import {  IconButton, Textarea } from "@mui/joy";
 import CustomNeshanMap from "@/components/module/NeshanMap";
 import { useRouter } from "next/navigation";
+import EditFactoryModalPage from "@/components/module/EditFactoryModalPage";
 
 
 
@@ -138,18 +139,15 @@ export const CreateCategory = ()=> {
 
     // Edit and Update factory part -------------------
 
-    const[factoryIdForEditFactory, setFactoryIdForEditFactory] = useState("");
     const [editFactoryModal, setEditFactoryModal] = useState(false);
-    const [editFactoryInfo, setEditFactoryInfo] = useState("");
+    const [editFactoryInfo, setEditFactoryInfo] = useState();
 
-     
     function GetRowIdForUpdateFactory(row) {
       setEditFactoryInfo(row.original)
-      setFactoryIdForEditFactory(row.original.id)
       setEditFactoryModal(true)
     }
 
-    // Address Part  -----------------------------------
+    // Factory Address Part  -----------------------------------
 
     const [Address, setAddress] = useState()
     const [latLang, setLatLang] = useState()
@@ -604,104 +602,7 @@ const table = useMaterialReactTable({
 
 
       
-      <Dialog fullWidth className="w-full" scroll="paper" maxWidth="md" open={editFactoryModal} onClose={() => setEditFactoryModal(false)}>
-
-        <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
-            ویرایش <span className="text-khas mx-2" > {editFactoryInfo.name} </span>
-        </DialogTitle>
-        <Divider />
-        <DialogContent className="flex flex-col items-center gap-10 mt-12 " >           
-
-          <div className="flex flex-col justify-center items-center gap-10 w-full h-full" >
-              <div className='w-full flex flex-col justify-center items-start gap-1' >
-                <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-2 justify-center items-center" >
-                  <TextField
-                    className="md:w-[90%] w-full p-3"
-                    id="input-with-icon-textfield"
-                    placeholder=" نام  "
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="end">
-                          <Category className='text-asliLight' />
-                        </InputAdornment>
-                      ),
-                    }}
-                    variant="standard"
-                  />
-
-                  <TextField
-                    className="md:w-[90%] w-full p-3"
-                    id="input-with-icon-textfield"
-                    placeholder=" رمزعبور  "
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="end">
-                          <Category className='text-asliLight' />
-                        </InputAdornment>
-                      ),
-                    }}
-                    variant="standard"
-                  />
-
-                  <TextField
-                    className="md:w-[90%] w-full p-3"
-                    id="input-with-icon-textfield"
-                    placeholder=" تلفن  "
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="end">
-                          <Category className='text-asliLight' />
-                        </InputAdornment>
-                      ),
-                    }}
-                    variant="standard"
-                  />
-
-                  <TextField
-                    className="md:w-[90%] w-full p-3"
-                    id="input-with-icon-textfield"
-                    placeholder=" موبایل  "
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="end">
-                          <Category className='text-asliLight' />
-                        </InputAdornment>
-                      ),
-                    }}
-                    variant="standard"
-                  />
-
-                  <FormControlLabel 
-                  control={<Checkbox/>
-                  } 
-                  label=" تکمیل شده " />
-
-                  <FormControlLabel control={<Checkbox />} label=" فعال " />
-
-                </div>
-
-              </div>
-
-          </div>
-
-        </DialogContent>
-        <DialogActions className="p-4 flex flex-row gap-4" >
-          <Button className='text-white bg-khas hover:bg-orange-600 w-28' >
-            {loading ? <CircularProgress size="medium" /> : " ثبت تغییرات "}
-          </Button>
-          <Button variant="soft" color='danger'  onClick={() => setEditFactoryInfo(false)}>
-            انصراف
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <EditFactoryModalPage  editFactoryModal={editFactoryModal} setEditFactoryModal={setEditFactoryModal} editFactoryInfo={editFactoryInfo} />
 
 
 

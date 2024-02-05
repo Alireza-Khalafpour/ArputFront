@@ -26,8 +26,6 @@ const UpdateAddress = () => {
 
 
 
-
-
     return (
         <div className="flex flex-row justify-center items-center gap-6 w-full h-full">
             <div className="w-1/2 border-2" >

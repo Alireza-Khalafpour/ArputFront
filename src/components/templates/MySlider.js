@@ -22,7 +22,7 @@ const MySlider = ({title}) => {
     },[])
 
     async function GetItems () {
-        await axios.get('https://supperapp-backend.chbk.run/Product/products?page=0&limit=18', {
+        await axios.get('https://supperapp-backend.chbk.run/product/products?page=0&limit=18', {
             headers:{
               'accept': 'application/json',
             }
@@ -57,7 +57,7 @@ const MySlider = ({title}) => {
                                 <Link href={`/products/${i.id}`} style={{backgroundImage: `url(${i.image_url})`}} className=" relative sliderCard h-52 bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] relative before:rounded-xl">
                                     <div id="info" className=" transition-all duration-700 text-xl text-white absolute bottom-5 right-3 gap-5 ">
                                         <h2> {i.name} </h2> 
-                                        <h3 className="text-sm"> موجود در {e2p(i.seller_number)} فروشگاه </h3>
+                                        <h3 className="text-sm"> موجود در {i.seller_number} فروشگاه </h3>
                                     </div>
                                     <div className="absolute top-3 left-3 !bg-transparent" > {i.has_bundle == true ? <div className="rounded-full w-4 h-4 bg-green-700 text-white " ></div> : null } </div>
                                 </Link>

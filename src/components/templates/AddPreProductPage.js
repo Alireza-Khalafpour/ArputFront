@@ -22,7 +22,7 @@ const AddPreProductPage = () => {
     const cookie = new Cookies();
 
     const [categoryList, setcategoryList] = useState([])
-    const [addCateg, setaddCategs] = useState()
+    const [addCateg, setaddCategs] = useState([])
     const [preProductName, setPreProductName] = useState("")
     const [width, setWidth] = useState(0)
     const [height, setHeight] = useState(0)
@@ -94,7 +94,7 @@ const AddPreProductPage = () => {
 
 
     useEffect(() => {
-        setCategoryIdsForCheckbox(addCateg?.features.map((i) => i.id ))
+        setCategoryIdsForCheckbox(addCateg.features?.map((i) => i.id ))
     },[addCateg])
 
 
@@ -111,6 +111,7 @@ const AddPreProductPage = () => {
         })
         .then((response) => {
             setcategoryList(response?.data.data)
+            console.log(response?.data.data, "cat list api")
         })
         .catch((error) => {
             console.log(error, "Error");
@@ -119,7 +120,7 @@ const AddPreProductPage = () => {
 
     async function sampleListApi(Au) {
         
-        await axios.get('https://supperapp-backend.chbk.run/features_sample/list', {
+        await axios.get('https://supperapp-backend.chbk.run/feature_samples/list', {
         headers:{
             'accept': 'application/json',
             'Authorization': `Bearer ${Au}`,
@@ -127,6 +128,7 @@ const AddPreProductPage = () => {
         })
         .then((response) => {
             setSampleOptions(response?.data.data)
+            console.log(response?.data.data, "feature sample list api")
         })
         .catch((error) => {
             console.log(error, "Error");
@@ -203,13 +205,13 @@ const AddPreProductPage = () => {
 
     // Add image and Name for pre-product-------------
     const [imageL, setImage] = useState()
+    const [imageForUpload, setImageForUpload] = useState()
     const[fileName, setFileName] = useState("فایلی انتخاب نشده...")
-
-    console.log(imageL)
   
     const DeleteImg = () => {
       setFileName("فایلی انتخاب نشده...")
       setImage()
+      setImageForUpload()
       setImgUrl()
       setPreProductData({...preProductData, image_url: ""})
     }
@@ -241,7 +243,7 @@ const AddPreProductPage = () => {
 
     async function handleImageUpload() {        
 
-        formData.append("file", imageL);
+        formData.append("file", imageForUpload);
 
         setLoading(true);
         await axios.post('https://supperapp-backend.chbk.run/upload/upload_texture', formData,
@@ -586,8 +588,8 @@ const AddPreProductPage = () => {
                                     <p> ویژگی های انتخابی شما،موارد نشان شده به رنگ سبز هستند. </p>
 
                                     {
-                                        addCateg?.features.map((i, index) => (
-                                            <div className={` flex flex-row justify-between mx-5 items-center p-3 md:w-[60%] w-full gap-4 ${preProductData.features[index]?.feature_id === i.id ? "bg-green-200" : "bg-paszamine1"   } rounded-lg border-asliLight border`} >
+                                        addCateg?.features?.map((i, index) => (
+                                            <div className={` flex flex-row justify-between mx-5 items-center p-3 md:w-[60%] w-full gap-4 ${preProductData?.features[index]?.feature_id === i.id ? "bg-green-200" : "bg-paszamine1"   } rounded-lg border-asliLight border`} >
 
                                                 <span className='w-1/4'> {i.name} </span>
 
@@ -662,6 +664,7 @@ const AddPreProductPage = () => {
                                     onChange={ ({target:{files}}) =>{
                                         files &&
                                         setImage(URL.createObjectURL(files[0]))
+                                        setImageForUpload(files[0])
                                         setFileName(files[0].name)
                                     }
                                     }

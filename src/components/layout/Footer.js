@@ -36,14 +36,14 @@ const Footer = () => {
                 </div>
 
                 <div className="flex flex-col md:w-1/4 w-full text-center gap-2 text-white  justify-around items-center h-full" >
-                    <Link href="/products" className=" cursor-pointer hover:text-khas" ><h5> گالری محصولات</h5></Link>
-                    <Link href="/signin" className=" cursor-pointer hover:text-khas"><h5> ثبت نام به عنوان فروشگاه </h5></Link>
-                    <Link href="/contactus" className=" cursor-pointer hover:text-khas" ><h5> تماس با ما </h5></Link>
-                    <Link href="/aboutus" className=" cursor-pointer hover:text-khas" ><h5> درباره ما </h5></Link>
+                    <Link href="/products" className=" cursor-pointer hover:text-khas text-white" ><h5> گالری محصولات</h5></Link>
+                    <Link href="/signin" className=" cursor-pointer hover:text-khas text-white"><h5> ثبت نام به عنوان فروشگاه </h5></Link>
+                    <Link href="/contactus" className=" cursor-pointer hover:text-khas text-white" ><h5> تماس با ما </h5></Link>
+                    <Link href="/aboutus" className=" cursor-pointer hover:text-khas text-white" ><h5> درباره ما </h5></Link>
                 </div>
 
                 <div className="flex flex-col md:w-1/4 w-full text-center gap-4 text-white text-xl justify-around items-center h-full" >
-                    <a className="border-2 border-paszamine1 p-2 px-5 rounded-2xl hover:scale-110 transition-all duration-300" href="mailto:info@arputmarket.com" > ایمیل  <AlternateEmailIcon/> </a>
+                    <a className="border-2 border-paszamine1 p-2 px-5 rounded-2xl hover:scale-110 transition-all duration-300 text-white" href="mailto:info@arputmarket.com" > ایمیل  <AlternateEmailIcon/> </a>
                     <div className="flex flex-row justify-between items-center gap-4" >
                         <a href='https://www.instagram.com/' target="_blank" className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-khas hover:text-white hover:bg-orange-700 m-auto cursor-pointer transition-all duration-100" > <Instagram/> </a>
                         <a href="https://www.facebook.com/" target="_blank" className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-blue-600 hover:text-white hover:bg-blue-700 m-auto cursor-pointer transition-all duration-100" > <Facebook/> </a>
@@ -53,7 +53,8 @@ const Footer = () => {
                 </div>
 
                 <div className="flex flex-col md:w-1/4 w-full text-center gap-4 text-white text-xl justify-around items-center h-full" >
-                    <Image src={LogoAR} width={130} height={130} />
+                    <Image src={LogoAR} width={90} height={90} />
+                    <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'><Image width={40} height={40} referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8' alt='' style={{cursor:"pointer"}} Code='LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'/></a>
                 </div>
                     
                 </div>
@@ -62,6 +63,7 @@ const Footer = () => {
                     <p className="text-white opacity-40" > کلیه حقوق این وبسایت متعلق به شرکت آرپوت مارکت(سپهر پنداران نیک سگال) می باشد. </p>
                     <p className="text-white opacity-40" > copyright 2024 &copy; ArputMarket </p>
                 </div>
+
 
             </div>
         </>

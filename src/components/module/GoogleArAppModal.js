@@ -16,9 +16,15 @@ export default function GoogleArAppModal() {
   return (
     <>
 
-      <button className='rounded-full bg-paszamine1 text-center text-khas p-2 w-16 h-16 outline-dashed outline-khas ' onClick={() => setOpen(true)}>
-            <Link href="https://superapp-storage.storage.iran.liara.space/ARPutMarketApp.apk" className="rounded-full bg-paszamine1 text-khas p-2 w-16 h-16 " > <Download className="animate-bounce text-4xl" /> </Link>
-      </button>
+      <ul className="app_btn">
+        <li onClick={() => setOpen(true)} >
+          <Link className='border-2 border-purple-900 bg-white rounded-xl p-2 hover:text-white ' href="https://superapp-storage.storage.iran.liara.space/ARPutMarketApp.apk" > <Download className="animate-bounce text-4xl" /> دانلود از گوگل پلی  </Link>
+        </li>
+        <li onClick={() => setOpen(true)} >
+          <Link className='border-2 border-purple-900 bg-white rounded-xl p-2 hover:text-white ' href="https://superapp-storage.storage.iran.liara.space/ARPutMarketApp.apk" > <Download className="animate-bounce text-4xl" /> دانلود از اپ استور  </Link>
+        </li>
+      </ul>
+
       <Modal open={open} onClose={() => setOpen(false)}>
         <ModalDialog
           aria-labelledby="nested-modal-title"

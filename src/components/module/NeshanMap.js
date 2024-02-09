@@ -18,6 +18,7 @@ function CustomNeshanMap({setAddress, setLatLang}) {
           })
           .then((response) => {
             setAddress(response.data)
+            console.log(response)
           })
           .catch((error) => {
             console.log(error, "Error");

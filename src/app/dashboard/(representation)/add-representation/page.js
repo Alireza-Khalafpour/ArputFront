@@ -71,7 +71,7 @@ export const AddRepresentation = ()=> {
 
     async function ListApi(currentid) {
       
-      await axios.get(`https://supperapp-backend.chbk.run/branch/branch_list_by_factory_id?factory_id=${currentid}`, {
+      await axios.get(`https://supperapp-backend.chbk.run/branch/factory/list?factory_id=${currentid}`, {
         headers:RepresentationListHeaders
         })
         .then((response) => {

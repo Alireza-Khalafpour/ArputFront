@@ -1,17 +1,17 @@
 import { ArrowOutward, ArrowOutwardOutlined, Favorite, Share } from "@mui/icons-material";
 import { AspectRatio, Button, Card, CardActions, CardContent, CardOverflow, Chip, Typography } from "@mui/joy";
 import axios from "axios";
-import Image from "next/image";
 import Link from "next/link";
 import { Rating } from "@mui/material";
 import { e2p } from "@/utils/replaceNumbers";
 import AddToFavoriteAndShare from "@/components/module/AddToFavoriteAndShare";
+import Image from "next/image";
 
 
 async function Products() {
 
 
-    const res = await axios.get('https://supperapp-backend.chbk.run/Product/products?page=1&limit=20', {
+    const res = await axios.get('https://supperapp-backend.chbk.run/product/products?page=0&limit=20', {
         headers:{
           'accept': 'application/json',
         }
@@ -20,6 +20,8 @@ async function Products() {
         });
 
     const productList = res?.data.data
+
+    console.log(productList, "dsaknfkasjdfnldsf")
 
 
 
@@ -58,10 +60,9 @@ async function Products() {
                             <div className=" w-full h-full" key={i.id} >
                                 <CardOverflow>
                                     <AspectRatio>
-                                    <Image
-                                        src={i.image_url}
-                                        loading="eager"
-                                        fill
+                                    <img
+                                        src={i?.image_url}
+                                        loading="lazy"
                                         alt=""
                                     />
                                     
@@ -80,7 +81,7 @@ async function Products() {
                                         {i.has_bundle === true ? "واقعیت افزوده دارد" : " واقعیت افزوده ندارد "}
                                     </Chip>
                                     <Typography level="body-sm">
-                                    {e2p(i.seller_number)} فروشگاه برای این کالا
+                                    {i.seller_number} فروشگاه برای این کالا
                                     </Typography>
                                 </CardContent>
                             </div>

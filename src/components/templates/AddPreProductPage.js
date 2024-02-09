@@ -33,6 +33,8 @@ const AddPreProductPage = () => {
     const [finalSampleFeatureIds, setFinalSampleFeatureIds] = useState([])
     const [sampleOptions, setSampleOptions] = useState([])
     const [imgUrl, setImgUrl] = useState()
+
+    console.log(addCateg, "categggggggggggggggggggggggg")
     // ----------
     const [message, setMessage] = useState();
     const [alert, setAlert] = useState(false);
@@ -111,7 +113,6 @@ const AddPreProductPage = () => {
         })
         .then((response) => {
             setcategoryList(response?.data.data)
-            console.log(response?.data.data, "cat list api")
         })
         .catch((error) => {
             console.log(error, "Error");
@@ -275,7 +276,7 @@ const AddPreProductPage = () => {
     async function handleAddPreProduct() {
 
         setLoading(true);
-        await axios.post('https://supperapp-backend.chbk.run/PreProduct/create',preProductData,
+        await axios.post('https://supperapp-backend.chbk.run/pre_product/create',preProductData,
         {
           headers: mainHeaders
         })
@@ -597,8 +598,8 @@ const AddPreProductPage = () => {
                                                     className='w-2/4 bg-white'
                                                     size='small'
                                                     noOptionsText=" موردی یافت نشد "
-                                                    options={sampleOptions.filter((s) => s.feature_data.id === i.id)}
-                                                    getOptionLabel={(option) =>  option.sample_data.main}
+                                                    options={sampleOptions.filter((s) => s.sample_data.feature_id === i.id)}
+                                                    getOptionLabel={(option) =>  option.sample_data.feature_sample_name}
                                                     onChange={(e, val) => handleSetTempFeature(i, index, val)}
                                                     renderInput={(params) => (
                                                         <TextField {...params} label=" انتخاب سمپل " placeholder="انتخاب کنید" />

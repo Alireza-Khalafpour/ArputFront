@@ -24,7 +24,7 @@ async function SingleProduct({ params: { single_product } }) {
 
   const res = await axios
     .get(
-      `https://supperapp-backend.chbk.run/Product/product/${single_product}`,
+      `https://supperapp-backend.chbk.run/product/product/${single_product}`,
       {
         headers: {
           accept: "application/json",
@@ -47,7 +47,7 @@ async function SingleProduct({ params: { single_product } }) {
     .catch((error) => {
       console.log(error, "Erroooooooor");
     });
-  console.log(productList.image);
+
   return (
     <>
       {res === undefined || res === null ? (
@@ -67,7 +67,7 @@ async function SingleProduct({ params: { single_product } }) {
             className="text-asliLight text-base"
             sx={{ "--Divider-childPosition": "10%" }}
           >
-            {productList.category_name}
+            {productList?.category_name}
           </Divider>
           <div className=" flex md:flex-row flex-col">
             <div className=" flex flex-col gap-4">

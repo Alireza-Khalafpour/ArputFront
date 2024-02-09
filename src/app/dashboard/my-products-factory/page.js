@@ -54,7 +54,7 @@ const MyProductsFactory = () => {
 
     async function ListApi(Au) {
       
-      await axios.get('https://supperapp-backend.chbk.run/PreProduct/list/factory_products', {
+      await axios.get('https://supperapp-backend.chbk.run/pre_product/factory/list', {
         headers:{
           'accept': 'application/json',
           'Authorization': `Bearer ${Au}`,
@@ -86,22 +86,21 @@ const MyProductsFactory = () => {
       
         async function AddProductApi() {
 
-          if(productName === "" || price === 0 ){
+          if(productName == "" || price === 0 ){
             setMessage(" فیلد های خالی را تکمیل کنید ")
             setErrorAlert(true)
           }else{
                       // setLoading(true);
-          await axios.post('https://supperapp-backend.chbk.run/Product/create', {
+          await axios.post('https://supperapp-backend.chbk.run/product/create', {
             "name": productName,
-            "pre_product": preProductId,
+            "pre_product_id": preProductId,
             "price": price,
-            "off": off,
             "description": description,
-            "image_urls": productImgUrls
           }, {
               headers: headers
             })
             .then((response) => {
+              console.log(response)
               setAlert(true)
               setMessage(" کالا ایجاد شد ")
               setLoading(false)
@@ -176,7 +175,7 @@ const MyProductsFactory = () => {
                 });
         
                 setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            };
+            }
         
 
 
@@ -364,27 +363,11 @@ const table = useMaterialReactTable({
           <Divider />
           <DialogContent className="flex flex-col justify-center items-center gap-10" >           
 
-            <div className='w-full grid grid-cols-2 gap-8 justify-center mx-auto text-center items-center' >
-              {/* <TextField
-                id="input-with-icon-textfield"
-                className="w-[65%]"
-                label=" نام کالا  "
-                placeholder=" نام کالا  "
-                value={productName}
-                onChange={(e) => setProductName(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="standard"
-              /> */}
+            <div className='w-full gap-8 justify-center mx-auto text-center items-center' >
 
               <TextField
                 id="input-with-icon-textfield"
-                className="w-[50%] mx-auto"
+                className="w-[35%] mx-auto"
                 label=" قیمت "
                 placeholder=" قیمت "
                 value={price}
@@ -399,77 +382,8 @@ const table = useMaterialReactTable({
                 variant="standard"
               />
 
-              <TextField
-                id="input-with-icon-textfield"
-                className="w-[50%] mx-auto "
-                label=" تخفبف "
-                placeholder=" تخفبف "
-                value={off}
-                onChange={(e) => setOff(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="standard"
-              />
-
-              {/* <TextField
-                id="input-with-icon-textfield"
-                className="w-[65%]"
-                label=" هزینه ارسال "
-                placeholder=" هزینه ارسال "
-                value={postCost}
-                onChange={(e) => setPostCost(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="standard"
-              /> */}
-
             </div>
 
-            <div className="w-full flex flex-col justify-center items-center text-center">
-                <form 
-                    onClick={() => document.getElementById("fileInput").click()}
-                    onDragOver={(e) => DragHandler(e)}
-                    onDrop={(e) => DropHandler(e)} 
-
-                    className='flex flex-col justify-center items-center border-2 cursor-pointer border-dashed border-asliLight w-64 h-24 rounded-3xl hover:animate-pulse' 
-                >
-                <input 
-                    type='file' 
-                    id='fileInput' 
-                    multiple 
-                    hidden 
-                    accept='image/*'
-                    onChange={ (e) =>{
-                        files &&
-                        setImage(URL.createObjectURL(files[0]))
-                        handleImageUpload(e)
-                    }
-                    }
-                />
-                {imageL ?
-                    <img className='w-full h-full p-1 rounded-3xl' src={imageL} alt="تکسچر محصول"  />
-                    :
-                    <div className='text-center'>
-                    <CloudUpload className='text-3xl text-asliLight'/>
-                    <p> آپلود تکسچر </p>
-                    </div>
-                }
-                </form>
-                <div className='w-52 flex flex-row justify-between items-center mt-1 p-1 text-sm' >
-                    <Delete  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg()}/>
-                    <p>{fileName}</p>
-                </div>
-              </div>
 
             <Textarea
                 id="input-with-icon-textfield"

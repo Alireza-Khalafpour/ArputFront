@@ -1,18 +1,16 @@
 'use client'
 
-import axios from "axios";
-import { useEffect } from "react";
-import Cookies from "universal-cookie";
-import { AddCircleOutline, Category, LocationCity, LocationOnRounded, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
-import { Alert, Autocomplete, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Snackbar, TextField, Typography } from "@mui/material";
+import { AddCircleOutline, Category } from "@mui/icons-material";
+import { Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Snackbar, TextField } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
-import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
+import { useEffect, useMemo, useState } from "react";
+import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 
-
-export const CreateDepartment = ()=> {
+const ExpirePulse = () => {
 
     const cookie = new Cookies();
 
@@ -26,19 +24,16 @@ export const CreateDepartment = ()=> {
     const [loading, setLoading] = useState(false);
 
     const [data, setData] = useState([])
-    const [categoryList, setcategoryList] = useState([])
-    const [addCateg, setaddCategs] = useState([])
-    const [CategoryIds, setCategoryIds] = useState([])
     const [departmentName, setDepartmentName] = useState("")
-    const [addMobile, setAddMobile] = useState("")
-    const [addTelephone, setAddTelephone] = useState("")
+
 
     const [addDepartmentModal, setAddDepartmentModal] = useState(false)
 
 
+    // گرفتن لیست برنامه های تایم اکسپایر
     async function ListApi(Au) {
       
-      await axios.get('https://supperapp-backend.chbk.run/department/department_list', {
+      await axios.get('https://supperapp-backend.chbk.run/pulse/time/expire/admin/list', {
         headers:{
           'accept': 'application/json',
           'Authorization': `Bearer ${Au}`,
@@ -46,18 +41,15 @@ export const CreateDepartment = ()=> {
         })
         .then((response) => {
           setData(response.data.data)
-          console.log(response.data.data)
         })
         .catch((error) => {
           console.log(error, "Error");
         });
     }
 
-    
 
-    useEffect(() => {
-      setCategoryIds(addCateg.map((i) => i.id))
-    },[addCateg])
+    //------------------------------------------------------------
+
 
     useEffect(() => {
       const Auth = cookie.get('tokenDastResi')
@@ -112,35 +104,25 @@ export const CreateDepartment = ()=> {
   const columns = useMemo(
     () => [
       {
-        header: ' نام دپارتمان ',
-        accessorKey: 'dep_name',
-        id: 'dep_name',
+        header: ' نام  ',
+        accessorKey: 'name',
+        id: 'name',
       },
       {
-        header: '  تاریخ ایجاد ',
-        accessorKey: 'created_at',
-        id: 'created_at',
-        Cell: ({ cell }) => <span>{cell.getValue().tolocal}</span>,
+        header: '  زمان انقضا(ساعت)  ',
+        accessorKey: 'hours',
+        id: 'hours',
       },
       {
-        header: ' ایجاد توسط ',
-        accessorKey: 'created_by_name',
-        id: 'created_by_name',
+        header: ' پالس AR ',
+        accessorKey: 'ar_pulse',
+        id: 'ar_pulse',
+        Cell: ({ cell }) => <span>{cell.getValue() === true ? "دارد" : "ندارد"}</span>,
       },
-      {
-          header: '  تاریخ بروزرسانی ',
-          accessorKey: 'updated_at',
-          id: 'updated_at',
-        },
-        {
-            header: ' بروزرسانی توسط ',
-            accessorKey: 'updated_by_name',
-            id: 'updated_by_name',
-        },
         {
           header: ' وضعیت ',
-          accessorKey: 'is_active',
-          id: 'is_active',
+          accessorKey: 'active',
+          id: 'active',
           Cell: ({ cell }) => <span>{cell.getValue() === true ? "فعال" : "غیرفعال"}</span>,
         },
     ],
@@ -199,7 +181,7 @@ const table = useMaterialReactTable({
               className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
               onClick={() => setAddDepartmentModal(true)}
             >
-                ثبت دپارتمان جدید <AddCircleOutline/> 
+                ثبت زمان جدید <AddCircleOutline/> 
             </button>
           </Box>
         </Box>
@@ -221,12 +203,13 @@ const table = useMaterialReactTable({
 
 });
 
+
+
     return (
 
       <div className="w-full" >
 
-        <MaterialReactTable table={table}/>
-
+        <MaterialReactTable table={table}/> 
 
         {/* <ContextMenu
             open={showContextMenu}
@@ -239,7 +222,7 @@ const table = useMaterialReactTable({
       <Dialog fullWidth className="w-full" scroll="paper" maxWidth="sm" open={addDepartmentModal} onClose={() => setAddDepartmentModal(false)}>
 
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
-            ایجاد دپارتمان جدید
+            ایجاد زمان جدید
           </DialogTitle>
           <Divider />
           <DialogContent className="flex flex-col items-center gap-10 mt-12 h-full " >           
@@ -249,10 +232,10 @@ const table = useMaterialReactTable({
                 <TextField
                   className="md:w-[50%] w-[90%]"
                   id="input-with-icon-textfield"
-                  label=" نام دپارتمان  "
-                  placeholder=" نام دپارتمان   "
-                  value={departmentName}
-                  onChange={(e) => setDepartmentName(e.target.value)}
+                  label=" نام زمان  "
+                  placeholder=" نام زمان   "
+                //   value={departmentName}
+                //   onChange={(e) => setDepartmentName(e.target.value)}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="end">
@@ -305,4 +288,4 @@ const table = useMaterialReactTable({
     );
 }
 
-export default CreateDepartment;
+export default ExpirePulse;

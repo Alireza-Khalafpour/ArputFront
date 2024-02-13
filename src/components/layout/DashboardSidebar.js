@@ -18,14 +18,15 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { Accordion, AccordionSummary, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@mui/material';
-import { AddRounded, Check, CheckCircleRounded, CloseRounded, ExpandMore, Factory, FactoryOutlined, FeaturedPlayListOutlined, Home, HourglassBottomOutlined, KeyboardArrowRight, ListAltOutlined, ManageAccountsOutlined, ManageSearchRounded, Payment, ShoppingBasket } from '@mui/icons-material';
+import { AddRounded, Check, CheckCircleRounded, CloseRounded, ElectricBolt, ExpandMore, Factory, FactoryOutlined, FeaturedPlayListOutlined, Home, HourglassBottomOutlined, KeyboardArrowRight, ListAltOutlined, ManageAccountsOutlined, ManageSearchRounded, Payment, PaymentOutlined, Schedule, ShoppingBasket, Timer } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import NotAllowedPage from './NotAllowedPage';
 import { Card, CardActions, Chip, ListItemDecorator } from '@mui/joy';
 
 
-const drawerWidth = 240;
+
+const drawerWidth = 250;
 
 
 
@@ -143,7 +144,7 @@ export default function DashbordSidebar({children}) {
         <List className='relative' >
 
             <ListItem disablePadding >
-              <Link onClick={() => setTitle(" داشبورد ")} href="/dashboard" className='bg-[#092739] text-[#F2F2F2] w-full mx-1 shadow-none border-none transition-all duration-200 flex justify-between cursor-pointer p-3 hover:bg-slate-700 rounded-lg text-right' >
+              <Link onClick={() => handleDrawerClose()} href="/dashboard" className='bg-[#092739] w-full mx-1 shadow-none border-none transition-all duration-200 flex justify-between cursor-pointer text-white p-3 hover:bg-slate-700 rounded-lg text-right' >
                 <span> داشبورد </span>
                 <Home className='text-khas' />
               </Link>
@@ -162,7 +163,7 @@ export default function DashbordSidebar({children}) {
                 >
                   <Typography> باندل  </Typography>
                 </AccordionSummary>
-                <Link  onClick={() => setTitle(" ایجاد باندل ")} href="/dashboard" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                <Link  onClick={() => setTitle(" ایجاد باندل ")} href="/dashboard" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white ' >
                     ایجاد باندل
                     <ListAltOutlined className='text-khas'/>
                 </Link>
@@ -183,29 +184,42 @@ export default function DashbordSidebar({children}) {
                   >
                     <Typography>  پنل ادمین </Typography>
                   </AccordionSummary>
-                  <Link  onClick={() => setTitle(" ایجاد و لیست دسته بندی ها ")} href="/dashboard/create-category" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                  <Link  onClick={() => handleDrawerClose()} href="/dashboard/create-category" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer hover:text-white text-white ' >
                         دسته بندی ها
                       <ListAltOutlined className='text-khas'/>
                   </Link>
-                  <Link  onClick={() => setTitle(" ایجاد و لیست ویژگی ها ")} href="/dashboard/CreateFeature" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                  <Link  onClick={() => handleDrawerClose()} href="/dashboard/CreateFeature" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
                           ویژگی ها    
                       <FeaturedPlayListOutlined className='text-khas'/>
                   </Link>
-                  <Link onClick={() => setTitle(" ایجاد و لیست کارخانه ها ")} href="/dashboard/create-factory" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                  <Link onClick={() => handleDrawerClose()} href="/dashboard/create-factory" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
                          کارخانه ها    
                       <FactoryOutlined className='text-khas'/>
                   </Link>
-                  <Link onClick={() => setTitle(" لیست تمام نمایندگی ها  ")} href="/dashboard/branches-list-Admin" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                  <Link onClick={() => handleDrawerClose()} href="/dashboard/branches-list-Admin" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
                         لیست تمام نمایندگی ها  
                       <FactoryOutlined className='text-khas'/>
                   </Link>
-                  <Link onClick={() => setTitle(" مدیریت پیش محصول و محصولات (Admin)")} href="/dashboard/my-products"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                  <Link onClick={() => handleDrawerClose()} href="/dashboard/my-products"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white p-3 ' >
                       مدیریت پیش محصول و محصولات (Admin)
                       <InboxIcon  className='text-khas'/>
                   </Link>
-                  <Link  onClick={() => setTitle(" ایجاد و لیست دپارتمان ها ")} href="/dashboard/create-department" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                  <Link  onClick={() => handleDrawerClose()} href="/dashboard/create-department" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
                         دپارتمان ها  
                       <ListAltOutlined className='text-khas'/>
+                  </Link>
+                  <Link  onClick={() => handleDrawerClose()} href="/dashboard/create-expire-pulse" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+                      زمانبندی پالس   
+                      <Timer className='text-khas'/>
+                  </Link>
+                  <Link  onClick={() => handleDrawerClose()} href="/dashboard/create-price-pulse" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+                      قیمت پالس   
+                      <PaymentOutlined className='text-khas'/>
+                  </Link>
+                  <Link  onClick={() => handleDrawerClose()} href="/dashboard/create-pulse-plan" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+                      برنامه پالس ها                        
+                      <ElectricBolt className='text-khas'/>
+
                   </Link>
                 </Accordion>
               </ListItem>
@@ -229,7 +243,7 @@ export default function DashbordSidebar({children}) {
                     >
                       <Typography>  مدیریت نمایندگی ها </Typography>
                     </AccordionSummary>
-                    <Link onClick={() => setTitle("  ایجاد و لیست نمایندگی ها  ")} href="/dashboard/add-representation" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                    <Link onClick={() => handleDrawerClose()} href="/dashboard/add-representation" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white p-3 ' >
                         ایجاد و لیست نمایندگی ها
                         <AddRounded className='text-khas'/>
                     </Link>
@@ -253,7 +267,7 @@ export default function DashbordSidebar({children}) {
                     >
                       <Typography>  مدیریت نمایندگی ها </Typography>
                     </AccordionSummary>
-                    <Link onClick={() => setTitle("  ایجاد و لیست نمایندگی ها  ")} href="/dashboard/add-representation" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                    <Link onClick={() => handleDrawerClose()} href="/dashboard/add-representation" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white p-3 ' >
                         (Admin)ایجاد و لیست نمایندگی ها
                         <AddRounded className='text-khas'/>
                     </Link>
@@ -277,7 +291,7 @@ export default function DashbordSidebar({children}) {
                 </AccordionSummary>
                 {
                   cookie.get("role") === "factory" &&
-                  <Link onClick={() => setTitle(" ایجاد پیش محصول ")} href="/dashboard/add-pre-product" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                  <Link onClick={() => handleDrawerClose()} href="/dashboard/add-pre-product" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white p-3 ' >
                       ایجاد پیش محصول
                       <AddRounded className='text-khas'/>
                   </Link>
@@ -285,7 +299,7 @@ export default function DashbordSidebar({children}) {
 
                 {
                   cookie.get("role") === "admin"  &&
-                  <Link onClick={() => setTitle(" ایجاد پیش محصول ")} href="/dashboard/add-pre-product" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                  <Link onClick={() => handleDrawerClose()} href="/dashboard/add-pre-product" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white p-3 ' >
                       ایجاد پیش محصول
                       <AddRounded className='text-khas'/>
                   </Link>
@@ -294,14 +308,14 @@ export default function DashbordSidebar({children}) {
 
                 {
                   cookie.get("role") === "factory" &&
-                    <Link onClick={() => setTitle(" مدیریت محصولات من ")} href="/dashboard/my-products-factory"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                    <Link onClick={() => handleDrawerClose()} href="/dashboard/my-products-factory"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white p-3 ' >
                         مدیریت محصولات من
                         <InboxIcon  className='text-khas'/>
                     </Link>
                 }
                                 {
                   cookie.get("role") === "shop" &&
-                    <Link onClick={() => setTitle(" مدیریت محصولات من ")} href="/dashboard/my-products-shop"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer p-3 ' >
+                    <Link onClick={() => handleDrawerClose()} href="/dashboard/my-products-shop"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white p-3 ' >
                         مدیریت محصولات من
                         <InboxIcon  className='text-khas'/>
                     </Link>
@@ -322,11 +336,11 @@ export default function DashbordSidebar({children}) {
                 >
                   <Typography>  مالی </Typography>
                 </AccordionSummary>
-                <Link onClick={() => setTitle(" کیف پول من")} href="/dashboard/my-wallet" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                <Link onClick={() => handleDrawerClose()} href="/dashboard/my-wallet" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
                     کیف پول من
                     <Payment className='text-khas'/>
                 </Link>
-                <button onClick={() => handleOpenPurchaseModal()} className='text-right mr-4 p-3 w-full hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                <button onClick={() => handleOpenPurchaseModal()} className='text-right mr-4 p-3 w-full hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
                   خرید اشتراک
                 </button>
               </Accordion>
@@ -344,11 +358,11 @@ export default function DashbordSidebar({children}) {
                 >
                   <Typography>  سفارشات </Typography>
                 </AccordionSummary>
-                <Link onClick={() => setTitle(" سفارشات در صف انتظار ")} href="/dashboard/processing-orders" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                <Link onClick={() => handleDrawerClose()} href="/dashboard/processing-orders" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
                       سفارشات در صف انتظار  
                     <HourglassBottomOutlined className='text-khas'/>
                 </Link>
-                <Link onClick={() => setTitle(" سفارشات انجام شده    ")} href="/dashboard/done-orders" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
+                <Link onClick={() => handleDrawerClose()} href="/dashboard/done-orders" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
                       سفارشات انجام شده    
                     <CheckCircleRounded className='text-khas'/>
                 </Link>
@@ -357,16 +371,16 @@ export default function DashbordSidebar({children}) {
 
         <Divider className='bg-slate-500' />
 
+        <Link onClick={() => handleDrawerClose()} href="/dashboard/ticketChat" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+          تیکت و پشتیبانی
+          <ManageAccountsOutlined className='text-khas'/>
+        </Link>
+
 
 
         </List>
 
 
-
-        <Link onClick={() => setTitle(" تیکت و پشتیبانی")} href="/dashboard/ticketChat" className=' absolute bottom-2 w-[90%] text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer ' >
-          تیکت و پشتیبانی
-          <ManageAccountsOutlined className='text-khas'/>
-        </Link>
 
       </Drawer>
 
@@ -381,7 +395,7 @@ export default function DashbordSidebar({children}) {
       >
         <DialogTitle className='w-full flex justify-between items-center' >
             <span className='' >  خرید اشتراک  </span>
-           <button onClick={() => handleClosePurchaseModal()} className='bg-rose-600 hover:bg-rose-700 text-white rounded-full w-8 h-8' ><CloseRounded/></button>
+           <button onClick={() => handleClosePurchaseModal()} className='bg-rose-600 hover:bg-rose-700 text-white hover:text-white rounded-full w-8 h-8' ><CloseRounded/></button>
         </DialogTitle>
         <DialogContent className='flex flex-row justify-center items-center gap-4' >
 
@@ -445,7 +459,7 @@ export default function DashbordSidebar({children}) {
                   / month
                 </Typography>
               </Typography>
-              <Button className='bg-khas text-white' endDecorator={<KeyboardArrowRight />}>Start now</Button>
+              <Button className='bg-khas text-white hover:text-white' endDecorator={<KeyboardArrowRight />}>Start now</Button>
             </CardActions>
           </Card>
 
@@ -507,7 +521,7 @@ export default function DashbordSidebar({children}) {
                   / month
                 </Typography>
               </Typography>
-              <Button className='bg-khas text-white' endDecorator={<KeyboardArrowRight />}>Start now</Button>
+              <Button className='bg-khas text-white hover:text-white' endDecorator={<KeyboardArrowRight />}>Start now</Button>
             </CardActions>
           </Card>
 
@@ -569,7 +583,7 @@ export default function DashbordSidebar({children}) {
                   / month
                 </Typography>
               </Typography>
-              <Button className='bg-khas text-white' endDecorator={<KeyboardArrowRight />}>Start now</Button>
+              <Button className='bg-khas text-white hover:text-white' endDecorator={<KeyboardArrowRight />}>Start now</Button>
             </CardActions>
           </Card>
 

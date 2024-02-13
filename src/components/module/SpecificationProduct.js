@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 import { Close } from "@mui/icons-material";
 import { Box, Drawer, Typography } from "@mui/material";
-import { e2p } from "@/utils/replaceNumbers";
 
 function SpecificationProduct({ productList }) {
   const [Show, SetShow] = useState(false);
@@ -49,7 +48,7 @@ function SpecificationProduct({ productList }) {
               <tr class=" odd:bg-gray-200 even:bg-white">
                 <td className="rounded-s-lg p-1 text-lg">وزن:</td>
                 <td className=" rounded-e-lg text-right text-gray-500">
-                  {productList.info[0] ? e2p(productList.info[0]?.weight) : "0"}{" "}
+                  {productList.info[0] ? productList.info[0]?.weight : "0"}{" "}
                 </td>
               </tr>
               <tr class=" odd:bg-gray-200 even:bg-white">
@@ -57,14 +56,14 @@ function SpecificationProduct({ productList }) {
                 <td className=" rounded-e-lg text-right text-gray-500">
                   {" "}
                   {productList.info[0]
-                    ? e2p(productList.info[0]?.width)
+                    ? productList.info[0]?.width
                     : "0"}{" "}
                 </td>
               </tr>
               <tr class=" odd:bg-gray-200 even:bg-white">
                 <td className="rounded-s-lg p-1 text-lg"> عرض:</td>
                 <td className=" rounded-e-lg text-right text-gray-500">
-                  {productList.info[0] ? e2p(productList.info[0]?.height) : "0"}{" "}
+                  {productList.info[0] ? productList.info[0]?.height : "0"}{" "}
                 </td>
               </tr>
             </tbody>
@@ -121,7 +120,7 @@ function SpecificationProduct({ productList }) {
                       <td className="rounded-s-lg p-1 text-lg">وزن:</td>
                       <td className=" rounded-e-lg text-right text-gray-500">
                         {productList.info[0]
-                          ? e2p(productList.info[0]?.weight)
+                          ? productList.info[0]?.weight
                           : "0"}{" "}
                       </td>
                     </tr>
@@ -130,7 +129,7 @@ function SpecificationProduct({ productList }) {
                       <td className=" rounded-e-lg text-right text-gray-500">
                         {" "}
                         {productList.info[0]
-                          ? e2p(productList.info[0]?.width)
+                          ? productList.info[0]?.width
                           : "0"}{" "}
                       </td>
                     </tr>
@@ -138,7 +137,7 @@ function SpecificationProduct({ productList }) {
                       <td className="rounded-s-lg p-1 text-lg"> عرض:</td>
                       <td className=" rounded-e-lg text-right text-gray-500">
                         {productList.info[0]
-                          ? e2p(productList.info[0]?.height)
+                          ? productList.info[0]?.height
                           : "0"}{" "}
                       </td>
                     </tr>

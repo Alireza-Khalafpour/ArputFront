@@ -4,10 +4,10 @@ import GeneralLoader from "@/components/module/GeneralLoader";
 import { Facebook, Instagram, Send, Telegram, WhatsApp } from "@mui/icons-material";
 import { Alert, Input, Snackbar, Textarea } from "@mui/joy";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
-const ContactUs = () => {
+function ContactUs() {
 
     const [message, setMessage] = useState();
     const [alert, setAlert] = useState(false);
@@ -17,6 +17,7 @@ const ContactUs = () => {
     const [phone, setPhone] = useState()
     const [email, setEmail] = useState()
     const [content, setContent] = useState()
+    const [info, setInfo] = useState()
 
 
     const headers ={
@@ -24,10 +25,12 @@ const ContactUs = () => {
         'Content-Type': 'application/json',
     }
 
-    async function MakeContact() {
+    // ارسال اطلاعات فرم ارتباط با ما --------------
+
+    function MakeContact() {
         setLoading(true);
         if (phone !== "" || email !== "" || content !==""){
-            await axios.post('https://supperapp-backend.chbk.run/contact_us_form/create', {
+             axios.post('https://supperapp-backend.chbk.run/contact_us_form/create', {
                 "mobile": phone,
                 "email": email,
                 "content": content},
@@ -56,6 +59,25 @@ const ContactUs = () => {
             setErrorAlert(true)
         }
       }
+
+      // دریافت داده برای صفحه ارتباط با ما--------------
+
+      
+      useEffect(() =>{
+            axios.get('https://supperapp-backend.chbk.run/contact_us/show', {
+              headers:{
+                'accept': 'application/json',
+              }
+              }).then((response) =>{
+                  
+                  console.log(response)
+                  setInfo(response.data)
+              })
+              .catch((error) => {
+                console.log(error, "Error");
+              });
+
+        },[])
 
 
 
@@ -93,6 +115,14 @@ const ContactUs = () => {
                         <span className="w-12 h-12 rounded-full flex justify-center items-center border-2 border-white hover:text-green-600  text-white hover:bg-paszamine1 m-auto cursor-pointer transition-all duration-100" > <WhatsApp/> </span>
                         <span className="w-12 h-12 rounded-full flex justify-center items-center border-2 border-white hover:text-blue-700 text-white hover:bg-paszamine1 m-auto cursor-pointer transition-all duration-100" > <Telegram/> </span>
                 </div>
+                <div className="flex flex-col justify-center items-center gap-4" >
+
+                    <p className="text-white text-base" > شماره تماس : {info?.mobile[0]} </p>
+                    <p className="text-white text-base" > تلفن : {info?.tel[0]} </p>
+                    <p className="text-white text-base" > ایمیل : {info?.email[0]} </p>
+                    <p className="text-white text-base" > آدرس : {info?.address[0]} </p>
+
+                </div>
                 
 
             </div>
@@ -103,7 +133,7 @@ const ContactUs = () => {
                 open={alert}
                 autoHideDuration={4000}
                 onClose={() => setAlert(false)}
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 className="bg-green-700"
                 >
                 <Alert variant='filled' severity='success' className='text-lg text-white font-semibold bg-green-700 ' > {message} </Alert>
@@ -113,7 +143,7 @@ const ContactUs = () => {
                 open={errorAlert}
                 autoHideDuration={4000}
                 onClose={() => setErrorAlert(false)}
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 className="bg-rose-700"
                 >
                 <Alert variant='filled' severity='error' className='text-lg text-white font-semibold bg-rose-700 ' > {message} </Alert>

@@ -137,48 +137,6 @@ export const AddRepresentation = ()=> {
   
     }
 
-    // Update a category -----------------------------------------
-
-
-    // // Delete a category -----------------------------------------
-
-    // async function DeleteCategoryApi() {
-    //   setLoading(true);
-    //   await axios.delete('https://supperapp-backend.chbk.run/category/delete', {'ids':DeleteCategoryIds}, {
-    //       headers: headers
-    //     })
-    //     .then((response) => {
-    //       console.log(response)
-    //       setAlert(true)
-    //       setMessage(" دسته بندی حذف شد ")
-    //       setLoading(false)
-    //       ListApi(Auth)
-    //     })
-    //     .catch((error) => {
-    //       console.log(error, "Error");
-    //       setMessage(" متاسفیم،خطایی رخ داده است ")
-    //       setErrorAlert(true)
-    //       setLoading(false)
-    //     });
-  
-    // }
-
-    // const [DeleteCategName, setDeleteCategName] = useState("")
-
-    // const GetRowIdForDelete = (row) => {
-    //   setDeleteCategoryIds([row.original.id])
-    //   setDeleteCategName(row.original.name)
-    //   setDeleteCategoryModal(true)
-    //   console.log(row)
-    // }
-
-    // const OmitRowIdForDelete = () => {
-    //   setDeleteCategoryIds([])
-    //   setDeleteCategoryModal(false)
-    // }
-
-
-
 
   // columns and data =============================================
   const columns = useMemo(
@@ -213,7 +171,6 @@ const table = useMaterialReactTable({
   columnResizeMode:true,
   enableStickyHeader: true,
   enableStickyFooter: true,
-  enableRowActions: true,
   renderRowActionMenuItems: true,
   muiTableBodyCellProps:{
     sx:{
@@ -264,23 +221,6 @@ const table = useMaterialReactTable({
       </Box>
     );
   },
-  renderRowActions: ({ row, table }) => {
-    return (
-      <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-        <IconButton
-          color="secondary"
-        >
-          <EditRounded />
-        </IconButton>
-        <IconButton
-          color="error"
-          onClick={() => GetRowIdForDelete(row)}
-        >
-          <DeleteRounded />
-        </IconButton>
-      </Box>
-    )
-  }
 });
 
   // modal part -------------------------------------------------------------

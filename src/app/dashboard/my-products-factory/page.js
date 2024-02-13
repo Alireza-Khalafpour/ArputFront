@@ -449,7 +449,7 @@ const table = useMaterialReactTable({
             <div className="grid grid-cols-2 gap-4 justify-around items-center w-full" >
 
               {features.map((x) => (
-                <p> {x.main_feature} : {x.main_sample} </p>
+                <p> {x.feature_name} : {x.feature_sample_name} </p>
               ))} 
 
             </div>

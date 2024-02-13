@@ -1,5 +1,5 @@
 import { Category } from "@mui/icons-material";
-import { Autocomplete, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, InputAdornment, TextField } from "@mui/material";
+import { Alert, Autocomplete, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, InputAdornment, Snackbar, TextField } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
@@ -8,7 +8,11 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
 
     const cookie = new Cookies();
     const Auth = cookie.get('tokenDastResi')
+
     const [loading, setLoading] = useState(false)
+    const [message, setMessage] = useState();
+    const [alert, setAlert] = useState(false);
+    const [errorAlert, setErrorAlert] = useState(false);
 
     // ---------------------
     
@@ -30,12 +34,13 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
             "factoryIdForEditFactory" : editFactoryInfo?.id,
             "editFactoryName" : editFactoryInfo?.name,
             "editFactoryPassword" : "",
-            "editFactoryCategories" : editFactoryInfo?.category,
+            "editFactoryCategories" : [editFactoryInfo?.category[0].id],
             "editFactoryTelephone": editFactoryInfo?.telephone,
             "editFactoryMobile" : "",
             "editFactoryActive" : editFactoryInfo?.active,
             "editFactoryComplete" : editFactoryInfo?.complete
         })
+
     },[editFactoryInfo])
 
     // update factory Api -------------------------
@@ -65,17 +70,25 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
             .then((response) => {
                 setAlert(true)
               if(response.data.Done === true){
-                console.log(response)
+                setAlert(true)
+                setMessage(response.data.Message)
                 setLoading(false)
+                setEditFactoryModal(false)
+
               }else {
-                console.log(response)
                 setLoading(false)
+                setMessage(response.data.Message)
+                setErrorAlert(true)
+                setEditFactoryModal(false)
 
               }
             })
             .catch(function (error) {
                 console.log(error)
-              setLoading(false)
+                setMessage(" متاسفیم،خطایی رخ داده است ")
+                setErrorAlert(true)
+                setLoading(false)
+                setEditFactoryModal(false)
             });
       
         }
@@ -207,6 +220,26 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
                 </Button>
                 </DialogActions>
             </Dialog>
+
+            <Snackbar
+        open={alert}
+        autoHideDuration={4000}
+        onClose={() => setAlert(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        se
+        >
+        <Alert variant='filled' severity='success' className='text-lg text-white font-semibold' > {message} </Alert>
+        </Snackbar>
+
+        <Snackbar
+        open={errorAlert}
+        autoHideDuration={4000}
+        onClose={() => setErrorAlert(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        se
+        >
+        <Alert variant='filled' severity='error' className='text-lg text-white font-semibold' > {message} </Alert>
+        </Snackbar>
             
         </>
     );

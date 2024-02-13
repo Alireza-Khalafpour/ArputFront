@@ -1,6 +1,6 @@
 "use client";
 
-import { e2p, sp } from "@/utils/replaceNumbers";
+
 import { useEffect, useState } from "react";
 import {
   AddRoadRounded,
@@ -112,12 +112,12 @@ const ShopingButton = ({ productList }) => {
             </CircularProgress>
             <h2 className="text-3xl">
               {" "}
-              {e2p(sp(productList.seller_info[0].price))}{" "}
+              {productList.seller_info[0].price}{" "}
               <span className="text-base"> ریال </span>{" "}
             </h2>
           </div>
           <Chip color="danger" className="p-2 text-sm  bg-rose-600 w-1/3 ">
-            تخفیف {e2p(productList.seller_info[0].off)}%{" "}
+            تخفیف {productList.seller_info[0].off}%{" "}
           </Chip>
         </CardContent>
 
@@ -142,7 +142,7 @@ const ShopingButton = ({ productList }) => {
               -{" "}
             </button>
             <Input
-              value={e2p(count)}
+              value={count}
               className="w-1/5 h-[32px] rounded-none bg-white text-black text-lg "
             />
             <button

@@ -34,7 +34,6 @@ const AddPreProductPage = () => {
     const [sampleOptions, setSampleOptions] = useState([])
     const [imgUrl, setImgUrl] = useState()
 
-    console.log(addCateg, "categggggggggggggggggggggggg")
     // ----------
     const [message, setMessage] = useState();
     const [alert, setAlert] = useState(false);

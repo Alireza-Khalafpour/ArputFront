@@ -292,21 +292,77 @@ export default function Header() {
                 <span className="drp_btn"><i> <ArrowDropDown/>  </i></span>
                 <div className="sub_menu">
                   <ul>
-                    <li><a href="about.html"> درباره ما </a></li>
-                    <li><a href="reviews.html">نظرات</a></li>
-                    <li><a href="contact.html"> ارتباط با ما </a></li>
-                    <li><a href="faq.html">سوالات متداول</a></li>
-                    <li><a href="sign-in.html">ورود</a></li>
-                    <li><a href="sign-up.html">ثبت نام</a></li>
-                    <li><a href="blog-list.html">لیست بلاگ</a></li>
-                    <li><a href="blog-single.html">جزییات بلاگ</a></li>
+                    <li><Link href="/aboutus"> درباره ما </Link></li>
+                    <li><Link href="/contactus"> ارتباط با ما </Link></li>
+                    <li><Link href="/signin">ورود</Link></li>
+                    <li><Link href="/signup">ثبت نام</Link></li>
                   </ul>
                 </div>
               </li>
 
-              <li class="nav-item">
-                <Link href="/signin" class="nav-link dark_btn animate-bounce" > ورود | ثبت نام </Link>
-              </li>
+              {
+                cookie.get("tokenDastResi")
+                ?
+                (
+                  <div className='flex flex-row justify-center items-center gap-1' >
+                  
+                    <IconButton color="inherit">
+                      <NotificationsActive className='w-7 h-7' />
+                    </IconButton>
+
+                    <IconButton color="inherit">
+                      <Link href="/buying_basket">
+                        <ShoppingBasket className='w-7 h-7' />
+                      </Link>
+                    </IconButton>
+
+                    <IconButton
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="inherit"
+                    >
+                      <AccountCircle className='w-7 h-7' />
+                    </IconButton>
+                    <Menu
+                      className='top-14 min-w-[140px] '
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                      onClick={handleClose}
+                    >
+                      <MenuItem> {name} </MenuItem>
+                      <Divider/>
+                      <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full'> <Link href="/" > <Home className='text-asliLight' /> خانه  </Link> </MenuItem>
+                      <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full '> <Link href="/profile" > <Person className='text-asliLight' /> پروفایل  </Link> </MenuItem>
+                      <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full '> <Link href="/dashboard"> <SpaceDashboard className='text-asliLight' /> داشبورد   </Link> </MenuItem>
+                      <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200'><Settings className='text-asliLight' /> برروزرسانی رمزعبور </MenuItem>
+                      <Divider/>
+                      <MenuItem className='text-rose-800 hover:bg-rose-200 gap-2 transition-colors duration-200 font-bold w-full ' onClick={() => handleLogout() }> <ExitToApp/> خروج </MenuItem>
+                    </Menu>
+
+                    
+
+
+                  </div>
+                )
+                :
+                (
+                  <li class="nav-item">
+                    <Link href="/signin" class="nav-link dark_btn animate-bounce" > ورود | ثبت نام </Link>
+                  </li>
+                )
+              }
             </ul>
           </div>
         </nav>

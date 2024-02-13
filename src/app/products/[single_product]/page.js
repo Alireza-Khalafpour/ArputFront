@@ -1,12 +1,8 @@
-import Image from "next/image";
-import { e2p, sp } from "@/utils/replaceNumbers";
-import { Badge, Rating } from "@mui/material";
 import { Chip, Divider } from "@mui/joy";
 import CommentTextArea from "@/components/module/CommentTextArea";
 import axios from "axios";
 import { cookies } from "next/headers";
 import AddProductCard from "@/components/module/AddProductCard";
-import { ExitToApp, Favorite, Share, ShoppingCart } from "@mui/icons-material";
 import Link from "next/link";
 import ViewProduct from "@/components/module/ViewProduct";
 import SellerDetails from "@/components/module/SellerDetails";

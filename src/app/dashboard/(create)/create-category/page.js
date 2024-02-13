@@ -87,7 +87,7 @@ export const CreateFactory = ()=> {
   
     async function AddCategoryApi() {
       setLoading(true);
-      await axios.post('https://supperapp-backend.chbk.run/category/create', {'name': addCategName, 'features':featureIds}, {
+      await axios.post('https://supperapp-backend.chbk.run/category/create', {'name': addCategName}, {
           headers: headers
         })
         .then((response) => {
@@ -159,7 +159,6 @@ export const CreateFactory = ()=> {
       setDeleteCategoryIds([row.original.id])
       setDeleteCategName(row.original.name)
       setDeleteCategoryModal(true)
-      console.log(row)
     }
 
     const OmitRowIdForDelete = () => {
@@ -280,7 +279,7 @@ const table = useMaterialReactTable({
           sx={{
               display: 'grid',
               margin: 'auto',
-              gridTemplateColumns: '1fr 1fr 1fr 1fr',
+              gridTemplateColumns: '1fr 1fr 1fr ',
               width: '100%',
               textAlign:"justify",
               gap: "15px"
@@ -291,8 +290,7 @@ const table = useMaterialReactTable({
   
             row?.original?.features.map((item) => ( 
               <>
-                <Typography> نوع ویژگی : {item.name} </Typography>
-                <Typography> نام ویژگی : {item.main}  </Typography>
+                <Typography> نام ویژگی : {item.name}  </Typography>
                 <Typography className="flex flex-row gap-1 items-center">  <p>وضعیت   : </p>{item.active === true ? <p className="rounded-full p-2 bg-green-700 w-2 h-2" ></p> : <p className="rounded-full p-2 bg-rose-700 w-2 h-2"></p>}  </Typography>
                 <Typography>  id : {item.id}   </Typography>
               </>
@@ -408,19 +406,6 @@ const table = useMaterialReactTable({
                 variant="standard"
               />
             
-              <Autocomplete
-                disablePortal
-                multiple
-                noOptionsText=" داده ای موحود نیست "
-                options={featureList}
-                getOptionLabel={(i)=> i.name}
-                onChange={(event, val) =>{
-                  setAddFeatures([...val]);
-                }}
-                limitTags={1}
-                sx={{ width:"190px"}}
-                renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن ویژگی " />}
-              />
             </div>
 
 

@@ -1,11 +1,11 @@
-import { ArrowOutward, ArrowOutwardOutlined, Favorite, Share } from "@mui/icons-material";
+import { ArrowOutward, ArrowOutwardOutlined, Favorite, Image, Share } from "@mui/icons-material";
 import { AspectRatio, Button, Card, CardActions, CardContent, CardOverflow, Chip, Typography } from "@mui/joy";
 import axios from "axios";
 import Link from "next/link";
 import { Rating } from "@mui/material";
 import { e2p } from "@/utils/replaceNumbers";
 import AddToFavoriteAndShare from "@/components/module/AddToFavoriteAndShare";
-import Image from "next/image";
+
 
 
 async function Products() {
@@ -21,7 +21,6 @@ async function Products() {
 
     const productList = res?.data.data
 
-    console.log(productList, "dsaknfkasjdfnldsf")
 
 
 
@@ -60,7 +59,7 @@ async function Products() {
                             <div className=" w-full h-full" key={i.id} >
                                 <CardOverflow>
                                     <AspectRatio>
-                                    <img
+                                    <Image
                                         src={i?.image_url}
                                         loading="lazy"
                                         alt=""

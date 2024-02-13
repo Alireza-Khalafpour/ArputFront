@@ -22,13 +22,12 @@ import premium from "../../public/images/premium.png"
 
 
 import "../components/styles/LandingPageStyles/aos.css"
-// import "../components/styles/LandingPageStyles/bootstrap.min.css"
-// import "../components/styles/LandingPageStyles/icofont.min.css"
 // import "../components/styles/LandingPageStyles/owl.carousel.min.css"
 import "../components/styles/LandingPageStyles/responsive.css"
 import "../components/styles/LandingPageStyles/style.css"
 import Image from "next/image";
 import BannerVideoMainPage from "@/components/module/BannerVideoMainPage";
+import CompanySlider from "@/components/module/CompanySlider";
 
 
 
@@ -83,18 +82,6 @@ export default function Home() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         <div className="flex md:flex-row flex-col justify-center items-center w-full md:gap-2 gap-10 rounded-3xl p-1 bg-[#ef3d52df]" >
 
           <div className="md:w-1/2 w-full flex md:flex-row flex-col gap-10 justify-center items-center" >
@@ -137,34 +124,34 @@ export default function Home() {
 
 
 
-          <section class="row_am features_section" id="features">
+          <section className="row_am features_section" id="features">
 
-            <div class="container">
-              <div class="section_title">
+            <div className="container">
+              <div className="section_title">
 
                 <h2><span> ویژگی‌ها </span>ما را متفاوت میکند</h2>
 
                 <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ <br/> چاپگرها و متون بلکه روزنامه با استفاده از طراحان گرافیک است. </p>
               </div>
-              <div class="feature_detail">
+              <div className="feature_detail">
 
-                <div class="left_data feature_box ">
+                <div className="left_data feature_box ">
 
-                  <div class="data_block">
-                    <div class="icon">
+                  <div className="data_block">
+                    <div className="icon">
                       <Image width={60} height={60} src={secureImg} alt="image" />
                     </div>
-                    <div class="text text-right">
+                    <div className="text text-right">
                       <h4>داده امن</h4>
                       <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،</p>
                     </div>
                   </div>
 
-                  <div class="data_block">
-                    <div class="icon">
+                  <div className="data_block">
+                    <div className="icon">
                       <Image width={60} height={60} src={functionalImg} alt="image" />
                     </div>
-                    <div class="text text-right">
+                    <div className="text text-right">
                       <h4>کاملا کاربردی</h4>
                       <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
                     </div>
@@ -172,24 +159,24 @@ export default function Home() {
                 </div>
 
 
-                <div class="right_data feature_box">
+                <div className="right_data feature_box">
 
-                  <div class="data_block">
-                    <div class="icon">
+                  <div className="data_block">
+                    <div className="icon">
                       <Image width={60} height={60} src={liveChatImg} alt="image" />
                     </div>
-                    <div class="text">
+                    <div className="text">
                       <h4>چت زنده</h4>
                       <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،</p>
                     </div>
                   </div>
 
 
-                  <div class="data_block">
-                    <div class="icon">
+                  <div className="data_block">
+                    <div className="icon">
                       <Image width={60} height={60} src={supportImg} alt="image" />
                     </div>
-                    <div class="text">
+                    <div className="text">
                       <h4>پشتبانی شبانه روزی</h4>
                       <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
                     </div>
@@ -197,7 +184,7 @@ export default function Home() {
 
                 </div>
 
-                <div class="feature_img">
+                <div className="feature_img">
                   <Image src={featureFrame} width={270} height={570} alt="image" />
                 </div>
               </div>
@@ -206,141 +193,175 @@ export default function Home() {
           </section>
 
 
-          <section class="row_am pricing_section" id="pricing">
+          <section className="row_am pricing_section" id="pricing">
 
-            <div class="container text-center mx-auto flex flex-col justify-center items-center ">
-              <div class="section_title">
+            <div className="container text-center mx-auto flex flex-col justify-center items-center ">
+              <div className="section_title">
 
-                <h2>بهترین و ساده ترین <span>قیمت‌گذاری</span></h2>
+                <h2>بهترین و ساده ترین <span>قیمت‌ گذاری</span></h2>
 
                 <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ <br/> چاپگرها و متون بلکه روزنامه با استفاده از طراحان گرافیک است. </p>
               </div>
 
-              <div class="toggle_block">
-                <span class="month active">ماهانه</span>
-                <div class="tog_block">
-                  <span class="tog_btn"></span>
+              <div className="toggle_block">
+                <span className="month active">ماهانه</span>
+                <div className="tog_block">
+                  <span className="tog_btn"></span>
                 </div>
-                <span class="years">سالانه</span>
-                <span class="offer">50% تخفیف</span>
+                <span className="years">سالانه</span>
+                <span className="offer">15% تخفیف</span>
               </div>
 
 
-              <div class="pricing_pannel monthly_plan active w-full">
+              <div className="pricing_pannel monthly_plan active w-full">
 
-                <div class="row flex flex-row justify-center items-center w-full gap-8">
+                <div className="row flex flex-row justify-center  w-full gap-8">
 
-                  <div class="w-1/3">
-                    <div class="pricing_block">
-                      <div class="icon">
-                        <Image width={60} height={60} src={standard} alt="image" className="mx-auto" />
-                      </div>
-                      <div class="pkg_name">
-                        <h3>استاندارد</h3>
-                        <span>برای شروع </span>
-                      </div>
-                      <span class="price">15 تومان</span>
-                      <ul class="benifits">
-                        <li>
-                          <p>تا پنج عدد وبسایت</p>
-                        </li>
-                        <li>
-                          <p>50 گیگ فضای دیسک</p>
-                        </li>
-                        <li>
-                          <p>10 صفحه داخلی سفارشی</p>
-                        </li>
-                        <li>
-                          <p>2 دسترسی دامنه</p>
-                        </li>
-                        <li>
-                          <p>پشتیبانی درخواستها</p>
-                        </li>
-                      </ul>
-                      <a href="contact.html" class="btn white_btn">سفارش دهید</a>
-                    </div>
-                  </div>
-
-                  <div class="w-1/3">
-                    <div class="pricing_block highlited_block">
-                      <div class="icon">
+                  <div className="w-1/3 min-h-[85vh]">
+                    <div className="pricing_block highlited_block h-full">
+                      <div className="icon">
                         <Image width={60} height={60} src={ultimate} alt="image" className="mx-auto" />
                       </div>
-                      <div class="pkg_name">
-                        <h3>نامحدود</h3>
+                      <div className="pkg_name">
+                        <h3> سفارشی </h3>
                         <span>برای حرفه ای ها</span>
+                        <hr className="my-2" />
                       </div>
-                      <span class="price">99 تومان</span>
-                      <ul class="benifits">
+
+                      <ul className="benifits">
                         <li>
-                          <p>وبسایت نامحدود</p>
+                          <p> تایل از پیش تعریف شده </p>
                         </li>
                         <li>
-                          <p>200 گیگ فضای دیسک</p>
+                          <p> امکان بارگزاری آنلاین محصولات </p>
                         </li>
                         <li>
-                          <p>20 صفحه داخلی سفارشی</p>
+                          <p> انتخاب سطوح زمین و دیوار </p>
                         </li>
                         <li>
-                          <p>10 دسترسی دامنه</p>
+                          <p> نمایش محصول در اندازه واقعی </p>
                         </li>
                         <li>
-                          <p>پشتیبانی شبانه روزی</p>
+                          <p> انتخاب سایز های متفاوت محصول </p>
+                        </li>
+                        <li>
+                          <p> انتخاب سایز های متفاوت محصول </p>
+                        </li>
+                        <li>
+                          <p> انتخاب طرح چینش محصول تایل </p>
+                        </li>
+                        <li>
+                          <p> نورپردازی و حرکت نور </p>
+                        </li>
+                        <li>
+                          <p> حرکت و چرخاندن تکسچر تایل </p>
+                        </li>
+                        <li>
+                          <p> تخمین مساحت،تعداد محصول و قیمت </p>
+                        </li>
+                        <li>
+                          <p> گرفتن عکس و ذخیره </p>
+                        </li>
+                        <li>
+                          <p> امکان سفارشی سازی نورپردازی </p>
+                        </li>
+                        <li>
+                          <p> لینک به فروشگاه آنلاین </p>
+                        </li>
+                        <li>
+                          <p> قراردادن برند شما </p>
+                        </li>
+                        <li>
+                          <p> رابط کاربری سفارشی </p>
+                        </li>
+                        <li>
+                          <p> افزودن دکور روی سطح تایل </p>
+                        </li>
+                        <li>
+                          <p> افزودن افکت گیمیفیکیشن </p>
+                        </li>
+                        <li>
+                          <p> شناسایی موانع طبیعی </p>
                         </li>
                       </ul>
-                      <a href="contact.html" class="btn white_btn">سفارش دهید</a>
+                      <a href="contact.html" className="btn white_btn"> سفارش دهید</a>
                     </div>
                   </div>
 
 
-                  <div class="w-1/3">
-                    <div class="pricing_block">
-                      <div class="icon">
+                  <div className="w-1/3 min-h-[85vh]">
+                    <div className="pricing_block h-full">
+                      <div className="icon">
                         <Image width={60} height={60} src={premium} alt="image" className="mx-auto" />
                       </div>
-                      <div class="pkg_name">
-                        <h3>پریمیوم</h3>
+                      <div className="pkg_name">
+                        <h3>آرپوت مارکت</h3>
                         <span>برای تیم های کوچک</span>
+                        <hr className="my-2" />
                       </div>
-                      <span class="price">55 تومان</span>
-                      <ul class="benifits">
-                        <li>
-                          <p>تا ده عدد وبسایت</p>
+
+                      <ul className="benifits">
+                      <li>
+                          <p> تایل از پیش تعریف شده </p>
                         </li>
                         <li>
-                          <p>100 گیگ فضای دیسک</p>
+                          <p> امکان بارگزاری آنلاین محصولات </p>
                         </li>
                         <li>
-                          <p>15 صفحه داخلی سفارشی</p>
+                          <p> انتخاب سطوح زمین و دیوار </p>
                         </li>
                         <li>
-                          <p>4 دسترسی دامنه</p>
+                          <p> نمایش محصول در اندازه واقعی </p>
                         </li>
                         <li>
-                          <p>پشتیبانی شبانه روزی</p>
+                          <p> انتخاب سایز های متفاوت محصول </p>
+                        </li>
+                        <li>
+                          <p> انتخاب سایز های متفاوت محصول </p>
+                        </li>
+                        <li>
+                          <p> انتخاب طرح چینش محصول تایل </p>
+                        </li>
+                        <li>
+                          <p> نورپردازی و حرکت نور </p>
+                        </li>
+                        <li>
+                          <p> حرکت و چرخاندن تکسچر تایل </p>
+                        </li>
+                        <li>
+                          <p> تخمین مساحت،تعداد محصول و قیمت </p>
+                        </li>
+                        <li>
+                          <p> گرفتن عکس و ذخیره </p>
+                        </li>
+                        <li>
+                          <p> لینک به فروشگاه آنلاین </p>
+                        </li>
+                        <li>
+                          <p> صفحه اختصاصی هر برند </p>
                         </li>
                       </ul>
-                      <a href="contact.html" class="btn white_btn">سفارش دهید</a>
+                      <a href="contact.html" className="btn white_btn">سفارش دهید</a>
                     </div>
                   </div>
                 </div>
 
               </div>
 
-              <div class="pricing_pannel yearly_plan w-full ">
-                <div class="row flex flex-row justify-center items-center w-full ">
+              <div className="pricing_pannel yearly_plan w-full ">
+                <div className="row flex flex-row justify-center items-center w-full ">
 
-                  <div class="col-md-4">
-                    <div class="pricing_block">
-                      <div class="icon">
+                  <div className="col-md-4">
+                    <div className="pricing_block">
+                      <div className="icon">
                         <Image width={60} height={60} src={standard} alt="image" />
                       </div>
-                      <div class="pkg_name">
+                      <div className="pkg_name">
                         <h3>استاندارد</h3>
                         <span>برای شروع </span>
                       </div>
-                      <span class="price">150 تومان</span>
-                      <ul class="benifits">
+                      <span className="price">150 تومان</span>
+                      <ul className="benifits">
                         <li>
                           <p>تا ده عدد وبسایت</p>
                         </li>
@@ -357,22 +378,22 @@ export default function Home() {
                           <p>پشتیبانی درخواستها</p>
                         </li>
                       </ul>
-                      <a href="contact.html" class="btn white_btn">سفارش دهید</a>
+                      <a href="contact.html" className="btn white_btn">سفارش دهید</a>
                     </div>
                   </div>
 
 
-                  <div class="col-md-4">
-                    <div class="pricing_block highlited_block">
-                      <div class="icon">
+                  <div className="col-md-4">
+                    <div className="pricing_block highlited_block">
+                      <div className="icon">
                         <Image width={60} height={60} src={ultimate} alt="image" />
                       </div>
-                      <div class="pkg_name">
+                      <div className="pkg_name">
                         <h3>نامحدود</h3>
                         <span>برای حرفه ای ها</span>
                       </div>
-                      <span class="price">999 تومان</span>
-                      <ul class="benifits">
+                      <span className="price">999 تومان</span>
+                      <ul className="benifits">
                         <li>
                           <p>وبسایت نامحدود</p>
                         </li>
@@ -389,22 +410,22 @@ export default function Home() {
                           <p>پشتیبانی شبانه روزی</p>
                         </li>
                       </ul>
-                      <a href="contact.html" class="btn white_btn">سفارش دهید</a>
+                      <a href="contact.html" className="btn white_btn">سفارش دهید</a>
                     </div>
                   </div>
 
 
-                  <div class="col-md-4">
-                    <div class="pricing_block">
-                      <div class="icon">
+                  <div className="col-md-4">
+                    <div className="pricing_block">
+                      <div className="icon">
                         <Image width={60} height={60} src={premium} alt="image" />
                       </div>
-                      <div class="pkg_name">
+                      <div className="pkg_name">
                         <h3>پریمیوم</h3>
                         <span>برای تیم های کوچک</span>
                       </div>
-                      <span class="price">550 تومان</span>
-                      <ul class="benifits">
+                      <span className="price">550 تومان</span>
+                      <ul className="benifits">
                         <li>
                           <p>تا بیست عدد وبسایت</p>
                         </li>
@@ -421,7 +442,7 @@ export default function Home() {
                           <p>پشتیبانی شبانه روزی</p>
                         </li>
                       </ul>
-                      <a href="contact.html" class="btn white_btn">سفارش دهید</a>
+                      <a href="contact.html" className="btn white_btn">سفارش دهید</a>
                     </div>
                   </div>
 
@@ -435,7 +456,24 @@ export default function Home() {
 
 
 
-        <div className="w-full text-center mx-auto md:text-3xl text-xl  gap-4" > <span className="h-full w-[2px] border-2 border-khas mx-3" ></span>  همکاری با کارخانه ها و فروشگاه ها  <span className="h-full w-[2px] border-2 border-khas mx-3" ></span> </div>
+
+        <section className="row_am trusted_section">
+
+          <div className="flex flex-col">
+            <div className="section_title">
+
+              <h2>مورد اعتماد <span>150+</span> شرکت</h2>
+
+              <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ <br/> چاپگرها و متون بلکه روزنامه با استفاده از طراحان گرافیک است. </p>
+            </div>
+
+            <div className="company_logos" >
+              <CompanySlider/>
+            </div>
+
+          </div>
+
+        </section>
 
             
         

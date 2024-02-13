@@ -28,9 +28,11 @@ export const BranchListAdmin = ()=> {
     const [data, setData] = useState([])
     const [representationName, setRepresentationName] = useState()
     const [repNumber, setRepNumber] = useState()
+    const [repCode, setRepCode] = useState()
+    const [factoryId, setFactoryId] = useState()
 
+    const [factoryList, setFactoryList] = useState([])
 
-    const [DeleteCategoryIds, setDeleteCategoryIds] = useState()
 
       
   
@@ -47,7 +49,7 @@ export const BranchListAdmin = ()=> {
 
     async function ListApi() {
       
-      await axios.get('https://supperapp-backend.chbk.run/branch/branch_list_admin', {
+      await axios.get('https://supperapp-backend.chbk.run/branch/admin/list', {
         headers:RepresentationListHeaders
         })
         .then((response) => {
@@ -59,9 +61,71 @@ export const BranchListAdmin = ()=> {
         });
     }
 
+    // گرفتن لیست کارخانه ها ----------------
+    async function GetFactories() {
+        
+      await axios.get('https://supperapp-backend.chbk.run/factory/list', {
+        headers:RepresentationListHeaders
+        })
+        .then((response) => {
+            setFactoryList(response.data.data)
+            console.log(response.data.data)
+        })
+        .catch((error) => {
+            console.log(error, "Error");
+        });
+  }
+
+
     useEffect(() => {
         ListApi();
+        GetFactories();
     },[])
+
+    // Admin add branch--------------------------------------
+    const headers ={
+      'accept': 'application/json',
+      'Authorization': `Bearer ${Auth}`,
+      }
+    
+  
+      const addBranchData= {
+        "factory_id": factoryId,
+        'name': representationName,
+        'mobile':repNumber,
+        "branch_code": repCode
+      }
+    
+      async function AddBranchApi() {
+        // setLoading(true);
+        console.log(addBranchData)
+        await axios.post('https://supperapp-backend.chbk.run/branch/create', addBranchData, {
+            headers: headers
+          })
+          .then((response) => {
+            if (response.data.Done === true) {
+              console.log(response)
+              setAlert(true)
+              setMessage(" نمایندگی جدید با موفقیت افزوده شد ")
+              setLoading(false)
+              setAddCategoryModal(false)
+              setTimeout(() => {
+                window.location.reload()
+              }, 500);
+            } else if (response.data.Done === false) {
+              setMessage(response.data.Message)
+              setErrorAlert(true)
+              setLoading(false)
+            }
+          })
+          .catch(function (error) {
+            console.log(error, "Error");
+            setMessage(" متاسفیم،خطایی رخ داده است ")
+            setErrorAlert(true)
+            setLoading(false)
+          });
+    
+      }
 
 
     
@@ -236,6 +300,38 @@ const table = useMaterialReactTable({
                 }}
                 variant="standard"
               />
+            
+            </div>
+
+            <div className='w-full flex flex-row justify-around items-center' >
+              <TextField
+                className="w-1/3"
+                id="input-with-icon-textfield"
+                label=" کد نمایندگی "
+                placeholder=" کد نمایندگی  "
+                value={repCode}
+                onChange={(e) => setRepCode(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="end">
+                      <Category className='text-asliLight' />
+                    </InputAdornment>
+                  ),
+                }}
+                variant="standard"
+              />
+
+              <Autocomplete
+                className="w-1/3"
+                noOptionsText=" داده ای موجود نیست "
+                options={factoryList}
+                getOptionLabel={(i)=> i.name}
+                onChange={(event, val) =>{
+                setFactoryId(val.id)
+                }}
+                // sx={{ width:"190px"}}
+                renderInput={(params) => <TextField {...params} variant="standard" label=" کارخانه " />}
+            />
             
             </div>
 

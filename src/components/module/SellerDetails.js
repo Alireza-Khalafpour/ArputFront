@@ -1,13 +1,13 @@
 "use client";
 
-import { e2p, sp } from "@/utils/replaceNumbers";
+
 import { KeyboardArrowUp, ShoppingCart, Star } from "@mui/icons-material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Button, Chip } from "@mui/material";
 import { useState } from "react";
 
 function SellerDetails({ productList }) {
-  console.log(productList.seller_info[0].price);
+  console.log(productList?.seller_info[0].price);
   const [Open, SetOpen] = useState(false);
   return (
     <div className=" basis-3/5">
@@ -16,7 +16,7 @@ function SellerDetails({ productList }) {
         <button className=" inline-block rounded-2xl border-2  border-black bg-white px-2 py-1">
           <p className=" text-lg">تمام ایران</p>
           <p className=" text-paszamine3">
-            {e2p(sp(productList.seller_info[0].price))}
+            {productList?.seller_info[0].price}
             <span className="text-base"> ریال </span>
           </p>
         </button>
@@ -27,7 +27,7 @@ function SellerDetails({ productList }) {
           <button className=" inline-block rounded-2xl border-2  border-black bg-white px-2 py-1">
             <p className=" text-lg">تمام ایران</p>
             <p className=" text-paszamine3">
-              {e2p(sp(productList.seller_info[0].price))}
+              {productList?.seller_info[0].price}
               <span className="text-base"> ریال </span>
             </p>
           </button>
@@ -79,10 +79,10 @@ function SellerDetails({ productList }) {
               <div className=" flex flex-row justify-between gap-4">
                 <h3 className=" font-semibold">
                   {" "}
-                  قیمت {e2p(sp(s.price ? s.price : 0))} ریال{" "}
+                  قیمت {s.price ? s?.price : 0} ریال{" "}
                 </h3>
                 <Chip className="p-1 px-3 bg-rose-500 text-white rounded-xl  ">
-                  تخفیف {e2p(s.price)} %
+                  تخفیف {s?.price} %
                 </Chip>
                 <Button
                   variant="contained"

@@ -1,18 +1,16 @@
 'use client'
 
-import axios from "axios";
-import { useEffect } from "react";
-import Cookies from "universal-cookie";
-import { AddCircleOutline, Category, LocationCity, LocationOnRounded, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
-import { Alert, Autocomplete, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Snackbar, TextField, Typography } from "@mui/material";
+import { AddCircleOutline, Category } from "@mui/icons-material";
+import { Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Snackbar, TextField } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
-import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
+import { useEffect, useMemo, useState } from "react";
+import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 
-
-export const CreateDepartment = ()=> {
+const PricePulse = () => {
 
     const cookie = new Cookies();
 
@@ -26,42 +24,36 @@ export const CreateDepartment = ()=> {
     const [loading, setLoading] = useState(false);
 
     const [data, setData] = useState([])
-    const [categoryList, setcategoryList] = useState([])
-    const [addCateg, setaddCategs] = useState([])
-    const [CategoryIds, setCategoryIds] = useState([])
     const [departmentName, setDepartmentName] = useState("")
-    const [addMobile, setAddMobile] = useState("")
-    const [addTelephone, setAddTelephone] = useState("")
+
 
     const [addDepartmentModal, setAddDepartmentModal] = useState(false)
 
 
-    async function ListApi(Au) {
+    // گرفتن لیست برنامه های قیمت پالس ------------
+    async function GetPulsePrice(Au) {
       
-      await axios.get('https://supperapp-backend.chbk.run/department/department_list', {
-        headers:{
-          'accept': 'application/json',
-          'Authorization': `Bearer ${Au}`,
-        }
-        })
-        .then((response) => {
-          setData(response.data.data)
-          console.log(response.data.data)
-        })
-        .catch((error) => {
-          console.log(error, "Error");
-        });
-    }
+        await axios.get('https://supperapp-backend.chbk.run/pulse/price/admin/list', {
+          headers:{
+            'accept': 'application/json',
+            'Authorization': `Bearer ${Au}`,
+          }
+          })
+          .then((response) => {
+            setData(response.data.data)
+          })
+          .catch((error) => {
+            console.log(error, "Error");
+          });
+      }
 
-    
 
-    useEffect(() => {
-      setCategoryIds(addCateg.map((i) => i.id))
-    },[addCateg])
+    //------------------------------------------------------------
+
 
     useEffect(() => {
       const Auth = cookie.get('tokenDastResi')
-      ListApi(Auth);
+      GetPulsePrice(Auth)
     },[])
     
     // -------------------------------------------------------
@@ -109,123 +101,118 @@ export const CreateDepartment = ()=> {
 
 
   // columns and data =============================================
-  const columns = useMemo(
-    () => [
-      {
-        header: ' نام دپارتمان ',
-        accessorKey: 'dep_name',
-        id: 'dep_name',
-      },
-      {
-        header: '  تاریخ ایجاد ',
-        accessorKey: 'created_at',
-        id: 'created_at',
-        Cell: ({ cell }) => <span>{cell.getValue().tolocal}</span>,
-      },
-      {
-        header: ' ایجاد توسط ',
-        accessorKey: 'created_by_name',
-        id: 'created_by_name',
-      },
-      {
-          header: '  تاریخ بروزرسانی ',
-          accessorKey: 'updated_at',
-          id: 'updated_at',
+
+
+  // چدول قیمتی پالس ها ------------------------
+    const columns = useMemo(
+        () => [
+          {
+            header: ' نام  ',
+            accessorKey: 'name',
+            id: 'name',
+          },
+          {
+            header: '  قیمت  ',
+            accessorKey: 'price',
+            id: 'price',
+          },
+          {
+            header: ' پالس AR ',
+            accessorKey: 'ar_pulse',
+            id: 'ar_pulse',
+            Cell: ({ cell }) => <span>{cell.getValue() === true ? "دارد" : "ندارد"}</span>,
+          },
+            {
+              header: ' وضعیت ',
+              accessorKey: 'active',
+              id: 'active',
+              Cell: ({ cell }) => <span>{cell.getValue() === true ? "فعال" : "غیرفعال"}</span>,
+            },
+        ],
+        []
+      );
+
+
+      const table = useMaterialReactTable({
+        columns,
+        data,
+        localization: mrtLocalizationFa,
+        rowNumberDisplayMode: true,
+        columnResizeMode:true,
+        enableStickyHeader: true,
+        enableStickyFooter: true,
+        enableRowActions: true,
+        muiTableBodyCellProps:{
+          sx:{
+            align: 'right',
+            textAlign:'right',
+          }
         },
-        {
-            header: ' بروزرسانی توسط ',
-            accessorKey: 'updated_by_name',
-            id: 'updated_by_name',
+        muiTableHeadCellProps:{
+          sx:{
+            textAlign:"right",
+            fontWeight: '600',
+            fontSize: '14px',
+            backgroundColor: '#ECEFF1',
+            alignItems: 'center',
+            background: '#1D9BF0',
+            borderRight: '1px solid rgba(224,224,224,1)',
+            color: 'white',
+          }
         },
-        {
-          header: ' وضعیت ',
-          accessorKey: 'is_active',
-          id: 'is_active',
-          Cell: ({ cell }) => <span>{cell.getValue() === true ? "فعال" : "غیرفعال"}</span>,
-        },
-    ],
-    []
-  );
-
-
-const table = useMaterialReactTable({
-  columns,
-  data,
-  localization: mrtLocalizationFa,
-  rowNumberDisplayMode: true,
-  columnResizeMode:true,
-  enableStickyHeader: true,
-  enableStickyFooter: true,
-  enableRowActions: true,
-  muiTableBodyCellProps:{
-    sx:{
-      align: 'right',
-      textAlign:'right',
-    }
-  },
-  muiTableHeadCellProps:{
-    sx:{
-      textAlign:"right",
-      fontWeight: '600',
-      fontSize: '14px',
-      backgroundColor: '#ECEFF1',
-      alignItems: 'center',
-      background: '#1D9BF0',
-      borderRight: '1px solid rgba(224,224,224,1)',
-      color: 'white',
-    }
-  },
-  muiTableContainerProps: { sx: { maxHeight: '500px' } },
-
-  renderTopToolbar: ({ table }) => {
-
-    return (
-      <Box
-        sx={() => ({
-          display: 'flex',
-          gap: '0.5rem',
-          p: '8px',
-          justifyContent: 'space-between',
-        })}
-      >
-        <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          {/* import MRT sub-components */}
-          <MRT_GlobalFilterTextField table={table} />
-          <MRT_ToggleFiltersButton table={table} />
-        </Box>
-        <Box>
-          <Box sx={{ display: 'flex', gap: '0.5rem' }}>
-            <button
-              className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
-              onClick={() => setAddDepartmentModal(true)}
+        muiTableContainerProps: { sx: { maxHeight: '500px' } },
+      
+        renderTopToolbar: ({ table }) => {
+      
+          return (
+            <Box
+              sx={() => ({
+                display: 'flex',
+                gap: '0.5rem',
+                p: '8px',
+                justifyContent: 'space-between',
+              })}
             >
-                ثبت دپارتمان جدید <AddCircleOutline/> 
-            </button>
-          </Box>
-        </Box>
-      </Box>
-    );
-  },
-//   renderRowActions: ({ row }) => {
-//     return (
-//       <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-//         <IconButton
-//           onClick={() => GetRowIdForPatchAddress(row)}
-//         >
-//           <LocationOnRounded />
-//           آدرس
-//         </IconButton>
-//       </Box>
-//     )
-//   },
-
-});
+              <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                {/* import MRT sub-components */}
+                <MRT_GlobalFilterTextField table={table} />
+                <MRT_ToggleFiltersButton table={table} />
+              </Box>
+              <Box>
+                <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+                  <button
+                    className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
+                    onClick={() => setAddDepartmentModal(true)}
+                  >
+                      ثبت برنامه قیمت جدید <AddCircleOutline/> 
+                  </button>
+                </Box>
+              </Box>
+            </Box>
+          );
+        },
+      //   renderRowActions: ({ row }) => {
+      //     return (
+      //       <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+      //         <IconButton
+      //           onClick={() => GetRowIdForPatchAddress(row)}
+      //         >
+      //           <LocationOnRounded />
+      //           آدرس
+      //         </IconButton>
+      //       </Box>
+      //     )
+      //   },
+      
+      });
+      
 
     return (
 
       <div className="w-full" >
 
-        <MaterialReactTable table={table}/>
+        <MaterialReactTable table={table}/> 
+
 
 
         {/* <ContextMenu
@@ -239,7 +226,7 @@ const table = useMaterialReactTable({
       <Dialog fullWidth className="w-full" scroll="paper" maxWidth="sm" open={addDepartmentModal} onClose={() => setAddDepartmentModal(false)}>
 
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
-            ایجاد دپارتمان جدید
+            ایجاد برنامه قیمت جدید
           </DialogTitle>
           <Divider />
           <DialogContent className="flex flex-col items-center gap-10 mt-12 h-full " >           
@@ -249,10 +236,10 @@ const table = useMaterialReactTable({
                 <TextField
                   className="md:w-[50%] w-[90%]"
                   id="input-with-icon-textfield"
-                  label=" نام دپارتمان  "
-                  placeholder=" نام دپارتمان   "
-                  value={departmentName}
-                  onChange={(e) => setDepartmentName(e.target.value)}
+                  label=" نام برنامه  "
+                  placeholder=" نام برنامه   "
+                //   value={departmentName}
+                //   onChange={(e) => setDepartmentName(e.target.value)}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="end">
@@ -305,4 +292,4 @@ const table = useMaterialReactTable({
     );
 }
 
-export default CreateDepartment;
+export default PricePulse;

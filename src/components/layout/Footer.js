@@ -54,7 +54,7 @@ const Footer = () => {
 
                 <div className="flex flex-col md:w-1/4 w-full text-center gap-4 text-white text-xl justify-around items-center h-full" >
                     <Image src={LogoAR} width={90} height={90} />
-                    <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'><Image width={40} height={40} referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8' alt='' style={{cursor:"pointer"}} Code='LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'/></a>
+                    <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'><Image width={70} height={70} referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8' alt='' style={{cursor:"pointer"}} Code='LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'/></a>
                 </div>
                     
                 </div>

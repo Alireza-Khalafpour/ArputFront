@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, Category, DeleteRounded, DetailsOutlined, EditRounded} from "@mui/icons-material";
+import { AddCircleOutline, Category, DeleteRounded, DetailsOutlined, EditRounded, RadioButtonChecked} from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, Snackbar, TextField, Tooltip } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
@@ -37,7 +37,8 @@ export const CreateFactory = ()=> {
 
     async function ListApi(Au) {
       
-      await axios.get('https://supperapp-backend.chbk.run/category/list', {
+      // await axios.get('https://supperapp-backend.chbk.run/category/list', {
+        await axios.get('https://supperapp-backend.chbk.run/category/all', {
         headers:{
           'accept': 'application/json',
           'Authorization': `Bearer ${Au}`,
@@ -113,7 +114,39 @@ export const CreateFactory = ()=> {
     }
 
     
-    // Update a category -----------------------------------------
+    // Activate category -----------------------------------------
+      
+        async function GetRowIdForActivate(id) {
+            setLoading(true);
+            await axios.patch('https://supperapp-backend.chbk.run/category/active', {
+                "ids": [`${id}`],
+            }, 
+            {
+              headers: headers
+            })
+            .then((response) => {
+                setAlert(true)
+              if(response.data.Done == true){
+                setAlert(true)
+                setMessage(" دسته بندی فعال شد ")
+                setLoading(false)
+                ListApi(Auth)
+
+              }else {
+                setLoading(false)
+                setMessage(response.data.Message)
+                setErrorAlert(true)
+
+              }
+            })
+            .catch(function (error) {
+                console.log(error)
+                setMessage(" متاسفیم،خطایی رخ داده است ")
+                setErrorAlert(true)
+                setLoading(false)
+            });
+      
+        }
 
 
     // Delete a category -----------------------------------------
@@ -141,9 +174,7 @@ export const CreateFactory = ()=> {
               response.json()
           })
          .then((d) => {
-            console.log(d)
-            // route.refresh();
-            setAlert(true)
+            setErrorAlert(true)
             setMessage(" دسته بندی حذف شد ")
             setLoading(false)
             ListApi(Auth)
@@ -183,9 +214,11 @@ export const CreateFactory = ()=> {
         id: 'name',
       },
       {
-        header: ' id ',
-        accessorKey: 'id',
-        id: 'id',
+        header: ' وضعیت ',
+        accessorKey: 'active',
+        id: 'active',
+        Cell: ({ cell }) => <span>{cell.getValue() === true ? "فعال" : "غیرفعال"}</span>,
+
       },
     ],
     []
@@ -262,12 +295,26 @@ const table = useMaterialReactTable({
         >
           <EditRounded />
         </IconButton>
-        <IconButton
-          color="error"
-          onClick={() => GetRowIdForDelete(row)}
-        >
-          <DeleteRounded />
-        </IconButton>
+          {
+            row.original.active == true 
+            ?
+            <IconButton
+              color="error"
+              onClick={() => GetRowIdForDelete(row)}
+            >
+                <DeleteRounded titleAccess="غیرفعال کردن" />
+            </IconButton>
+
+            :
+
+            <IconButton
+            color="success"
+            onClick={() => GetRowIdForActivate(row.original.id)}
+          >
+              <RadioButtonChecked titleAccess="فعال کردن" />
+          </IconButton>
+
+          }
       </Box>
     )
   },
@@ -278,9 +325,8 @@ const table = useMaterialReactTable({
         <Box
           sx={{
               display: 'grid',
-              margin: 'auto',
-              gridTemplateColumns: '1fr 1fr 1fr ',
-              width: '100%',
+              gridTemplateColumns: '1fr 1fr ',
+              width: '50%',
               textAlign:"justify",
               gap: "15px"
           }}
@@ -292,7 +338,6 @@ const table = useMaterialReactTable({
               <>
                 <Typography> نام ویژگی : {item.name}  </Typography>
                 <Typography className="flex flex-row gap-1 items-center">  <p>وضعیت   : </p>{item.active === true ? <p className="rounded-full p-2 bg-green-700 w-2 h-2" ></p> : <p className="rounded-full p-2 bg-rose-700 w-2 h-2"></p>}  </Typography>
-                <Typography>  id : {item.id}   </Typography>
               </>
              ))
           } 
@@ -384,7 +429,7 @@ const table = useMaterialReactTable({
       <Modal open={addCategoryModal} onClose={() => OnCloseModal()}>
         <ModalDialog variant="outlined" role="definition" className="w-[40vw] h-[65vh] p-0" >
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
-              افزودن ویژگی به {}
+              ایجاد دسته بندی
           </DialogTitle>
           <Divider />
           <DialogContent className="flex flex-col justify-center items-center gap-10" >           

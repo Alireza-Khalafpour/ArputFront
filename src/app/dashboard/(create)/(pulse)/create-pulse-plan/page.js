@@ -1,7 +1,7 @@
 'use client'
 
 import { Add, AddCircleOutline, Category } from "@mui/icons-material";
-import { Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Snackbar, TextField } from "@mui/material";
+import { Alert, Autocomplete, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Snackbar, TextField } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import { useEffect, useMemo, useState } from "react";
@@ -24,15 +24,22 @@ const PulsePlan = () => {
     const [loading, setLoading] = useState(false);
 
     const [data, setData] = useState([])
-    const [departmentName, setDepartmentName] = useState("")
+    const [priceData, setPriceData] = useState([])
+    const [expireData, setExpireData] = useState([])
     const [allShops, setAllShops] = useState([])
+    const [planName, setPlaneName] = useState("")
+    const [pulse_price_with_ar_id, set_pulse_price_with_ar_id] = useState("")
+    const [pulse_price_without_ar_id, set_pulse_price_without_ar_id] = useState("")
+    const [pulse_time_expire_id, set_pulse_time_expire_id] = useState("")
 
+    const [pulsePlanIdForShop, setPulsePlanIdForShop] = useState("")
 
     const [addDepartmentModal, setAddDepartmentModal] = useState(false)
+    const [shopPlanModal, setShopPlanModal] = useState(false)
 
 
     // گرفتن لیست برنامه های پالس ------------
-    async function GetPulsePrice(Au) {
+    async function GetPulsePlan(Au) {
       
         await axios.get( 'https://supperapp-backend.chbk.run/pulse/plan/admin/list', {
           headers:{
@@ -58,12 +65,48 @@ const PulsePlan = () => {
           }
           })
           .then((response) => {
-            setAllShops(response.data)
+            setAllShops(response.data.data)
+            console.log(response.data.data)
           })
           .catch((error) => {
             console.log(error, "Error");
           });
       }
+
+        // گرفتن لیست برنامه های قیمت پالس ------------
+        async function GetPulsePrice(Au) {
+          
+          await axios.get('https://supperapp-backend.chbk.run/pulse/price/admin/list', {
+            headers:{
+              'accept': 'application/json',
+              'Authorization': `Bearer ${Au}`,
+            }
+            })
+            .then((response) => {
+
+              setPriceData(response.data.data)
+            })
+            .catch((error) => {
+              console.log(error, "Error");
+            });
+        }
+        // گرفتن لیست برنامه های تایم اکسپایر
+        async function GetPulseExpire(Au) {
+      
+          await axios.get('https://supperapp-backend.chbk.run/pulse/time/expire/admin/list', {
+            headers:{
+              'accept': 'application/json',
+              'Authorization': `Bearer ${Au}`,
+            }
+            })
+            .then((response) => {
+
+              setExpireData(response.data.data)
+            })
+            .catch((error) => {
+              console.log(error, "Error");
+            });
+        }
 
 
     //------------------------------------------------------------
@@ -71,8 +114,10 @@ const PulsePlan = () => {
 
     useEffect(() => {
       const Auth = cookie.get('tokenDastResi')
-      GetPulsePrice(Auth)
+      GetPulsePlan(Auth)
       GetShopsList(Auth)
+      GetPulseExpire(Auth)
+      GetPulsePrice(Auth)
     },[])
     
     // -------------------------------------------------------
@@ -84,44 +129,48 @@ const PulsePlan = () => {
     }
   
   
-    async function AddFactoryApi() {
-        setLoading(true);
-        await axios.post('https://supperapp-backend.chbk.run/department/create', {
-            'dep_name': departmentName, 
-        }, 
-        {
-          headers: headers
-        })
-        .then((response) => {
-          if(response.data.Done === true){
-            setAlert(true)
-            setMessage(response.data.Message)
-            setLoading(false)
-            setAddDepartmentModal(false)
-            setDepartmentName()
-            ListApi(Auth)
-          }else {
-            setMessage(response.data.Message)
-            setErrorAlert(true)
-            setDepartmentName()
-            setLoading(false)
-            setAddDepartmentModal(false)
-          }
-        })
-        .catch(function (error) {
-          setMessage(" متاسفیم،خطایی رخ داده است ")
+    async function AddPulsePlan() {
+      setLoading(true);
+      await axios.post('https://supperapp-backend.chbk.run/pulse/plan/admin/create', {
+          "name": planName,
+          "pulse_price_with_ar_id": pulse_price_with_ar_id,
+          "pulse_price_without_ar_id": pulse_price_without_ar_id,
+          "pulse_time_expire_id": pulse_time_expire_id
+      }, 
+      {
+        headers: headers
+      })
+      .then((response) => {
+        if(response.data.Done === true){
+          setAlert(true)
+          setMessage(response.data.Message)
+          
+        }else {
+          setMessage(response.data.Message)
           setErrorAlert(true)
-          setDepartmentName()
-          setLoading(false)
-          setAddDepartmentModal(false)
-        });
-  
-    }
+          
+        }
+      })
+      .catch(function (error) {
+        setMessage(" متاسفیم،خطایی رخ داده است ")
+        setErrorAlert(true)
+        
+      });
 
+      setAddDepartmentModal(false)
+      setLoading(false)
+      set_pulse_price_with_ar_id("")
+      set_pulse_price_without_ar_id("")
+      set_pulse_time_expire_id("")
+      setPlaneName("")
+      GetPulsePlan(Auth)
+
+  }
     // ایجاد برنامه برای فروشگاه انتخاب شده
 
     const GetRowId = (row) => {
-        console.log(row.original.id)
+        setPulsePlanIdForShop(row.original.id)
+        setShopPlanModal(true)
     }
 
 
@@ -253,21 +302,59 @@ const PulsePlan = () => {
             <div className="flex flex-col justify-center items-center gap-10 w-full" >
               <div className='w-full flex md:flex-row flex-col gap-7 justify-around items-center my-10 ' >
                 <TextField
-                  className="md:w-[50%] w-[90%]"
-                  id="input-with-icon-textfield"
-                  label=" نام برنامه  "
-                  placeholder=" نام برنامه   "
-                //   value={departmentName}
-                //   onChange={(e) => setDepartmentName(e.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="end">
-                        <Category className='text-asliLight' />
-                      </InputAdornment>
-                    ),
-                  }}
-                  variant="standard"
-                />
+                    className="md:w-[50%] w-[90%]"
+                    id="input-with-icon-textfield"
+                    label=" نام برنامه "
+                    placeholder=" نام برنامه "
+                    value={planName}
+                    onChange={(e) => setPlaneName(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="end">
+                          <Category className='text-asliLight' />
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="standard"
+                  />
+                  <Autocomplete
+                    className="md:w-[50%] w-[90%]"
+                    noOptionsText=" داده ای موجود نیست "
+                    options={priceData.filter((x) => x.ar_pulse == true) }
+                    getOptionLabel={(i)=> i.name}
+                    // value={addCateg ? addCateg[0] : " "}
+                    onChange={(event, val) =>{
+                    set_pulse_price_with_ar_id(val.id);
+                    }}
+                    renderInput={(params) => <TextField {...params} variant="standard" label=" قیمت با AR " />}
+                  />
+
+              </div>
+              <div className='w-full flex md:flex-row flex-col gap-7 justify-around items-center my-10 ' >
+
+                  <Autocomplete
+                    className="md:w-[50%] w-[90%]"
+                    noOptionsText=" داده ای موجود نیست "
+                    options={priceData.filter((x) => x.ar_pulse == false)}
+                    getOptionLabel={(i)=> i.name}
+                    // value={addCateg ? addCateg[0] : " "}
+                    onChange={(event, val) =>{
+                    set_pulse_price_without_ar_id(val.id);
+                    }}
+                    renderInput={(params) => <TextField {...params} variant="standard" label=" قیمت بدون AR " />}
+                  />
+
+                  <Autocomplete
+                    className="md:w-[50%] w-[90%]"
+                    noOptionsText=" داده ای موجود نیست "
+                    options={expireData}
+                    getOptionLabel={(i)=> i.name}
+                    // value={addCateg ? addCateg[0] : " "}
+                    onChange={(event, val) =>{
+                    set_pulse_time_expire_id(val.id);
+                    }}
+                    renderInput={(params) => <TextField {...params} variant="standard" label=" زمان انقضا " />}
+                  />
 
               </div>
 
@@ -275,7 +362,7 @@ const PulsePlan = () => {
 
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4 mt-10" >
-            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddFactoryApi()}>
+            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddPulsePlan()}>
               {loading ? <CircularProgress size="medium" /> : " ثبت "}
             </Button>
             <Button variant="soft" color='danger'  onClick={() => setAddDepartmentModal(false)}>
@@ -283,6 +370,45 @@ const PulsePlan = () => {
             </Button>
           </DialogActions>
       </Dialog>
+
+
+
+      <Dialog fullWidth className="w-full" scroll="paper" maxWidth="sm" open={shopPlanModal} onClose={() => setShopPlanModal(false)}>
+
+          <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
+              اختصاص برنامه پالس به فروشگاه
+          </DialogTitle>
+          <Divider />
+          <DialogContent className="flex flex-col items-center gap-10 mt-12 h-full " >           
+
+            <div className="flex flex-col justify-center items-center gap-10 w-full" >
+
+                  <Autocomplete
+                    className="md:w-[50%] w-[90%]"
+                    noOptionsText=" داده ای موجود نیست "
+                    options={allShops}
+                    getOptionLabel={(i)=> i.branch_data.branch_name}
+                    // value={addCateg ? addCateg[0] : " "}
+                    onChange={(event, val) =>{
+                    set_pulse_price_with_ar_id(val.id);
+                    }}
+                    renderInput={(params) => <TextField {...params} variant="standard" label=" انتخاب فروشگاه " />}
+                  />
+
+
+            </div>
+
+          </DialogContent>
+          <DialogActions className="p-4 flex flex-row gap-4 mt-10" >
+            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddPulsePlan()}>
+              {loading ? <CircularProgress size="medium" /> : " ثبت "}
+            </Button>
+            <Button variant="soft" color='danger'  onClick={() => setShopPlanModal(false)}>
+              انصراف
+            </Button>
+          </DialogActions>
+      </Dialog>
+
 
         <Snackbar
         open={alert}

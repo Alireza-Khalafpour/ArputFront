@@ -6,8 +6,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Divider, MenuList } from '@mui/material';
-import { Apps, ArrowDropDown, CloseRounded, ExitToApp, Home, InstallMobileOutlined, LoginOutlined, NotificationsActive, Person, Phone, Settings, ShoppingBasket, SpaceDashboard, ThreePRounded, VideoLabel } from '@mui/icons-material';
+import { Alert, Divider, MenuList, Snackbar } from '@mui/material';
+import { Apps, ArrowDropDown, CloseRounded, ExitToApp, Home, InstallMobileOutlined, LoginOutlined, NotificationsActive, Person, Phone, Settings, ShoppingBasket, SpaceDashboard, ThreePRounded, VideoLabel, Wallet } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
@@ -28,12 +28,16 @@ export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [name , setName] = React.useState("");
+  const [family , setFamily] = React.useState("");
+
+  const [alert, setAlert] = React.useState(false)
 
   const [dropMenu, setDrpMenu] = React.useState(false)
 
   const [open, setOpen] = React.useState(false);
 
-  const [videoModal, setVideoModal] = React.useState(false);
+  const [addressError, setAddressError] = React.useState(false);
+  const [infoError, setInfoError] = React.useState(false);
 
 
 
@@ -50,6 +54,21 @@ export default function Header() {
       })
       .then((response) => {
         setName(response.data.data[0].name)
+        setFamily(response.data.data[0].family)
+        if(cookie.get("role") !== "admin") {
+          if(response.data.data[0]?.address.length == 0 ){
+          setTimeout(() => {
+              setAddressError(true)
+              setAlert(true)
+            }, 4000);
+            }
+            if(response.data.data[0].name == "" || response.data.data[0].name == null){
+              setTimeout(() => {
+                setInfoError(true)
+                setAlert(true)
+              }, 4000);
+            }
+        }
       })
       .catch((error) => {
         console.log("Error on getting current user");
@@ -57,12 +76,16 @@ export default function Header() {
   }
 
 
-  const handleLogout = () => {
+  async function handleLogout() {
     cookie.remove("tokenDastResi");
     cookie.remove("role");
-    setTimeout(() => {
+    if (cookie.get("tokenDastResi")) {
+      cookie.remove("tokenDastResi");
+      cookie.remove("role");
       window.location.replace("/")
-    }, 500);
+    }else{
+      window.location.replace("/")
+    }
     setAnchorEl(null);
   }
 
@@ -254,7 +277,7 @@ export default function Header() {
       <div className="w-full min-h-[90px]">
         
         <nav className="navbar navbar-expand-lg flex flex-row justify-center w-full items-center !fixed z-[200] backdrop-blur-xl ">
-          <Link className="w-1/6" href="/">
+          <Link className="md:w-1/6 w-1/2" href="/">
             <Image src="/favicon.ico" width={80} height={80} className='m-auto' />
           </Link>
           {/* <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -267,27 +290,27 @@ export default function Header() {
             </span>
           </button> */}
 
-          <div className="w-5/6">
+          <div className="md:w-5/6 w-1/2">
             <ul className="navbar-nav mx-auto flex flex-row justify-center ">
 
-              <li className="nav-item">
+              <li className="nav-item md:block hidden">
               <Link href="/" className='hover:text-asliLight nav-link ' >  خانه </Link>
               </li>
 
-              <li className='nav-item' >
-                <Link href="/products" className='hover:text-asliLight nav-link ' > فروشگاه</Link>
+              <li className='nav-item md:block hidden' >
+                <Link href="/products" className='hover:text-asliLight nav-link ' > گالری</Link>
               </li>
 
-              <li className='nav-item' >
+              <li className='nav-item md:block hidden' >
                 <Link href="/aboutus" className='hover:text-asliLight nav-link ' > درباره ما </Link>
               </li>
 
-              <li className='nav-item' >
+              <li className='nav-item md:block hidden' >
                 <Link href="/contactus" className='hover:text-asliLight nav-link ' > تماس با ما</Link>
               </li>
 
 
-              <li className="nav-item has_dropdown">
+              <li className="nav-item md:!block !hidden has_dropdown">
                 <a className="nav-link" href="#">صفحه‌ها</a>
                 <span className="drp_btn"><i> <ArrowDropDown/>  </i></span>
                 <div className="sub_menu">
@@ -311,14 +334,15 @@ export default function Header() {
                     </IconButton>
 
                     <IconButton color="inherit">
-                      <Link href="/buying_basket">
-                        <ShoppingBasket className='w-7 h-7' />
+                      <Link href="/dashboard/my-wallet">
+                        <Wallet className='w-7 h-7' />
                       </Link>
                     </IconButton>
 
                     <IconButton
                       aria-controls="menu-appbar"
                       aria-haspopup="true"
+                      aria-expanded={anchorEl ? 'true' : undefined}
                       onClick={handleMenu}
                       color="inherit"
                     >
@@ -327,6 +351,7 @@ export default function Header() {
                     <Menu
                       className='top-14 min-w-[140px] '
                       id="menu-appbar"
+                      aria-labelledby="menu-appbar"
                       anchorEl={anchorEl}
                       anchorOrigin={{
                         vertical: 'top',
@@ -337,11 +362,11 @@ export default function Header() {
                         vertical: 'top',
                         horizontal: 'right',
                       }}
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}
-                      onClick={handleClose}
+                      open={anchorEl}
+                      onClose={() => handleClose()}
+                      onClick={() => handleClose()}
                     >
-                      <MenuItem> {name} </MenuItem>
+                      <MenuItem> {name} {family} </MenuItem>
                       <Divider/>
                       <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full'> <Link href="/" > <Home className='text-asliLight' /> خانه  </Link> </MenuItem>
                       <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full '> <Link href="/profile" > <Person className='text-asliLight' /> پروفایل  </Link> </MenuItem>
@@ -359,7 +384,8 @@ export default function Header() {
                 :
                 (
                   <li class="nav-item">
-                    <Link href="/signin" class="nav-link dark_btn animate-bounce" > ورود | ثبت نام </Link>
+                    <Link href="/signin" class="nav-link dark_btn md:block hidden " > ورود | ثبت نام </Link>
+                    <Link href="/signin" class="nav-link dark_btn md:hidden block " >  <LoginOutlined/> </Link>
                   </li>
                 )
               }
@@ -368,6 +394,34 @@ export default function Header() {
         </nav>
 
       </div>
+
+      <Snackbar
+          open={alert}
+          onClose={() => setAlert(false)}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          className='my-auto md:!w-[40vw] !w-[80vw]'
+          >
+          <Alert variant='filled' severity='error' className='flex flex-col justify-center items-center w-full ' > 
+          
+              <p className='text-2xl' > ابتدا اطلاعات زیر را تکمیل کنید </p>
+
+              <div className='flex md:flex-row flex-col gap-4 justify-center items-center mt-5 ' >
+                {
+                  infoError &&
+                  <Link onClick={() => setAlert(false)} href="/profile" className='rounded-xl p-4 bg-khas text-white hover:bg-orange-600 cursor-pointer ' >
+                  تکمیل پروفایل
+                </Link>
+                }
+                {
+                addressError &&
+                <Link onClick={() => setAlert(false)} href="/profile/updateAddress" className='rounded-xl p-4 bg-khas text-white hover:bg-orange-600 cursor-pointer ' >
+                  تکمیل آدرس
+                </Link>
+                }
+              </div>
+
+           </Alert>
+      </Snackbar>
 
     </>
 

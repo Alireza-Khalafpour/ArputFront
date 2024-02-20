@@ -33,6 +33,8 @@ async function SingleProduct({ params: { single_product } }) {
 
   const productList = res.data;
 
+  console.log(productList)
+
   const Rate = axios
     .get(
       `https://supperapp-backend.chbk.run/rate_pre_product/pre_product/star_rate/${single_product}`,
@@ -46,31 +48,20 @@ async function SingleProduct({ params: { single_product } }) {
 
   return (
     <>
-      {res === undefined || res === null ? (
-        <div>
-          <h2> ابتدا وارد شوید </h2>
-          <Link
-            className="w-48 rounded-xl bg-khas text-white hover:bg-orange-600"
-            href="/signin"
-          >
-            {" "}
-            ورود{" "}
-          </Link>
-        </div>
-      ) : (
-        <div className=" my-5 flex  flex-col  gap-5">
+
+        <div className=" my-5 flex flex-col gap-5">
           <Divider
             className="text-asliLight text-base"
             sx={{ "--Divider-childPosition": "10%" }}
           >
             {productList?.category_name}
           </Divider>
-          <div className=" flex md:flex-row flex-col">
-            <div className=" flex flex-col gap-4">
-              <ViewProduct productList={productList} />
-              <SellerDetails productList={productList} />
+          <div className=" flex md:flex-row flex-col w-full">
+            <div className=" flex flex-col gap-4 md:w-2/3 w-full">
+              <ViewProduct className="w-full" productList={productList} />
+              <SellerDetails className="w-full" productList={productList} />
             </div>
-            <SpecificationProduct productList={productList} />
+            <SpecificationProduct className="md:w-1/3 w-full" productList={productList} />
           </div>
 
           <div className="w-full flex flex-col gap-12 justify-center items-center">
@@ -89,7 +80,7 @@ async function SingleProduct({ params: { single_product } }) {
             </ul>
           </div>
         </div>
-      )}
+
     </>
   );
 }

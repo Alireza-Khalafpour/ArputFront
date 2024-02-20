@@ -4,6 +4,8 @@ import "./globals.css";
 import { Providers } from "./GlobalRedux/provider";
 import Footer from "@/components/layout/Footer";
 import NavigationBarMobile from "@/components/layout/NavigationBarMobile";
+import RepairingWebsite from "@/components/templates/RepairingWebsite";
+
 
 
 export const metadata = {
@@ -23,6 +25,7 @@ export default function RootLayout({ children }) {
             {children}
           <Footer />
           <NavigationBarMobile />
+          {/* <RepairingWebsite/> */}
         </Providers>
       </body>
     </html>

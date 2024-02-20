@@ -18,7 +18,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { Accordion, AccordionSummary, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@mui/material';
-import { AddRounded, Check, CheckCircleRounded, CloseRounded, ElectricBolt, ExpandMore, Factory, FactoryOutlined, FeaturedPlayListOutlined, Home, HourglassBottomOutlined, KeyboardArrowRight, ListAltOutlined, ManageAccountsOutlined, ManageSearchRounded, Payment, PaymentOutlined, Schedule, ShoppingBasket, Timer } from '@mui/icons-material';
+import { AddRounded, Check, CheckCircleRounded, CloseRounded, CreateRounded, ElectricBolt, ExpandMore, Factory, FactoryOutlined, FeaturedPlayListOutlined, Home, HourglassBottomOutlined, KeyboardArrowRight, ListAltOutlined, ManageAccountsOutlined, ManageSearchRounded, Payment, PaymentOutlined, Schedule, ShoppingBasket, Timer } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import NotAllowedPage from './NotAllowedPage';
@@ -169,6 +169,30 @@ export default function DashbordSidebar({children}) {
                 </Link>
               </Accordion>
             </ListItem> */}
+            {
+              cookie.get("role") === "admin" && 
+
+              <>
+                <Divider className='bg-slate-500' />
+
+                <ListItem  disablePadding >
+                  <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
+                    <AccordionSummary
+                      expandIcon={<ExpandMore style={{color:"white"}} />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                      className='hover:bg-slate-700 rounded-lg'
+                    >
+                      <Typography>  ساخت باندل </Typography>
+                    </AccordionSummary>
+                    <Link onClick={() => handleDrawerClose()} href="/dashboard/createBundle" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+                          ساخت باندل 
+                        <CreateRounded className='text-khas'/>
+                    </Link>
+                  </Accordion>
+                </ListItem>
+              </>
+            }
             <Divider className='bg-slate-500' />
 
               {
@@ -190,6 +214,10 @@ export default function DashbordSidebar({children}) {
                   </Link>
                   <Link  onClick={() => handleDrawerClose()} href="/dashboard/CreateFeature" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
                           ویژگی ها    
+                      <FeaturedPlayListOutlined className='text-khas'/>
+                  </Link>
+                  <Link  onClick={() => handleDrawerClose()} href="/dashboard/create-feature-sample" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+                          ویژگی و سمپل    
                       <FeaturedPlayListOutlined className='text-khas'/>
                   </Link>
                   <Link onClick={() => handleDrawerClose()} href="/dashboard/create-factory" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
@@ -245,30 +273,6 @@ export default function DashbordSidebar({children}) {
                     </AccordionSummary>
                     <Link onClick={() => handleDrawerClose()} href="/dashboard/add-representation" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white p-3 ' >
                         ایجاد و لیست نمایندگی ها
-                        <AddRounded className='text-khas'/>
-                    </Link>
-                  </Accordion>
-                </ListItem>
-
-                <Divider className='bg-slate-500' />
-
-                </>
-              }
-                            {
-                cookie.get("role") === "admin" &&
-
-                <>
-                
-                <ListItem  disablePadding >
-                  <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
-                    <AccordionSummary
-                      expandIcon={<ExpandMore style={{color:"white"}} />}
-                      className='hover:bg-slate-700 rounded-lg'
-                    >
-                      <Typography>  مدیریت نمایندگی ها </Typography>
-                    </AccordionSummary>
-                    <Link onClick={() => handleDrawerClose()} href="/dashboard/add-representation" className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white p-3 ' >
-                        (Admin)ایجاد و لیست نمایندگی ها
                         <AddRounded className='text-khas'/>
                     </Link>
                   </Accordion>
@@ -343,29 +347,6 @@ export default function DashbordSidebar({children}) {
                 <button onClick={() => handleOpenPurchaseModal()} className='text-right mr-4 p-3 w-full hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
                   خرید اشتراک
                 </button>
-              </Accordion>
-            </ListItem>
-
-        <Divider className='bg-slate-500' />
-
-            <ListItem  disablePadding >
-              <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
-                <AccordionSummary
-                  expandIcon={<ExpandMore style={{color:"white"}} />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  className='hover:bg-slate-700 rounded-lg'
-                >
-                  <Typography>  سفارشات </Typography>
-                </AccordionSummary>
-                <Link onClick={() => handleDrawerClose()} href="/dashboard/processing-orders" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
-                      سفارشات در صف انتظار  
-                    <HourglassBottomOutlined className='text-khas'/>
-                </Link>
-                <Link onClick={() => handleDrawerClose()} href="/dashboard/done-orders" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
-                      سفارشات انجام شده    
-                    <CheckCircleRounded className='text-khas'/>
-                </Link>
               </Accordion>
             </ListItem>
 

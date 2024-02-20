@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, Edit, EditRounded, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
+import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, Edit, EditRounded, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RadioButtonChecked, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, CircularProgress, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, Snackbar, TextField, Tooltip } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
@@ -217,6 +217,68 @@ export const CreateFeature = ()=> {
       ];
 
 
+          // Activate Feature -----------------------------------------
+      
+          async function GetRowIdForActivate(id) {
+            setLoading(true);
+            await axios.put(`https://supperapp-backend.chbk.run/feature/active/${id}`,
+            {
+              headers: headers
+            })
+            .then((response) => {
+                setAlert(true)
+              if(response.data.Done == true){
+                setAlert(true)
+                setMessage(" ویژگی فعال شد ")
+                setLoading(false)
+                ListApi(Auth)
+
+              }else {
+                setLoading(false)
+                setMessage(response.data.Message)
+                setErrorAlert(true)
+
+              }
+            })
+            .catch(function (error) {
+                console.log(error)
+                setMessage(" متاسفیم،خطایی رخ داده است ")
+                setErrorAlert(true)
+                setLoading(false)
+            });
+      
+        }
+
+
+    // Deactive a Feature -----------------------------------------
+
+    const GetRowIdForDelete = (id) => {
+
+      setLoading(true);
+
+      const deleteMethod = {
+          method: 'PUT',
+          headers: {
+              'accept': 'application/json',
+              'Authorization': `Bearer ${Auth}`,
+          },
+         }
+         
+         fetch(`https://supperapp-backend.chbk.run/feature/deactive/${id}`, deleteMethod)
+         .then((response) => {
+              response.json()
+          })
+         .then((d) => {
+            setErrorAlert(true)
+            setMessage(" ویژگی حذف شد ")
+            setLoading(false)
+            ListApi(Auth)
+          }) 
+         .catch(err => console.log(err)) 
+
+    }
+
+
 
   // columns and data =============================================
   const columns = useMemo(
@@ -311,6 +373,26 @@ export const CreateFeature = ()=> {
           >
             <EditRounded />
           </IconButton>
+          {
+            row.original.active == true 
+            ?
+            <IconButton
+              color="error"
+              onClick={() => GetRowIdForDelete(row.original?.id)}
+            >
+                <DeleteRounded titleAccess="غیرفعال کردن" />
+            </IconButton>
+
+            :
+
+            <IconButton
+            color="success"
+            onClick={() => GetRowIdForActivate(row.original?.id)}
+          >
+              <RadioButtonChecked titleAccess="فعال کردن" />
+          </IconButton>
+
+          }
         </Box>
       )
     }
@@ -373,7 +455,6 @@ export const CreateFeature = ()=> {
                 noOptionsText=" داده ای موجود نیست "
                 options={categoryList}
                 getOptionLabel={(i)=> i.name}
-                value={FeaturesData.category_id}
                 onChange={(event, val) =>{
                   setFeaturesData({...FeaturesData, 'category_id' : val.id})
                 }}
@@ -383,33 +464,6 @@ export const CreateFeature = ()=> {
 
             </div>
 
-            <div className="w-full flex flex-col justify-center items-center gap-3" >
-              {/* {
-                FeaturesData["others"].map((i,index)=> (
-                      <div className="w-full text-center flex flex-row justify-center gap-4 items-center " >
-                          <TextField
-                            id="input-with-icon-textfield"
-                            label=" ویژگی های بیشتر "
-                            value={i}
-                            onChange={e => changeHandler(e, index)}
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="end">
-                                  <Category className='text-asliLight' />
-                                </InputAdornment>
-                              ),
-                            }}
-                            variant="standard"
-                          />
-                          <button className=" px-1 text-red-500 " type='button' onClick={() => deleteHandler(index)} >
-                              <DeleteForeverOutlined/>
-                          </button>
-                      </div>
-                  ))
-              } 
-              <button className="w-56 p-2 border-b-asliLight border-dashed border-b-2 hover:border-b-asliDark  " onClick={ () => addHandler()} > <AddRounded/> افزودن ویژگی های بیشتر </button>
-              */}
-            </div>
 
 
           </DialogContent>
@@ -456,7 +510,7 @@ export const CreateFeature = ()=> {
                 noOptionsText=" داده ای موجود نیست "
                 options={categoryList}
                 getOptionLabel={(i)=> i.name}
-                value={FeaturesData.category}
+                // value={FeaturesData.category}
                 onChange={(event, val) =>{
                   setFeaturesData({...FeaturesData, 'category_id' : val.id})
                 }}

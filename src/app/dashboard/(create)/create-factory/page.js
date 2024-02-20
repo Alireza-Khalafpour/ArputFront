@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, Category, Edit, LocationCity, LocationOnRounded, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
+import { AddCircleOutline, Category, DeleteRounded, Edit, LocationCity, LocationOnRounded, RadioButtonChecked, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, InputAdornment, Snackbar, TextField, Typography } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
@@ -173,6 +173,8 @@ export const CreateCategory = ()=> {
       setAddAddressModal(true)
     }
 
+    
+
     async function AddFactoryAddress() {
 
       if(zipcode == null || zipcode == '') {
@@ -194,7 +196,6 @@ export const CreateCategory = ()=> {
           headers: headers
         })
         .then((response) => {
-          console.log(response.data.Done)
           setAlert(true)
           setMessage(" آدرس با موفقیت ثبت شد ")
           setLoading(false)
@@ -326,6 +327,26 @@ const table = useMaterialReactTable({
           <Edit />
           ویرایش
         </IconButton>
+        {
+            row.original.active == true 
+            ?
+            <IconButton
+              color="error"
+              onClick={() => GetRowIdForDelete(row.original?.id)}
+            >
+                <DeleteRounded className="text-red-600" titleAccess="غیرفعال کردن" />
+            </IconButton>
+
+            :
+
+            <IconButton
+            color="success"
+            onClick={() => GetRowIdForActivate(row.original?.id)}
+          >
+              <RadioButtonChecked titleAccess="فعال کردن" />
+          </IconButton>
+
+          }
       </Box>
     )
   },
@@ -369,6 +390,64 @@ const table = useMaterialReactTable({
 
 
 });
+
+          // Activate Factory -----------------------------------------
+
+      
+              async function GetRowIdForActivate(id) {
+                setLoading(true);
+    
+                const ActiveMethod = {
+                    method: 'PATCH',
+                    headers: {
+                        'accept': 'application/json',
+                        'Authorization': `Bearer ${Auth}`,
+                    },
+                   }
+                   
+                   fetch(`https://supperapp-backend.chbk.run/factory/admin/active/${id}`, ActiveMethod)
+                   .then((response) => {
+                        response.json()
+                    })
+                   .then((d) => {
+                      setAlert(true)
+                      setMessage(" کارخانه فعال شد ")
+                      setLoading(false)
+                      ListApi(Auth)
+                    }) 
+                   .catch(err => console.log(err)) 
+          
+            }
+    
+    
+        // Deactive a Factory -----------------------------------------
+    
+        const GetRowIdForDelete = (id) => {
+    
+          setLoading(true);
+    
+          const deleteMethod = {
+              method: 'PATCH',
+              headers: {
+                  'accept': 'application/json',
+                  'Authorization': `Bearer ${Auth}`,
+              },
+             }
+             
+             fetch(`https://supperapp-backend.chbk.run/factory/admin/deactive/${id}`, deleteMethod)
+             .then((response) => {
+                  response.json()
+              })
+             .then((d) => {
+                setAlert(true)
+                setMessage(" کارخانه حذف شد ")
+                setLoading(false)
+                ListApi(Auth)
+              }) 
+             .catch(err => console.log(err)) 
+    
+        }
+
 
   // modal part -------------------------------------------------------------
   const[addCategoryModal, setAddCategoryModal] = useState(false);

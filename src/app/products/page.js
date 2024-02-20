@@ -28,16 +28,14 @@ async function Products() {
 
     return (
         <div className="flex flex-row w-full h-full justify-center items-start gap-2 p-4" >
-            <div id="filterPart" className="w-1/6 md:flex hidden h-96 border-asliLight rounded-xl border-2 border-solid p-3 flex-col gap-4" >
+            {/* <div id="filterPart" className="w-1/6 md:flex hidden h-96 border-asliLight rounded-xl border-2 border-solid p-3 flex-col gap-4" >
                 <div className="w-full flex flex-row justify-between items-center" >
                     <span className="text-xl" > فیلتر ها </span>
                     <button className="text-sm text-khas" > حذف فیلتر </button>
                 </div>
-                {/* <div>
-                    filter
-                </div> */}
-            </div>
-        <div id="productsPart" className="flex flex-row justify-center items-center gap-5 w-5/6 flex-wrap" >
+
+            </div> */}
+        <div id="productsPart" className="flex flex-row justify-center items-center gap-5 w-full flex-wrap" >
 
             {productList?.length > 0 || res === undefined ? null : (
 

@@ -10,7 +10,7 @@ function SellerDetails({ productList }) {
   console.log(productList?.seller_info[0].price);
   const [Open, SetOpen] = useState(false);
   return (
-    <div className=" basis-3/5">
+    <div className=" basis-3/5 w-full">
       <div className=" md:hidden  px-5 py-5" id="seller">
         <p className="py-3 font-bold">فروشنده ها</p>
         <button className=" inline-block rounded-2xl border-2  border-black bg-white px-2 py-1">

@@ -1,13 +1,14 @@
 'use client'
 
 import { AddCircleOutline, Category } from "@mui/icons-material";
-import { Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Snackbar, TextField } from "@mui/material";
+import { Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, InputAdornment, Snackbar, TextField } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import { useEffect, useMemo, useState } from "react";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { Checkbox } from "@mui/joy";
 
 
 const PricePulse = () => {
@@ -25,6 +26,10 @@ const PricePulse = () => {
 
     const [data, setData] = useState([])
     const [departmentName, setDepartmentName] = useState("")
+
+    const [price, setPrice] = useState(0)
+    const [expireName, setExpireName] = useState("")
+    const [arPulse, setArPulse] = useState(false)
 
 
     const [addDepartmentModal, setAddDepartmentModal] = useState(false)
@@ -59,46 +64,56 @@ const PricePulse = () => {
     // -------------------------------------------------------
 
     const headers ={
-    'accept': 'application/json',
-    'Authorization': `Bearer ${Auth}`,
-    'Content-Type': 'application/json',
-    }
-  
-  
-    async function AddFactoryApi() {
-        setLoading(true);
-        await axios.post('https://supperapp-backend.chbk.run/department/create', {
-            'dep_name': departmentName, 
-        }, 
-        {
-          headers: headers
-        })
-        .then((response) => {
-          if(response.data.Done === true){
-            setAlert(true)
-            setMessage(response.data.Message)
-            setLoading(false)
-            setAddDepartmentModal(false)
-            setDepartmentName()
-            ListApi(Auth)
-          }else {
-            setMessage(response.data.Message)
+      'accept': 'application/json',
+      'Authorization': `Bearer ${Auth}`,
+      'Content-Type': 'application/json',
+      }
+    
+    
+      async function AddPricePulse() {
+          setLoading(true);
+          await axios.post( 'https://supperapp-backend.chbk.run/pulse/price/admin/create', {
+              "price": price,
+              "name": expireName,
+              "ar_pulse": arPulse
+          }, 
+          {
+            headers: headers
+          })
+          .then((response) => {
+            if(response.data.Done === true){
+              setAlert(true)
+              setMessage(response.data.Message)
+              setLoading(false)
+              setAddDepartmentModal(false)
+              setPrice(0)
+              setExpireName("")
+              setArPulse(false)
+              GetPulsePrice(Auth)
+            }else {
+              setMessage(response.data.Message)
+              setErrorAlert(true)
+              setLoading(false)
+              setAddDepartmentModal(false)
+              setPrice(0)
+              setExpireName("")
+              setArPulse(false)
+              GetPulsePrice(Auth)
+            }
+          })
+          .catch(function (error) {
+            setMessage(" متاسفیم،خطایی رخ داده است ")
             setErrorAlert(true)
-            setDepartmentName()
             setLoading(false)
             setAddDepartmentModal(false)
-          }
-        })
-        .catch(function (error) {
-          setMessage(" متاسفیم،خطایی رخ داده است ")
-          setErrorAlert(true)
-          setDepartmentName()
-          setLoading(false)
-          setAddDepartmentModal(false)
-        });
+            setPrice(0)
+            setExpireName("")
+            setArPulse(false)
+            GetPulsePrice(Auth)
+          });
+    
+      }
   
-    }
-
 
   // columns and data =============================================
 
@@ -232,14 +247,13 @@ const PricePulse = () => {
           <DialogContent className="flex flex-col items-center gap-10 mt-12 h-full " >           
 
             <div className="flex flex-col justify-center items-center gap-10 w-full" >
-              <div className='w-full flex md:flex-row flex-col gap-7 justify-around items-center my-10 ' >
-                <TextField
+            <TextField
                   className="md:w-[50%] w-[90%]"
                   id="input-with-icon-textfield"
-                  label=" نام برنامه  "
-                  placeholder=" نام برنامه   "
-                //   value={departmentName}
-                //   onChange={(e) => setDepartmentName(e.target.value)}
+                  label=" قیمت "
+                  placeholder=" قیمت "
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="end">
@@ -250,13 +264,37 @@ const PricePulse = () => {
                   variant="standard"
                 />
 
-              </div>
+                <TextField
+                  className="md:w-[50%] w-[90%]"
+                  id="input-with-icon-textfield"
+                  label=" نام برنامه قیمت گذاری  "
+                  placeholder=" نام برنامه قیمت گذاری   "
+                  value={expireName}
+                  onChange={(e) => setExpireName(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="end">
+                        <Category className='text-asliLight' />
+                      </InputAdornment>
+                    ),
+                  }}
+                  variant="standard"
+                />
+                <FormControlLabel
+                  className="border border-asliLight rounded-xl md:w-[50%] w-[85%] p-2 "
+                  control={<Checkbox
+                      checked={arPulse}
+                      onChange={(e) => setArPulse(e.target.checked)}
+                  />
+                  } 
+                  label=" AR دارد " 
+                />
 
             </div>
 
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4 mt-10" >
-            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddFactoryApi()}>
+            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddPricePulse()}>
               {loading ? <CircularProgress size="medium" /> : " ثبت "}
             </Button>
             <Button variant="soft" color='danger'  onClick={() => setAddDepartmentModal(false)}>

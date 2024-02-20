@@ -19,13 +19,9 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
     const [factoryInfo, setFactoryInfo] = useState({
         "factoryIdForEditFactory": "",
         "editFactoryName": "",
-        "editFactoryPassword": "",
         "editFactoryCategories": [],
         "editFactoryTelephone": "",
-        "editFactoryAddress": [],
-        "editFactoryMobile": "",
-        "editFactoryActive":true,
-        "editFactoryComplete": false,
+        "editFactoryImage" : "",
     });
 
     
@@ -33,12 +29,9 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
         setFactoryInfo({
             "factoryIdForEditFactory" : editFactoryInfo?.id,
             "editFactoryName" : editFactoryInfo?.name,
-            "editFactoryPassword" : "",
             "editFactoryCategories" : [editFactoryInfo?.category[0].id],
             "editFactoryTelephone": editFactoryInfo?.telephone,
-            "editFactoryMobile" : "",
-            "editFactoryActive" : editFactoryInfo?.active,
-            "editFactoryComplete" : editFactoryInfo?.complete
+            "editFactoryImage" : ""
         })
 
     },[editFactoryInfo])
@@ -55,14 +48,11 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
         async function UpdateFactoryApi() {
             setLoading(true);
             await axios.patch('https://supperapp-backend.chbk.run/factory/update', {
-                "complete": factoryInfo.editFactoryComplete,
                 "id": factoryInfo.factoryIdForEditFactory,
                 "name": factoryInfo.editFactoryName,
-                "password": factoryInfo.editFactoryPassword,
                 "categories": factoryInfo.editFactoryCategories,
                 "telephone": factoryInfo.editFactoryTelephone,
-                "mobile": factoryInfo.editFactoryMobile,
-                "active": factoryInfo.editFactoryActive
+                "image": factoryInfo.editFactoryImage,
             }, 
             {
               headers: headers
@@ -110,18 +100,6 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
                 <div className="flex flex-col justify-center items-center gap-10 w-full h-full" >
                         <div className="w-full flex flex-col gap-2 justify-center items-center mx-auto" >
 
-                        {/* <Autocomplete
-                        className="md:w-1/2 w-full  p-3"
-                        noOptionsText=" داده ای موجود نیست "
-                        options={categoryList}
-                        getOptionLabel={(i)=> i.name}
-                        value={editFactoryCategories}
-                        onChange={(event, val) =>{
-                        setEditFactoryCategories(val);
-                        }}
-                        renderInput={(params) => <TextField {...params} variant="standard" label=" دسته بندی " />}
-                    /> */}
-
                         <TextField
                             className="md:w-1/2 w-full p-3"
                             id="input-with-icon-textfield"
@@ -138,21 +116,6 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
                             variant="standard"
                         />
 
-                        <TextField
-                            className="md:w-1/2 w-full p-3"
-                            id="input-with-icon-textfield"
-                            placeholder=" رمزعبور  "
-                            value={factoryInfo?.editFactoryPassword}
-                            onChange={(e) => setFactoryInfo({...factoryInfo, "editFactoryPassword" : e.target.value})}
-                            InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="end">
-                                <Category className='text-asliLight' />
-                                </InputAdornment>
-                            ),
-                            }}
-                            variant="standard"
-                        />
 
                         <TextField
                             className="md:w-1/2 w-full p-3"
@@ -170,41 +133,6 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
                             variant="standard"
                         />
 
-                        <TextField
-                            className="md:w-1/2 w-full p-3"
-                            id="input-with-icon-textfield"
-                            placeholder=" موبایل  "
-                            value={factoryInfo?.editFactoryMobile}
-                            onChange={(e) => setFactoryInfo({...factoryInfo, "editFactoryMobile" : e.target.value})}
-                            InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="end">
-                                <Category className='text-asliLight' />
-                                </InputAdornment>
-                            ),
-                            }}
-                            variant="standard"
-                        />
-
-                        <FormControlLabel
-                        className="border border-asliLight rounded-xl md:w-[50%] w-[85%] "
-                        control={<Checkbox
-                            checked={factoryInfo?.editFactoryComplete}
-                            onChange={(e) => setFactoryInfo({...factoryInfo, "editFactoryComplete" : e.target.checked})}
-                        />
-                        } 
-                        label=" تکمیل شده " />
-
-                        <FormControlLabel  
-                            className="border border-asliLight rounded-xl md:w-[50%] w-[85%]"
-                            control={<Checkbox
-                            checked={factoryInfo?.editFactoryActive}
-                            onChange={(e) => setFactoryInfo({...factoryInfo, "editFactoryActive" : e.target.checked})}
-
-                            />
-                        } 
-                            label=" فعال "
-                        />
 
                         </div>
 

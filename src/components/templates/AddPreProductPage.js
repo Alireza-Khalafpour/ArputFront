@@ -41,6 +41,7 @@ const AddPreProductPage = () => {
     const [loading, setLoading] = useState(false);
     //-------------
     const [branchList, setBranchList] = useState([])
+    const [factoryList, setFactoryList] = useState([])
     // ------------
     const [tempFeatureSample,setTempFeatureSample] = useState()
     const [preProductData, setPreProductData] = useState(
@@ -128,7 +129,6 @@ const AddPreProductPage = () => {
         })
         .then((response) => {
             setSampleOptions(response?.data.data)
-            console.log(response?.data.data, "feature sample list api")
         })
         .catch((error) => {
             console.log(error, "Error");
@@ -139,6 +139,7 @@ const AddPreProductPage = () => {
         const Auth = cookie.get('tokenDastResi')
         categoryListApi(Auth);
         sampleListApi(Auth)
+        GetAllFactories(Auth);
     },[])
 
 
@@ -373,11 +374,29 @@ const AddPreProductPage = () => {
 
 
 
-  
         useEffect(() => {
-            GetCurrentUser()
-            GetBranches()
+            if(cookie.get("role") !== "admin"){
+                GetCurrentUser()
+                GetBranches()
+            }
         },[])
+
+        // get all factories when account is admin ----------------
+        async function GetAllFactories(Au) {
+      
+            await axios.get('https://supperapp-backend.chbk.run/factory/list', {
+              headers:{
+                'accept': 'application/json',
+                'Authorization': `Bearer ${Au}`,
+              }
+              })
+              .then((response) => {
+                setFactoryList(response.data.data)
+              })
+              .catch((error) => {
+                console.log(error, "Error");
+              });
+          }
 
 
         //  handle only in representation----------------------------
@@ -403,16 +422,31 @@ const AddPreProductPage = () => {
                         </StepLabel>
                         <StepContent>
                             <div className='w-full flex flex-row gap-2 justify-around items-center my-8'>
+
+                            {
+                                cookie.get("role") === "admin" &&
+                                <Autocomplete
+                                className="md:w-[28%] w-[90%]"
+                                noOptionsText=" داده ای موجود نیست "
+                                options={factoryList}
+                                getOptionLabel={(i)=> i.name}
+                                // value={addCateg ? addCateg[0] : " "}
+                                onChange={(event, val) =>{
+                                    setPreProductData({...preProductData, "factory_id": val.id})
+                                }}
+                                renderInput={(params) => <TextField {...params} variant="standard" label=" کارخانه " />}
+                            />
+                            }
+
                             <Autocomplete
                                 className="md:w-[28%] w-[90%]"
                                 noOptionsText=" داده ای موجود نیست "
                                 options={categoryList}
                                 getOptionLabel={(i)=> i.name}
-                                value={addCateg}
+                                // value={addCateg ? addCateg[0] : " "}
                                 onChange={(event, val) =>{
                                 setaddCategs(val);
                                 }}
-                                // sx={{ width:"190px"}}
                                 renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن دسته بندی " />}
                             />
 
@@ -597,7 +631,7 @@ const AddPreProductPage = () => {
                                                     className='w-2/4 bg-white'
                                                     size='small'
                                                     noOptionsText=" موردی یافت نشد "
-                                                    options={sampleOptions.filter((s) => s.sample_data.feature_id === i.id)}
+                                                    options={sampleOptions.filter((s) => s.feature_data.id === i.id)}
                                                     getOptionLabel={(option) =>  option.sample_data.feature_sample_name}
                                                     onChange={(e, val) => handleSetTempFeature(i, index, val)}
                                                     renderInput={(params) => (
@@ -662,10 +696,10 @@ const AddPreProductPage = () => {
                                     hidden 
                                     accept='image/*'
                                     onChange={ ({target:{files}}) =>{
-                                        files &&
                                         setImage(URL.createObjectURL(files[0]))
                                         setImageForUpload(files[0])
                                         setFileName(files[0].name)
+                                        console.log(files)
                                     }
                                     }
                                 />

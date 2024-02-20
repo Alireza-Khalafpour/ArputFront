@@ -31,6 +31,7 @@ export const MyProducts = ()=> {
     const [info, setInfo] = useState([])
     const [features, setFeatures] = useState([])
     const [imageUrl, setImageUrl] = useState()
+    const [hasBundle, setHasBundle] = useState(false)
     // add product states----------------------------
     const[AddProductModal, setAddProductModal] = useState(false);
 
@@ -50,7 +51,7 @@ export const MyProducts = ()=> {
 
     async function ListApi(Au) {
       
-      await axios.get('https://supperapp-backend.chbk.run/PreProduct/list/all', {
+      await axios.get('https://supperapp-backend.chbk.run/pre_product/list/all', {
         headers:{
           'accept': 'application/json',
           'Authorization': `Bearer ${Au}`,
@@ -86,9 +87,7 @@ export const MyProducts = ()=> {
             "name": productName,
             "pre_product": preProductId,
             "price": price,
-            "off": off,
             "description": description,
-            "image_urls": productImgUrls
           }, {
               headers: headers
             })
@@ -101,9 +100,7 @@ export const MyProducts = ()=> {
               setPreProductId('')
               setProductName('')
               setPrice(0)
-              setOff(0)
               setDescription('')
-              setProductImgUrls([])
               ListApi(Auth)
             })
             .catch(function (error) {
@@ -212,6 +209,7 @@ export const MyProducts = ()=> {
     setFeatures(row.original.features)
     setImageUrl(row.original.image_url)
     setOpenDetail(true)
+    setHasBundle(row.original.has_bundle)
   }
 
   const handleAddProductModal = (row) => {
@@ -252,12 +250,12 @@ const table = useMaterialReactTable({
   renderRowActions: ({ row, table }) => {
     return (
       <div className="w-auto">
-        <IconButton
+        {/* <IconButton
           onClick={() => handleAddProductModal(row)}
           title=" افزودن کالا "
         >
           <AddCircleRounded className="text-khas" />
-        </IconButton>
+        </IconButton> */}
         <Button onClick={() => handleDetailModal(row)} size="small" className="rounded-xl bg-khas hover:bg-orange-600 p-1 text-white font-semibold "  >
           جزییات
         </Button>
@@ -284,9 +282,9 @@ function handleCloseProductModal() {
 
       <div className="flex flex-col gap-4" >
 
-        <p className="text-paszamine3 py-4">  لیست پیش محصول ها | برای ایجاد محصول بر روی پیش محصول مورد نظر کلیک راست کنید یا دکمه " افزودن کالا " را بفشارید.  </p>
+        {/* <p className="text-paszamine3 py-4">  لیست پیش محصول ها | برای ایجاد محصول بر روی پیش محصول مورد نظر کلیک راست کنید یا دکمه " افزودن کالا " را بفشارید.  </p>
 
-        <Divider/>
+        <Divider/> */}
 
         {/* <div className="p-0 md:w-5/12 w-full flex flex-row" >
           <button onClick={() => setOpenFilter(true)} className="rounded-lg bg-khas text-white p-0 rounded-l-none hover:bg-orange-500 flex flex-row-reverse justify-center items-center px-1 " >
@@ -354,73 +352,6 @@ function handleCloseProductModal() {
                 variant="standard"
               />
 
-              <TextField
-                id="input-with-icon-textfield"
-                className="w-[65%]"
-                label=" تخفبف "
-                placeholder=" تخفبف "
-                value={off}
-                onChange={(e) => setOff(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="standard"
-              />
-
-              {/* <TextField
-                id="input-with-icon-textfield"
-                className="w-[65%]"
-                label=" هزینه ارسال "
-                placeholder=" هزینه ارسال "
-                value={postCost}
-                onChange={(e) => setPostCost(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="standard"
-              /> */}
-
-              <div>
-                <form 
-                    onClick={() => document.getElementById("fileInput").click()}
-                    onDragOver={(e) => DragHandler(e)}
-                    onDrop={(e) => DropHandler(e)} 
-
-                    className='flex flex-col justify-center items-center border-2 cursor-pointer border-dashed border-asliLight w-64 h-24 rounded-3xl hover:animate-pulse' 
-                >
-                <input 
-                    type='file' 
-                    id='fileInput' 
-                    multiple 
-                    hidden 
-                    accept='image/*'
-                    onChange={ (e) =>{
-                      handleImageUpload(e)
-                    }
-                    }
-                />
-                {imageL ?
-                    <img className='w-full h-full p-1 rounded-3xl' src={imageL} alt="تکسچر محصول"  />
-                    :
-                    <div className='text-center'>
-                    <CloudUpload className='text-3xl text-asliLight'/>
-                    <p> آپلود تکسچر </p>
-                    </div>
-                }
-                </form>
-                <div className='w-52 flex flex-row justify-between items-center mt-1 p-1 text-sm' >
-                    <Delete  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg()}/>
-                    <p>{fileName}</p>
-                </div>
-              </div>
 
             </div>
 
@@ -488,10 +419,12 @@ function handleCloseProductModal() {
             <div className="grid grid-cols-2 gap-4 justify-around items-center w-full" >
 
               {features.map((x) => (
-                <p> {x.main_feature} : {x.main_sample} </p>
+                <p> {x.feature_name} : {x.feature_sample_name} </p>
+
               ))} 
 
             </div>
+            <h2 className="p-2 rounded-2xl bg-sky-200" > واقعیت افزوده: {hasBundle == true ? "دارد" : "ندارد"} </h2>
 
           </div>
 

@@ -61,11 +61,11 @@ export default function SignInPage() {
         if(response.data.role == 'client') {
           setTimeout(() => {
             route.push("/")
-          }, 1700);
+          }, 1000);
         }else{
           setTimeout(() => {
             route.push("/dashboard")
-          }, 1700);
+          }, 1000);
         }
         setLoading(false)
       })

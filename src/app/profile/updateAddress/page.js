@@ -28,6 +28,7 @@ const UpdateAddress = () => {
     const [alley, setAlley] = useState()
     const [number, setNumber] = useState()
     const [zipcode, setZipcode] = useState()
+
     
     // update address Api --------------------------------
 
@@ -42,8 +43,8 @@ const UpdateAddress = () => {
         await axios.put('https://supperapp-backend.chbk.run/register/user_address',
          {
             "id": userId,
-            "lat": latLang?.Lat,
-            "lng": latLang?.Lng,
+            "lat": latLang?.lat,
+            "lng": latLang?.lng,
             "main_address": Address?.formatted_address,
             "street": street,
             "alley": alley,
@@ -106,7 +107,10 @@ const UpdateAddress = () => {
             
             useEffect(() =>{
                 getUSer(Auth)
-              },[])
+            },[])
+
+
+
 
     return (
         <div className="flex flex-row justify-center items-center gap-6 w-full h-full">

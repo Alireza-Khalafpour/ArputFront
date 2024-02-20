@@ -3,12 +3,12 @@
 import { ArrowOutwardOutlined, AspectRatio, Favorite, Share } from "@mui/icons-material";
 import { Alert, CardOverflow, IconButton, Snackbar } from "@mui/joy";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Cookies from "universal-cookie";
 import GeneralLoader from "./GeneralLoader";
 import { Card, CardContent, Chip, Dialog, DialogContent, DialogTitle, Rating, Slide, Typography } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -77,20 +77,29 @@ const AddToFavoriteAndShare = ({pId}) => {
     async function FindIpAddress(i) {
         const date = new Date();
        
-        await axios.get("https://geolocation-db.com/json/0daad5e0-82e7-11ee-92e0-f5d620c7dcb4").then((response) => {
-            axios.post('https://supperapp-backend.chbk.run/pulse/create',{
-                "product_id": i.product_id,
-                "pre_product_id": pId,
-                "shop_id": i.seller_id,
-                "mac_address": "",
-                "ar_pulse": false,
-                "ip_address": response.data.IPv4
-            }).then((response) => {
-                console.log(response)
-                route.push(`/products/${i.product_id}`)
-            })
+        await axios.get("https://geolocation-db.com/json/0daad5e0-82e7-11ee-92e0-f5d620c7dcb4")
+        .then((response) => {
+            console.log(response);
+            if(response.status === 200){
+                CreatePulse(response, i)    
+            }
         });
-        
+    }
+
+    async function CreatePulse(res, i) {
+        await axios.post('https://supperapp-backend.chbk.run/pulse/create',{
+            "product_id": i.product_id,
+            "pre_product_id": pId,
+            "shop_id": i.seller_id,
+            "mac_address": "",
+            "ar_pulse": false,
+            "ip_address": res.data.IPv4
+        }).then((response) => {
+            console.log(response)
+            route.push(`/products/${i.product_id}`)
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
 
@@ -143,7 +152,7 @@ const AddToFavoriteAndShare = ({pId}) => {
                                     <CardOverflow>
                                         <AspectRatio>
                                         <image
-                                            src={i.products_image[0]}
+                                            // src={i.products_image[0]}
                                             loading="lazy"
                                             alt=""
                                         />

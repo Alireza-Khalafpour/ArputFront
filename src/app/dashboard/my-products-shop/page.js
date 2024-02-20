@@ -30,15 +30,15 @@ export const MyProductsShop = ()=> {
     const [info, setInfo] = useState([])
     const [features, setFeatures] = useState([])
     const [imageUrl, setImageUrl] = useState()
+    const [hasBundle, setHasBundle] = useState(false)
     // add product states----------------------------
     const[AddProductModal, setAddProductModal] = useState(false);
 
     const [productName, setProductName] = useState('');
     const [preProductId, setPreProductId] = useState('');
     const [price, setPrice] = useState(0);
-    const [off, setOff] = useState(0);
     const [description, setDescription] = useState("");
-    const [productImgUrls, setProductImgUrls] = useState([]);
+
     
     // Alerts---------------------------------------
     const [message, setMessage] = useState();
@@ -49,7 +49,7 @@ export const MyProductsShop = ()=> {
 
     async function ListApi(Au) {
       
-      await axios.get('https://supperapp-backend.chbk.run/PreProduct/list/shops', {
+      await axios.get('https://supperapp-backend.chbk.run/pre_product/shop/list/all', {
         headers:{
           'accept': 'application/json',
           'Authorization': `Bearer ${Au}`,
@@ -86,13 +86,12 @@ export const MyProductsShop = ()=> {
             setErrorAlert(true)
           }else{
                       // setLoading(true);
-          await axios.post('https://supperapp-backend.chbk.run/Product/create', {
-            "name": productName,
-            "pre_product": preProductId,
-            "price": price,
-            "off": off,
-            "description": description,
-            "image_urls": productImgUrls
+          await axios.post('https://supperapp-backend.chbk.run/product/create', {
+              "name": productName,
+              "pre_product_id": preProductId,
+              "price": price,
+              "description": description
+
           }, {
               headers: headers
             })
@@ -104,9 +103,7 @@ export const MyProductsShop = ()=> {
               setProductName("")
               setPreProductId("")
               setPrice(0)
-              setOff(0)
               setDescription("")
-              setImageUrl([])
               setAddProductModal(false)
             })
             .catch(function (error) {
@@ -120,58 +117,6 @@ export const MyProductsShop = ()=> {
       
         }
 
-
-            // Add image and Name for product-------------
-            const [imageL, setImage] = useState()
-            const[fileName, setFileName] = useState("فایلی انتخاب نشده...")
-          
-            const DeleteImg = () => {
-              setFileName("فایلی انتخاب نشده...")
-              setImage()
-              setImgUrl()
-            }
-
-            // Drag and Drop image ---------------------------
-
-            function DragHandler(e){
-                e.preventDefault();
-            }
-
-            function DropHandler(e){
-                e.preventDefault();
-                setImage(e.dataTransfer.files[0])
-            }
-
-            // handle upload image and get url-----------------------------
-
-            const ImgHeaders ={
-              'accept': 'application/json',
-              'Authorization': `Bearer ${Auth}`,
-              'Content-Type': 'multipart/form-data'
-              }
-
-            async function handleImageUpload(e) {
-
-                setImage(e.target.files[0])
-                setFileName(e.target.files[0].name)
-        
-                // setLoading(true);
-                await axios.post('https://supperapp-backend.chbk.run/upload/upload_texture', {"file" : e.target.files[0]},
-                {
-                  headers: ImgHeaders
-                })
-                .then((response) => {
-                    setProductImgUrls([response?.data.address])
-                    // setLoading(false)
-                })
-                .catch((error) => {
-                  console.log(error, "Error");
-                //   setLoading(false)
-                });
-        
-                setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            };
-        
 
 
     
@@ -233,6 +178,7 @@ export const MyProductsShop = ()=> {
     setFeatures(row.original.features)
     setImageUrl(row.original.image_url)
     setOpenDetail(true)
+    setHasBundle(row.original.has_bundle)
 
   }
 
@@ -312,19 +258,6 @@ const table = useMaterialReactTable({
 
         <Divider/>
 
-        {/* <div className="p-0 md:w-5/12 w-full flex flex-row" >
-          <button onClick={() => setOpenFilter(true)} className="rounded-lg bg-khas text-white p-0 rounded-l-none hover:bg-orange-500 flex flex-row-reverse justify-center items-center px-1 " >
-              فیلتر <FilterAlt/>
-          </button>
-          <Input
-              className="w-full rounded-none"
-              startDecorator={<Search />}
-              placeholder="جستجوی نام یا کد"
-              size="lg"
-          />
-          <Button size="md" className="bg-khas hover:bg-orange-500 w-28 rounded-r-none text-white font-semibold"> جستجو </Button>
-      </div> */}
-
         <MaterialReactTable table={table}/>
 
         {/* <ContextMenu
@@ -378,7 +311,7 @@ const table = useMaterialReactTable({
                 variant="standard"
               />
 
-              <TextField
+              {/* <TextField
                 id="input-with-icon-textfield"
                 className="w-[65%]"
                 label=" تخفبف "
@@ -393,26 +326,10 @@ const table = useMaterialReactTable({
                   ),
                 }}
                 variant="standard"
-              />
-
-              {/* <TextField
-                id="input-with-icon-textfield"
-                className="w-[65%]"
-                label=" هزینه ارسال "
-                placeholder=" هزینه ارسال "
-                value={postCost}
-                onChange={(e) => setPostCost(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="standard"
               /> */}
 
-              <div>
+
+              {/* <div>
                 <form 
                     onClick={() => document.getElementById("fileInput").click()}
                     onDragOver={(e) => DragHandler(e)}
@@ -444,7 +361,7 @@ const table = useMaterialReactTable({
                     <Delete  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg()}/>
                     <p>{fileName}</p>
                 </div>
-              </div>
+              </div> */}
 
             </div>
 
@@ -512,10 +429,13 @@ const table = useMaterialReactTable({
             <div className="grid grid-cols-2 gap-4 justify-around items-center w-full" >
 
               {features.map((x) => (
-                <p> {x.main_feature} : {x.main_sample} </p>
+                <p> {x.feature_name} : {x.feature_sample_name} </p>
               ))} 
 
             </div>
+
+            <h2 className="p-2 rounded-2xl bg-sky-200" > واقعیت افزوده: {hasBundle == true ? "دارد" : "ندارد"} </h2>
+
 
           </div>
 

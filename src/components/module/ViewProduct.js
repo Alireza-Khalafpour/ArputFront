@@ -12,7 +12,7 @@ function ViewProduct({ productList }) {
   }
   console.log(productList);
   return (
-    <div className=" relative flex flex-col gap-6 bg-white p-5 md:rounded-xl md:flex-row justify-between md:m-auto">
+    <div className=" relative flex flex-col gap-6 bg-white p-5 md:rounded-xl md:flex-row justify-between md:m-auto w-full">
       <div className="w-1/3 md:flex md:flex-row flex-col gap-4 justify-end items-end absolute md:top-3 top-[70%] left-5 hidden">
         <Favorite className="text-rose-600 hover:text-rose-700 cursor-pointer " />
         <Share className="text-blue-400 cursor-pointer" />
@@ -29,14 +29,14 @@ function ViewProduct({ productList }) {
           59 فروشنده دیگر
           <KeyboardArrowDownIcon />
         </button>
-        <div className=" flex flex-col  items-center gap-5 w-full justify-center">
+        {/* <div className=" flex flex-col  items-center gap-5 w-full justify-center">
           <ShopingButton productList={productList} />
           <div className=" md:hidden flex-row  gap-4    flex">
             <Favorite className="text-rose-600 hover:text-rose-700 cursor-pointer " />
             <Share className="text-blue-400 cursor-pointer" />
             <ExitToApp className="text-khas cursor-pointer" />
           </div>
-        </div>
+        </div> */}
 
         {/* <Button
           variant="contained"

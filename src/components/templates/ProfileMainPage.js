@@ -2,7 +2,7 @@
 
 import { Dns, Edit, EditAttributes, Email, Person2, Smartphone } from "@mui/icons-material";
 import { Avatar, FormControl, FormHelperText, FormLabel, Input, Textarea } from "@mui/joy";
-import { Badge } from "@mui/material";
+import { Alert, Badge, Snackbar } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
@@ -12,8 +12,15 @@ const ProfileMainPage = () => {
     const cookie = new Cookies();
     const Au = cookie.get("tokenDastResi") ? cookie.get("tokenDastResi") : null 
 
-    const [userInfo, setUserInfo] =useState();
-    const {id, last_login, active, address, complete, email, family, image, national_code , name} = userInfo ? userInfo : "";
+    const [message, setMessage] = useState();
+    const [alert, setAlert] = useState(false);
+    const [errorAlert, setErrorAlert] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const [Name, setName] = useState("");
+    const [Family, setFamily] = useState("");
+    const [ShopName, setShopName] = useState("");
+    const [Id, setId] = useState("");
 
 
     async function getUSer(Auth) {
@@ -24,7 +31,10 @@ const ProfileMainPage = () => {
           }
           })
           .then((response) => {
-            setUserInfo(response.data.data[0])
+            setName(response.data?.data[0]?.name)
+            setFamily(response.data?.data[0]?.family)
+            setShopName(response.data?.data[0]?.shop_name)
+            setId(response.data.data[0]?.id)
           })
           .catch((error) => {
             console.log("Error on getting current user");
@@ -34,6 +44,51 @@ const ProfileMainPage = () => {
       useEffect(() =>{
         getUSer(Au)
       },[])
+
+
+      // Update User Data --------------
+
+      const headers ={
+        'accept': 'application/json',
+        'Authorization': `Bearer ${Au}`,
+        'Content-Type': 'application/json',
+        }
+
+      async function EditProfileInfo() {
+        setLoading(true);
+        await axios.patch('https://supperapp-backend.chbk.run/register/edit_profile', {
+            "first_name": Name,
+            "family": Family,
+            "name": ShopName
+        }, 
+        {
+          headers: headers
+        })
+        .then((response) => {
+            setLoading(true)
+            console.log(response.data)
+          if(response.data.Done == true){
+            setAlert(true)
+            setMessage( " تغییرات ثبت شدند " )
+            setLoading(false)
+            getUSer(Au)
+
+          }else {
+            setLoading(false)
+            setMessage(response.data.Error_text)
+            setErrorAlert(true)
+
+          }
+        })
+        .catch(function (error) {
+            console.log(error)
+            setMessage(" متاسفیم،خطایی رخ داده است ")
+            setErrorAlert(true)
+            setLoading(false)
+        });
+  
+    }
+
 
 
     return (
@@ -54,8 +109,9 @@ const ProfileMainPage = () => {
                 </Badge>
 
                 <div className="gap-3 flex flex-col">
-                    <h2 className="text-2xl font-bold"> {id}</h2>
-                    <p> <Email className="text-khas"/> {email}</p>
+                    <h2 className="text-2xl font-bold"> {Name} {Family}</h2>
+                    <h2 className="text-2xl font-bold"> {ShopName}</h2>
+                    <p> <Email className="text-khas"/> email</p>
                 </div>
 
             </div>
@@ -64,13 +120,13 @@ const ProfileMainPage = () => {
 
                 <FormControl className="w-full">
                     <FormLabel> نام </FormLabel>
-                    <Input className="md:w-[70%] w-full shadow-lg " value={name} endDecorator={<Dns/>} size="lg" placeholder=" نام " />
+                    <Input className="md:w-[70%] w-full shadow-lg " value={Name} onChange={(e) => setName(e.target.value)} endDecorator={<Dns/>} size="lg" placeholder=" نام " />
                     {/* <FormHelperText>This is a helper text.</FormHelperText> */}
                 </FormControl>
 
                 <FormControl className="w-full" >
                     <FormLabel> نام خانوادگی </FormLabel>
-                    <Input className="md:w-[70%] w-full shadow-lg " size="lg" value={family} endDecorator={<Dns/>} placeholder="  نام خانوادگی" />
+                    <Input className="md:w-[70%] w-full shadow-lg " size="lg" value={Family} onChange={(e) => setFamily(e.target.value)} endDecorator={<Dns/>} placeholder="  نام خانوادگی" />
                     {/* <FormHelperText>This is a helper text.</FormHelperText> */}
                 </FormControl>
 
@@ -79,36 +135,47 @@ const ProfileMainPage = () => {
             <div className="flex md:flex-row flex-col justify-around items-center" >
 
                 <FormControl className="w-full" >
-                    <FormLabel> شماره همراه </FormLabel>
-                    <Input className="md:w-[70%] w-full shadow-lg "  endDecorator={<Smartphone/>} size="lg" placeholder="   شماره همراه  " />
+                    <FormLabel> نام فروشگاه </FormLabel>
+                    <Input className="md:w-[70%] w-full shadow-lg " value={ShopName} onChange={(e) => setShopName(e.target.value)} endDecorator={<Smartphone/>} size="lg" placeholder="   نام فروشگاه  " />
                     {/* <FormHelperText>This is a helper text.</FormHelperText> */}
                 </FormControl>
 
                 <FormControl className="w-full">
                     <FormLabel> ایمیل </FormLabel>
-                    <Input className="md:w-[70%] w-full shadow-lg " value={email} endDecorator={<Email/>} size="lg" placeholder=" ایمیل " />
+                    <Input disabled className="md:w-[70%] w-full shadow-lg " endDecorator={<Email/>} size="lg" placeholder=" ایمیل " />
                     {/* <FormHelperText>This is a helper text.</FormHelperText> */}
                 </FormControl>
 
             </div>
 
-            <div className="flex md:flex-row flex-col justify-center items-center" >
-
-                <FormControl className="w-full" >
-                    <FormLabel> آدرس و کد پستی </FormLabel>
-                    <Textarea minRows={3} className="md:w-[85%] w-full text-center shadow-lg " placeholder="   آدرس و کد پستی  " />
-                    {/* <FormHelperText>This is a helper text.</FormHelperText> */}
-                </FormControl>
-
-            </div>
 
             <div className="flex flex-row justify-center items-center w-full" >
 
-                <button className="bg-khas p-3 rounded-full shadow-2xl w-56 text-white hover:font-bold hover:bg-orange-500 transition-all duration-150" >
-                    ذخیره تغییرات
+                <button onClick={() => EditProfileInfo()} className="bg-khas p-3 rounded-full shadow-2xl w-56 text-white hover:font-bold hover:bg-orange-500 transition-all duration-150" >
+                    ذخیره
                 </button>
 
             </div>
+
+            <Snackbar
+                open={alert}
+                autoHideDuration={4000}
+                onClose={() => setAlert(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                se
+                >
+                <Alert variant='filled' severity='success' className='text-lg text-white font-semibold' > {message} </Alert>
+                </Snackbar>
+
+                <Snackbar
+                open={errorAlert}
+                autoHideDuration={4000}
+                onClose={() => setErrorAlert(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                se
+                >
+                <Alert variant='filled' severity='error' className='text-lg text-white font-semibold' > {message} </Alert>
+            </Snackbar>
 
             
         </div>

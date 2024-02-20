@@ -26,12 +26,12 @@ const ProfileSidebar = ({children}) => {
                         <span className="md:block hidden" > اطلاعات کاربر </span>
                     </Link>
                     </ListItem>
-                    <ListItem disablePadding focusRipple className="mb-6" >
+                    {/* <ListItem disablePadding focusRipple className="mb-6" >
                     <Link href="/profile/complete-information" onClick={() => setSelected(2)} className={` w-full shadow-none border-l-4 hover:border-khas hover:bg-paszamine2 text-paszamine3 ${selected == 2 ? "border-khas bg-paszamine2 !text-black" : null} transition-all duration-200 flex justify-start mr-4 cursor-pointer p-4  rounded-md gap-2`} >
                         <WysiwygRounded/>
                         <span className="md:block hidden" >  تکمیل اطلاعات </span>
                     </Link>
-                    </ListItem>
+                    </ListItem> */}
 
                     <ListItem disablePadding focusRipple className="mb-6" >
                     <Link href="/profile/updateAddress" onClick={() => setSelected(3)} className={` w-full shadow-none border-l-4 hover:border-khas hover:bg-paszamine2 text-paszamine3 ${selected == 3 ? "border-khas bg-paszamine2 !text-black" : null} transition-all duration-200 flex justify-start mr-4 cursor-pointer p-4  rounded-md gap-2`} >

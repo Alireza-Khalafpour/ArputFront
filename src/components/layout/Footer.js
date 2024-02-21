@@ -1,7 +1,8 @@
 import { Facebook, Instagram, Telegram, WhatsApp } from "@mui/icons-material";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import Image from "next/image";
-import LogoAR from "../../../public/images/EnamadLogo.png"
+import LogoAR from "../../../public/images/Final Light Blur Transparented.png"
+import Enamad from "../../../public/images/EnamadLogo.png"
 import Link from "next/link";
 
 const Footer = () => {
@@ -52,9 +53,10 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <div className="flex  md:w-1/4 w-full text-center gap-4 text-white text-xl justify-around items-center h-full" >
-                    <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'><image referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8' alt='' style={{cursor:"pointer"}} Code='LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'/><Image width={100} height={100} src={LogoAR} /></a>
-                    <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'><image referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8' alt='' style={{cursor:"pointer"}} Code='LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'/></a>
+                <div className="flex flex-col md:w-1/4 w-full text-center gap-4 text-white text-xl justify-center items-center h-full" >
+                    <Image width={80} height={80} src={LogoAR} />
+                    <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'><image referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8' alt='' style={{cursor:"pointer"}} Code='LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'/><Image width={80} height={80} src={Enamad} /></a>
+                    {/* <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'><image referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=453471&Code=LXmYefVTi3B1grCi0Hl0ikppOHJ96se8' alt='' style={{cursor:"pointer"}} Code='LXmYefVTi3B1grCi0Hl0ikppOHJ96se8'/></a> */}
                 </div>
                     
                 </div>

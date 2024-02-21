@@ -1,10 +1,11 @@
-import { ArrowOutward, ArrowOutwardOutlined, Favorite, Image, Share } from "@mui/icons-material";
+import { ArrowOutward, ArrowOutwardOutlined, Favorite, Share } from "@mui/icons-material";
 import { AspectRatio, Button, Card, CardActions, CardContent, CardOverflow, Chip, Typography } from "@mui/joy";
 import axios from "axios";
 import Link from "next/link";
 import { Rating } from "@mui/material";
 import { e2p } from "@/utils/replaceNumbers";
 import AddToFavoriteAndShare from "@/components/module/AddToFavoriteAndShare";
+import Image from "next/image";
 
 
 
@@ -60,6 +61,7 @@ async function Products() {
                                     <Image
                                         src={i?.image_url}
                                         loading="lazy"
+                                        fill
                                         alt=""
                                     />
                                     
@@ -78,7 +80,7 @@ async function Products() {
                                         {i.has_bundle === true ? "واقعیت افزوده دارد" : " واقعیت افزوده ندارد "}
                                     </Chip>
                                     <Typography level="body-sm">
-                                    {i.seller_number} فروشگاه برای این کالا
+                                    {i.shop_number} فروشگاه برای این کالا
                                     </Typography>
                                 </CardContent>
                             </div>

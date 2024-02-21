@@ -1406,7 +1406,7 @@ iframe#youtubevideo {
 }
 
 .pricing_section .pricing_pannel .pricing_block {
-    text-align: right;
+    text-align: center;
     background-color: var(--bg-white);
     min-height: 700px;
     border-radius: 12px;
@@ -1456,6 +1456,14 @@ iframe#youtubevideo {
 }
 
 /* pricing box list */
+
+.benifits{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: right !important;
+    list-style-type: circle !important;
+}
+
 .pricing_section .pricing_pannel .pricing_block .benifits {
     margin-bottom: 40px;
 }

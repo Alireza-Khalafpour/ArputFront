@@ -31,6 +31,7 @@ const PulsePlan = () => {
     const [pulse_price_with_ar_id, set_pulse_price_with_ar_id] = useState("")
     const [pulse_price_without_ar_id, set_pulse_price_without_ar_id] = useState("")
     const [pulse_time_expire_id, set_pulse_time_expire_id] = useState("")
+    const [shopId, setShopId] = useState("")
 
     const [pulsePlanIdForShop, setPulsePlanIdForShop] = useState("")
 
@@ -58,7 +59,7 @@ const PulsePlan = () => {
     // دریافت لیست شاپ ها ---------------
     async function GetShopsList(Au) {
       
-        await axios.get('https://supperapp-backend.chbk.run/branch/admin/list', {
+        await axios.get('https://supperapp-backend.chbk.run/branch/admin/branch', {
           headers:{
             'accept': 'application/json',
             'Authorization': `Bearer ${Au}`,
@@ -172,6 +173,45 @@ const PulsePlan = () => {
         setPulsePlanIdForShop(row.original.id)
         setShopPlanModal(true)
     }
+
+    const headersCreateShopPlan ={
+      'accept': 'application/json',
+      'Authorization': `Bearer ${Auth}`,
+      'Content-Type': 'application/json',
+      }
+    
+    
+      async function UpdateShopPlan() {
+          setLoading(true);
+          await axios.patch('https://supperapp-backend.chbk.run/pulse/plan/admin/shop', {
+            "shop_id": shopId,
+            "pulse_plan_id": pulsePlanIdForShop
+          }, 
+          {
+            headers: headersCreateShopPlan
+          })
+          .then((response) => {
+              setAlert(true)
+            if(response.data.Done === true){
+              setAlert(true)
+              setMessage(response.data.Message)
+              setLoading(false)
+
+            }else {
+              setLoading(false)
+              setMessage(response.data.Message)
+              setErrorAlert(true)
+
+            }
+          })
+          .catch(function (error) {
+              console.log(error)
+              setMessage(" متاسفیم،خطایی رخ داده است ")
+              setErrorAlert(true)
+              setLoading(false)
+          });
+    
+      }
 
 
   // columns and data =============================================
@@ -387,10 +427,10 @@ const PulsePlan = () => {
                     className="md:w-[50%] w-[90%]"
                     noOptionsText=" داده ای موجود نیست "
                     options={allShops}
-                    getOptionLabel={(i)=> i.branch_data.branch_name}
+                    getOptionLabel={(i)=> i.shop_name}
                     // value={addCateg ? addCateg[0] : " "}
                     onChange={(event, val) =>{
-                    set_pulse_price_with_ar_id(val.id);
+                    setShopId(val.shop_id);
                     }}
                     renderInput={(params) => <TextField {...params} variant="standard" label=" انتخاب فروشگاه " />}
                   />
@@ -400,7 +440,7 @@ const PulsePlan = () => {
 
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4 mt-10" >
-            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddPulsePlan()}>
+            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => UpdateShopPlan()}>
               {loading ? <CircularProgress size="medium" /> : " ثبت "}
             </Button>
             <Button variant="soft" color='danger'  onClick={() => setShopPlanModal(false)}>

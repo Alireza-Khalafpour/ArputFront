@@ -42,7 +42,9 @@ const MySlider = ({title}) => {
 
     function handleExpand() {
         setExpand((p) => !p)
-        document.getElementById("noScroll").scrollTo(0, 0)
+        setTimeout(() => {
+            document.getElementById("noScroll").scrollTo(0, 0)
+        }, 350);
     }
 
     return (
@@ -64,7 +66,6 @@ const MySlider = ({title}) => {
         //             onSwiper={(swiper) => console.log(swiper)}
         //             onSlideChange={() => console.log('slide change')}
         //         >
-
 
         //             {
         //                 items?.map((i) => (

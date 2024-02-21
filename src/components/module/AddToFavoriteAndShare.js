@@ -96,7 +96,9 @@ const AddToFavoriteAndShare = ({pId}) => {
             "ip_address": res.data.IPv4
         }).then((response) => {
             console.log(response)
-            route.push(`/products/${i.product_id}`)
+            setTimeout(() => {
+                route.push(`/products/${i.product_id}`)
+            }, 200);
         }).catch((err) => {
             console.log(err)
         })

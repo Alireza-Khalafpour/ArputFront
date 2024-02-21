@@ -33,7 +33,7 @@ export const CreateFeature = ()=> {
 
     async function ListApi(Au) {
       
-      await axios.get('https://supperapp-backend.chbk.run/feature/list', {
+      await axios.get('https://supperapp-backend.chbk.run/feature/admin/list', {
         headers:{
           'accept': 'application/json',
           'Authorization': `Bearer ${Au}`,
@@ -217,37 +217,33 @@ export const CreateFeature = ()=> {
       ];
 
 
-          // Activate Feature -----------------------------------------
-      
-          async function GetRowIdForActivate(id) {
-            setLoading(true);
-            await axios.put(`https://supperapp-backend.chbk.run/feature/active/${id}`,
-            {
-              headers: headers
-            })
-            .then((response) => {
-                setAlert(true)
-              if(response.data.Done == true){
-                setAlert(true)
-                setMessage(" ویژگی فعال شد ")
-                setLoading(false)
-                ListApi(Auth)
+          // Activate Feature -----------------------------------------          
 
-              }else {
-                setLoading(false)
-                setMessage(response.data.Message)
-                setErrorAlert(true)
+            const GetRowIdForActivate = (id) => {
 
-              }
-            })
-            .catch(function (error) {
-                console.log(error)
-                setMessage(" متاسفیم،خطایی رخ داده است ")
-                setErrorAlert(true)
-                setLoading(false)
-            });
-      
-        }
+              setLoading(true);
+        
+              const deleteMethod = {
+                  method: 'PUT',
+                  headers: {
+                      'accept': 'application/json',
+                      'Authorization': `Bearer ${Auth}`,
+                  },
+                 }
+                 
+                 fetch(`https://supperapp-backend.chbk.run/feature/active/${id}`, deleteMethod)
+                 .then((response) => {
+                      response.json()
+                  })
+                 .then((d) => {
+                    setAlert(true)
+                    setMessage(" ویژگی فعال شد ")
+                    setLoading(false)
+                    ListApi(Auth)
+                  }) 
+                 .catch(err => console.log(err)) 
+        
+            }
 
 
     // Deactive a Feature -----------------------------------------
@@ -269,7 +265,7 @@ export const CreateFeature = ()=> {
               response.json()
           })
          .then((d) => {
-            setErrorAlert(true)
+            setAlert(true)
             setMessage(" ویژگی حذف شد ")
             setLoading(false)
             ListApi(Auth)

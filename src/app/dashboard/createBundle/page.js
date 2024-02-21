@@ -99,7 +99,7 @@ const CreateBundle = () => {
             .then((response) => {
               console.log(response)
               setAlert(true)
-              setMessage(response.message)
+              setMessage(response.data.Message)
               setLoading(false)
               handleCloseBundleModal()
               ListApi(Auth)

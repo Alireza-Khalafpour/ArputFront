@@ -361,7 +361,7 @@ const AddPreProductPage = () => {
 
         async function GetBranches() {
         
-            await axios.get('https://supperapp-backend.chbk.run/branch/factory_branch', {
+            await axios.get('https://supperapp-backend.chbk.run/branch/factory/branch', {
               headers:currentUserHeaders
               })
               .then((response) => {

@@ -111,7 +111,7 @@ export default function Home() {
 
 
         <div >
-          <MySlider title=" پربازدید ها " />
+          <MySlider title=" جذاب ترین ها " />
         </div>
 
         <div >
@@ -308,10 +308,10 @@ export default function Home() {
                             <div className="pkg_name w-full flex flex-col justify-center items-center ">
                               <h3> سفارشی </h3>
                               <span>برای حرفه ای ها</span>
-                              <hr className="my-2" />
+                              <hr className="my-2 text-white text-xl" />
                             </div>
 
-                            <ul className="benifits p-4">
+                            <ul className="benifits !items-start !list-disc p-4 px-10">
                               <li>
                                 <p> تایل از پیش تعریف شده </p>
                               </li>
@@ -382,7 +382,7 @@ export default function Home() {
                               <hr className="my-2" />
                             </div>
 
-                            <ul className="benifits p-4">
+                            <ul className="benifits !items-start !list-disc p-4 px-10">
                             <li>
                                 <p> تایل از پیش تعریف شده </p>
                               </li>
@@ -423,7 +423,7 @@ export default function Home() {
                                 <p> صفحه اختصاصی هر برند </p>
                               </li>
                             </ul>
-
+                            
                               <a href="#" className="btn white_btn">سفارش دهید</a>
 
                           </div>

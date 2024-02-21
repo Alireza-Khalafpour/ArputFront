@@ -32,21 +32,16 @@ export default function Header() {
 
   const [alert, setAlert] = React.useState(false)
 
-  const [dropMenu, setDrpMenu] = React.useState(false)
-
-  const [open, setOpen] = React.useState(false);
-
   const [addressError, setAddressError] = React.useState(false);
   const [infoError, setInfoError] = React.useState(false);
 
-
-
-  React.useEffect(() =>{
+  React.useEffect(() => {
     getUSer(Au)
   },[])
 
-  function getUSer(Auth) {
-    axios.get('https://supperapp-backend.chbk.run/register/current_user', {
+
+  async function getUSer(Auth) {
+    await axios.get('https://supperapp-backend.chbk.run/register/current_user', {
       headers:{
         'accept': 'application/json',
         'Authorization': `Bearer ${Auth}`,
@@ -55,18 +50,18 @@ export default function Header() {
       .then((response) => {
         setName(response.data.data[0].name)
         setFamily(response.data.data[0].family)
-        if(cookie.get("role") !== "admin") {
+        if(cookie.get("role") !== "admin" && cookie.get("role") !== "client") {
           if(response.data.data[0]?.address.length == 0 ){
           setTimeout(() => {
               setAddressError(true)
               setAlert(true)
-            }, 4000);
+            }, 3000);
             }
-            if(response.data.data[0].name == "" || response.data.data[0].name == null){
+            if(response.data.data[0].name == "" || response.data.data[0].name == null || response.data.data[0].shop_name == ""){
               setTimeout(() => {
                 setInfoError(true)
                 setAlert(true)
-              }, 4000);
+              }, 3000);
             }
         }
       })
@@ -395,11 +390,12 @@ export default function Header() {
 
       </div>
 
-      <Snackbar
+      <Modal
           open={alert}
           onClose={() => setAlert(false)}
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          className='my-auto md:!w-[40vw] !w-[80vw]'
+          // disableEscapeKeyDown= "true"
+          className='m-auto text-center md:!w-[40vw] !w-[80vw] '
           >
           <Alert variant='filled' severity='error' className='flex flex-col justify-center items-center w-full ' > 
           
@@ -421,7 +417,7 @@ export default function Header() {
               </div>
 
            </Alert>
-      </Snackbar>
+      </Modal>
 
     </>
 

@@ -109,9 +109,8 @@ export const BranchListAdmin = ()=> {
               setMessage(" نمایندگی جدید با موفقیت افزوده شد ")
               setLoading(false)
               setAddCategoryModal(false)
-              setTimeout(() => {
-                window.location.reload()
-              }, 500);
+              ListApi()
+              GetFactories()
             } else if (response.data.Done === false) {
               setMessage(response.data.Message)
               setErrorAlert(true)
@@ -210,21 +209,25 @@ const table = useMaterialReactTable({
         <Divider/>
         <Box
           sx={{
-              display: 'grid',
-              margin: 'auto',
-              gridTemplateColumns: '1fr 1fr 1fr 1fr',
               width: '100%',
               textAlign:"justify",
-              gap: "12px"
           }}
         >
 
           {
   
             row?.original?.branch_data.map((item) => ( 
-              <>
+              <div className="grid grid-cols-5 gap-1" >
+                    <IconButton
+                      color="error"
+                    >
+                        <DeleteRounded className="text-red-600" titleAccess="غیرفعال کردن" />
+                    </IconButton>
                 <p className="text-lg p-2" > {item.branch_name} </p>
-              </>
+                <p className="text-lg p-2" > {item.branch_code} </p>
+                <p className="text-lg p-2" > {item.telephone} </p>
+                <p className="text-lg p-2" > {item.address[0]} </p>
+              </div>
              ))
           } 
 
@@ -232,6 +235,26 @@ const table = useMaterialReactTable({
         </Box>
     </div>
   ),
+  renderRowActions: ({ row }) => {
+    return (
+      <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+        <IconButton
+          className=" hover:bg-slate-300 p-1 rounded-xl"
+          onClick={() => GetRowIdForPatchAddress(row)}
+        >
+          <LocationOnRounded />
+          آدرس
+        </IconButton>
+        <IconButton
+          className=" hover:bg-slate-300 p-1 rounded-xl "
+          onClick={() => GetRowIdForUpdateFactory(row)}
+        >
+          <Edit />
+          ویرایش
+        </IconButton>
+      </Box>
+    )
+  },
 
 });
 

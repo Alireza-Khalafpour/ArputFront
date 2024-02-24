@@ -48,16 +48,16 @@ export default function Header() {
       }
       })
       .then((response) => {
-        setName(response.data.data[0].name)
-        setFamily(response.data.data[0].family)
+        setName(response?.data.data[0].name)
+        setFamily(response?.data.data[0].family)
         if(cookie.get("role") !== "admin" && cookie.get("role") !== "client") {
-          if(response.data.data[0]?.address.length == 0 ){
+          if(response?.data.data[0]?.address.length == 0 ){
           setTimeout(() => {
               setAddressError(true)
               setAlert(true)
             }, 3000);
             }
-            if(response.data.data[0].name == "" || response.data.data[0].name == null || response.data.data[0].shop_name == ""){
+            if(response?.data.data[0].name == "" || response?.data.data[0].name == null || response?.data.data[0].shop_name == ""){
               setTimeout(() => {
                 setInfoError(true)
                 setAlert(true)
@@ -335,7 +335,6 @@ export default function Header() {
                     </IconButton>
 
                     <IconButton
-                      aria-controls="menu-appbar"
                       aria-haspopup="true"
                       aria-expanded={anchorEl ? 'true' : undefined}
                       onClick={handleMenu}
@@ -345,8 +344,6 @@ export default function Header() {
                     </IconButton>
                     <Menu
                       className='top-14 min-w-[140px] '
-                      id="menu-appbar"
-                      aria-labelledby="menu-appbar"
                       anchorEl={anchorEl}
                       anchorOrigin={{
                         vertical: 'top',

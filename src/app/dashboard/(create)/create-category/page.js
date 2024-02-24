@@ -20,24 +20,26 @@ export const CreateFactory = ()=> {
     const cookie = new Cookies();
 
     const Auth = cookie.get('tokenDastResi')
-
+  // --------------
     const [message, setMessage] = useState();
     const [alert, setAlert] = useState(false);
     const [errorAlert, setErrorAlert] = useState(false);
     const [loading, setLoading] = useState(false);
-
+  // --------------
     const [data, setData] = useState([])
     const [featureList, setFeatureList] = useState([])
     const [addFeature, setAddFeatures] = useState([])
-    const [featureIds, setFeatureIds] = useState([])
     const [addCategName, setAddCategName] = useState("")
-
+    const[addCategoryModal, setAddCategoryModal] = useState(false);
+    const[deleteCategoryModal, setDeleteCategoryModal] = useState(false);
+    const[editCategoryModal, setEditCategoryModal] = useState(false);
+    const[editCategoryId, setEditCategoryId] = useState("");
     const [DeleteCategoryIds, setDeleteCategoryIds] = useState()
 
 
+    // Get Categories api -------------
     async function ListApi(Au) {
       
-      // await axios.get('https://supperapp-backend.chbk.run/category/list', {
         await axios.get('https://supperapp-backend.chbk.run/category/all', {
         headers:{
           'accept': 'application/json',
@@ -51,6 +53,8 @@ export const CreateFactory = ()=> {
           console.log(error, "Error");
         });
     }
+
+    // Get feature List ------------------
 
     async function FeatureListApi(Au) {
       
@@ -67,10 +71,6 @@ export const CreateFactory = ()=> {
           console.log(error, "Error");
         });
     }
-
-    useEffect(() => {
-      setFeatureIds(addFeature.map((i) => i.id))
-    },[addFeature])
 
     useEffect(() => {
       const Auth = cookie.get('tokenDastResi')
@@ -113,6 +113,56 @@ export const CreateFactory = ()=> {
   
     }
 
+    // Edit Category Api -------------------------------
+
+    const GetRowIdForEdit = (row) => {
+      setEditCategoryId(row.original.id)
+      setAddCategName(row.original.name)
+      setEditCategoryModal(true)
+    }
+
+    async function EditCategoryApi() {
+      setLoading(true);
+      await axios.patch('https://supperapp-backend.chbk.run/category/admin/update', {
+        "name": addCategName,
+        "id": editCategoryId,
+        "active": true
+      }, {
+          headers: headers
+        })
+        .then((response) => {
+          if (response.data.Done=== true) {
+            setAlert(true)
+            setMessage(response.data.message)
+            setLoading(false)
+            setEditCategoryModal(false)
+            ListApi(Auth)
+            setAddCategName("")
+          }else {
+            setMessage(response.data.message)
+            setErrorAlert(true)
+            setLoading(false)
+            setEditCategoryModal(false)
+            ListApi(Auth)
+            setAddCategName("")
+          }
+        })
+        .catch(function (error) {
+          setMessage(" متاسفیم،خطایی رخ داده است ")
+          setErrorAlert(true)
+          setLoading(false)
+        });
+  
+    }
+
+    // handle close Edit category modal -----------------------
+
+    const handleCloseEditModal= () =>{
+      setAddCategName("")
+      setEditCategoryModal(false)
+    }
+
+
     
     // Activate category -----------------------------------------
       
@@ -149,7 +199,7 @@ export const CreateFactory = ()=> {
         }
 
 
-    // Delete a category -----------------------------------------
+    // Delete a category (Deactive) -----------------------------------------
 
     const DeleteCategoryApi = (i) => {
 
@@ -174,7 +224,7 @@ export const CreateFactory = ()=> {
               response.json()
           })
          .then((d) => {
-            setErrorAlert(true)
+            setAlert(true)
             setMessage(" دسته بندی حذف شد ")
             setLoading(false)
             ListApi(Auth)
@@ -224,6 +274,7 @@ export const CreateFactory = ()=> {
     []
   );
 
+  // table ------------------
 
 const table = useMaterialReactTable({
   columns,
@@ -292,6 +343,7 @@ const table = useMaterialReactTable({
       <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
         <IconButton
           color="secondary"
+          onClick={() => GetRowIdForEdit(row)}
         >
           <EditRounded />
         </IconButton>
@@ -347,16 +399,8 @@ const table = useMaterialReactTable({
   ),
 });
 
-  // modal part -------------------------------------------------------------
-  const[addCategoryModal, setAddCategoryModal] = useState(false);
-  const[deleteCategoryModal, setDeleteCategoryModal] = useState(false);
-  const [image, setImage] = useState([])
-  const[fileName, setFileName] = useState("فایلی انتخاب نشده...")
 
-  const DeleteImg = () => {
-    setFileName("فایلی انتخاب نشده...")
-    setImage([])
-  }
+
 
     return (
 
@@ -372,15 +416,14 @@ const table = useMaterialReactTable({
             options={contextMenuOptions}
         /> */}
 
-      <Modal open={addCategoryModal} onClose={() => setAddCategoryModal(false)}>
+      <Modal open={editCategoryModal} onClose={() => handleCloseEditModal()}>
         <ModalDialog variant="outlined" role="definition" className="w-[40vw] h-[65vh] p-0" >
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
-             ایجاد دسته بندی جدید
+              ویرایش 
           </DialogTitle>
           <Divider />
           <DialogContent className="flex flex-col justify-center items-center gap-10" >           
 
-            <div className='w-full flex md:flex-row flex-col gap-6 justify-around items-center' >
               <TextField
                 id="input-with-icon-textfield"
                 label=" نام دسته بندی "
@@ -395,31 +438,15 @@ const table = useMaterialReactTable({
                     </InputAdornment>
                   ),
                 }}
-                variant="standard"
+                variant="outlined"
               />
             
-              <Autocomplete
-                disablePortal
-                multiple
-                className="w-full"
-                noOptionsText=" داده ای موحود نیست "
-                options={featureList}
-                getOptionLabel={(i)=> i.name}
-                onChange={(event, val) =>{
-                  setAddFeatures([...val]);
-                }}
-                sx={{ width:"190px"}}
-                renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن ویژگی " />}
-              />
-            </div>
-
-
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4" >
-            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddCategoryApi()}>
-              {loading ? <CircularProgress size="medium" className="text-white w-12 h-12" /> : " ثبت "}
+            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => EditCategoryApi()}>
+              {loading ? <CircularProgress size="medium" className="text-white w-12 h-12" /> : " ویرایش "}
             </Button>
-            <Button variant="soft" color='danger'  onClick={() => setAddCategoryModal(false)}>
+            <Button variant="soft" color='danger'  onClick={() => handleCloseEditModal()}>
               انصراف
             </Button>
           </DialogActions>
@@ -448,7 +475,7 @@ const table = useMaterialReactTable({
                     </InputAdornment>
                   ),
                 }}
-                variant="standard"
+                variant="outlined"
               />
             
             </div>

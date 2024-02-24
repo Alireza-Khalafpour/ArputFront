@@ -1,6 +1,6 @@
 'use client'
 
-import { Add, AddCircleOutline, Category } from "@mui/icons-material";
+import { Add, AddCircleOutline, Category, DeleteRounded, RadioButtonChecked } from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Snackbar, TextField } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
@@ -121,7 +121,7 @@ const PulsePlan = () => {
       GetPulsePrice(Auth)
     },[])
     
-    // -------------------------------------------------------
+    // Create Pulse Plan ------------------------------------------------
 
     const headers ={
     'accept': 'application/json',
@@ -213,6 +213,63 @@ const PulsePlan = () => {
     
       }
 
+              // Activate Factory -----------------------------------------
+
+
+              async function GetRowIdForActivate(id) {
+                setLoading(true);
+      
+                const ActiveMethod = {
+                    method: 'PATCH',
+                    headers: {
+                        'accept': 'application/json',
+                        'Authorization': `Bearer ${Auth}`,
+                    },
+                    }
+                    
+                    fetch(`https://supperapp-backend.chbk.run/pulse/plan/admin/active/${id}`, ActiveMethod)
+                    .then((response) => {
+                        response.json()
+                    })
+                    .then((d) => {
+                      setAlert(true)
+                      setMessage(" برنامه پالس فعال شد ")
+                      setLoading(false)
+                      GetPulsePlan(Auth)
+                    }) 
+                    .catch(err => console.log(err)) 
+                
+              }
+          
+          
+              // Deactive a Factory -----------------------------------------
+          
+              const GetRowIdForDelete = (id) => {
+          
+                setLoading(true);
+          
+                const deleteMethod = {
+                    method: 'PATCH',
+                    headers: {
+                        'accept': 'application/json',
+                        'Authorization': `Bearer ${Auth}`,
+                    },
+                   }
+                   
+                   fetch(`https://supperapp-backend.chbk.run/pulse/plan/admin/deactive/${id}`, deleteMethod)
+                   .then((response) => {
+                        response.json()
+                    })
+                   .then((d) => {
+                      setAlert(true)
+                      setMessage(" برنامه پالس غیرفعال شد ")
+                      setLoading(false)
+                      GetPulsePlan(Auth)
+                    }) 
+                   .catch(err => console.log(err)) 
+          
+              }
+
 
   // columns and data =============================================
 
@@ -301,13 +358,39 @@ const PulsePlan = () => {
         renderRowActions: ({ row }) => {
           return (
             <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-              <IconButton
+
+                <IconButton
                 onClick={() => GetRowId(row)}
                 className="text-sm rounded-xl bg-khas text-white hover:text-black"
+                disabled={row.original.active === false}
               >
                 <Add />
                 فروشگاه ها
               </IconButton>
+
+
+          {
+            row.original.active == true 
+            ?
+            <IconButton
+              color="error"
+              onClick={() => GetRowIdForDelete(row.original?.id)}
+            >
+                <DeleteRounded className="text-red-600" titleAccess="غیرفعال کردن" />
+            </IconButton>
+
+            :
+
+            <IconButton
+            color="success"
+            onClick={() => GetRowIdForActivate(row.original?.id)}
+          >
+              <RadioButtonChecked titleAccess="فعال کردن" />
+          </IconButton>
+
+          }
+
+              
             </Box>
           )
         },

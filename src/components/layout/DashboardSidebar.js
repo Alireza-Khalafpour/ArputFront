@@ -134,6 +134,7 @@ export default function DashbordSidebar({children}) {
         variant="persistent"
         anchor="right"
         open={open}
+        className='!text-base text-pretty'
       >
         <DrawerHeader >
           <IconButton onClick={handleDrawerClose}>
@@ -224,10 +225,16 @@ export default function DashbordSidebar({children}) {
                          کارخانه ها    
                       <FactoryOutlined className='text-khas'/>
                   </Link>
-                  <Link onClick={() => handleDrawerClose()} href="/dashboard/branches-list-Admin" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
-                        لیست تمام نمایندگی ها  
+
+                    <Link onClick={() => handleDrawerClose()} href="/dashboard/branches-list-Admin" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+                         نمایندگی ها به تفکیک کارخانه  
                       <FactoryOutlined className='text-khas'/>
                   </Link>
+                  <Link onClick={() => handleDrawerClose()} href="/dashboard/all-shops-admin" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+                       فروشگاه ها و نمایندگی ها  
+                      <FactoryOutlined className='text-khas'/>
+                  </Link>
+
                   <Link onClick={() => handleDrawerClose()} href="/dashboard/my-products"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white p-3 ' >
                       مدیریت پیش محصول و محصولات (Admin)
                       <InboxIcon  className='text-khas'/>

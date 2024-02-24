@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 
-const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactoryInfo}) => {
+const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactoryInfo, setTriggerUpdateFactory}) => {
 
     const cookie = new Cookies();
     const Auth = cookie.get('tokenDastResi')
@@ -64,6 +64,7 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
                 setMessage(response.data.Message)
                 setLoading(false)
                 setEditFactoryModal(false)
+                setTriggerUpdateFactory(0)
 
               }else {
                 setLoading(false)

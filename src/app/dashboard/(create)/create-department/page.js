@@ -1,14 +1,16 @@
 'use client'
 
 import axios from "axios";
+import * as shamsi from 'shamsi-date-converter';
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, Category, LocationCity, LocationOnRounded, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
-import { Alert, Autocomplete, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Snackbar, TextField, Typography } from "@mui/material";
+import { AddCircleOutline, Category, DeleteRounded, Edit, LocationCity, LocationOnRounded, RadioButtonChecked, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
+import { Alert, Autocomplete, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Snackbar, TextField, Typography } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import { useRouter } from "next/navigation";
+import { digitsEnToFa } from "@persian-tools/persian-tools";
 
 
 
@@ -26,15 +28,18 @@ export const CreateDepartment = ()=> {
     const [loading, setLoading] = useState(false);
 
     const [data, setData] = useState([])
-    const [categoryList, setcategoryList] = useState([])
     const [addCateg, setaddCategs] = useState([])
     const [CategoryIds, setCategoryIds] = useState([])
     const [departmentName, setDepartmentName] = useState("")
-    const [addMobile, setAddMobile] = useState("")
-    const [addTelephone, setAddTelephone] = useState("")
+    const [EditDepartmentId, setEditDepartmentId] = useState("")
+    const [editDepartment, setEditDepartment] = useState(false)
+
 
     const [addDepartmentModal, setAddDepartmentModal] = useState(false)
 
+
+
+    // Fetch department list ---------------------------
 
     async function ListApi(Au) {
       
@@ -64,7 +69,7 @@ export const CreateDepartment = ()=> {
       ListApi(Auth);
     },[])
     
-    // -------------------------------------------------------
+    // Create new department------------------------------------------
 
     const headers ={
     'accept': 'application/json',
@@ -107,6 +112,103 @@ export const CreateDepartment = ()=> {
   
     }
 
+        // Edit Department Api -------------------------------
+
+        const GetRowIdForEdit = (row) => {
+          setEditDepartmentId(row.original.id)
+          setDepartmentName(row.original.dep_name)
+          setEditDepartment(true)
+          setAddDepartmentModal(true)
+        }
+    
+        async function EditDepartmentApi() {
+          setLoading(true);
+          await axios.patch('https://supperapp-backend.chbk.run/department/update', {
+            "id": EditDepartmentId,
+            "dep_name":departmentName,
+            "is_active": true
+          }, {
+              headers: headers
+            })
+            .then((response) => {
+              if (response.data.Done=== true) {
+                setAlert(true)
+                setMessage(response.data.message)
+              }else {
+                setMessage(response.data.message)
+                setErrorAlert(true)
+              }
+            })
+            .catch(function (error) {
+              setMessage(" متاسفیم،خطایی رخ داده است ")
+              setErrorAlert(true)
+            });
+      
+            ListApi(Auth)
+            setDepartmentName("")
+            setEditDepartmentId("")
+            setLoading(false)
+            setAddDepartmentModal(false)
+            setEditDepartment(false)
+        }
+
+        // Activate Factory -----------------------------------------
+
+
+        async function GetRowIdForActivate(id) {
+          setLoading(true);
+
+          const ActiveMethod = {
+              method: 'PATCH',
+              headers: {
+                  'accept': 'application/json',
+                  'Authorization': `Bearer ${Auth}`,
+              },
+              }
+              
+              fetch(`https://supperapp-backend.chbk.run/department/active?department_id=${id}`, ActiveMethod)
+              .then((response) => {
+                  response.json()
+              })
+              .then((d) => {
+                setAlert(true)
+                setMessage(" دپارنمان فعال شد ")
+                setLoading(false)
+                ListApi(Auth)
+              }) 
+              .catch(err => console.log(err)) 
+          
+        }
+    
+    
+        // Deactive a Factory -----------------------------------------
+    
+        const GetRowIdForDelete = (id) => {
+    
+          setLoading(true);
+    
+          const deleteMethod = {
+              method: 'PATCH',
+              headers: {
+                  'accept': 'application/json',
+                  'Authorization': `Bearer ${Auth}`,
+              },
+             }
+             
+             fetch(`https://supperapp-backend.chbk.run/department/deactive?department_id=${id}`, deleteMethod)
+             .then((response) => {
+                  response.json()
+              })
+             .then((d) => {
+                setAlert(true)
+                setMessage(" دپارتمان حذف شد ")
+                setLoading(false)
+                ListApi(Auth)
+              }) 
+             .catch(err => console.log(err)) 
+    
+        }
+
 
   // columns and data =============================================
   const columns = useMemo(
@@ -120,7 +222,7 @@ export const CreateDepartment = ()=> {
         header: '  تاریخ ایجاد ',
         accessorKey: 'created_at',
         id: 'created_at',
-        Cell: ({ cell }) => <span>{cell.getValue().tolocal}</span>,
+        Cell: ({ cell }) => <span>{ digitsEnToFa(shamsi.gregorianToJalali(cell.getValue()).join('/')) }</span>,
       },
       {
         header: ' ایجاد توسط ',
@@ -131,6 +233,7 @@ export const CreateDepartment = ()=> {
           header: '  تاریخ بروزرسانی ',
           accessorKey: 'updated_at',
           id: 'updated_at',
+          Cell: ({ cell }) => <span>{ cell.getValue() ? digitsEnToFa(shamsi.gregorianToJalali(cell.getValue()).join('/')) : ""}</span>,
         },
         {
             header: ' بروزرسانی توسط ',
@@ -206,18 +309,39 @@ const table = useMaterialReactTable({
       </Box>
     );
   },
-//   renderRowActions: ({ row }) => {
-//     return (
-//       <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-//         <IconButton
-//           onClick={() => GetRowIdForPatchAddress(row)}
-//         >
-//           <LocationOnRounded />
-//           آدرس
-//         </IconButton>
-//       </Box>
-//     )
-//   },
+  renderRowActions: ({ row }) => {
+    return (
+      <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+        <IconButton
+          className=" hover:bg-slate-300 p-1 rounded-xl "
+          onClick={() => GetRowIdForEdit(row)}
+        >
+          <Edit />
+          
+        </IconButton>
+        {
+            row.original.is_active == true 
+            ?
+            <IconButton
+              color="error"
+              onClick={() => GetRowIdForDelete(row.original?.id)}
+            >
+                <DeleteRounded className="text-red-600" titleAccess="غیرفعال کردن" />
+            </IconButton>
+
+            :
+
+            <IconButton
+            color="success"
+            onClick={() => GetRowIdForActivate(row.original?.id)}
+          >
+              <RadioButtonChecked titleAccess="فعال کردن" />
+          </IconButton>
+
+          }
+      </Box>
+    )
+  },
 
 });
 
@@ -239,7 +363,7 @@ const table = useMaterialReactTable({
       <Dialog fullWidth className="w-full" scroll="paper" maxWidth="sm" open={addDepartmentModal} onClose={() => setAddDepartmentModal(false)}>
 
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
-            ایجاد دپارتمان جدید
+            {editDepartment ? " ویرایش دپارتمان " : "ایجاد دپارتمان جدید"}
           </DialogTitle>
           <Divider />
           <DialogContent className="flex flex-col items-center gap-10 mt-12 h-full " >           
@@ -269,9 +393,17 @@ const table = useMaterialReactTable({
 
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4 mt-10" >
-            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddFactoryApi()}>
-              {loading ? <CircularProgress size="medium" /> : " ثبت "}
-            </Button>
+            {
+              editDepartment
+              ?
+              <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => EditDepartmentApi()}>
+                {loading ? <CircularProgress size="medium" /> : " ویرایش "}
+              </Button>
+              :
+              <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddFactoryApi()}>
+                {loading ? <CircularProgress size="medium" /> : " ثبت "}
+              </Button>
+            }
             <Button variant="soft" color='danger'  onClick={() => setAddDepartmentModal(false)}>
               انصراف
             </Button>

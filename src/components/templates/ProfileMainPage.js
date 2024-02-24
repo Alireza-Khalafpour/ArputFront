@@ -21,6 +21,10 @@ const ProfileMainPage = () => {
     const [Family, setFamily] = useState("");
     const [ShopName, setShopName] = useState("");
     const [Id, setId] = useState("");
+    const [profileImage, setProfileImage] = useState();
+
+    const [imageFile, setImageFile] = useState()
+    const [imageUrl, setImageUrl] = useState("")
 
 
     async function getUSer(Auth) {
@@ -35,6 +39,7 @@ const ProfileMainPage = () => {
             setFamily(response.data?.data[0]?.family)
             setShopName(response.data?.data[0]?.shop_name)
             setId(response.data.data[0]?.id)
+            setProfileImage(response.data?.data[0]?.image)
           })
           .catch((error) => {
             console.log("Error on getting current user");
@@ -55,11 +60,13 @@ const ProfileMainPage = () => {
         }
 
       async function EditProfileInfo() {
+
         setLoading(true);
         await axios.patch('https://supperapp-backend.chbk.run/register/edit_profile', {
             "first_name": Name,
             "family": Family,
-            "name": ShopName
+            "name": ShopName,
+            "image": imageUrl
         }, 
         {
           headers: headers
@@ -71,14 +78,14 @@ const ProfileMainPage = () => {
             setAlert(true)
             setMessage( " تغییرات ثبت شدند " )
             setLoading(false)
-            getUSer(Au)
+            setImageUrl("")
 
           }else {
             setLoading(false)
             setMessage(response.data.Error_text)
             setErrorAlert(true)
-
           }
+          getUSer(Au)
         })
         .catch(function (error) {
             console.log(error)
@@ -89,6 +96,38 @@ const ProfileMainPage = () => {
   
     }
 
+    // Upload image -----------------------
+    const headersImage ={
+        'accept': 'application/json',
+        'Authorization': `Bearer ${Au}`,
+        'Content-Type': ' multipart/form-data',
+        }
+
+    const formData = new FormData();
+
+    async function handleImageUpload() {        
+
+        formData.append("file", imageFile);
+
+        setLoading(true);
+        await axios.post('https://supperapp-backend.chbk.run/upload/upload_texture', formData,
+        {
+          headers: headersImage
+        })
+        .then(async (response) => {
+            setImageUrl(response.data.address)
+        })
+        .catch((error) => {
+          console.log(error, "Error");
+        });
+        setLoading(false)
+    };
+
+    useEffect(() => {
+        setTimeout(() => {
+            handleImageUpload()
+        }, 300);
+    },[imageFile])
 
 
     return (
@@ -98,6 +137,7 @@ const ProfileMainPage = () => {
                 <Badge
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                     variant="standard"
+                    onClick={() => document.getElementById("fileInput").click()}
                     badgeContent={
                     <Edit
                         sx={{ '--Avatar-size': '44px', "position": 'absolute' , "right" : "10px" , "bottom":"30px" }}
@@ -105,8 +145,20 @@ const ProfileMainPage = () => {
                     />
                     }
                 >
-                    <Avatar alt="Aravis Howard" size="lg" className="md:w-64 w-40 md:h-64 h-40 border-2 border-paszamine2" />
+                    <Avatar alt="Aravis Howard" size="lg" src={profileImage} className="md:w-64 w-40 md:h-64 h-40 border-2 border-paszamine2 " />
                 </Badge>
+                <input 
+                    type='file' 
+                    id='fileInput' 
+                    multiple 
+                    hidden 
+                    className="!hidden"
+                    accept='image/*'
+                    onChange={ ({target:{files}}) =>{
+                        setImageFile(files[0])
+                    }
+                    }
+                />
 
                 <div className="gap-3 flex flex-col">
                     <h2 className="text-2xl font-bold"> {Name} {Family}</h2>

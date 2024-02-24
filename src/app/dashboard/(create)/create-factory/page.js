@@ -28,6 +28,9 @@ export const CreateCategory = ()=> {
     const [errorAlert, setErrorAlert] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    // when factory updated fetch Factory list Again ----------
+    const [triggerUpdateFactory, setTriggerUpdateFactory] = useState()
+
     const [data, setData] = useState([])
     const [categoryList, setcategoryList] = useState([])
     const [addCateg, setaddCategs] = useState([])
@@ -81,6 +84,12 @@ export const CreateCategory = ()=> {
       ListApi(Auth);
       categoryListApi(Auth);
     },[])
+
+    useEffect(() => {
+      const Auth = cookie.get('tokenDastResi')
+      ListApi(Auth);
+      categoryListApi(Auth);
+    },[triggerUpdateFactory])
     
     // -------------------------------------------------------
 
@@ -681,7 +690,7 @@ const table = useMaterialReactTable({
 
 
       
-      <EditFactoryModalPage  editFactoryModal={editFactoryModal} setEditFactoryModal={setEditFactoryModal} editFactoryInfo={editFactoryInfo} />
+      <EditFactoryModalPage setTriggerUpdateFactory={setTriggerUpdateFactory} editFactoryModal={editFactoryModal} setEditFactoryModal={setEditFactoryModal} editFactoryInfo={editFactoryInfo} />
 
 
 

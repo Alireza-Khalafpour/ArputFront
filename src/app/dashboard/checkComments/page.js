@@ -1,9 +1,11 @@
 'use client'
 
+
+import * as shamsi from 'shamsi-date-converter';
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, EditRounded, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
+import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, EditRounded, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RadioButtonChecked, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, Snackbar, TextField, Tooltip } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
@@ -11,6 +13,7 @@ import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/l
 import ContextMenu from "@/utils/ContextMenu";
 import { CircularProgress, ModalDialog } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
+import { digitsEnToFa } from "@persian-tools/persian-tools";
 
 
 
@@ -37,6 +40,7 @@ const CheckComments = () => {
         'Authorization': `Bearer ${Auth}`
       }
 
+      // fetch comment list for admin -----------------------
 
     async function ListApi() {
       
@@ -51,11 +55,46 @@ const CheckComments = () => {
         });
     }
 
-
-
     useEffect(() => {
         ListApi();
     },[])
+
+      // Confirm And Reject comment -----------------------------------------
+
+
+      const headers ={
+        'accept': 'application/json',
+        'Authorization': `Bearer ${Auth}`,
+        'Content-Type': 'application/json',
+        }
+      
+  
+      async function EditCommentApi(row) {
+        setLoading(true);
+        await axios.patch('https://supperapp-backend.chbk.run/comment/admin/confirm_comment', {
+            "comment_id": row.original.id,
+            "is_admin_confirmation": row.original.is_admin_confirmation == true ? false : true
+          }, {
+            headers: headers
+          })
+          .then((response) => {
+            if (response.data.Done=== true) {
+              setAlert(true)
+              setMessage(response.data.Message)
+            }else {
+              setMessage(response.data.Message)
+              setErrorAlert(true)
+            }
+          })
+          .catch(function (error) {
+            setMessage(" متاسفیم،خطایی رخ داده است ")
+            setErrorAlert(true)
+          });
+    
+          ListApi()
+      }
+  
+    
 
 
   // columns and data =============================================
@@ -70,7 +109,8 @@ const CheckComments = () => {
         header: ' وضعیت تایید ',
         accessorKey: 'is_admin_confirmation',
         id: 'is_admin_confirmation',
-        maxSize:20
+        Cell: ({ cell }) => <span>{ cell.getValue()  == true ? "تایید شده" : <span className='bg-red-500 rounded-2xl p-1 text-white ' > در انتظار تایید </span> }</span>,
+        size:20
       },
       {
         header: ' عنوان دیدگاه ',
@@ -81,18 +121,21 @@ const CheckComments = () => {
         header: ' تاریخ ',
         accessorKey: 'created_at',
         id: 'created_at',
+        Cell: ({ cell }) => <span>{ digitsEnToFa(shamsi.gregorianToJalali(cell.getValue()).join('/'))}</span>,
       },
       {
         header: ' تعداد لایک ',
         accessorKey: 'like',
         id: 'like',
-        maxSize:20
+        size:20,
+        Cell: ({ cell }) => <span>{ digitsEnToFa(cell.getValue())}</span>,
       },
       {
         header: ' تعداد دیس لایک ',
         accessorKey: 'dislike',
         id: 'dislike',
-        maxSize:20
+        size:20,
+        Cell: ({ cell }) => <span>{ digitsEnToFa(cell.getValue())}</span>,
       },
       {
         header: ' متن دیدگاه ',
@@ -113,6 +156,7 @@ const table = useMaterialReactTable({
   columnResizeMode:true,
   enableStickyHeader: true,
   enableStickyFooter: true,
+  enableRowActions: true,
   muiTableBodyCellProps:{
     sx:{
       align: 'right',
@@ -132,37 +176,32 @@ const table = useMaterialReactTable({
     }
   },
   muiTableContainerProps: { sx: { maxHeight: '500px' } },
+  renderRowActions: ({ row }) => {
+    return (
+      <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+        {
+            row.original.is_admin_confirmation == true 
+            ?
+            <IconButton
+              color="error"
+              onClick={() => EditCommentApi(row)}
+            >
+                <DeleteRounded className="text-red-600" titleAccess="رد کردن" />
+            </IconButton>
 
+            :
 
-  renderDetailPanel: ({ row }) => (
+            <IconButton
+            color="success"
+            onClick={() => EditCommentApi(row)}
+          >
+              <RadioButtonChecked titleAccess="تایید کردن" />
+          </IconButton>
 
-    <div className="bg-paszamine1 p-2">
-        <h3 className="w-full text-start font-extrabold mb-2" > <span className=" p-1 text-base" >  لیست نمایندگی ها </span> </h3>
-        <Divider/>
-        <Box
-          sx={{
-              display: 'grid',
-              margin: 'auto',
-              gridTemplateColumns: '1fr 1fr 1fr 1fr',
-              width: '100%',
-              textAlign:"justify",
-              gap: "12px"
-          }}
-        >
-
-          {
-  
-            row?.original?.branch_data.map((item) => ( 
-              <>
-                <p className="text-lg p-2" > {item.branch_name} </p>
-              </>
-             ))
-          } 
-
-
-        </Box>
-    </div>
-  ),
+          }
+      </Box>
+    )
+  },
 
 });
 

@@ -699,7 +699,6 @@ const AddPreProductPage = () => {
                                         setImage(URL.createObjectURL(files[0]))
                                         setImageForUpload(files[0])
                                         setFileName(files[0].name)
-                                        console.log(files)
                                     }
                                     }
                                 />

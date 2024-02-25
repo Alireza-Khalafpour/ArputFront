@@ -87,7 +87,7 @@ export const CreateFeatureSample = ()=> {
     async function AddFeatureSampleApi() {
         setLoading(true);
         await axios.post('https://supperapp-backend.chbk.run/feature_samples/create', {
-            "feature_id": featureId,
+            "feature_sample_id": featureId,
             "feature_sample_name": sampleName
         }, 
         {

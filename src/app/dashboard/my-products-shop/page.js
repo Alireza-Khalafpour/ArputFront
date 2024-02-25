@@ -11,6 +11,7 @@ import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/l
 import { Alert, ModalDialog, Snackbar, Textarea } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
 import Image from "next/image";
+import ProuductsTableOfShopAndFactory from "@/components/templates/ProuductsTableOfShopAndFactory";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -133,6 +134,13 @@ export const MyProductsShop = ()=> {
         header: ' نام دسته بندی ',
         accessorKey: 'category_name',
         id: 'category_name',
+      },
+      {
+        header: ' برند/کارخانه ',
+        accessorKey: 'factory_name',
+        id: 'factory_name',
+        filterVariant: 'select',
+        // filterSelectOptions: BrandsList,
       },
       {
         header: ' وضعیت دسترسی ',
@@ -259,6 +267,12 @@ const table = useMaterialReactTable({
         <Divider/>
 
         <MaterialReactTable table={table}/>
+
+        <span className="text-xl font-bold pt-4 " > لیست کالا های شما  </span> 
+
+        <Divider/>
+
+        <ProuductsTableOfShopAndFactory/>
 
         {/* <ContextMenu
             open={showContextMenu}

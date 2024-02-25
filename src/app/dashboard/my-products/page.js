@@ -3,7 +3,7 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, AddCircleRounded, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DetailsOutlined, FilterAlt, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, Search, TableRowsRounded } from "@mui/icons-material";
+import { AddCircleOutline, AddCircleRounded, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, FilterAlt, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RadioButtonChecked, RefreshOutlined, Search, TableRowsRounded } from "@mui/icons-material";
 import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, InputAdornment, Modal, Slide, TextField, Tooltip } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
@@ -165,6 +165,63 @@ export const MyProducts = ()=> {
         
                 setActiveStep((prevActiveStep) => prevActiveStep + 1);
             };
+
+                    // Activate Factory -----------------------------------------
+
+
+        async function GetRowIdForActivate(id) {
+          setLoading(true);
+
+          const ActiveMethod = {
+              method: 'PUT',
+              headers: {
+                  'accept': 'application/json',
+                  'Authorization': `Bearer ${Auth}`,
+              },
+              }
+              
+              fetch(`https://supperapp-backend.chbk.run/pre_product/admin/active?pre_product_id=${id}`, ActiveMethod)
+              .then((response) => {
+                  response.json()
+              })
+              .then((d) => {
+                setAlert(true)
+                setMessage(" پیش محصول فعال شد ")
+                setLoading(false)
+                ListApi(Auth)
+              }) 
+              .catch(err => console.log(err)) 
+          
+        }
+    
+    
+        // Deactive a Factory -----------------------------------------
+    
+        const GetRowIdForDelete = (id) => {
+    
+          setLoading(true);
+    
+          const deleteMethod = {
+              method: 'PUT',
+              headers: {
+                  'accept': 'application/json',
+                  'Authorization': `Bearer ${Auth}`,
+              },
+             }
+             
+             fetch(`https://supperapp-backend.chbk.run/pre_product/admin/deactive?pre_product_id=${id}`, deleteMethod)
+             .then((response) => {
+                  response.json()
+              })
+             .then((d) => {
+                setAlert(true)
+                setMessage(" پیش محصول حذف شد ")
+                setLoading(false)
+                ListApi(Auth)
+              }) 
+             .catch(err => console.log(err)) 
+    
+        }
         
 
 
@@ -184,18 +241,36 @@ export const MyProducts = ()=> {
         id: 'category_name',
       },
       
-      // {
-      //   header: ' قیمت ',
-      //   Cell: ({ cell }) => <span>{e2p(cell.getValue().toLocaleString())}</span>,
-      // },
-      // {
-      //   header: ' تخفیف ',
-      //   Cell: ({ cell }) => <span>{e2p(cell.getValue())}</span>,
-      // },
-
     ],
     []
   );
+
+  // Admin pre-product Confirmation ----------------
+      async function ConfirmPreProduct(row) {
+    
+        setLoading(true);
+  
+        const confirmMethod = {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${Auth}`,
+            },
+           }
+           
+           fetch(`https://supperapp-backend.chbk.run/pre_product/admin/confirmation?pre_product_id=${row?.original?.pre_product_id}`, confirmMethod)
+           .then((response) => {
+                response.json()
+            })
+           .then((d) => {
+              setAlert(true)
+              setMessage(" پیش محصول تایید شد ")
+              setLoading(false)
+              ListApi(Auth)
+            }) 
+           .catch(err => console.log(err)) 
+  
+      }
 
   // --------------------------------------
 
@@ -259,6 +334,29 @@ const table = useMaterialReactTable({
         <Button onClick={() => handleDetailModal(row)} size="small" className="rounded-xl bg-khas hover:bg-orange-600 p-1 text-white font-semibold "  >
           جزییات
         </Button>
+        <Button disabled={row.original.admin_confirmation == true} onClick={() => ConfirmPreProduct(row)} size="small" className="rounded-xl bg-khas hover:bg-orange-600 p-1 text-white font-semibold "  >
+          تایید
+        </Button>
+        {
+            row.original.active == true 
+            ?
+            <IconButton
+              color="error"
+              onClick={() => GetRowIdForDelete(row.original?.pre_product_id)}
+            >
+                <DeleteRounded className="text-red-600" titleAccess="غیرفعال کردن" />
+            </IconButton>
+
+             :
+
+            <IconButton
+            color="success"
+            onClick={() => GetRowIdForActivate(row.original?.pre_product_id)}
+          >
+              <RadioButtonChecked titleAccess="فعال کردن" />
+          </IconButton>
+
+          }
       </div>
     )
   }
@@ -281,23 +379,6 @@ function handleCloseProductModal() {
 
 
       <div className="flex flex-col gap-4" >
-
-        {/* <p className="text-paszamine3 py-4">  لیست پیش محصول ها | برای ایجاد محصول بر روی پیش محصول مورد نظر کلیک راست کنید یا دکمه " افزودن کالا " را بفشارید.  </p>
-
-        <Divider/> */}
-
-        {/* <div className="p-0 md:w-5/12 w-full flex flex-row" >
-          <button onClick={() => setOpenFilter(true)} className="rounded-lg bg-khas text-white p-0 rounded-l-none hover:bg-orange-500 flex flex-row-reverse justify-center items-center px-1 " >
-              فیلتر <FilterAlt/>
-          </button>
-          <Input
-              className="w-full rounded-none"
-              startDecorator={<Search />}
-              placeholder="جستجوی نام یا کد"
-              size="lg"
-          />
-          <Button size="md" className="bg-khas hover:bg-orange-500 w-28 rounded-r-none text-white font-semibold"> جستجو </Button>
-      </div> */}
 
         <MaterialReactTable table={table}/>
 

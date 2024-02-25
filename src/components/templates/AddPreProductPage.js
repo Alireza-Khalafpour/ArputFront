@@ -34,6 +34,7 @@ const AddPreProductPage = () => {
     const [sampleOptions, setSampleOptions] = useState([])
     const [imgUrl, setImgUrl] = useState()
 
+    console.log(sampleOptions)
     // ----------
     const [message, setMessage] = useState();
     const [alert, setAlert] = useState(false);
@@ -202,7 +203,6 @@ const AddPreProductPage = () => {
         setPreProductData({...preProductData, info:{width: preProductData.info.width, height:preProductData.info.height, weight: Number(event.target.value)} }) 
       };
 
-    // ----------------------------------------------------
 
     // Add image and Name for pre-product-------------
     const [imageL, setImage] = useState()
@@ -301,9 +301,6 @@ const AddPreProductPage = () => {
                 //         "only_in_Representation": []
                 //     }
                 // )
-                setTimeout(() => {
-                    window.location.reload()
-                }, 1500);
             }else{
                 setMessage(" متاسفیم،خطایی رخ داده است ")
                 setErrorAlert(true)
@@ -323,9 +320,6 @@ const AddPreProductPage = () => {
                 //         "only_in_Representation": []
                 //     }
                 // )
-                setTimeout(() => {
-                    window.location.reload()
-                }, 1500);
             }
         })
         .catch((error) => {
@@ -334,6 +328,10 @@ const AddPreProductPage = () => {
           setErrorAlert(true)
           setLoading(false)
         });
+
+                        // setTimeout(() => {
+                //     window.location.reload()
+                // }, 1500);
 
     };
 
@@ -618,8 +616,6 @@ const AddPreProductPage = () => {
                         <StepContent className='flex flex-col gap-12 p-3 m-5' >
 
                             <div className='flex flex-col justify-around items-center gap-6 w-full my-5' >
-
-                                    <p> ویژگی های انتخابی شما،موارد نشان شده به رنگ سبز هستند. </p>
 
                                     {
                                         addCateg?.features?.map((i, index) => (

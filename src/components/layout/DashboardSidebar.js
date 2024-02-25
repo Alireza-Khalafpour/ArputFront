@@ -247,6 +247,10 @@ export default function DashbordSidebar({children}) {
                          مدیریت کامنت ها
                       <ListAltOutlined className='text-khas'/>
                   </Link>
+                  <Link  onClick={() => handleDrawerClose()} href="/dashboard/ticketChat/admin-ticket" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+                         مدیریت تیکت ها
+                      <ListAltOutlined className='text-khas'/>
+                  </Link>
                   <Link  onClick={() => handleDrawerClose()} href="/dashboard/create-expire-pulse" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
                       زمانبندی پالس   
                       <Timer className='text-khas'/>

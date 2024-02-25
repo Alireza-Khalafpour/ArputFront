@@ -6,11 +6,12 @@ import Cookies from "universal-cookie";
 import { Category, CloudUpload, Delete} from "@mui/icons-material";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Modal, Slide, TextField,  } from "@mui/material";
 import {  MaterialReactTable, useMaterialReactTable } from "material-react-table";
-import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
+import { useMemo, useState } from "react";
 import { Alert, ModalDialog, Snackbar, Textarea } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
 import Image from "next/image";
+import ProuductsTableOfShopAndFactory from "@/components/templates/ProuductsTableOfShopAndFactory";
 
 
 
@@ -86,7 +87,7 @@ const MyProductsFactory = () => {
       
         async function AddProductApi() {
 
-          if(productName == "" || price === 0 ){
+          if(productName == "" || price === 0 || price == "" ){
             setMessage(" فیلد های خالی را تکمیل کنید ")
             setErrorAlert(true)
           }else{
@@ -117,12 +118,33 @@ const MyProductsFactory = () => {
               console.log(error, "Error");
               setMessage(" متاسفیم،خطایی رخ داده است ")
               setErrorAlert(true)
-              // setLoading(false)
             });
           }
 
       
         }
+
+
+        // Get Brands/Factories List Api ----------------
+
+          const [brandInfo, setBrandInfo] = useState([])
+          console.log(brandInfo)
+
+
+          async function GetBrandData() {
+              
+            await axios.get("https://supperapp-backend.chbk.run/template/brand/data")
+              .then((response) => {
+                setBrandInfo(response.data.data.map((i) => i.brand_name))
+              })
+              .catch((error) => {
+                console.log(error, "Error");
+              });
+          }
+
+          useEffect(() => {
+            GetBrandData()
+          },[])
 
 
             // Add image and Name for product-------------
@@ -194,18 +216,16 @@ const MyProductsFactory = () => {
         accessorKey: 'category_name',
         id: 'category_name',
       },
-      
-      // {
-      //   header: ' قیمت ',
-      //   Cell: ({ cell }) => <span>{e2p(cell.getValue().toLocaleString())}</span>,
-      // },
-      // {
-      //   header: ' تخفیف ',
-      //   Cell: ({ cell }) => <span>{e2p(cell.getValue())}</span>,
-      // },
+      {
+        header: ' برند/کارخانه ',
+        accessorKey: 'factory_name',
+        id: 'factory_name',
+        filterVariant: 'select',
+        filterSelectOptions: brandInfo,
+      },
 
     ],
-    []
+  [brandInfo, data]
   );
 
   // handle close modal add product--------------------------
@@ -227,10 +247,9 @@ const MyProductsFactory = () => {
   }
 
   const handleDetailModal = (row) => {
-    console.log(row)
     setInfo(row.original.info)
     setFeatures(row.original.features)
-    setImageUrl(row.original.image_url)
+    setImageUrl(row.original?.image_url)
     setOpenDetail(true)
   }
 
@@ -268,7 +287,6 @@ const table = useMaterialReactTable({
     }
   },
   muiTableContainerProps: { sx: { maxHeight: '500px' } },
-  // renderRowActionMenuItems
   renderRowActions: ({ row, table }) => {
     return (
       <div className="w-max gap-3 flex flex-row justify-center items-center">
@@ -287,35 +305,6 @@ const table = useMaterialReactTable({
     )
   }
 
-  // renderTopToolbar: ({ table }) => {
-
-  //   return (
-  //     <Box
-  //       sx={() => ({
-  //         display: 'flex',
-  //         gap: '0.5rem',
-  //         p: '8px',
-  //         justifyContent: 'space-between',
-  //       })}
-  //     >
-  //       <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-  //         {/* import MRT sub-components */}
-  //         <MRT_GlobalFilterTextField table={table} />
-  //         <MRT_ToggleFiltersButton table={table} />
-  //       </Box>
-  //       <Box>
-  //         <Box sx={{ display: 'flex', gap: '0.5rem' }}>
-  //           <button
-  //             className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
-  //             onClick={() => setAddCategoryModal(true)}
-  //           >
-  //             دسته بندی جدید <AddCircleOutline/> 
-  //           </button>
-  //         </Box>
-  //       </Box>
-  //     </Box>
-  //   );
-  // },
 });
 
 
@@ -328,24 +317,17 @@ const table = useMaterialReactTable({
 
       <div className="flex flex-col gap-4" >
 
-        <p className="text-paszamine3 py-4">  لیست پیش محصول ها | برای ایجاد محصول بر روی پیش محصول مورد نظر کلیک راست کنید یا دکمه " افزودن کالا " را بفشارید.  </p>
+        <p className="text-paszamine3 py-4">  <span className="text-xl font-bold" > لیست پیش محصول ها | </span> برای ایجاد محصول بر روی پیش محصول مورد نظر کلیک راست کنید یا دکمه <span className="text-khas font-bold" > " افزودن کالا " </span> را بفشارید. </p>
 
         <Divider/>
 
-        {/* <div className="p-0 md:w-5/12 w-full flex flex-row" >
-          <button onClick={() => setOpenFilter(true)} className="rounded-lg bg-khas text-white p-0 rounded-l-none hover:bg-orange-500 flex flex-row-reverse justify-center items-center px-1 " >
-              فیلتر <FilterAlt/>
-          </button>
-          <Input
-              className="w-full rounded-none"
-              startDecorator={<Search />}
-              placeholder="جستجوی نام یا کد"
-              size="lg"
-          />
-          <Button size="md" className="bg-khas hover:bg-orange-500 w-28 rounded-r-none text-white font-semibold"> جستجو </Button>
-      </div> */}
-
         <MaterialReactTable table={table}/>
+
+      <span className="text-xl font-bold pt-4 " > لیست کالا های شما  </span> 
+
+        <Divider/>
+
+        <ProuductsTableOfShopAndFactory/>
 
         {/* <ContextMenu
             open={showContextMenu}
@@ -433,7 +415,7 @@ const table = useMaterialReactTable({
             <h2  className="p-2 rounded-2xl bg-sky-200" > اطلاعات جانبی </h2>
             <div className="flex flex-row gap-1 justify-center items-center w-full" >
 
-                <div className="w-1/3" > <Image src={imageUrl} width={150} height={150} /> </div>
+                <div className="w-1/3" > <Image src={imageUrl ? imageUrl : ""} width={150} height={150} /> </div>
                 <div className="w-2/3  grid grid-cols-2 gap-4 " >
 
                   <p>طول : {e2p(`${info.height}`)} سانتی متر  </p>

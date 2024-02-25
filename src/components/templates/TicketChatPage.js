@@ -8,6 +8,7 @@ import { e2p } from "@/utils/replaceNumbers";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import TicketHistorySidebar from "../module/TicketHistorySidebar";
+import { digitsEnToFa } from "@persian-tools/persian-tools";
 
 
 const TicketChatPage = () => {
@@ -199,6 +200,20 @@ const TicketChatPage = () => {
                         <Avatar size="lg" variant="soft" className="ml-8" />
                     </div>
                     <div className="p-4 flex flex-col gap-4 w-full overflow-y-scroll overflow-x-hidden" >
+
+
+                    <div className={`p-2 flex w-full ${subResponse?.sub_response?.role === "کارخانه" ? `justify-start` : `justify-end`} `}>
+
+                        <div className={` w-[70%] ${subResponse?.sub_response?.role === "کارخانه" ? "bg-blue-200" : "bg-orange-200"} rounded-xl`}>
+                            {subResponse?.content}
+                            <div className={`w-full ${subResponse?.sub_response.role === "کارخانه" ? "bg-blue-200" : "bg-orange-200"} rounded-b-xl px-3 text-left`} >
+                                <p className="pt-3">{ subResponse?.created_at ?  digitsEnToFa(subResponse?.created_at) : ""}</p>
+                            </div>
+                        </div>
+                        <Divider/>
+
+                    </div>
+
                         {
                             subResponse?.sub_response.map((i) => (
                                 <div className={`p-2 flex w-full ${i.role === "کارخانه" ? `justify-start` : `justify-end`} `}>
@@ -206,7 +221,7 @@ const TicketChatPage = () => {
                                         <div className={` w-[70%] ${i.role === "کارخانه" ? "bg-blue-200" : "bg-orange-200"} rounded-xl`}>
                                             {i.content}
                                             <div className={`w-full ${i.role === "کارخانه" ? "bg-blue-200" : "bg-orange-200"} rounded-b-xl px-3 text-left`} >
-                                                <p className="pt-3">{e2p(i.updated_at)}</p>
+                                                <p className="pt-3">{ i?.updated_at ?  digitsEnToFa(i?.updated_at) : ""}</p>
                                             </div>
                                         </div>
                                         <Divider/>

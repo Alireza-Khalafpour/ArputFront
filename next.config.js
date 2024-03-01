@@ -2,12 +2,15 @@
 const nextConfig = {
   // output: 'standalone',
     images: {
-        remotePatterns: [
-          {
-            protocol: "https",
-            hostname: "**",
-          },
-        ],
+      domains:[
+        'superapp-storage.storage.iran.liara.space'
+      ],
+        // remotePatterns: [
+        //   {
+        //     protocol: "https",
+        //     hostname: "**",
+        //   },
+        // ],
       },
 }
 

@@ -3,15 +3,17 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { Category, CloudUpload, Delete} from "@mui/icons-material";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Modal, Slide, TextField,  } from "@mui/material";
-import {  MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import { AddCircleOutline, Category, CloudUpload, Delete} from "@mui/icons-material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Modal, Slide, TextField,  } from "@mui/material";
+import {  MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import { useMemo, useState } from "react";
 import { Alert, ModalDialog, Snackbar, Textarea } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
 import Image from "next/image";
 import ProuductsTableOfShopAndFactory from "@/components/templates/ProuductsTableOfShopAndFactory";
+import { digitsEnToFa } from "@persian-tools/persian-tools";
+import Link from "next/link";
 
 
 
@@ -36,6 +38,7 @@ const MyProductsFactory = () => {
     const [info, setInfo] = useState([])
     const [features, setFeatures] = useState([])
     const [imageUrl, setImageUrl] = useState()
+    const [hasBundle, setHasBundle] = useState(false)
     // add product states----------------------------
     const[AddProductModal, setAddProductModal] = useState(false);
 
@@ -63,7 +66,6 @@ const MyProductsFactory = () => {
         })
         .then((response) => {
           setData(response.data.Data)
-          console.log(response)
         })
         .catch((error) => {
           console.log(error, "Error");
@@ -109,10 +111,12 @@ const MyProductsFactory = () => {
               setProductName("")
               setPreProductId("")
               setPrice(0)
-              setOff(0)
               setDescription("")
               setImageUrl([])
               setAddProductModal(false)
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000);
             })
             .catch(function (error) {
               console.log(error, "Error");
@@ -128,8 +132,6 @@ const MyProductsFactory = () => {
         // Get Brands/Factories List Api ----------------
 
           const [brandInfo, setBrandInfo] = useState([])
-          console.log(brandInfo)
-
 
           async function GetBrandData() {
               
@@ -250,6 +252,7 @@ const MyProductsFactory = () => {
     setInfo(row.original.info)
     setFeatures(row.original.features)
     setImageUrl(row.original?.image_url)
+    setHasBundle(row.original.has_bundle)
     setOpenDetail(true)
   }
 
@@ -303,7 +306,36 @@ const table = useMaterialReactTable({
         </Button>
       </div>
     )
-  }
+  },
+  renderTopToolbar: ({ table }) => {
+      
+    return (
+      <Box
+        sx={() => ({
+          display: 'flex',
+          gap: '0.5rem',
+          p: '8px',
+          justifyContent: 'space-between',
+        })}
+      >
+        <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          {/* import MRT sub-components */}
+          <MRT_GlobalFilterTextField table={table} />
+          <MRT_ToggleFiltersButton table={table} />
+        </Box>
+        <Box>
+          <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+            <Link
+              className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
+              href="/dashboard/add-pre-product"
+            >
+              ساخت پیش محصول جدید <AddCircleOutline/> 
+            </Link>
+          </Box>
+        </Box>
+      </Box>
+    );
+  },
 
 });
 
@@ -361,7 +393,7 @@ const table = useMaterialReactTable({
                     </InputAdornment>
                   ),
                 }}
-                variant="standard"
+                variant="outlined"
               />
 
             </div>
@@ -382,7 +414,7 @@ const table = useMaterialReactTable({
                     </InputAdornment>
                   ),
                 }}
-                variant="standard"
+                variant="outlined"
               />
 
 
@@ -415,12 +447,12 @@ const table = useMaterialReactTable({
             <h2  className="p-2 rounded-2xl bg-sky-200" > اطلاعات جانبی </h2>
             <div className="flex flex-row gap-1 justify-center items-center w-full" >
 
-                <div className="w-1/3" > <Image src={imageUrl ? imageUrl : ""} width={150} height={150} /> </div>
+                <div className="w-1/3" > <Image src={imageUrl} width={150} height={150} /></div>
                 <div className="w-2/3  grid grid-cols-2 gap-4 " >
 
-                  <p>طول : {e2p(`${info.height}`)} سانتی متر  </p>
-                  <p>عرض: {e2p(`${info.width}`)} سانتی متر  </p>
-                  <p>وزن: {e2p(`${info.weight}`)} کیلوگرم  </p>
+                  <p>طول : {digitsEnToFa(`${info.height}`)} سانتی متر  </p>
+                  <p>عرض: {digitsEnToFa(`${info.width}`)} سانتی متر  </p>
+                  <p>وزن: {digitsEnToFa(`${info.weight}`)} کیلوگرم  </p>
 
                 </div>
             </div>
@@ -435,6 +467,8 @@ const table = useMaterialReactTable({
               ))} 
 
             </div>
+            <h2 className="p-2 rounded-2xl bg-sky-200" > واقعیت افزوده: {hasBundle == true ? "دارد" : "ندارد"} </h2>
+
 
           </div>
 

@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { Add, CommentOutlined, Mail, Subject, Telegram } from "@mui/icons-material";
+import { Add, AddRounded, CommentOutlined, Mail, Subject, Telegram } from "@mui/icons-material";
 import { Avatar, Box, Button, IconButton, Input, Textarea, Typography } from "@mui/joy";
-import { Alert, Autocomplete, Divider, InputAdornment, List, ListItem, ListItemText, Snackbar, TextField } from "@mui/material";
+import { Alert, Autocomplete, Checkbox, Divider, FormControlLabel, InputAdornment, List, ListItem, ListItemText, Snackbar, TextField } from "@mui/material";
 import { e2p } from "@/utils/replaceNumbers";
+import * as shamsi from 'shamsi-date-converter';
 import axios from "axios";
 import Cookies from "universal-cookie";
 import TicketHistorySidebar from "../module/TicketHistorySidebar";
@@ -13,29 +14,6 @@ import { digitsEnToFa } from "@persian-tools/persian-tools";
 
 const TicketChatPage = () => {
 
-    const Messages = [
-        {
-            role:"client",
-            message: "سلام. من در حال خرید کاشی از سایت شما هستم و متوجه شدم که قسمتی از سایت شما خراب شده است.",
-            createdAt: "20:15 | 1402/08/29"
-        },
-        {
-            role:"admin",
-            message: " متأسفیم که با این مشکل روبرو شده‌اید. لطفاً مشکل را بیان کنید تا بتوانیم به شما کمک کنیم.😊😊😊",
-            createdAt: "20:19 | 1402/08/29"
-        },
-        {
-            role:"client",
-            message: " بله😊، وقتی می‌خواهم به صفحه محصولات بروم، صفحه خالی باز می‌شود.",
-            createdAt: "21:33 | 1402/08/29"
-        },
-        {
-            role:"admin",
-            message: " متوجه شدم. لطفاً از مرورگر دیگری استفاده کنید و یا صفحه را بازنشانی کنید. اگر مشکل شما حل نشد، لطفاً با ما تماس بگیرید. ",
-            createdAt: "22:33 | 1402/08/29"
-        },
-        
-    ]
 
     const cookie = new Cookies();
     const Auth = cookie.get('tokenDastResi')
@@ -51,15 +29,17 @@ const TicketChatPage = () => {
     const [departmentId, setDepartmentId] = useState("")
     const [subject, setSubject] = useState("")
     const [content, setContent] = useState("")
-    const [userId , setUserId] = useState('')
+    const [factoryId , setFactoryId] = useState('')
+    const [sendToFactory, setSendToFactory] = useState(false)
     // ---------------
-    const [subResponse, setSubResponse] = useState()
+    const [subResponse, setSubResponse] = useState("")
+    const [resetChat, setResetChat] = useState(0)
 
 
     // get userId -------------------------------------
 
-    function getUSer(Au) {
-        axios.get('https://supperapp-backend.chbk.run/register/current_user', {
+    async function getUSer(Au) {
+        await axios.get('https://supperapp-backend.chbk.run/register/current_user', {
             headers:{
             'accept': 'application/json',
             'Authorization': `Bearer ${Au}`,
@@ -91,11 +71,19 @@ const TicketChatPage = () => {
           });
       }
 
+
       useEffect(() => {
         const Auth = cookie.get('tokenDastResi')
         GetDepartmentList(Auth)
         getUSer(Auth)
       },[])
+
+      useEffect(() => {
+        const Auth = cookie.get('tokenDastResi')
+        GetDepartmentList(Auth)
+        getUSer(Auth)
+      },[resetChat])
+
 
 
 
@@ -115,7 +103,7 @@ const TicketChatPage = () => {
                   "subject": subject,
                   "content": content,
                   "department_id": departmentId,
-                  "factory_id": userId,
+                  "factory_id": sendToFactory == true ? factoryId : "",
                   "file": ""
                 }, 
                 {
@@ -146,9 +134,49 @@ const TicketChatPage = () => {
                 setMessage(" موضوع را مشخص کنید")
                 setErrorAlert(true)
             }
-
-    
       }
+
+      // Respond to an existing ticket-----------------------------
+      async function RespondTicket() {
+
+        setLoading(true);
+        await axios.patch('https://supperapp-backend.chbk.run/ticket/update_sub_response', {
+            "id": subResponse?.id,
+            "content": content
+        }, 
+        {
+            headers: headers
+        })
+        .then((response) => {
+            if(response.data.Done === true){
+            setAlert(true)
+            setMessage(response.data.Message)
+            
+            }else {
+            setMessage(response.data.Message)
+            setErrorAlert(true)
+            
+            }
+        })
+        .catch(function (error) {
+            setMessage(" متاسفیم،خطایی رخ داده است ")
+            setErrorAlert(true)
+            
+        });
+    
+        setDepartmentId("")
+        setSubject("")
+        setContent("")
+
+  }
+
+
+      const ResetAll = () => {
+        setSubResponse("")
+        setResetChat(1)
+        document.getElementById("departments").focus();
+        scrollTo(document.getElementById("departments"))
+      } 
 
 
     return (
@@ -158,19 +186,21 @@ const TicketChatPage = () => {
 
                 <div className="flex flex-col gap-5 text-center w-1/4" >
 
-                    <div className="w-full border-2 border-paszamine2 rounded-xl flex-col flex justify-center items-center gap-3 " >
+                    <div className="w-full border-2 border-paszamine2 rounded-xl flex-col flex justify-center items-center gap-6 pb-7 " >
                         <h3 className="text-lg text-white bg-khas w-full px-2 py-5 rounded-t-xl text-center " > مشخصات تیکت </h3>
 
                         <Autocomplete
                             className="md:w-3/4 w-full "
                             noOptionsText=" داده ای موجود نیست "
+                            id="departments"
                             options={departmentList}
                             getOptionLabel={(i)=> i.dep_name}
                             onChange={(event, val) =>{
                                 setDepartmentId(val.id)
                             }}
-                            renderInput={(params) => <TextField {...params} variant="outlined" label=" ارسال به " dir="rtl"/>}
+                            renderInput={(params) => <TextField {...params} variant="outlined" label=" ارسال به دپارتمان " dir="rtl"/>}
                         />
+
 
                         <TextField
                             className="md:w-3/4 w-full "
@@ -188,8 +218,28 @@ const TicketChatPage = () => {
                             variant="outlined"
                         />
 
+                        <FormControlLabel
+                            className="border border-asliLight rounded-xl md:w-3/4 w-full m-0 "
+                            control={<Checkbox
+                                checked={sendToFactory}
+                                onChange={(e) => setSendToFactory(e.target.checked)}
+                            />
+                            } 
+                            label=" ارسال برای کارخانه " 
+                        />
+                        
                     </div>
-                    <TicketHistorySidebar setSubResponse={setSubResponse} />
+                    <ListItem
+                        onClick={() => ResetAll()}
+                        className="mb-5 w-3/4 rounded-xl border border-gray-600 p-1 mx-auto bg-blue-200 hover:bg-blue-300 cursor-pointer flex flex-row justify-between "
+                        disableGutters
+                    >
+                        <span> ایجاد تیکت جدید </span>
+
+                        <AddRounded />
+
+                    </ListItem>
+                    <TicketHistorySidebar setResetChat={setResetChat} alert={alert} setSubResponse={setSubResponse} />
 
                 </div>
 
@@ -202,12 +252,13 @@ const TicketChatPage = () => {
                     <div className="p-4 flex flex-col gap-4 w-full overflow-y-scroll overflow-x-hidden" >
 
 
-                    <div className={`p-2 flex w-full ${subResponse?.sub_response?.role === "کارخانه" ? `justify-start` : `justify-end`} `}>
+                    <div className={`p-2 flex w-full justify-start `}>
 
-                        <div className={` w-[70%] ${subResponse?.sub_response?.role === "کارخانه" ? "bg-blue-200" : "bg-orange-200"} rounded-xl`}>
+                        <div className={` w-[70%] bg-blue-200 rounded-xl p-2`}>
                             {subResponse?.content}
-                            <div className={`w-full ${subResponse?.sub_response.role === "کارخانه" ? "bg-blue-200" : "bg-orange-200"} rounded-b-xl px-3 text-left`} >
-                                <p className="pt-3">{ subResponse?.created_at ?  digitsEnToFa(subResponse?.created_at) : ""}</p>
+                            <div className={`w-full bg-blue-200  rounded-b-xl px-3 text-left`} >
+                                <p className="pt-3"> {subResponse?.created_at ? digitsEnToFa(subResponse?.created_at.split(" ")[1]) : ""} | { subResponse?.created_at ?  digitsEnToFa(shamsi.gregorianToJalali(subResponse?.created_at).join('/')) : ""}</p>
+
                             </div>
                         </div>
                         <Divider/>
@@ -215,13 +266,13 @@ const TicketChatPage = () => {
                     </div>
 
                         {
-                            subResponse?.sub_response.map((i) => (
-                                <div className={`p-2 flex w-full ${i.role === "کارخانه" ? `justify-start` : `justify-end`} `}>
+                            subResponse?.sub_response?.map((i) => (
+                                <div className={`p-2 flex w-full ${i?.role === "کارخانه" ? `justify-start` : `justify-end`} `}>
 
-                                        <div className={` w-[70%] ${i.role === "کارخانه" ? "bg-blue-200" : "bg-orange-200"} rounded-xl`}>
+                                        <div className={` p-2 w-[70%] ${i?.role === "کارخانه" ? "bg-blue-200" : "bg-orange-200"} rounded-xl`}>
                                             {i.content}
-                                            <div className={`w-full ${i.role === "کارخانه" ? "bg-blue-200" : "bg-orange-200"} rounded-b-xl px-3 text-left`} >
-                                                <p className="pt-3">{ i?.updated_at ?  digitsEnToFa(i?.updated_at) : ""}</p>
+                                            <div className={`w-full ${i?.role === "کارخانه" ? "bg-blue-200" : "bg-orange-200"} rounded-b-xl px-3 text-left`} >
+                                                <p className="pt-3"> {i?.updated_at ? digitsEnToFa(i?.updated_at.split(" ")[1]) : ""} | { i?.updated_at ?  digitsEnToFa(shamsi.gregorianToJalali(i?.updated_at).join('/')) : ""}</p>
                                             </div>
                                         </div>
                                         <Divider/>
@@ -260,7 +311,14 @@ const TicketChatPage = () => {
                                     <Typography sx={{ ml: 'auto' }} className="bg-paszamine2 text-center items-center my-auto" >
                                     {content.length} تعداد کاراکتر
                                     </Typography>
-                                    <button onClick={() => SendTicket()} className="p-3 flex flex-row w-20 rounded-xl bg-khas text-paszamine1 hover:bg-orange-500 hover:font-bold   "> <Telegram/> ارسال </button>
+                                    {
+                                        subResponse == ""
+                                        ?
+                                        <button onClick={() => SendTicket()} className="p-3 flex flex-row w-20 rounded-xl bg-khas text-paszamine1 hover:bg-orange-500 hover:font-bold   "> <Telegram/> ارسال </button>
+                                        :
+                                        <button onClick={() => RespondTicket()} className="p-3 flex flex-row w-20 rounded-xl bg-asliLight text-paszamine1 hover:bg-blue-600 hover:font-bold   "> <Telegram/> پاسخ </button>
+
+                                    }
                                 </div>
                             }
                             sx={{ minWidth: 300 }}

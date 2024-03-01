@@ -12,6 +12,7 @@ import ContextMenu from "@/utils/ContextMenu";
 import { Alert, Input, ModalDialog, Snackbar, Textarea } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
 import Image from "next/image";
+import Link from "next/link";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -258,7 +259,7 @@ export const MyProducts = ()=> {
             },
            }
            
-           fetch(`https://supperapp-backend.chbk.run/pre_product/admin/confirmation?pre_product_id=${row?.original?.pre_product_id}`, confirmMethod)
+           fetch(`https://supperapp-backend.chbk.run/pre_product/admin/confirmation?pre_product_id=${row.original?.pre_product_id}`, confirmMethod)
            .then((response) => {
                 response.json()
             })
@@ -334,9 +335,16 @@ const table = useMaterialReactTable({
         <Button onClick={() => handleDetailModal(row)} size="small" className="rounded-xl bg-khas hover:bg-orange-600 p-1 text-white font-semibold "  >
           جزییات
         </Button>
-        <Button disabled={row.original.admin_confirmation == true} onClick={() => ConfirmPreProduct(row)} size="small" className="rounded-xl bg-khas hover:bg-orange-600 p-1 text-white font-semibold "  >
-          تایید
-        </Button>
+        {
+          row.original?.admin_confirmation == true
+          ?
+          null
+          :
+          <Button onClick={() => ConfirmPreProduct(row)} size="small" className="rounded-xl bg-khas hover:bg-orange-600 p-1 text-white font-semibold "  >
+            تایید
+          </Button>
+
+        }
         {
             row.original.active == true 
             ?
@@ -359,7 +367,36 @@ const table = useMaterialReactTable({
           }
       </div>
     )
-  }
+  },
+  renderTopToolbar: ({ table }) => {
+      
+    return (
+      <Box
+        sx={() => ({
+          display: 'flex',
+          gap: '0.5rem',
+          p: '8px',
+          justifyContent: 'space-between',
+        })}
+      >
+        <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          {/* import MRT sub-components */}
+          <MRT_GlobalFilterTextField table={table} />
+          <MRT_ToggleFiltersButton table={table} />
+        </Box>
+        <Box>
+          <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+            <Link
+              className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
+              href="/dashboard/add-pre-product"
+            >
+              ساخت پیش محصول جدید <AddCircleOutline/> 
+            </Link>
+          </Box>
+        </Box>
+      </Box>
+    );
+  },
 });
 
 

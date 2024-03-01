@@ -105,6 +105,7 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
                             className="md:w-1/2 w-full p-3"
                             id="input-with-icon-textfield"
                             placeholder=" نام  "
+                            label="نام"
                             value={factoryInfo?.editFactoryName}
                             onChange={(e) => setFactoryInfo({...factoryInfo, "editFactoryName" : e.target.value})}
                             InputProps={{
@@ -114,7 +115,7 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
                                 </InputAdornment>
                             ),
                             }}
-                            variant="standard"
+                            variant="outlined"
                         />
 
 
@@ -122,6 +123,7 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
                             className="md:w-1/2 w-full p-3"
                             id="input-with-icon-textfield"
                             placeholder=" تلفن  "
+                            label="تلفن"
                             value={factoryInfo?.editFactoryTelephone}
                             onChange={(e) => setFactoryInfo({...factoryInfo, "editFactoryTelephone" : e.target.value})}
                             InputProps={{
@@ -131,7 +133,7 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
                                 </InputAdornment>
                             ),
                             }}
-                            variant="standard"
+                            variant="outlined"
                         />
 
 

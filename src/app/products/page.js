@@ -6,6 +6,7 @@ import { Rating } from "@mui/material";
 import { e2p } from "@/utils/replaceNumbers";
 import AddToFavoriteAndShare from "@/components/module/AddToFavoriteAndShare";
 import Image from "next/image";
+import { numberToWords } from "@persian-tools/persian-tools";
 
 
 
@@ -54,15 +55,15 @@ async function Products() {
 
                 productList?.map((i) => (
 
-                        <Card className="md:w-1/5 w-full h-[400px] hover:shadow-2xl" key={i.id}>
+                        <Card className="md:w-1/5 w-full h-[420px] hover:shadow-2xl " key={i.id}>
                             <div className=" w-full h-full" key={i.id} >
                                 <CardOverflow>
                                     <AspectRatio>
                                     <Image
                                         src={i?.image_url}
-                                        loading="lazy"
-                                        fill
-                                        alt=""
+                                        width={200}
+                                        height={200}
+                                        alt="عکس"
                                     />
                                     
                                     </AspectRatio>
@@ -80,7 +81,7 @@ async function Products() {
                                         {i.has_bundle === true ? "واقعیت افزوده دارد" : " واقعیت افزوده ندارد "}
                                     </Chip>
                                     <Typography level="body-sm">
-                                    {i.shop_number} فروشگاه برای این کالا
+                                    {numberToWords(i.shop_number)} فروشگاه برای این کالا
                                     </Typography>
                                 </CardContent>
                             </div>

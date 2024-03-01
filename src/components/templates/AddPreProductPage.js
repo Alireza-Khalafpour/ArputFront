@@ -33,8 +33,6 @@ const AddPreProductPage = () => {
     const [finalSampleFeatureIds, setFinalSampleFeatureIds] = useState([])
     const [sampleOptions, setSampleOptions] = useState([])
     const [imgUrl, setImgUrl] = useState()
-
-    console.log(sampleOptions)
     // ----------
     const [message, setMessage] = useState();
     const [alert, setAlert] = useState(false);
@@ -67,7 +65,7 @@ const AddPreProductPage = () => {
         const [tempIndex, setTempIndex] = useState()
 
         function handleSetTempFeature(i,index,val){
-            setTempFeatureSample({"feature_id": i.id,"sample_id":val.sample_data.id})
+            setTempFeatureSample({"feature_id": i.id,"sample_id":val.sample_data.sample_id})
             setTempIndex(index)
         }
 
@@ -329,9 +327,9 @@ const AddPreProductPage = () => {
           setLoading(false)
         });
 
-                        // setTimeout(() => {
-                //     window.location.reload()
-                // }, 1500);
+        setTimeout(() => {
+            window.location.reload()
+        }, 1800);
 
     };
 

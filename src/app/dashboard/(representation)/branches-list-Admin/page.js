@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, EditRounded, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
+import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, EditRounded, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RadioButtonChecked, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, Snackbar, TextField, Tooltip } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
@@ -53,7 +53,7 @@ export const BranchListAdmin = ()=> {
         headers:RepresentationListHeaders
         })
         .then((response) => {
-            console.log(response)
+            console.log(response.data.data)
             setData(response.data.data)
         })
         .catch((error) => {
@@ -69,7 +69,6 @@ export const BranchListAdmin = ()=> {
         })
         .then((response) => {
             setFactoryList(response.data.data)
-            console.log(response.data.data)
         })
         .catch((error) => {
             console.log(error, "Error");
@@ -104,7 +103,6 @@ export const BranchListAdmin = ()=> {
           })
           .then((response) => {
             if (response.data.Done === true) {
-              console.log(response)
               setAlert(true)
               setMessage(" نمایندگی جدید با موفقیت افزوده شد ")
               setLoading(false)
@@ -125,6 +123,68 @@ export const BranchListAdmin = ()=> {
           });
     
       }
+
+
+          // Activate Branch Admin -----------------------------------------
+
+          async function GetRowIdForActivate(id) {
+      
+            setLoading(true);
+      
+               const ActiveMethod = {
+                method: 'PATCH',
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': `Bearer ${Auth}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({"id": id}),
+               }
+               
+               fetch('https://supperapp-backend.chbk.run/branch/active', ActiveMethod)
+               .then((response) => {
+                    response.json()
+                })
+               .then((data) => {
+                  setAlert(true)
+                  setMessage(" نمایندگی فعال شد ")
+                  setLoading(false)
+                  ListApi(Auth)
+                }) 
+               .catch(err => console.log(err)) 
+      
+          }
+      
+      
+          // Deactive Branch Admin -----------------------------------------
+      
+          const GetRowIdForDelete = (id) => {
+      
+            setLoading(true);
+      
+               const deleteMethod = {
+                method: 'PATCH',
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': `Bearer ${Auth}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({"id": id}),
+               }
+               
+               fetch(`https://supperapp-backend.chbk.run/branch/deactive`, deleteMethod)
+               .then((response) => {
+                    response.json()
+                })
+               .then((data) => {
+                  setAlert(true)
+                  setMessage(" نمایندگی غیرفعال شد ")
+                  setLoading(false)
+                  ListApi(Auth)
+                }) 
+               .catch(err => console.log(err)) 
+      
+          }
 
 
     
@@ -157,6 +217,22 @@ const table = useMaterialReactTable({
       align: 'right',
       textAlign:'right',
     }
+  },
+  displayColumnDefOptions:{    
+    'mrt-row-expand': {
+      size: 70
+    },
+  },
+  muiTableContainerProps: { 
+    sx: {
+     maxHeight: '500px' ,
+     borderRadius: "30px",
+    } 
+  },
+  muiTablePaperProps: {
+    sx: {
+      borderRadius: "30px",
+     } 
   },
   muiTableHeadCellProps:{
     sx:{
@@ -218,11 +294,27 @@ const table = useMaterialReactTable({
   
             row?.original?.branch_data.map((item) => ( 
               <div className="grid grid-cols-5 gap-1" >
-                    <IconButton
+                    {
+                      item?.active == true
+                      ?
+                      <IconButton
                       color="error"
+                      className="max-w-fit"
+                      onClick={() => GetRowIdForDelete(item?.branch_id)}
                     >
                         <DeleteRounded className="text-red-600" titleAccess="غیرفعال کردن" />
                     </IconButton>
+
+                      :
+
+                    <IconButton
+                      color="success"
+                      className="max-w-fit"
+                      onClick={() => GetRowIdForActivate(item?.branch_id)}
+                    >
+                        <RadioButtonChecked titleAccess="فعال کردن" />
+                    </IconButton>
+                    }
                 <p className="text-lg p-2" > {item.branch_name} </p>
                 <p className="text-lg p-2" > {item.branch_code} </p>
                 <p className="text-lg p-2" > {item.telephone} </p>
@@ -401,7 +493,6 @@ const table = useMaterialReactTable({
       autoHideDuration={4000}
       onClose={() => setAlert(false)}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      se
     >
       <Alert variant='filled' severity='success' className='text-lg text-white font-semibold' > {message} </Alert>
     </Snackbar>
@@ -411,7 +502,6 @@ const table = useMaterialReactTable({
       autoHideDuration={4000}
       onClose={() => setErrorAlert(false)}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      se
     >
       <Alert variant='filled' severity='error' className='text-lg text-white font-semibold' > {message} </Alert>
     </Snackbar>

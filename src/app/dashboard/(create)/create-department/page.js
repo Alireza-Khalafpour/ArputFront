@@ -152,8 +152,7 @@ export const CreateDepartment = ()=> {
             setEditDepartment(false)
         }
 
-        // Activate Factory -----------------------------------------
-
+        // Activate Department -----------------------------------------
 
         async function GetRowIdForActivate(id) {
           setLoading(true);
@@ -181,7 +180,7 @@ export const CreateDepartment = ()=> {
         }
     
     
-        // Deactive a Factory -----------------------------------------
+        // Deactive Department -----------------------------------------
     
         const GetRowIdForDelete = (id) => {
     

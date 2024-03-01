@@ -6,7 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Alert, Divider, MenuList, Snackbar } from '@mui/material';
+import { Alert, Box, Divider, MenuList, Snackbar, Tooltip } from '@mui/material';
 import { Apps, ArrowDropDown, CloseRounded, ExitToApp, Home, InstallMobileOutlined, LoginOutlined, NotificationsActive, Person, Phone, Settings, ShoppingBasket, SpaceDashboard, ThreePRounded, VideoLabel, Wallet } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
@@ -15,6 +15,7 @@ import { Menu, MenuItem, Modal, ModalDialog } from '@mui/joy';
 import axios from 'axios';
 import Image from 'next/image';
 import "../styles/LandingPageStyles/style.css"
+import HeaderDropMenu from '../templates/HeaderDropMenu';
 
 
 export default function Header() {
@@ -34,12 +35,15 @@ export default function Header() {
 
   const [addressError, setAddressError] = React.useState(false);
   const [infoError, setInfoError] = React.useState(false);
+  const [triggered, setTriggered]= React.useState(0)
+
 
   React.useEffect(() => {
-    getUSer(Au)
-  },[])
+    route.refresh();
+  },[triggered])
 
-
+  
+  
   async function getUSer(Auth) {
     await axios.get('https://supperapp-backend.chbk.run/register/current_user', {
       headers:{
@@ -52,40 +56,32 @@ export default function Header() {
         setFamily(response?.data.data[0].family)
         if(cookie.get("role") !== "admin" && cookie.get("role") !== "client") {
           if(response?.data.data[0]?.address.length == 0 ){
-          setTimeout(() => {
+            setTimeout(() => {
               setAddressError(true)
               setAlert(true)
             }, 3000);
-            }
-            if(response?.data.data[0].name == "" || response?.data.data[0].name == null || response?.data.data[0].shop_name == ""){
-              setTimeout(() => {
+          }
+          if(response?.data.data[0].name == "" || response?.data.data[0].name == null || response?.data.data[0].shop_name == ""){
+            setTimeout(() => {
                 setInfoError(true)
                 setAlert(true)
               }, 3000);
             }
-        }
-      })
-      .catch((error) => {
-        console.log("Error on getting current user");
-      });
-  }
-
-
-  async function handleLogout() {
-    cookie.remove("tokenDastResi");
-    cookie.remove("role");
-    if (cookie.get("tokenDastResi")) {
-      cookie.remove("tokenDastResi");
-      cookie.remove("role");
-      window.location.replace("/")
-    }else{
-      window.location.replace("/")
-    }
-    setAnchorEl(null);
-  }
-
-
-  const handleMenu = (event) => {
+          }
+        })
+        .catch((error) => {
+          console.log("Error on getting current user");
+        });
+      }
+      
+      React.useEffect(() => {
+        setTimeout(() => {
+          getUSer(Au)
+        }, 250);
+      },[])
+      
+      
+      const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -312,8 +308,18 @@ export default function Header() {
                   <ul>
                     <li><Link href="/aboutus"> درباره ما </Link></li>
                     <li><Link href="/contactus"> ارتباط با ما </Link></li>
-                    <li><Link href="/signin">ورود</Link></li>
-                    <li><Link href="/signup">ثبت نام</Link></li>
+                    {
+                      cookie.get("tokenDastResi")
+                      ?
+                      (<div></div>)
+                      :
+                      (
+                        <>
+                          <li><Link href="/signin">ورود</Link></li>
+                          <li><Link href="/signup">ثبت نام</Link></li>
+                        </>
+                      )
+                    }
                   </ul>
                 </div>
               </li>
@@ -333,44 +339,7 @@ export default function Header() {
                         <Wallet className='w-7 h-7' />
                       </Link>
                     </IconButton>
-
-                    <IconButton
-                      aria-haspopup="true"
-                      aria-expanded={anchorEl ? 'true' : undefined}
-                      onClick={handleMenu}
-                      color="inherit"
-                    >
-                      <AccountCircle className='w-7 h-7' />
-                    </IconButton>
-                    <Menu
-                      className='top-14 min-w-[140px] '
-                      anchorEl={anchorEl}
-                      anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                      
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                      open={anchorEl}
-                      onClose={() => handleClose()}
-                      onClick={() => handleClose()}
-                    >
-                      <MenuItem> {name} {family} </MenuItem>
-                      <Divider/>
-                      <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full'> <Link href="/" > <Home className='text-asliLight' /> خانه  </Link> </MenuItem>
-                      <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full '> <Link href="/profile" > <Person className='text-asliLight' /> پروفایل  </Link> </MenuItem>
-                      <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200 w-full '> <Link href="/dashboard"> <SpaceDashboard className='text-asliLight' /> داشبورد   </Link> </MenuItem>
-                      <MenuItem onClick={() => handleClose()} className='gap-2 hover:bg-sky-200 transition-colors duration-200'><Settings className='text-asliLight' /> برروزرسانی رمزعبور </MenuItem>
-                      <Divider/>
-                      <MenuItem className='text-rose-800 hover:bg-rose-200 gap-2 transition-colors duration-200 font-bold w-full ' onClick={() => handleLogout() }> <ExitToApp/> خروج </MenuItem>
-                    </Menu>
-
-                    
-
-
+                    <HeaderDropMenu name={name} family={family} setTriggered={setTriggered} />
                   </div>
                 )
                 :

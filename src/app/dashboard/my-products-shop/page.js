@@ -12,6 +12,7 @@ import { Alert, ModalDialog, Snackbar, Textarea } from "@mui/joy";
 import { e2p } from "@/utils/replaceNumbers";
 import Image from "next/image";
 import ProuductsTableOfShopAndFactory from "@/components/templates/ProuductsTableOfShopAndFactory";
+import { digitsEnToFa } from "@persian-tools/persian-tools";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -39,7 +40,9 @@ export const MyProductsShop = ()=> {
     const [preProductId, setPreProductId] = useState('');
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState("");
-
+    // -----------------------------------------------
+    const [imageFiles, setImageFiles] = useState([])
+    console.log(imageFiles)
     
     // Alerts---------------------------------------
     const [message, setMessage] = useState();
@@ -168,7 +171,6 @@ export const MyProductsShop = ()=> {
       setProductName("")
       setPreProductId("")
       setPrice(0)
-      setOff(0)
       setDescription("")
       setImageUrl([])
       setAddProductModal(false)
@@ -194,7 +196,7 @@ export const MyProductsShop = ()=> {
 
     setAddProductModal(true)
     setPreProductId(row.original.pre_product_id)
-    console.log(row.original.pre_product_id)
+    setProductName(row.original.name)
   }
 
 const table = useMaterialReactTable({
@@ -291,7 +293,7 @@ const table = useMaterialReactTable({
           <DialogContent className="flex flex-col justify-center items-center gap-10" >           
 
             <div className='w-[90%] grid grid-cols-2 gap-8 justify-center mx-auto items-center' >
-              <TextField
+              {/* <TextField
                 id="input-with-icon-textfield"
                 className="w-[65%]"
                 label=" نام کالا  "
@@ -306,7 +308,19 @@ const table = useMaterialReactTable({
                   ),
                 }}
                 variant="standard"
-              />
+              /> */}
+
+                <input 
+                    type='file' 
+                    id='fileInput' 
+                    multiple  
+                    className="!hidden"
+                    accept='image/*'
+                    onChange={ ({target:{files}}) =>{
+                        setImageFile(files)
+                    }
+                    }
+                />
 
               <TextField
                 id="input-with-icon-textfield"
@@ -430,9 +444,9 @@ const table = useMaterialReactTable({
                 <div className="w-1/3" > <Image src={imageUrl} width={150} height={150} /> </div>
                 <div className="w-2/3  grid grid-cols-2 gap-4 " >
 
-                  <p>طول : {e2p(`${info.height}`)} سانتی متر  </p>
-                  <p>عرض: {e2p(`${info.width}`)} سانتی متر  </p>
-                  <p>وزن: {e2p(`${info.weight}`)} کیلوگرم  </p>
+                  <p>طول : {digitsEnToFa(`${info.height}`)} سانتی متر  </p>
+                  <p>عرض: {digitsEnToFa(`${info.width}`)} سانتی متر  </p>
+                  <p>وزن: {digitsEnToFa(`${info.weight}`)} کیلوگرم  </p>
 
                 </div>
             </div>

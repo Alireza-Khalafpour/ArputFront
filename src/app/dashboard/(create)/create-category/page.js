@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, Category, DeleteRounded, DetailsOutlined, EditRounded, RadioButtonChecked} from "@mui/icons-material";
+import { AddAPhoto, AddCircleOutline, Category, DeleteRounded, DetailsOutlined, EditRounded, MiscellaneousServices, RadioButtonChecked} from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, Snackbar, TextField, Tooltip } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
@@ -279,8 +279,9 @@ export const CreateFactory = ()=> {
 const table = useMaterialReactTable({
   columns,
   data,
-  enableExpandAll: false, //hide expand all double arrow in column header
+  enableExpandAll: true, //hide expand all double arrow in column header
   enableExpanding: true,
+  positionExpandColumn:"first",
   initialState: { expanded: false }, //expand all rows by default
   paginateExpandedRows: false, //When rows are expanded, do not count sub-rows as number of rows on the page towards pagination
   localization: mrtLocalizationFa,

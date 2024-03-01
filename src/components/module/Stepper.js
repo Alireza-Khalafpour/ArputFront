@@ -7,13 +7,13 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
 
-const steps = [' شماره همراه ', ' ایجاد حساب  '];
+const steps = [' شماره همراه ', ' رمز جدید '];
 
 export default function StepperModule({activeStep}) {
 
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <div className='w-full'>
       <Stepper activeStep={activeStep} >
         {steps.map((label, index) => {
           const stepProps = {};
@@ -27,6 +27,6 @@ export default function StepperModule({activeStep}) {
         })}
       </Stepper>
 
-    </Box>
+    </div>
   );
 }

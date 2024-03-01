@@ -29,10 +29,11 @@ function GalleryProduct({ productList }) {
             clickable: true,
           }}
           modules={[Pagination]}
-          className="   items-center"
+          className=" items-center"
         >
           <SwiperSlide>
             <Image
+              className="hover:blur-sm "
               src={productList.image_url[0]}
               alt={productList.image_url[0]}
               width={200}
@@ -40,9 +41,9 @@ function GalleryProduct({ productList }) {
               onClick={(e) => handleImage(e)}
             />
           </SwiperSlide>
-          <SwiperSlide>
+          {/* <SwiperSlide>
             <Image
-              src={productList.image_url[0]}
+              src={productList.image_url[1]}
               alt={productList.image_url[0]}
               width={200}
               height={200}
@@ -51,7 +52,7 @@ function GalleryProduct({ productList }) {
           </SwiperSlide>
           <SwiperSlide>
             <Image
-              src={productList.image_url[0]}
+              src={productList.image_url[2]}
               alt={productList.image_url[0]}
               width={200}
               height={200}
@@ -60,13 +61,13 @@ function GalleryProduct({ productList }) {
           </SwiperSlide>
           <SwiperSlide>
             <Image
-              src={productList.image_url[0]}
+              src={productList.image_url[3]}
               alt={productList.image_url[0]}
               width={200}
               height={200}
               onClick={(e) => handleImage(e)}
             />
-          </SwiperSlide>
+          </SwiperSlide> */}
         </Swiper>
       </div>
       <div className=" w-[400px] m-auto  flex-row-reverse h-[350px] hidden md:flex">
@@ -86,9 +87,18 @@ function GalleryProduct({ productList }) {
         >
           <SwiperSlide>
             <Image
+              className="hover:blur-sm "
               width={350}
               height={350}
               src={productList.image_url[0]}
+              alt={productList.image_url[0]}
+            />
+          </SwiperSlide>
+          {/* <SwiperSlide>
+            <Image
+              width={350}
+              height={350}
+              src={productList.image_url[1]}
               alt={productList.image_url[0]}
             />
           </SwiperSlide>
@@ -96,7 +106,7 @@ function GalleryProduct({ productList }) {
             <Image
               width={350}
               height={350}
-              src={productList.image_url[0]}
+              src={productList.image_url[2]}
               alt={productList.image_url[0]}
             />
           </SwiperSlide>
@@ -104,20 +114,15 @@ function GalleryProduct({ productList }) {
             <Image
               width={350}
               height={350}
-              src={productList.image_url[0]}
+              src={productList.image_url[3]}
               alt={productList.image_url[0]}
             />
-          </SwiperSlide>
-          <SwiperSlide>
-            <Image
-              width={350}
-              height={350}
-              src={productList.image_url[0]}
-              alt={productList.image_url[0]}
-            />
-          </SwiperSlide>
+          </SwiperSlide> */}
         </Swiper>
-        <Swiper
+
+
+
+        {/* <Swiper
           onSwiper={setThumbsSwiper}
           spaceBetween={10}
           slidesPerView={4}
@@ -127,39 +132,69 @@ function GalleryProduct({ productList }) {
           direction="vertical"
           className={`mySwiper flex h-full w-[100px] `}
         >
-          <SwiperSlide>
-            <Image
-              width={100}
-              height={100}
-              src={productList.image_url[0]}
-              alt={productList.image_url[0]}
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <Image
-              width={100}
-              height={100}
-              src={productList.image_url[0]}
-              alt={productList.image_url[0]}
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <Image
-              width={100}
-              height={100}
-              src={productList.image_url[0]}
-              alt={productList.image_url[0]}
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <Image
-              width={100}
-              height={100}
-              src={productList.image_url[0]}
-              alt={productList.image_url[0]}
-            />
-          </SwiperSlide>
-        </Swiper>
+          {
+            productList.image_url[0]
+            ?
+            <SwiperSlide>
+              <Image
+                width={100}
+                height={100}
+                src={productList.image_url[0]}
+                alt={productList.image_url[0]}
+              />
+            </SwiperSlide>
+
+            :
+            null
+          }
+                    {
+            productList.image_url[1]
+            ?
+            <SwiperSlide>
+              <Image
+                width={100}
+                height={100}
+                src={productList.image_url[1]}
+                alt={productList.image_url[0]}
+              />
+            </SwiperSlide>
+
+            :
+            null
+          }
+                    {
+            productList.image_url[2]
+            ?
+            <SwiperSlide>
+              <Image
+                width={100}
+                height={100}
+                src={productList.image_url[2]}
+                alt={productList.image_url[0]}
+              />
+            </SwiperSlide>
+
+            :
+            null
+          }
+          {
+            productList.image_url[3]
+            ?
+            <SwiperSlide>
+              <Image
+                width={100}
+                height={100}
+                src={productList.image_url[3]}
+                alt={productList.image_url[0]}
+              />
+            </SwiperSlide>
+
+            :
+            null
+          }
+        </Swiper> */}
+
+
       </div>
     </>
   );

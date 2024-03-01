@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, Category, DeleteRounded, Edit, LocationCity, LocationOnRounded, RadioButtonChecked, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
+import { AddCircleOutline, Category, DeleteRounded, Edit, EditAttributes, LocationCity, LocationOnRounded, Person, RadioButtonChecked, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, InputAdornment, Snackbar, TextField, Typography } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
@@ -12,6 +12,7 @@ import {  IconButton, Textarea } from "@mui/joy";
 import CustomNeshanMap from "@/components/module/NeshanMap";
 import { useRouter } from "next/navigation";
 import EditFactoryModalPage from "@/components/module/EditFactoryModalPage";
+import { digitsEnToFa } from "@persian-tools/persian-tools";
 
 
 
@@ -156,6 +157,54 @@ export const CreateCategory = ()=> {
       setEditFactoryModal(true)
     }
 
+    // Edit Factory Username---------------------------------
+
+    const [openEditUsernameModal, setOpenEditUsernameModal] = useState(false)
+
+    const headersEditUsername ={
+      'accept': 'application/json',
+      'Authorization': `Bearer ${Auth}`,
+      'Content-Type': 'application/json',
+      }
+
+      const handleEditFactoryUsername = (row) => {
+        setOpenEditUsernameModal(true);
+        setFactoryIdForAddress(row.original.id)
+      }
+    
+    
+      async function GetRowIdForUpdateUsername() {
+          setLoading(true);
+          await axios.patch('https://supperapp-backend.chbk.run/register/factory/change_username', {
+            "factory_id": factoryIdForAddress,
+            "new_mobile": addMobile
+          }, 
+          {
+            headers: headersEditUsername
+          })
+          .then((response) => {
+              setAlert(true)
+            if(response.data.Done === true){
+              setAlert(true)
+              setMessage(response.data?.Error_text)
+            }else {
+              setMessage(response.data?.Error_text)
+              setErrorAlert(true)
+            }
+          })
+          .catch(function (error) {
+              console.log(error)
+              setMessage(" متاسفیم،خطایی رخ داده است ")
+              setErrorAlert(true)
+          });
+          setLoading(false)
+          setOpenEditUsernameModal(false)
+          setFactoryIdForAddress("")
+          setAddMobile("")
+          ListApi(Auth)
+
+      } 
+
     // Factory Address Part  -----------------------------------
 
     const [Address, setAddress] = useState()
@@ -243,12 +292,13 @@ export const CreateCategory = ()=> {
         header: ' نام کاربری ',
         accessorKey: 'username',
         id: 'username',
+        Cell: ({ cell }) => <span>{digitsEnToFa(cell.getValue())}</span>,
       },
       {
-        header: ' موبایل ',
+        header: ' تلفن ',
         accessorKey: 'telephone',
         id: 'telephone',
-        Cell: ({ cell }) => <span>{cell.getValue()}</span>,
+        Cell: ({ cell }) => <span>{digitsEnToFa(cell.getValue())}</span>,
       },
       // {
       //   header: ' تلفن ',
@@ -261,7 +311,7 @@ export const CreateCategory = ()=> {
   );
 
 
-const table = useMaterialReactTable({
+  const table = useMaterialReactTable({
   columns,
   data,
   localization: mrtLocalizationFa,
@@ -288,8 +338,23 @@ const table = useMaterialReactTable({
       color: 'white',
     }
   },
-  muiTableContainerProps: { sx: { maxHeight: '500px' } },
 
+  displayColumnDefOptions:{    
+    'mrt-row-expand': {
+      size: 70
+    },
+  },
+  muiTableContainerProps: { 
+    sx: {
+      maxHeight: '500px' ,
+      borderRadius: "30px",
+    } 
+  },
+  muiTablePaperProps: {
+    sx: {
+      borderRadius: "30px",
+      } 
+  },
   renderTopToolbar: ({ table }) => {
 
     return (
@@ -323,18 +388,25 @@ const table = useMaterialReactTable({
     return (
       <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
         <IconButton
-          className=" hover:bg-slate-300 p-1 rounded-xl"
+          className=" hover:bg-slate-300 p-1 rounded-xl text-sm "
           onClick={() => GetRowIdForPatchAddress(row)}
         >
           <LocationOnRounded />
           آدرس
         </IconButton>
         <IconButton
-          className=" hover:bg-slate-300 p-1 rounded-xl "
+          className=" hover:bg-slate-300 p-1 rounded-xl text-sm "
           onClick={() => GetRowIdForUpdateFactory(row)}
         >
           <Edit />
           ویرایش
+        </IconButton>
+        <IconButton
+          className=" hover:bg-slate-300 p-1 rounded-xl text-sm "
+          onClick={() => handleEditFactoryUsername(row)}
+        >
+          <EditAttributes />
+          ویرایش نام کاربری
         </IconButton>
         {
             row.original.active == true 
@@ -362,8 +434,7 @@ const table = useMaterialReactTable({
   renderDetailPanel: ({ row }) => (
 
     <>
-        <h3 className="w-full text-start font-extrabold" > اطلاعات آدرس و دسته بندی ها: </h3>
-        <Divider className="my-2" />
+        <h3 className="w-full text-start font-extrabold border-b-2 p-1 " > اطلاعات آدرس و دسته بندی ها: </h3>
         <Box
         sx={{
             display: 'grid',
@@ -398,78 +469,79 @@ const table = useMaterialReactTable({
 
 
 
-});
+  });
 
-          // Activate Factory -----------------------------------------
+  // Activate Factory -----------------------------------------
 
-      
-              async function GetRowIdForActivate(id) {
-                setLoading(true);
-    
-                const ActiveMethod = {
-                    method: 'PATCH',
-                    headers: {
-                        'accept': 'application/json',
-                        'Authorization': `Bearer ${Auth}`,
-                    },
-                   }
-                   
-                   fetch(`https://supperapp-backend.chbk.run/factory/admin/active/${id}`, ActiveMethod)
-                   .then((response) => {
-                        response.json()
-                    })
-                   .then((d) => {
-                      setAlert(true)
-                      setMessage(" کارخانه فعال شد ")
-                      setLoading(false)
-                      ListApi(Auth)
-                    }) 
-                   .catch(err => console.log(err)) 
+
+  async function GetRowIdForActivate(id) {
+      setLoading(true);
+
+      const ActiveMethod = {
+          method: 'PATCH',
+          headers: {
+              'accept': 'application/json',
+              'Authorization': `Bearer ${Auth}`,
+          },
+          }
           
-            }
-    
-    
-        // Deactive a Factory -----------------------------------------
-    
-        const GetRowIdForDelete = (id) => {
-    
-          setLoading(true);
-    
-          const deleteMethod = {
-              method: 'PATCH',
-              headers: {
-                  'accept': 'application/json',
-                  'Authorization': `Bearer ${Auth}`,
-              },
-             }
-             
-             fetch(`https://supperapp-backend.chbk.run/factory/admin/deactive/${id}`, deleteMethod)
-             .then((response) => {
-                  response.json()
-              })
-             .then((d) => {
-                setAlert(true)
-                setMessage(" کارخانه حذف شد ")
-                setLoading(false)
-                ListApi(Auth)
-              }) 
-             .catch(err => console.log(err)) 
-    
-        }
+          fetch(`https://supperapp-backend.chbk.run/factory/admin/active/${id}`, ActiveMethod)
+          .then((response) => {
+              response.json()
+          })
+          .then((d) => {
+            setAlert(true)
+            setMessage(" کارخانه فعال شد ")
+            setLoading(false)
+            ListApi(Auth)
+          }) 
+          .catch(err => console.log(err)) 
 
-
-  // modal part -------------------------------------------------------------
-  const[addCategoryModal, setAddCategoryModal] = useState(false);
-  const[count, setCount] = useState(0);
-  const[price, setPrice] = useState(0);
-  const [image, setImage] = useState([])
-  const[fileName, setFileName] = useState("فایلی انتخاب نشده...")
-
-  const DeleteImg = () => {
-    setFileName("فایلی انتخاب نشده...")
-    setImage([])
   }
 
+
+  // Deactive a Factory -----------------------------------------
+
+  const GetRowIdForDelete = (id) => {
+
+    setLoading(true);
+
+    const deleteMethod = {
+        method: 'PATCH',
+        headers: {
+            'accept': 'application/json',
+            'Authorization': `Bearer ${Auth}`,
+        },
+        }
+        
+        fetch(`https://supperapp-backend.chbk.run/factory/admin/deactive/${id}`, deleteMethod)
+        .then((response) => {
+            response.json()
+        })
+        .then((d) => {
+          setAlert(true)
+          setMessage(" کارخانه حذف شد ")
+          setLoading(false)
+          ListApi(Auth)
+        }) 
+        .catch(err => console.log(err)) 
+
+  }
+
+
+  // // modal part -------------------------------------------------------------
+  // const[count, setCount] = useState(0);
+  // const[price, setPrice] = useState(0);
+  // const [image, setImage] = useState([])
+  // const[fileName, setFileName] = useState("فایلی انتخاب نشده...")
+  
+  // const DeleteImg = () => {
+    //   setFileName("فایلی انتخاب نشده...")
+    //   setImage([])
+    // }
+    
+
+  const[addCategoryModal, setAddCategoryModal] = useState(false);
   const CloseHandler = () => {
     setAddCategoryModal(false)
   }
@@ -513,7 +585,7 @@ const table = useMaterialReactTable({
                       </InputAdornment>
                     ),
                   }}
-                  variant="standard"
+                  variant="outlined"
                 />
               
                 <Autocomplete
@@ -528,7 +600,7 @@ const table = useMaterialReactTable({
                     setaddCategs([...val]);
                   }}
                   sx={{ width:"190px"}}
-                  renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن دسته بندی " />}
+                  renderInput={(params) => <TextField {...params} variant="outlined" label=" افزودن دسته بندی " />}
                 />
               </div>
               <div className='w-full flex md:flex-row flex-col gap-7 justify-around items-center' >
@@ -546,7 +618,7 @@ const table = useMaterialReactTable({
                       </InputAdornment>
                     ),
                   }}
-                  variant="standard"
+                  variant="outlined"
                 />
 
                 <TextField
@@ -563,7 +635,7 @@ const table = useMaterialReactTable({
                       </InputAdornment>
                     ),
                   }}
-                  variant="standard"
+                  variant="outlined"
                 />
               
 
@@ -605,6 +677,7 @@ const table = useMaterialReactTable({
                   <TextField
                     className="md:w-[90%] w-full p-3"
                     id="input-with-icon-textfield"
+                    label=" خیابان  "
                     placeholder=" خیابان  "
                     value={street}
                     onChange={(e) => setStreet(e.target.value)}
@@ -615,12 +688,13 @@ const table = useMaterialReactTable({
                         </InputAdornment>
                       ),
                     }}
-                    variant="standard"
+                    variant="outlined"
                   />
                   <TextField
                     className="md:w-[90%] w-full p-3 "
                     id="input-with-icon-textfield"
                     placeholder=" کوچه  "
+                    label = "کوچه"
                 value={alley}
                     onChange={(e) => setAlley(e.target.value)}
                     InputProps={{
@@ -630,12 +704,12 @@ const table = useMaterialReactTable({
                         </InputAdornment>
                       ),
                     }}
-                    variant="standard"
+                    variant="outlined"
                   />
                   <TextField
                     className="md:w-[90%] w-full p-3 "
                     id="input-with-icon-textfield"
-
+                    label=" پلاک "
                     placeholder=" پلاک  "
                     value={number}
                     onChange={(e) => setNumber(e.target.value)}
@@ -646,12 +720,13 @@ const table = useMaterialReactTable({
                         </InputAdornment>
                       ),
                     }}
-                    variant="standard"
+                    variant="outlined"
                   />
                   <TextField
                     className="md:w-[90%] w-full p-3 "
                     id="input-with-icon-textfield"
                     placeholder=" کدپستی  "
+                    label= "کدپستی"
                     value={zipcode}
                     onChange={(e) => setZipcode(e.target.value)}
                     InputProps={{
@@ -661,7 +736,7 @@ const table = useMaterialReactTable({
                         </InputAdornment>
                       ),
                     }}
-                    variant="standard"
+                    variant="outlined"
                   />
                 </div>
                 <h2 className="border-b-2 text-lg" > آدرس </h2>
@@ -693,6 +768,50 @@ const table = useMaterialReactTable({
       <EditFactoryModalPage setTriggerUpdateFactory={setTriggerUpdateFactory} editFactoryModal={editFactoryModal} setEditFactoryModal={setEditFactoryModal} editFactoryInfo={editFactoryInfo} />
 
 
+      <Dialog fullWidth className="w-full" scroll="paper" maxWidth="sm" open={openEditUsernameModal} onClose={() => setOpenEditUsernameModal(false)}>
+
+        <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
+            ویرایش نام کاربری
+        </DialogTitle>
+        <Divider />
+        <DialogContent className="flex flex-col items-center gap-10 mt-12 " >           
+
+        <div className="flex flex-col justify-center items-center gap-10 w-full h-full" >
+                <div className="w-full flex flex-col gap-2 justify-center items-center mx-auto" >
+
+                <TextField
+                    className="md:w-1/2 w-full p-3"
+                    id="input-with-icon-textfield"
+                    placeholder=" نام کاربری جدید  "
+                    label = "نام کاربری جدید "
+                    value={addMobile}
+                    onChange={(e) => setAddMobile(e.target.value)}
+                    InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="end">
+                        <Person className='text-asliLight' />
+                        </InputAdornment>
+                    ),
+                    }}
+                    variant="outlined"
+                />
+
+
+
+                </div>
+
+        </div>
+
+        </DialogContent>
+        <DialogActions className="p-4 flex flex-row gap-4" >
+        <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => GetRowIdForUpdateUsername()} >
+            {loading ? <CircularProgress size="medium" /> : " ثبت تغییرات "}
+        </Button>
+        <Button variant="soft" color='danger'  onClick={() => setOpenEditUsernameModal(false)}>
+            انصراف
+        </Button>
+        </DialogActions>
+        </Dialog>
 
         <Snackbar
         open={alert}

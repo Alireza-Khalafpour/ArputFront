@@ -1,7 +1,7 @@
 'use client'
 
 
-import { AddCircleOutline, DeleteRounded, Edit, RadioButtonChecked } from "@mui/icons-material";
+import { Add, AddCircleOutline, DeleteRounded, Edit, RadioButtonChecked, Telegram } from "@mui/icons-material";
 import { Alert, Box, Dialog, DialogContent, DialogTitle, Divider, IconButton, Snackbar } from "@mui/material";
 import axios from "axios";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
@@ -10,6 +10,7 @@ import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/l
 import Cookies from "universal-cookie";
 import { digitsEnToFa } from "@persian-tools/persian-tools";
 import * as shamsi from 'shamsi-date-converter';
+import { Textarea } from "@mui/joy";
 
 const AdminTicket = () =>  {
 
@@ -25,6 +26,9 @@ const AdminTicket = () =>  {
     const [loading, setLoading] = useState(false);
     //-----------------
     const [openDetails, setOpenDetails] = useState(false);
+    const [subResponses, setSubResponses] = useState([])
+    const [idToRespond, setIdToRespond] = useState("")
+    const [content, setContent] = useState("")
 
 
         
@@ -106,7 +110,49 @@ const AdminTicket = () =>  {
 
       const GetRowSubResponses = (row) => {
         console.log(row)
+        setIdToRespond(row.original.id)
+        setSubResponses(row.original.sub_response)
         setOpenDetails(true)
+      }
+
+      // Handle response to ticket-------------------------------------------
+      const headersSendTicket ={
+        'accept': 'application/json',
+        'Authorization': `Bearer ${Auth}`,
+        'Content-Type': 'application/json',
+        }
+      
+      
+        async function RespondTicket() {
+
+          setLoading(true);
+          await axios.patch('https://supperapp-backend.chbk.run/ticket/update_sub_response' , 
+            {
+              "id": idToRespond,
+              "content": content
+            }, 
+          {
+            headers: headersSendTicket
+          })
+          .then((response) => {
+            if(response.data.Done === true){
+              setAlert(true)
+              setMessage(response.data.Message)
+              
+            }else {
+              setMessage(response.data.Message)
+              setErrorAlert(true)
+              
+            }
+          })
+          .catch(function (error) {
+            setMessage(" متاسفیم،خطایی رخ داده است ")
+            setErrorAlert(true)
+            
+          });
+    
+          setIdToRespond("")
+          setContent("")
       }
 
 
@@ -218,7 +264,7 @@ const table = useMaterialReactTable({
 
 
 
-      <Dialog fullWidth className="w-full" scroll="paper" open={openDetails} onClose={() => setOpenDetails(false)}>
+      <Dialog fullWidth className="w-full" scroll="paper" maxWidth="md" open={openDetails} onClose={() => setOpenDetails(false)}>
 
         <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
           تیکت ها
@@ -227,7 +273,59 @@ const table = useMaterialReactTable({
         <DialogContent className="flex flex-col items-center gap-10 mt-12 h-full " >           
 
           <div className="flex flex-col justify-center items-center gap-10 w-full" >
-            dajaks
+            
+            <div className="flex flex-col justify-center items-start w-full gap-6" >
+
+                {
+                  subResponses.map((i) => (
+                <p className={`border ${i.role == "کارخانه" ? "border-khas" : "border-asliLight"} rounded-xl py-6 px-2 relative`} >
+                    {i.content}
+                    <span className="absolute bottom-0 left-1 text-xs" > {i.updated_at} </span>
+                </p>
+
+                  ))
+                }
+              
+            </div>
+
+            <div className="w-full" >
+
+            <Textarea
+                placeholder=" اینجا بنویسید... "
+                value={content}
+                onChange={(event) => setContent(event.target.value)}
+                minRows={2}
+                maxRows={3}
+                // startDecorator={
+                //     <div className="flex flex-row gap-1">
+                //     <IconButton variant="outlined" color="neutral" onClick={addEmoji('👍')}>
+                //         👍
+                //     </IconButton>
+                //     <IconButton variant="outlined" color="neutral" onClick={addEmoji('🏖')}>
+                //         🏖
+                //     </IconButton>
+                //     <IconButton variant="outlined" color="neutral" onClick={addEmoji('😍')}>
+                //         😍
+                //     </IconButton>
+                //     <Button variant="outlined" color="neutral" sx={{ ml: 'auto' }}>
+                //         <Add/> 
+                //     </Button>
+                //     </div>
+                // }
+                endDecorator={
+                    <div className="w-full flex flex-row justify-between">
+                        {/* <Typography sx={{ ml: 'auto' }} className="bg-paszamine2 text-center items-center my-auto" >
+                        {content.length} تعداد کاراکتر
+                        </Typography> */}
+                        <button onClick={() => RespondTicket()} className="p-3 flex flex-row w-20 rounded-xl bg-khas text-paszamine1 hover:bg-orange-500 hover:font-bold   "> <Telegram/> ارسال </button>
+                    </div>
+                }
+                sx={{ minWidth: 300 }}
+            />
+
+            </div>
+            
+
           </div>
 
         </DialogContent>

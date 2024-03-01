@@ -17,7 +17,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   });
 
 
-const AddToFavoriteAndShare = ({pId}) => {
+
+
+
+const ShopsModalForPulseInMainPage = ({shops, displayStores, setDisplayStore, loading, pre_product_id}) => {
+
+
 
 
     const cookie = new Cookies();
@@ -29,9 +34,7 @@ const AddToFavoriteAndShare = ({pId}) => {
     const [message, setMessage] = useState();
     const [alert, setAlert] = useState(false);
     const [errorAlert, setErrorAlert] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [shops, setShops] = useState([]);
-    const [displayStores, setDisplayStore] = useState(false)
+
 
 
 
@@ -41,37 +44,27 @@ const AddToFavoriteAndShare = ({pId}) => {
         'Content-Type': 'application/json',
         }
 
-    async function AddToFavorites(pId) {
-        await axios.post('https://supperapp-backend.chbk.run/favorite_product/create', {
-        'product_id': `${pId}`
-        }, 
-        {
-        headers: headers
-        })
-        .then((response) => {
-            setMessage(response.data.Message)
-            setAlert(true)
-            setLoading(false)
-        })
-        .catch(function (error) {
-            console.log(error, "Error");
-            setMessage(" متاسفیم،خطایی رخ داده است یا وارد حساب خود شوید ")
-            setErrorAlert(true)
-            setLoading(false)
-        });
-    }
+    // async function AddToFavorites(pId) {
+    //     await axios.post('https://supperapp-backend.chbk.run/favorite_product/create', {
+    //     'product_id': `${pId}`
+    //     }, 
+    //     {
+    //     headers: headers
+    //     })
+    //     .then((response) => {
+    //         setMessage(response.data.Message)
+    //         setAlert(true)
+    //         setLoading(false)
+    //     })
+    //     .catch(function (error) {
+    //         console.log(error, "Error");
+    //         setMessage(" متاسفیم،خطایی رخ داده است یا وارد حساب خود شوید ")
+    //         setErrorAlert(true)
+    //         setLoading(false)
+    //     });
+    // }
 
-    // گرفتن لیست شاپ ها-----------------------------
 
-    async function GetShopList(id) {
-        setDisplayStore(true)
-        setLoading(true)
-        await axios.get(`https://supperapp-backend.chbk.run/product/product/${id}`).then((response) => {
-            setShops(response.data.seller_info)
-            console.log(response.data)
-            setLoading(false)
-        });
-    }
 
     // رفتن به صفحه جزییات محصول و دریافت آی پی کاربر از سایت "geolocation" -----------------------------
 
@@ -90,7 +83,7 @@ const AddToFavoriteAndShare = ({pId}) => {
     async function CreatePulse(res, i) {
         await axios.post('https://supperapp-backend.chbk.run/pulse/create',{
             "product_id": i.product_id,
-            "pre_product_id": pId,
+            "pre_product_id": pre_product_id,
             "shop_id": i.seller_id,
             "mac_address": "",
             "ar_pulse": false,
@@ -98,7 +91,7 @@ const AddToFavoriteAndShare = ({pId}) => {
         }).then((response) => {
             console.log(response)
             setTimeout(() => {
-                route.push(`/products/${pId}`)
+                route.push(`/products/${pre_product_id}`)
             }, 200);
         }).catch((err) => {
             console.log(err)
@@ -107,34 +100,14 @@ const AddToFavoriteAndShare = ({pId}) => {
 
 
 
+
+
+
     return (
-        <>
+        <div>
+            
 
-            <div className="w-full flex flex-col justify-center items-center gap-4" >
-                <div className="w-full flex flex-row justify-start items-center gap-4 ">
-                    <IconButton
-                        className="rounded-full text-rose-700 "
-                        onClick={() => AddToFavorites(pId)}
-                    >
-                        <Favorite />
-                    </IconButton>
-                    <IconButton
-                        className="rounded-full text-asliLight"
-                        >
-                    <Share />
-                    </IconButton>
-                </div>
-                {/* <button className="w-full bg-khas rounded-md text-white h-10" onClick={() => FindIpAddress(pId)} >
-                    دیدن محصول
-                </button> */}
-                <button className="w-full bg-khas rounded-md text-white h-10" onClick={() => GetShopList(pId)} >
-                    دیدن محصول
-                </button>
-                
-
-
-
-                    <Dialog
+            <Dialog
                         fullWidth= "true"
                         maxWidth="xl"
                         TransitionComponent={Transition}
@@ -149,7 +122,7 @@ const AddToFavoriteAndShare = ({pId}) => {
                             ?
                             <div> <GeneralLoader/> </div>
                             :
-                            shops?.map((i) =>(
+                            shops.map((i) =>(
                                 <Card onClick={() => FindIpAddress(i)} className="md:w-1/6 w-3/4 h-[200px] hover:shadow-2xl cursor-pointer" >
                                     <div className=" w-full h-full" >
                                     <CardOverflow>
@@ -163,7 +136,7 @@ const AddToFavoriteAndShare = ({pId}) => {
                                         </AspectRatio>
                                         
                                     </CardOverflow>
-                                        <CardContent className="gap-3 m-auto text-right p-1 h-full w-full flex flex-col justify-center" >
+                                    <CardContent className="gap-3 m-auto text-right p-1 h-full w-full flex flex-col justify-center" >
                                             <span
                                             endDecorator={<ArrowOutwardOutlined />}
                                             >
@@ -188,7 +161,9 @@ const AddToFavoriteAndShare = ({pId}) => {
                     </Dialog>
 
 
-            </div>
+
+
+
 
             <Snackbar
                 open={alert}
@@ -211,8 +186,10 @@ const AddToFavoriteAndShare = ({pId}) => {
                 >
                 <Alert variant='filled' className='text-lg text-white font-semibold bg-rose-900 text-center z-[300]' > {message} </Alert>
             </Snackbar>
-        </>
+
+
+        </div>
     );
 }
 
-export default AddToFavoriteAndShare;
+export default ShopsModalForPulseInMainPage;

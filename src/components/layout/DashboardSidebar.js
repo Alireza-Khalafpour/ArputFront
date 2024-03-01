@@ -92,7 +92,7 @@ export default function DashbordSidebar({children}) {
 
   return (
     <div sx={{ display: 'flex' }}>
-      <AppBar position="relative" open={open} className='bg-asliLight' style={{maxHeight: "4rem"}} >
+      <AppBar position="relative" open={open} className='bg-[#132F5D]' style={{maxHeight: "4rem"}} >
         <Toolbar style={{maxHeight: '20px'}} >
           <IconButton
             color="inherit"
@@ -131,9 +131,10 @@ export default function DashbordSidebar({children}) {
           },
           
         }}
-        variant="persistent"
+        variant="temporary"
         anchor="right"
         open={open}
+        onClose={() => handleDrawerClose()}
         className='!text-base text-pretty'
       >
         <DrawerHeader >
@@ -154,22 +155,6 @@ export default function DashbordSidebar({children}) {
             
             <Divider className='bg-slate-500' />
 
-            {/* <ListItem  disablePadding >
-              <Accordion className='bg-[#092739] text-[#F2F2F2] w-full shadow-none border-none' >
-                <AccordionSummary
-                  expandIcon={<ExpandMore style={{color:"white"}} />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  className='hover:bg-slate-700 rounded-lg'
-                >
-                  <Typography> باندل  </Typography>
-                </AccordionSummary>
-                <Link  onClick={() => setTitle(" ایجاد باندل ")} href="/dashboard" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white ' >
-                    ایجاد باندل
-                    <ListAltOutlined className='text-khas'/>
-                </Link>
-              </Accordion>
-            </ListItem> */}
             {
               cookie.get("role") === "admin" && 
 
@@ -218,7 +203,7 @@ export default function DashbordSidebar({children}) {
                       <FeaturedPlayListOutlined className='text-khas'/>
                   </Link>
                   <Link  onClick={() => handleDrawerClose()} href="/dashboard/create-feature-sample" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
-                          ویژگی و سمپل    
+                          نمونه ویژگی   
                       <FeaturedPlayListOutlined className='text-khas'/>
                   </Link>
                   <Link onClick={() => handleDrawerClose()} href="/dashboard/create-factory" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >

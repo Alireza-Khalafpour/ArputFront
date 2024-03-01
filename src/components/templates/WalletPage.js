@@ -9,43 +9,20 @@ import { Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogCont
 import { e2p } from "@/utils/replaceNumbers";
 import Cookies from "universal-cookie";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { addCommas, digitsEnToFa } from "@persian-tools/persian-tools";
 
 
-
-// const data = [
-//     {
-//         date: "12/5/89",
-//         amount: "4580000000",
-//         paymentStatus: "موفق",
-//     },
-//     {
-//         date: "12/5/89",
-//         amount: "4580000000",
-//         paymentStatus: "ناموفق",
-//     },
-//     {
-//         date: "12/5/89",
-//         amount: "4580000000",
-//         paymentStatus: "در حال انجام",
-//     },
-//     {
-//         date: "12/5/89",
-//         amount: "4580000000",
-//         paymentStatus: "موفق",
-//     },
-//     {
-//         date: "12/5/89",
-//         amount: "4580000000",
-//         paymentStatus: "موفق",
-//     },
-// ]
 
 
 const WalletPage = () => {
 
   const cookie = new Cookies();
+  const Auth = cookie.get('tokenDastResi');
+  const route = useRouter();
 
-  const Auth = cookie.get('tokenDastResi')
+
+
 
   const [paymentModal, setPaymentModal] = useState(false);
   const [data, setData] = useState([]);
@@ -76,7 +53,7 @@ const WalletPage = () => {
           })
           .then((response) => {
             setWalletData(response.data)
-            setData(response.data)
+            setData(response.data?.payments)
             console.log(response.data)
           })
           .catch((error) => {
@@ -86,7 +63,6 @@ const WalletPage = () => {
 
       useEffect(() => {
         GetWallet(Auth)
-        setData(walletData?.payments)
       },[])
 
       const headers ={
@@ -107,15 +83,8 @@ const WalletPage = () => {
           headers: headers
         })
         .then((response) => {
-          console.log(response.data)
-          if(response.data.Done === true){
-            setAlert(true)
-            setMessage(response.data.Message)
-            
-          }else {
-            setMessage(response.data.Message)
-            setErrorAlert(true)
-            
+          if(response.data.Done == true) {
+            route.push(response.data.Data[0])
           }
         })
         .catch(function (error) {
@@ -128,46 +97,41 @@ const WalletPage = () => {
 
 
       const columns = [
+        // {
+        // accessorKey:'date',
+        //   header: ' تاریخ واریز ',
+        //   size: 150,
+        // },
         {
-        accessorKey:'date',
-          header: ' تاریخ واریز ',
-          size: 150,
-        },
-        {
-        accessorKey:'amount',
           header: ' مبلغ ',
+          accessorKey:'payments',
+          id: 'payments',
           size: 150,
-          Cell: ({ cell }) => (
-            <Box component="span">
-              {cell.getValue()?.toLocaleString('fa-IR')}
-            </Box>
-          ),
- 
         },
-        {
-        accessorKey:'paymentStatus',
-          header: ' وضعیت پرداخت  ' ,
-          size: 150,
-          Cell: ({ cell }) => (
-            <Box
-              className="px-4 py-1"
-              component="span"
-              sx={(theme) => ({
-                backgroundColor:
-                  cell.getValue() === "موفق"
-                    ? theme.palette.success.dark
-                    : cell.getValue() === "ناموفق"
-                    ? theme.palette.error.dark
-                    : theme.palette.warning.dark,
-                borderRadius: '0.25rem',
-                color: '#fff',
-                maxWidth: '9ch',
-              })}
-            >
-              {cell.getValue()}
-            </Box>
-          ),
-        },
+        // {
+        // accessorKey:'paymentStatus',
+        //   header: ' وضعیت پرداخت  ' ,
+        //   size: 150,
+        //   Cell: ({ cell }) => (
+        //     <Box
+        //       className="px-4 py-1"
+        //       component="span"
+        //       sx={(theme) => ({
+        //         backgroundColor:
+        //           cell.getValue() === "موفق"
+        //             ? theme.palette.success.dark
+        //             : cell.getValue() === "ناموفق"
+        //             ? theme.palette.error.dark
+        //             : theme.palette.warning.dark,
+        //         borderRadius: '0.25rem',
+        //         color: '#fff',
+        //         maxWidth: '9ch',
+        //       })}
+        //     >
+        //       {cell.getValue()}
+        //     </Box>
+        //   ),
+        // },
       ];
 
 
@@ -227,7 +191,7 @@ const WalletPage = () => {
         renderBottomToolbar: ({ row }) => {
           return (
             <div className="w-full flex justify-end items-center flex-row gap-4 p-4 border-4" >
-            <span className="p-2 border border-khas text-asliLight font-semibold rounded-xl " > موجودی : {e2p(walletData.balance ? walletData.payments : 0)} </span>
+            <span className="p-2 border border-khas text-asliLight font-semibold rounded-xl " > موجودی : {digitsEnToFa(addCommas(walletData?.balance))} ریال </span>
             <span className="p-2 border border-khas text-asliLight font-semibold rounded-xl " > مجموع کل واریزی ها : {e2p(0)} </span>
         </div>
           )
@@ -325,6 +289,7 @@ const WalletPage = () => {
               <Textarea 
                 className="md:w-[80%] w-[90%]" 
                 minRows={2}
+                value={description}
                 placeholder="توضیحات"
                 // value={Address === undefined ? " " : `${Address?.state} ${Address?.formatted_address}`}
                 onChange={(e) => setDescription(e.target.value)}

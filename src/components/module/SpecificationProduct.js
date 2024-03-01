@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import { Close } from "@mui/icons-material";
@@ -25,19 +25,27 @@ function SpecificationProduct({ productList }) {
 
   return (
     <div className=" flex flex-col gap-2  px-5 basis-2/5 overflow-auto max-h-[100vh] py-3 ">
-      {productList.features.map((i) => (
         <div className=" flex flex-col items-center justify-center gap-4 rounded-lg bg-white py-4">
           <p className="font-bold md:hidden text-center">مشخصات کلی </p>
 
           <table class="w-[95%] table-fixed">
-            <tbody className=" text-right">
-              <tr class="  odd:bg-gray-200 even:bg-white">
-                <td className="rounded-s-lg p-1 text-lg"> ویژگی ها </td>
-                <td className="rounded-e-lg text-right text-gray-500">
+            <tbody className=" text-right w-full">
+            <tr class="">
+                <td className="rounded-s-lg p-1 text-lg font-bold py-2">
                   {" "}
-                  {i.main_name} : {i.main_sample}
+                  ویژگی ها :{" "}
                 </td>
               </tr>
+              {productList.features.map((i) => (
+                <tr class=" odd:bg-gray-200 even:bg-white" >
+                    <td className="rounded-s-lg p-1 text-lg">{i.feature_name}:</td>
+                    <td className="rounded-e-lg text-right text-gray-500">
+                      {i.feature_sample_name}
+                    </td>
+                </tr>
+              ))}
+
+              <Divider className="my-4" />
 
               <tr class="odd:bg-gray-200 even:bg-white">
                 <td className="rounded-s-lg p-1 text-lg font-bold py-2">
@@ -177,7 +185,7 @@ function SpecificationProduct({ productList }) {
             </div>
           )}
         </div>
-      ))}
+      
     </div>
   );
 }

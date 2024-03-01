@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, Category, DeleteRounded, LocationCity, LocationOnRounded, RadioButtonChecked, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
+import { AddCircleOutline, Category, DeleteRounded, Edit, LocationCity, LocationOnRounded, RadioButtonChecked, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Snackbar, TextField, Typography } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
@@ -30,6 +30,9 @@ export const CreateFeatureSample = ()=> {
     const [sampleName, setSampleName] = useState("")
     const [features, setFeatures] =useState([])
     const [featureId, setFeatureId] =useState("")
+    // ----------
+    const [isUpdate, setIsUpdate] = useState(false)
+    const [updateSampleId, setUpdateSampleId] = useState("")
 
 
     // Feature-sample List--------------
@@ -61,7 +64,7 @@ export const CreateFeatureSample = ()=> {
           })
           .then((response) => {
             setFeatures(response.data.data)
-            console.log(response)
+            console.log(response.data)
           })
           .catch((error) => {
             console.log(error, "Error");
@@ -87,8 +90,9 @@ export const CreateFeatureSample = ()=> {
     async function AddFeatureSampleApi() {
         setLoading(true);
         await axios.post('https://supperapp-backend.chbk.run/feature_samples/create', {
-            "feature_sample_id": featureId,
-            "feature_sample_name": sampleName
+            "feature_id": featureId,
+            "feature_sample_name": sampleName,
+            "active": true
         }, 
         {
           headers: headers
@@ -98,64 +102,101 @@ export const CreateFeatureSample = ()=> {
           if(response.data.Done === true){
             setAlert(true)
             setMessage(" فیچر سمپل جدید اضافه شد ")
-            setLoading(false)
-            setFeatureSampleModal(false)
-            setSampleName("")
-            setFeatureId("")
             ListApi(Auth)
           }else {
             setMessage(response.data.Message)
             setErrorAlert(true)
-            setSampleName("")
-            setFeatureId("")
-            setLoading(false)
-            setFeatureSampleModal(false)
           }
         })
         .catch(function (error) {
           setMessage(" متاسفیم،خطایی رخ داده است ")
           setErrorAlert(true)
-          setSampleName("")
-          setFeatureId("")
-          setLoading(false)
-          setFeatureSampleModal(false)
         });
+
+        setLoading(false)
+        setFeatureSampleModal(false)
+        setSampleName("")
+        setFeatureId("")
   
     }
 
-              // Activate Feature-sample -----------------------------------------
-              const headersActivate = {
-                'accept': 'application/json',
-                'Authorization': `Bearer ${Auth}`,
+    // Edit Feature-Sample Api --------------------------------------------
+
+
+            const GetRowIdForEdit = (row) => {
+              setUpdateSampleId(row?.sample_data.sample_id)
+              setIsUpdate(true)
+              setSampleName(row?.sample_data.feature_sample_name)
+              setFeatureSampleModal(true)
             }
-      
-              async function GetRowIdForActivate(id) {
-                setLoading(true);
-    
-                const ActiveMethod = {
-                    method: 'PUT',
-                    headers: {
-                        'accept': 'application/json',
-                        'Authorization': `Bearer ${Auth}`,
-                    },
-                   }
-                   
-                   fetch(`https://supperapp-backend.chbk.run/feature_samples/active?feature_sample_id=${id}`, ActiveMethod)
-                   .then((response) => {
-                        response.json()
-                    })
-                   .then((d) => {
-                      setAlert(true)
-                      setMessage(" سمپل فعال شد ")
-                      setLoading(false)
-                      ListApi(Auth)
-                    }) 
-                   .catch(err => console.log(err)) 
+        
+            async function EditFeatureSampleApi() {
+              setLoading(true);
+              await axios.put('https://supperapp-backend.chbk.run/feature_samples/update', {
+                  "feature_sample_id": updateSampleId,
+                  "feature_id": featureId,
+                  "feature_sample_name": sampleName
+              }, {
+                  headers: headers
+                })
+                .then((response) => {
+                  if (response.data.Done=== true) {
+                    setAlert(true)
+                    setMessage(response.data.message)
+                  }else {
+                    setMessage(response.data.message)
+                    setErrorAlert(true)
+                  }
+                })
+                .catch(function (error) {
+                  setMessage(" متاسفیم،خطایی رخ داده است ")
+                  setErrorAlert(true)
+                });
           
+                ListApi(Auth)
+                setLoading(false)
+                setSampleName("")
+                setFeatureId("")
+                setUpdateSampleId("")
+                setIsUpdate(false)
+                setFeatureSampleModal(false)
             }
+  
+
+
+        // Activate Feature-sample -----------------------------------------
+        const headersActivate = {
+          'accept': 'application/json',
+          'Authorization': `Bearer ${Auth}`,
+      }
+
+        async function GetRowIdForActivate(id) {
+          setLoading(true);
+
+          const ActiveMethod = {
+              method: 'PUT',
+              headers: {
+                  'accept': 'application/json',
+                  'Authorization': `Bearer ${Auth}`,
+              },
+              }
+              
+              fetch(`https://supperapp-backend.chbk.run/feature_samples/active?feature_sample_id=${id}`, ActiveMethod)
+              .then((response) => {
+                  response.json()
+              })
+              .then((d) => {
+                setAlert(true)
+                setMessage(" سمپل فعال شد ")
+                setLoading(false)
+                ListApi(Auth)
+              }) 
+              .catch(err => console.log(err)) 
+    
+      }
     
     
-        // Deactive a Feature-sample -----------------------------------------
+        // DeActive a Feature-sample -----------------------------------------
     
         const GetRowIdForDelete = (id) => {
     
@@ -181,6 +222,15 @@ export const CreateFeatureSample = ()=> {
               }) 
              .catch(err => console.log(err)) 
     
+        }
+
+        // handle close modal-------------------------------------
+        const handleCloseModal = () => {
+          setSampleName("")
+          setFeatureId("")
+          setUpdateSampleId("")
+          setIsUpdate(false)
+          setFeatureSampleModal(false)
         }
 
 
@@ -270,24 +320,31 @@ const table = useMaterialReactTable({
   renderRowActions: ({ row }) => {
     return (
       <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-                  {
-            row.original.sample_data.active == true 
-            ?
+
             <IconButton
-              color="error"
-              onClick={() => GetRowIdForDelete(row.original.sample_data?.id)}
+              onClick={() => GetRowIdForEdit(row.original)}
             >
-                <DeleteRounded titleAccess="غیرفعال کردن" />
+             <Edit/>
             </IconButton>
 
-            :
+          {
+              row.original.sample_data.active == true 
+              ?
+              <IconButton
+                color="error"
+                onClick={() => GetRowIdForDelete(row.original.sample_data?.sample_id)}
+              >
+                  <DeleteRounded titleAccess="غیرفعال کردن" />
+              </IconButton>
 
-            <IconButton
-            color="success"
-            onClick={() => GetRowIdForActivate(row.original.sample_data?.id)}
-          >
-              <RadioButtonChecked titleAccess="فعال کردن" />
-          </IconButton>
+              :
+
+              <IconButton
+                color="success"
+                onClick={() => GetRowIdForActivate(row.original.sample_data?.sample_id)}
+              >
+                  <RadioButtonChecked titleAccess="فعال کردن" />
+              </IconButton>
 
           }
       </Box>
@@ -311,10 +368,10 @@ const table = useMaterialReactTable({
             options={contextMenuOptions}
         /> */}
 
-      <Dialog fullWidth className="w-full" scroll="paper" maxWidth="sm" open={featureSampleModal} onClose={() => setFeatureSampleModal(false)}>
+      <Dialog fullWidth className="w-full" scroll="paper" maxWidth="sm" open={featureSampleModal} onClose={() => handleCloseModal()}>
 
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
-            ایجاد سمپل جدید
+            {isUpdate == true ? "ویرایش" : "ایجاد سمپل جدید"}
           </DialogTitle>
           <Divider />
           <DialogContent className="flex flex-col items-center gap-10 mt-12 h-full " >           
@@ -338,7 +395,12 @@ const table = useMaterialReactTable({
                   variant="standard"
                 />
 
-                <Autocomplete
+                {
+                  isUpdate == true
+                  ?
+                  null
+                  :
+                  <Autocomplete
                     className="md:w-[50%] w-[90%]"
                     noOptionsText=" داده ای موجود نیست "
                     options={features}
@@ -349,6 +411,7 @@ const table = useMaterialReactTable({
                     }}
                     renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن ویژگی " />}
                 />
+                }
 
 
 
@@ -358,10 +421,20 @@ const table = useMaterialReactTable({
 
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4 mt-10" >
-            <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddFeatureSampleApi()}>
-              {loading ? <CircularProgress size="medium" /> : " ثبت "}
-            </Button>
-            <Button variant="soft" color='danger'  onClick={() => setFeatureSampleModal(false)}>
+            {
+              isUpdate == true
+              ?
+              <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => EditFeatureSampleApi()}>
+              {loading ? <CircularProgress size="medium" /> : " ویرایش "}
+              </Button>
+              :
+              <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => AddFeatureSampleApi()}>
+                {loading ? <CircularProgress size="medium" /> : " ثبت "}
+              </Button>
+
+            }
+
+            <Button variant="soft" color='danger'  onClick={() => handleCloseModal()}>
               انصراف
             </Button>
           </DialogActions>

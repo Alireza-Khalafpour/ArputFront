@@ -11,6 +11,8 @@ import { Badge } from "@mui/joy";
 import { Fade } from "react-reveal";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Navigation, Pagination, Scrollbar } from "swiper/modules";
+import ShopsModalForPulseInMainPage from "../module/ShopsModalForPulseInMainPage";
+import { numberToWords } from "@persian-tools/persian-tools";
 
 
 
@@ -18,6 +20,27 @@ const MySlider = ({title}) => {
     
     const [expand, setExpand] = useState(false)
     const [items, setItems] = useState([])
+
+    // -----------
+    const [loading, setLoading] = useState(false);
+    const [shops, setShops] = useState([]);
+    const [displayStores, setDisplayStore] = useState(false)
+    const [pre_product_id, set_pre_product_id] = useState("")
+
+
+    // گرفتن لیست شاپ ها-----------------------------
+
+    async function GetShopList(i) {
+        setDisplayStore(true)
+        setLoading(true)
+        set_pre_product_id(i.id)
+        console.log(i)
+        await axios.get(`https://supperapp-backend.chbk.run/product/product/${i.id}`).then((response) => {
+            setShops(response.data.seller_info)
+            setLoading(false)
+        });
+    }
+    // -------------------------------------------------
 
     useEffect(() =>{
         GetItems()
@@ -31,7 +54,6 @@ const MySlider = ({title}) => {
             })
             .then((response) => {
               setItems(response.data.data)
-              console.log(response.data.data)
             })
             .catch((error) => {
               console.log(error, "Error");
@@ -126,13 +148,20 @@ const MySlider = ({title}) => {
 
                 {
                     items?.map((i) => (
-                            <Link href={`/products/${i.id}`} key={i?.id} style={{backgroundImage: `url(${i?.image_url})`}} className=" relative sliderCard h-52 bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] relative before:rounded-xl">
+                            // <Link href={`/products/${i.id}`} key={i?.id} style={{backgroundImage: `url(${i?.image_url})`}} className=" relative sliderCard h-52 bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] relative before:rounded-xl">
+                            //     <div id="info" className=" transition-all duration-700 text-xl text-white absolute bottom-5 right-3 gap-5 ">
+                            //         <h2> {i?.name} </h2> 
+                            //         <h3 className="text-sm"> موجود در {i.shop_number ? e2p(i?.shop_number) : ""} فروشگاه </h3>
+                            //     </div>
+                            //     <div className="absolute top-3 left-3 !bg-transparent" > {i?.has_bundle == true ? <div className="rounded-full w-4 h-4 bg-green-700 text-white " ></div> : null } </div>
+                            // </Link>
+                            <button onClick={() => GetShopList(i)} key={i?.id} style={{backgroundImage: `url(${i?.image_url})`}} className=" relative sliderCard h-52 bg-[auto 100%] bg-center bg-no-repeat flex-[0.28] hover:flex-1  transition-all duration-700 rounded-xl cursor-pointer !min-w-[13%] relative before:rounded-xl">
                                 <div id="info" className=" transition-all duration-700 text-xl text-white absolute bottom-5 right-3 gap-5 ">
                                     <h2> {i?.name} </h2> 
-                                    <h3 className="text-sm"> موجود در {i.shop_number ? e2p(i?.shop_number) : ""} فروشگاه </h3>
+                                    <h3 className="text-sm"> موجود در {i.shop_number ? numberToWords(i?.shop_number) : ""} فروشگاه </h3>
                                 </div>
                                 <div className="absolute top-3 left-3 !bg-transparent" > {i?.has_bundle == true ? <div className="rounded-full w-4 h-4 bg-green-700 text-white " ></div> : null } </div>
-                            </Link>
+                            </button>
                     ))
                 }
 
@@ -141,6 +170,8 @@ const MySlider = ({title}) => {
         <div className="w-full text-center my-6 border-b border-paszamine3 rounded-3xl relative mt-16 " >
             <button onClick={() => handleExpand()} className="w-14 h-14 rounded-full bg-khas text-white transition-all duration-700 absolute bottom-[-25px] " > {expand ? <KeyboardDoubleArrowUp/> : <KeyboardDoubleArrowDown/>} </button>
         </div>
+
+        <ShopsModalForPulseInMainPage pre_product_id={pre_product_id} loading={loading} displayStores={displayStores} setDisplayStore={setDisplayStore} shops={shops} />
 
         
     </>

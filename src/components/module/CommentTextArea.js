@@ -90,9 +90,6 @@ export default function CommentTextArea({single_product}) {
   const [loading, setLoading] = React.useState(false);
   
 
-  // ----ست کردن آیکون میزان رضایت از کالا----------------------------------------------
-
-
 
 
   // add comment function -------------------------------------------
@@ -106,7 +103,7 @@ export default function CommentTextArea({single_product}) {
   function AddComment(single_product) {
     setLoading(true);
     if (content !== "" && content !== null && title !== "") {
-      axios.post('https://supperapp-backend.chbk.run/comment_pre_product/create', {
+      axios.post('https://supperapp-backend.chbk.run/comment/create', {
         "content": content,
         "title": title,
         "pre_product_id": `${single_product}`
@@ -169,48 +166,7 @@ export default function CommentTextArea({single_product}) {
                   highlightSelectedOnly
                 />
               </div>
-{/* 
-              <IconButton
-                variant="plain"
-                color="neutral"
-                onClick={(event) => setAnchorEl(event.currentTarget)}
-              >
-                <FormatBold />
-                <KeyboardArrowDown fontSize="md" />
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={() => setAnchorEl(null)}
-                size="sm"
-                placement="bottom-start"
-                sx={{ '--ListItemDecorator-size': '24px' }}
-              >
-                {['200', 'normal', 'bold'].map((weight) => (
-                  <MenuItem
-                    key={weight}
-                    selected={fontWeight === weight}
-                    onClick={() => {
-                      setFontWeight(weight);
-                      setAnchorEl(null);
-                    }}
-                    sx={{ fontWeight: weight }}
-                  >
-                    <ListItemDecorator>
-                      {fontWeight === weight && <Check fontSize="sm" />}
-                    </ListItemDecorator>
-                    {weight === '200' ? 'lighter' : weight}
-                  </MenuItem>
-                ))}
-              </Menu>
-              <IconButton
-                variant={italic ? 'soft' : 'plain'}
-                color={italic ? 'primary' : 'neutral'}
-                aria-pressed={italic}
-                onClick={() => setItalic((bool) => !bool)}
-              >
-                <FormatItalic />
-              </IconButton> */}
+
               <Button onClick={() => AddComment(single_product)} className='bg-khas hover:bg-orange-600 p-2 text-white w-28 ' >  ثبت دیدگاه </Button>
             </div>
           }

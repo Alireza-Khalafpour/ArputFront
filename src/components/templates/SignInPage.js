@@ -20,6 +20,7 @@ import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import GeneralLoader from '../module/GeneralLoader';
+import ForgotPassword from './ForgotPassword';
 
 
 
@@ -55,9 +56,10 @@ export default function SignInPage() {
       .then((response) => {
         cookie.set("tokenDastResi", response.data.access_token, {secure:true, maxAge: 14400  } );
         cookie.set("role", response.data.role, {secure:true, maxAge: 14400  } );
+        cookie.set("welcommed", false, {secure:true, maxAge: 14400  } );
         cookie.remove('activeList');
         setAlert(true)
-        setMessage(" خوش آمدید ")
+        setMessage(" ...در حال ورود")
         if(response.data.role == 'client') {
           setTimeout(() => {
             route.push("/")
@@ -206,7 +208,9 @@ export default function SignInPage() {
                           >
                             {loading ? <span className='text-sm' > <GeneralLoader/>  </span>: "ورود"}
                           </button>
-                          <span className='w-1/2 hover:text-[#443DC0] hover:font-semibold hover:cursor-pointer hover:border-b-[3px]' > فراموشی رمز </span>
+
+                          <ForgotPassword/>
+
                         </Grid>
                         <Grid className=' w-full my-8 text-center self-center flex justify-center gap-2'>
 

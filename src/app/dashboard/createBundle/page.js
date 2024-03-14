@@ -4,14 +4,12 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import Cookies from "universal-cookie";
 import { AddCircleOutline, AddCircleRounded, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DetailsOutlined, FilterAlt, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RefreshOutlined, Search, TableRowsRounded } from "@mui/icons-material";
-import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, InputAdornment, Modal, Slide, TextField, Tooltip } from "@mui/material";
+import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, InputAdornment, MobileStepper, Modal, Slide, TextField, Tooltip } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
-import ContextMenu from "@/utils/ContextMenu";
-import { Alert, Input, ModalDialog, Snackbar, Textarea } from "@mui/joy";
-import { e2p } from "@/utils/replaceNumbers";
-import Image from "next/image";
+import { Alert, Input, ModalDialog, Snackbar } from "@mui/joy";
+
 
 
 
@@ -39,6 +37,8 @@ const CreateBundle = () => {
     const [number_of_product_in_box, set_number_of_product_in_box] = useState(0);
 
     const [preProductName, setPreProductName] = useState("")
+
+    const [activeStep, setActiveStep] = useState(0)
     
     // Alerts---------------------------------------
     const [message, setMessage] = useState();
@@ -70,7 +70,7 @@ const CreateBundle = () => {
       ListApi(Auth);
     },[])
 
-    // Add product Api -------------------------------------------------------
+    // Add bundle Api -------------------------------------------------------
 
       const headers ={
         'accept': 'application/json',
@@ -112,6 +112,149 @@ const CreateBundle = () => {
             });
       
         }
+
+
+    // Add image and image name-----------------------------
+    const [imageForUpload, setImageForUpload] = useState()
+  
+    const DeleteImg = (item) => {
+      setImageForUpload()
+      setActiveStep(item)
+      if(item == 0){
+        set_albedo_texture_url("")
+      }else if(item == 1){
+        set_metalic_texture_url("")
+      }else if(item ==2){
+        set_normal_map_texture_url("")
+      }else if(item == 3){
+        set_height_map_texture_url("")
+      }
+      document.getElementById('getTextureFile').value= null;
+
+
+  }
+
+    // Upload Texture---------------------------------------------------------------------------------
+
+    const TextureHeaders ={
+        'accept': 'application/json',
+        'Authorization': `Bearer ${Auth}`,
+        'Content-Type': ' multipart/form-data',
+        }
+
+    const formData = new FormData();
+
+    async function handleImageUpload(Type) { 
+
+        formData.append("file", imageForUpload);
+
+        setLoading(true);
+
+        if(imageForUpload !== null && imageForUpload !== undefined && imageForUpload !== ""){
+          switch (Type) {
+            case "albedo_texture_url" :
+              await axios.post('https://supperapp-backend.chbk.run/upload/upload_texture', formData,
+              {
+                headers: TextureHeaders
+              })
+              .then((response) => {
+                if(response.data.Done == true) {
+                  set_albedo_texture_url(response.data.address)
+                  setAlert(true)
+                  setMessage(response.data.message)
+                  setActiveStep(1)
+                }else{
+                  setErrorAlert(true)
+                  setMessage(response.data.message)
+                } 
+              })
+              .catch((error) => {
+                console.log(error, "Error");
+                setLoading(false)
+              });
+              setImageForUpload("")
+              break;
+  
+            case "metalic_texture_url" :
+              await axios.post('https://supperapp-backend.chbk.run/upload/upload_texture', formData,
+              {
+                headers: TextureHeaders
+              })
+              .then((response) => {
+                if(response.data.Done == true) {
+                  set_metalic_texture_url(response.data.address)
+                  setAlert(true)
+                  setMessage(response.data.message)
+                  setActiveStep(2)
+                }else{
+                  setErrorAlert(true)
+                  setMessage(response.data.message)
+                }
+                  
+              })
+              .catch((error) => {
+                console.log(error, "Error");
+                setLoading(false)
+              });
+              setImageForUpload("")
+              break;
+              
+            case "normal_map_texture_url" :
+              await axios.post('https://supperapp-backend.chbk.run/upload/upload_texture', formData,
+              {
+                headers: TextureHeaders
+              })
+              .then((response) => {
+                if(response.data.Done == true) {
+                  set_normal_map_texture_url(response.data.address)
+                  setAlert(true)
+                  setMessage(response.data.message)
+                  setActiveStep(3)
+                }else{
+                  setErrorAlert(true)
+                  setMessage(response.data.message)
+                }
+                  
+              })
+              .catch((error) => {
+                console.log(error, "Error");
+                setLoading(false)
+              });
+              setImageForUpload("")
+              break;
+  
+            case "height_map_texture_url" :
+              await axios.post('https://supperapp-backend.chbk.run/upload/upload_texture', formData,
+              {
+                headers: TextureHeaders
+              })
+              .then((response) => {
+                if(response.data.Done == true) {
+                  set_height_map_texture_url(response.data.address)
+                  setAlert(true)
+                  setMessage(response.data.message)
+                  setActiveStep(4)
+                }else{
+                  setErrorAlert(true)
+                  setMessage(response.data.message)
+                }
+                  
+              })
+              .catch((error) => {
+                console.log(error, "Error");
+                setLoading(false)
+              });
+              setImageForUpload("")
+              break;
+  
+          }
+        }else{
+          setMessage("ابتدا فایل را انتخاب کنید")
+          setErrorAlert(true)
+        }
+        document.getElementById('getTextureFile').value= null;
+
+    };
 
 
     
@@ -191,7 +334,19 @@ const table = useMaterialReactTable({
 
 
 function handleCloseBundleModal() {
+  setPreProductId('')
+  set_albedo_texture_url("");
+  set_metalic_texture_url("");
+  set_normal_map_texture_url("");
+  set_height_map_texture_url("");
+  set_smoothness(0);
+  set_height_map_intensity(0);
+  set_tile_in_texture(0);
+  set_number_of_product_in_box(0);
+  document.getElementById('getTextureFile').value= null;
   setAddBundleModal(false)
+  
+
 }
 
 
@@ -203,87 +358,71 @@ function handleCloseBundleModal() {
 
         <MaterialReactTable table={table}/>
 
-        {/* <ContextMenu
-            open={showContextMenu}
-            position={contextMenuPosition}
-            onClose={handleContextMenuClose}
-            rowData={contextMenuRowData}
-            options={contextMenuOptions}
-        /> */}
-
-      <Modal open={AddBundleModal} onClose={() => handleCloseBundleModal()}>
+      <Modal open={AddBundleModal} >
         <ModalDialog variant="outlined" role="definition" className="w-[50vw] h-[70vh] p-0" >
           <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
                ایجاد باندل برای <span className="text-khas mx-1" >{preProductName}</span>
           </DialogTitle>
           <Divider />
-          <DialogContent className="flex flex-col justify-center items-center gap-10" >           
+          <DialogContent className="flex flex-col justify-center items-center gap-5" >       
+          
+                    
+          {/* <div className="w-full" >
+            <MobileStepper
+                variant="progress"
+                steps={5}
+                position="static"
+                activeStep={activeStep}
+                className="w-full"
+              /> 
+          </div> */}
 
-            <div className='w-[90%] grid grid-cols-2 gap-8 justify-center mx-auto items-center' >
-              <TextField
-                id="input-with-icon-textfield"
-                className="w-full"
-                label=" albedo_texture_url "
-                placeholder=" albedo_texture_url "
-                value={albedo_texture_url}
-                onChange={(e) => set_albedo_texture_url(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="outlined"
-              />
-            <TextField
-                id="input-with-icon-textfield"
-                className="w-full"
-                label=" metalic_texture_url "
-                placeholder=" metalic_texture_url "
-                value={metalic_texture_url}
-                onChange={(e) => set_metalic_texture_url(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="outlined"
-              />
-            <TextField
-                id="input-with-icon-textfield"
-                className="w-full"
-                label="normal_map_texture_url "
-                placeholder="normal_map_texture_url "
-                value={normal_map_texture_url}
-                onChange={(e) => set_normal_map_texture_url(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="outlined"
-              />
-                            <TextField
-                id="input-with-icon-textfield"
-                className="w-full"
-                label="  height_map_texture_url "
-                placeholder=" height_map_texture_url "
-                value={height_map_texture_url}
-                onChange={(e) => set_height_map_texture_url(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="outlined"
-              />
+          <div className="w-full justify-center flex flex-col gap-10 items-center" >
+            <input 
+                id="getTextureFile"
+                type='file'  
+                accept='image/*'
+                onChange={ ({target:{files}}) =>{
+                    setImageForUpload(files[0])
+                }
+                }
+            />
+          </div>
+          
+          <div className='w-[90%] grid grid-cols-2 gap-8 justify-center mx-auto items-center' >
+
+
+              <div className="w-full flex flex-row gap-8 justify-center items-center" >
+
+                <div className='w-32 flex flex-col justify-between items-center mt-1 p-1 text-sm' >
+                    <DeleteForeverOutlined  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg(0)}/>
+                    <Button disabled={ activeStep != 0} onClick={() => handleImageUpload("albedo_texture_url")} className="px-2 py-1 text-xs hover:bg-orange-500 bg-khas text-white rounded-xl" > آپلود albedo_texture_url</Button>
+                </div>
+              </div>   
+
+              <div className="w-full flex flex-row gap-8 justify-center items-center" >
+
+                <div className='w-32 flex flex-col justify-between items-center mt-1 p-1 text-sm' >
+                    <DeleteForeverOutlined  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg(1)}/>
+                    <Button disabled={ activeStep !=1} onClick={() => handleImageUpload("metalic_texture_url")} className="px-2 py-1 text-xs hover:bg-orange-500 bg-khas text-white rounded-xl" > آپلود metalic_texture_url </Button>
+                </div>
+              </div>
+
+              <div className="w-full flex flex-row gap-8 justify-center items-center" >
+
+                <div className='w-32 flex flex-col justify-between items-center mt-1 p-1 text-sm' >
+                    <DeleteForeverOutlined  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg(2)}/>
+                    <Button disabled={ activeStep != 2} onClick={() => handleImageUpload("normal_map_texture_url")} className="px-2 py-1 text-xs hover:bg-orange-500 bg-khas text-white rounded-xl" > آپلود metalic_texture_url </Button>
+                </div>
+              </div>
+
+              <div className="w-full flex flex-row gap-8 justify-center items-center" >
+
+                <div className='w-32 flex flex-col justify-between items-center mt-1 p-1 text-sm' >
+                    <DeleteForeverOutlined  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg(3)}/>
+                    <Button disabled={ activeStep != 3} onClick={() => handleImageUpload("height_map_texture_url")} className="px-2 py-1 text-xs hover:bg-orange-500 bg-khas text-white rounded-xl" > آپلود metalic_texture_url </Button>
+                </div>
+              </div>
 
 
 

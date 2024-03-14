@@ -36,6 +36,8 @@ export const MyProductsShop = ()=> {
     // add product states----------------------------
     const[AddProductModal, setAddProductModal] = useState(false);
 
+    const [triggerGetShopProductApi, setTriggerGetShopProductApi] = useState(1)
+
     const [productName, setProductName] = useState('');
     const [preProductId, setPreProductId] = useState('');
     const [price, setPrice] = useState(0);
@@ -101,7 +103,7 @@ export const MyProductsShop = ()=> {
             })
             .then((response) => {
               setAlert(true)
-              setMessage(" کالا ایجاد شد ")
+              setMessage(response.data.message)
               setLoading(false)
               ListApi(Auth)
               setProductName("")
@@ -109,6 +111,7 @@ export const MyProductsShop = ()=> {
               setPrice(0)
               setDescription("")
               setAddProductModal(false)
+              setTriggerGetShopProductApi((prev) => prev + 1 )
             })
             .catch(function (error) {
               console.log(error, "Error");
@@ -274,15 +277,8 @@ const table = useMaterialReactTable({
 
         <Divider/>
 
-        <ProuductsTableOfShopAndFactory/>
+        <ProuductsTableOfShopAndFactory triggerGetShopProductApi={triggerGetShopProductApi} />
 
-        {/* <ContextMenu
-            open={showContextMenu}
-            position={contextMenuPosition}
-            onClose={handleContextMenuClose}
-            rowData={contextMenuRowData}
-            options={contextMenuOptions}
-        /> */}
 
       <Modal open={AddProductModal} onClose={() => handleCloseAddProductModal()}>
         <ModalDialog variant="outlined" role="definition" className="w-[50vw] h-[70vh] p-0" >
@@ -292,39 +288,12 @@ const table = useMaterialReactTable({
           <Divider />
           <DialogContent className="flex flex-col justify-center items-center gap-10" >           
 
-            <div className='w-[90%] grid grid-cols-2 gap-8 justify-center mx-auto items-center' >
-              {/* <TextField
-                id="input-with-icon-textfield"
-                className="w-[65%]"
-                label=" نام کالا  "
-                placeholder=" نام کالا  "
-                value={productName}
-                onChange={(e) => setProductName(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="standard"
-              /> */}
+            <div className='w-full grid grid-cols-2 gap-4 justify-center items-center' >
 
-                <input 
-                    type='file' 
-                    id='fileInput' 
-                    multiple  
-                    className="!hidden"
-                    accept='image/*'
-                    onChange={ ({target:{files}}) =>{
-                        setImageFile(files)
-                    }
-                    }
-                />
 
               <TextField
                 id="input-with-icon-textfield"
-                className="w-[65%]"
+                className="w-1/2"
                 label=" قیمت "
                 placeholder=" قیمت "
                 value={price}
@@ -339,56 +308,10 @@ const table = useMaterialReactTable({
                 variant="standard"
               />
 
-              {/* <TextField
-                id="input-with-icon-textfield"
-                className="w-[65%]"
-                label=" تخفبف "
-                placeholder=" تخفبف "
-                value={off}
-                onChange={(e) => setOff(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className='text-asliLight' />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="standard"
-              /> */}
 
-
-              {/* <div>
-                <form 
-                    onClick={() => document.getElementById("fileInput").click()}
-                    onDragOver={(e) => DragHandler(e)}
-                    onDrop={(e) => DropHandler(e)} 
-
-                    className='flex flex-col justify-center items-center border-2 cursor-pointer border-dashed border-asliLight w-64 h-24 rounded-3xl hover:animate-pulse' 
-                >
-                <input 
-                    type='file' 
-                    id='fileInput' 
-                    multiple 
-                    hidden 
-                    accept='image/*'
-                    onChange={ (e) =>{
-                      handleImageUpload(e)
-                    }
-                    }
-                />
-                {imageL ?
-                    <img className='w-full h-full p-1 rounded-3xl' src={imageL} alt="تکسچر محصول"  />
-                    :
-                    <div className='text-center'>
-                    <CloudUpload className='text-3xl text-asliLight'/>
-                    <p> آپلود تکسچر </p>
-                    </div>
-                }
-                </form>
-                <div className='w-52 flex flex-row justify-between items-center mt-1 p-1 text-sm' >
-                    <Delete  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg()}/>
-                    <p>{fileName}</p>
-                </div>
+              {/* <div className="w-1/2" >
+                  <label class="w-full mb-2 text-sm font-medium text-gray-900 dark:text-white" for="large_size"> همه عکس ها را انتخاب کنید </label>
+                  <input class="w-full text-lg text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="large_size" type="file" multiple/>
               </div> */}
 
             </div>

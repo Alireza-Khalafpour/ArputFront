@@ -38,6 +38,7 @@ import CompanySlider from "@/components/module/CompanySlider";
 
 
 
+
 export default function Home() {
 
 
@@ -105,27 +106,30 @@ export default function Home() {
 
         </div>
 
+        <Divider></Divider>
+
 
         {/* <div className="flex flex-col gap-12 justify-center w-full items-center" > */}
         <div className="w-full text-center mx-auto text-3xl gap-4" > <span className="h-full w-[2px] border-2 border-khas mx-4" ></span>  دسته بندی ها  <span className="h-full w-[2px] border-2 border-khas mx-4" ></span> </div>
 
 
-        <div >
+        <div className="w-full md:block hidden " >
           <MySlider title=" جذاب ترین ها " />
         </div>
 
-        <div >
+        <div className="w-full md:block hidden " >
           <MySlider title=" سرامیک " />
         </div>
 
 
-          {/* <div className="w-full md:hidden block " >
-            <ProductSwiper title=" پرفروش ها " />
+
+          <div className="w-full md:hidden block " >
+            <ProductSwiper title=" جذاب ترین ها " />
           </div>
 
           <div className="w-full md:hidden block " >
             <ProductSwiper title=" سرامیک " />
-          </div> */}
+          </div>
 
 
 
@@ -140,7 +144,7 @@ export default function Home() {
               </div>
               <div className="feature_detail">
 
-                <div className="left_data feature_box md:!text-left !text-center md:!pl-[130px] !p-0 ">
+                <div className="left_data feature_box md:!text-left !text-center lg:mr-5 mr-0 ">
 
                   <div className="data_block">
                     <div className="icon flex justify-center ">
@@ -164,7 +168,7 @@ export default function Home() {
                 </div>
 
 
-                <div className="right_data feature_box md:!text-right !text-center md:!pr-[130px] !p-0 ">
+                <div className="right_data feature_box md:!text-right !text-center lg:ml-5 ml-0 ">
 
                   <div className="data_block">
                     <div className="icon flex justify-center">
@@ -189,7 +193,7 @@ export default function Home() {
 
                 </div>
 
-                <div className="feature_img ">
+                <div className="feature_img lg:!block !hidden ">
                   <Image src={featureFrame} width={270} height={570} alt="image" />
                 </div>
               </div>
@@ -203,9 +207,9 @@ export default function Home() {
             <div class="container">
               <div class="how_it_inner">
                 <div class="section_title">
-                  <h2><span>نحوه کار</span> -سه قدم آسان</h2>
-                  <p>  ابتدا اپلیکیشن آرپوت مارکت را از طریق سامانه ی www.arputmarket.com،
-                    بازار و یا play store دانلود کنید.  <br/>   سپس با دانلود و به روز رسانی پیش نیاز آن (Google play services for AR ) می توانید وارد اپلیکیشن شوید و محصول مور نظر را در محیط واقعی آرپوت کنید!!  </p>
+                  <h2 className="mb-12" > <span>نحوه کار</span> -سه قدم آسان</h2>
+                  <p className="mb-12" >  ابتدا اپلیکیشن آرپوت مارکت را از طریق سامانه ی www.arputmarket.com،
+                    بازار و یا playstore دانلود کنید.  <br/>   سپس با دانلود و به روز رسانی پیش نیاز آن (Google play services for AR ) می توانید وارد اپلیکیشن شوید و محصول مور نظر را در محیط واقعی آرپوت کنید!!  </p>
                 </div>  
                 <div class="step_block">
 
@@ -307,7 +311,7 @@ export default function Home() {
                             </div>
                             <div className="pkg_name w-full flex flex-col justify-center items-center ">
                               <h3> سفارشی </h3>
-                              <span>برای حرفه ای ها</span>
+                              <span>برای کارخانه ها</span>
                               <hr className="my-2 text-white text-xl" />
                             </div>
 

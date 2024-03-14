@@ -7,6 +7,8 @@ import Link from "next/link";
 import ViewProduct from "@/components/module/ViewProduct";
 import SellerDetails from "@/components/module/SellerDetails";
 import SpecificationProduct from "@/components/module/SpecificationProduct";
+import { ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
+import LikeDislikeComment from "@/components/module/LikeDislikeComment";
 
 async function SingleProduct({ params: { single_product } }) {
 
@@ -34,7 +36,7 @@ async function SingleProduct({ params: { single_product } }) {
       console.log(error, "Error");
     });
 
-  const productList = res.data;
+  const productList = res?.data;
 
   // get comments of pre product ----------------------------------
 
@@ -54,18 +56,8 @@ async function SingleProduct({ params: { single_product } }) {
       const CommentsList = CommentsApi?.data?.data;
 
 
-    //--------------------------------------------------------------
 
-    const Rate = axios
-      .get(
-        `https://supperapp-backend.chbk.run/rate_pre_product/pre_product/star_rate/${single_product}`,
-        {
-          headers: headers,
-        }
-      )
-      .catch((error) => {
-        console.log(error, "Erroooooooor");
-      });
+
 
 
 
@@ -78,14 +70,16 @@ async function SingleProduct({ params: { single_product } }) {
             className="text-asliLight text-4xl"
             sx={{ "--Divider-childPosition": "10%" }} 
           >
+            <Link href={`/Shops/${single_product}/${productList?.seller_info[0]?.seller_name}`} >
             فروشگاه
             {" "}
             {productList?.seller_info[0]?.seller_name ? productList?.seller_info[0]?.seller_name : "آرپوت مارکت" }
+            </Link>
           </Divider>
 
           <div className=" flex md:flex-row flex-col w-full">
             <div className=" flex flex-col gap-4 md:w-2/3 w-full">
-              <ViewProduct className="w-full" productList={productList} />
+              <ViewProduct className="w-full" productList={productList} single_product={single_product} />
               <SellerDetails className="w-full" productList={productList} />
             </div>
             <SpecificationProduct className="md:w-1/3 w-full" productList={productList} />
@@ -102,17 +96,28 @@ async function SingleProduct({ params: { single_product } }) {
               <CommentTextArea single_product={single_product} />
             </div>
 
-            <ul className="w-full flex flex-col gap-6 justify-center items-center ">
+            <ul className="w-[80vw] mx-auto flex flex-col gap-6 justify-center items-center ">
               {
                 CommentsList?.map((i) => (
-                  <li className="md:w-[90%] w-full flex flex-row justify-start items-center p-4 odd:bg-slate-200 border-black border-b-2 ">
-                      {i?.content}
+                  <li className="md:w-[90%] w-full flex flex-row justify-between items-center p-4 gap-4 odd:bg-slate-200 border-black border-b-2 ">
+                      <div>
+                        <div
+                            className="p-2 text-sm bg-paszamine3 text-white rounded-2xl"
+                          >
+                            {i?.title}
+                          </div>
+                        <span> {i?.content} </span>
+                      </div>
+                      <div>
+                        <LikeDislikeComment CommentId={i.id} single_product={single_product} />
+                      </div>
                   </li>
                 ))
               }
             </ul>
           </div>
         </div>
+        
 
     </>
   );

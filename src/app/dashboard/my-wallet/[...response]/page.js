@@ -6,6 +6,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import successImg from "../../../../../public/images/Plain credit card.gif"
 import failImg from "../../.././../../public/images/Pay attention.gif"
+import { CloseRounded } from "@mui/icons-material";
+import Link from "next/link";
 
 
  function page() {
@@ -18,7 +20,7 @@ import failImg from "../../.././../../public/images/Pay attention.gif"
 
     // Get Response of Payment State ---------
     async function PaymentFinish() {
-        await axios.get(`https://supperapp-backend.chbk.run/payment/finished/?authority=${Authority}}&status=${Status}`, {
+        await axios.get(`https://supperapp-backend.chbk.run/payment/finished/?authority=${Authority}&status=${Status}`, {
             headers:{
             'accept': 'application/json',
             }
@@ -41,29 +43,31 @@ import failImg from "../../.././../../public/images/Pay attention.gif"
     
 
     return (
-        <div>
+        <div className="min-h-[80vh]">
              
             {
                 response?.alert_stat == 'success' 
                 ?
                 (
                     <div className="w-full flex flex-col justify-center items-center gap-6" >
-                        <Image src={successImg} width={500} height={500} />
-                        <h2 className="text-xl " >
+                        <Image src={successImg} width={300} height={300} className="rounded-full" />
+                        <h2 className="text-2xl " >
                             {response?.stat_msg}
                         </h2>
                         <h3> شماره پیگیری : {response?.refid} </h3>
+                        <Link href="/dashboard/my-wallet" className="p-2 rounded-2xl bg-khas text-white" > بازگشت به کیف پول </Link>
                     </div>
             )
             :
             (
 
                 <div className="w-full flex flex-col justify-center items-center gap-6" >
-                <Image src={failImg} width={500} height={500} />
-                <h2 className="text-xl " >
-                    {response?.stat_msg}
-                </h2>
-            </div>
+                    <CloseRounded className="text-4xl text-white p-4 bg-red-600 mx-auto w-48 h-48 rounded-full" />
+                    <h2 className="text-2xl text-black" >
+                        {response?.stat_msg}
+                    </h2>
+                    <Link href="/dashboard/my-wallet" className="p-2 rounded-2xl bg-khas text-white" > بازگشت به کیف پول </Link>
+            </div> 
 
             )
             

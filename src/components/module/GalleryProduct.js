@@ -10,19 +10,34 @@ import "../styles/GalleryProduct.css";
 import "swiper/css/pagination";
 import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules";
 import { useState } from "react";
+import ImageGalleryModal from "../templates/ImageGalleryModal";
 
 function GalleryProduct({ productList }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+
+
+  const [openImages, setOpenImages] = useState(false);
+
+  const handleClickOpenImages = () => {
+      setOpenImages(true);
+  };
+
+  const handleCloseImages = () => {
+      setOpenImages(false);
+  };
 
   function handleImage(e) {
     console.log(e.target);
   }
 
+
+
+
   return (
     <>
       <div className=" md:hidden block">
         <Swiper
-          slidesPerView={2}
+          slidesPerView={1}
           spaceBetween={10}
           centeredSlides={true}
           pagination={{
@@ -34,8 +49,8 @@ function GalleryProduct({ productList }) {
           <SwiperSlide>
             <Image
               className="hover:blur-sm "
-              src={productList.image_url[0]}
-              alt={productList.image_url[0]}
+              src={productList?.image_url[0]}
+              alt={productList?.image_url[0]}
               width={200}
               height={200}
               onClick={(e) => handleImage(e)}
@@ -87,11 +102,12 @@ function GalleryProduct({ productList }) {
         >
           <SwiperSlide>
             <Image
-              className="hover:blur-sm "
+            
+              className="hover:cursor-pointer "
               width={350}
               height={350}
-              src={productList.image_url[0]}
-              alt={productList.image_url[0]}
+              src={productList?.image_url[0]}
+              alt={productList?.image_url[0]}
             />
           </SwiperSlide>
           {/* <SwiperSlide>
@@ -194,6 +210,7 @@ function GalleryProduct({ productList }) {
           }
         </Swiper> */}
 
+          {/* <ImageGalleryModal openImages={openImages} handleCloseImages={handleCloseImages} /> */}
 
       </div>
     </>

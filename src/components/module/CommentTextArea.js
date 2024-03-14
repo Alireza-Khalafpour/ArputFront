@@ -134,6 +134,7 @@ export default function CommentTextArea({single_product}) {
   }
 
 
+
   return (
 
     <>
@@ -141,7 +142,7 @@ export default function CommentTextArea({single_product}) {
       <FormControl>
         <Textarea
           className="w-full"
-          placeholder=" نظر خود را در اینحا ثبت کنید... "
+          placeholder=" نظر خود را در اینجا ثبت کنید... "
           minRows={3}
           maxRows={3}
           value={content}

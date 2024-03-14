@@ -278,9 +278,9 @@ const table = useMaterialReactTable({
 
                 {
                   subResponses.map((i) => (
-                <p className={`border ${i.role == "کارخانه" ? "border-khas" : "border-asliLight"} rounded-xl py-6 px-2 relative`} >
+                <p className={`border ${i.role == "کارخانه" ? "border-khas" : "border-asliLight"} rounded-xl py-6 px-2 relative min-w-[50%]`} >
                     {i.content}
-                    <span className="absolute bottom-0 left-1 text-xs" > {i.updated_at} </span>
+                    <span className="absolute bottom-0 left-1 text-sm" > {digitsEnToFa(shamsi.gregorianToJalali(i?.updated_at).join('/'))} </span>
                 </p>
 
                   ))

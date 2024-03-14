@@ -23,6 +23,7 @@ import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import NotAllowedPage from './NotAllowedPage';
 import { Card, CardActions, Chip, ListItemDecorator } from '@mui/joy';
+import { useRouter } from 'next/navigation';
 
 
 
@@ -66,7 +67,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function DashbordSidebar({children}) {
 
+  
   const cookie = new Cookies();
+  const route = useRouter()
+  
+  if(cookie.get("tokenDastResi") === undefined ){
+  route.push("/")
+  }
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -352,10 +359,14 @@ export default function DashbordSidebar({children}) {
 
         <Divider className='bg-slate-500' />
 
-        <Link onClick={() => handleDrawerClose()} href="/dashboard/ticketChat" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
-          تیکت و پشتیبانی
-          <ManageAccountsOutlined className='text-khas'/>
-        </Link>
+        {
+          cookie.get("role") !== "admin" &&
+
+          <Link onClick={() => handleDrawerClose()} href="/dashboard/ticketChat" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+            تیکت و پشتیبانی
+            <ManageAccountsOutlined className='text-khas'/>
+          </Link>
+        }
 
 
 

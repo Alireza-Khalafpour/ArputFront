@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import { Button, Divider } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -36,7 +37,7 @@ function SpecificationProduct({ productList }) {
                   ویژگی ها :{" "}
                 </td>
               </tr>
-              {productList.features.map((i) => (
+              {productList?.features.map((i) => (
                 <tr class=" odd:bg-gray-200 even:bg-white" >
                     <td className="rounded-s-lg p-1 text-lg">{i.feature_name}:</td>
                     <td className="rounded-e-lg text-right text-gray-500">
@@ -56,22 +57,22 @@ function SpecificationProduct({ productList }) {
               <tr class=" odd:bg-gray-200 even:bg-white">
                 <td className="rounded-s-lg p-1 text-lg">وزن:</td>
                 <td className=" rounded-e-lg text-right text-gray-500">
-                  {productList.info[0] ? productList.info[0]?.weight : "0"}{" "}
+                  {productList?.info[0] ? productList?.info[0]?.weight : "0"}{" "}
                 </td>
               </tr>
               <tr class=" odd:bg-gray-200 even:bg-white">
                 <td className="rounded-s-lg p-1 text-lg"> طول:</td>
                 <td className=" rounded-e-lg text-right text-gray-500">
                   {" "}
-                  {productList.info[0]
-                    ? productList.info[0]?.width
+                  {productList?.info[0]
+                    ? productList?.info[0]?.width
                     : "0"}{" "}
                 </td>
               </tr>
               <tr class=" odd:bg-gray-200 even:bg-white">
                 <td className="rounded-s-lg p-1 text-lg"> عرض:</td>
                 <td className=" rounded-e-lg text-right text-gray-500">
-                  {productList.info[0] ? productList.info[0]?.height : "0"}{" "}
+                  {productList?.info[0] ? productList?.info[0]?.height : "0"}{" "}
                 </td>
               </tr>
             </tbody>
@@ -114,7 +115,7 @@ function SpecificationProduct({ productList }) {
                       <td className="rounded-s-lg p-1 text-lg"> ویژگی ها </td>
                       <td className="rounded-e-lg text-right text-gray-500">
                         {" "}
-                        {i.main_name} : {i.main_sample}
+                        {/* {i?.main_name} : {i?.main_sample} */}
                       </td>
                     </tr>
 
@@ -127,8 +128,8 @@ function SpecificationProduct({ productList }) {
                     <tr class=" odd:bg-gray-200 even:bg-white">
                       <td className="rounded-s-lg p-1 text-lg">وزن:</td>
                       <td className=" rounded-e-lg text-right text-gray-500">
-                        {productList.info[0]
-                          ? productList.info[0]?.weight
+                        {productList?.info[0]
+                          ? productList?.info[0]?.weight
                           : "0"}{" "}
                       </td>
                     </tr>
@@ -136,16 +137,16 @@ function SpecificationProduct({ productList }) {
                       <td className="rounded-s-lg p-1 text-lg"> طول:</td>
                       <td className=" rounded-e-lg text-right text-gray-500">
                         {" "}
-                        {productList.info[0]
-                          ? productList.info[0]?.width
+                        {productList?.info[0]
+                          ? productList?.info[0]?.width
                           : "0"}{" "}
                       </td>
                     </tr>
                     <tr class=" odd:bg-gray-200 even:bg-white">
                       <td className="rounded-s-lg p-1 text-lg"> عرض:</td>
                       <td className=" rounded-e-lg text-right text-gray-500">
-                        {productList.info[0]
-                          ? productList.info[0]?.height
+                        {productList?.info[0]
+                          ? productList?.info[0]?.height
                           : "0"}{" "}
                       </td>
                     </tr>
@@ -157,7 +158,7 @@ function SpecificationProduct({ productList }) {
                   </p>
                   <div>
                     <h3 className=" font-bold">توضیحات :</h3>
-                    <h2> {productList.seller_info[0]?.description} </h2>
+                    <h2> {productList?.seller_info[0]?.description} </h2>
                   </div>
                 </div>
               </Box>
@@ -168,7 +169,7 @@ function SpecificationProduct({ productList }) {
               <p className="  font-bold text-xl text-center">مشخصات بیشتر</p>
               <div>
                 <h3 className=" font-bold">توضیحات :</h3>
-                <h2> {productList.seller_info[0]?.description} </h2>
+                <h2> {productList?.seller_info[0]?.description} </h2>
               </div>
               <div className=" text-center">
                 <Button

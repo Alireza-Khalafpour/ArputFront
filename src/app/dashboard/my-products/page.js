@@ -3,9 +3,9 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, AddCircleRounded, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, FilterAlt, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RadioButtonChecked, RefreshOutlined, Search, TableRowsRounded } from "@mui/icons-material";
+import { AddCircleOutline, AddCircleRounded, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, EditRounded, FilterAlt, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RadioButtonChecked, RefreshOutlined, Search, TableRowsRounded } from "@mui/icons-material";
 import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, InputAdornment, Modal, Slide, TextField, Tooltip } from "@mui/material";
-import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import { MRT_ActionMenuItem, MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import ContextMenu from "@/utils/ContextMenu";
@@ -323,6 +323,42 @@ const table = useMaterialReactTable({
   },
   muiTableContainerProps: { sx: { maxHeight: '500px' } },
   // renderRowActionMenuItems
+  enableCellActions:true,
+  renderCellActionMenuItems:({ closeMenu, row, table }) => [
+    <MRT_ActionMenuItem
+      icon={<EditRounded className="text-asliDark" />}
+      key={1}
+      label=" جزییات "
+      onClick={() => {
+        handleDetailModal(row)
+        closeMenu();
+      }}
+      table={table}
+    />,
+    <Divider/>,
+    
+    <MRT_ActionMenuItem
+      icon={<DeleteRounded className="text-rose-500" />}
+      key={2}
+      label="غیرفعال کردن"
+      onClick={async () => {
+        GetRowIdForDelete(row.original?.pre_product_id)
+        closeMenu()
+      }}
+      table={table}
+    />,
+    <Divider/>,
+    <MRT_ActionMenuItem
+    icon={<RadioButtonChecked className="text-teal-700" />}
+    key={3}
+    label="فعال کردن"
+    onClick={async () => {
+      GetRowIdForActivate(row.original?.pre_product_id)
+      closeMenu()
+    }}
+    table={table}
+  />,
+  ],
   renderRowActions: ({ row, table }) => {
     return (
       <div className="w-auto">

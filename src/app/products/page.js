@@ -37,13 +37,13 @@ async function Products() {
                 </div>
 
             </div> */}
-        <div id="productsPart" className="flex flex-row justify-center items-center gap-5 w-full flex-wrap" >
+        <div id="productsPart" className="flex flex-row justify-start items-center gap-5 w-full flex-wrap" >
 
             {productList?.length > 0 || res === undefined ? null : (
 
                 <>
                     <h2>
-                        Reloading please be patient ...
+                        صبر کنید ...
                     </h2>
                 </>
 
@@ -76,7 +76,7 @@ async function Products() {
                                     >
                                     {i.name}
                                     </span>
-                                    <div className="flex flex-row gap-1 items-center"> <span> امتیاز : </span> <Rating value={3} readOnly /> </div>
+                                    {/* <div className="flex flex-row gap-1 items-center"> <span> امتیاز : </span> <Rating value={3} readOnly /> </div> */}
                                     <Chip component="span" size="sm" variant="soft" color={i.has_bundle === true ? "success" : "danger"}>
                                         {i.has_bundle === true ? "واقعیت افزوده دارد" : " واقعیت افزوده ندارد "}
                                     </Chip>

@@ -42,8 +42,8 @@ const AddToFavoriteAndShare = ({pId}) => {
         }
 
     async function AddToFavorites(pId) {
-        await axios.post('https://supperapp-backend.chbk.run/favorite_product/create', {
-        'product_id': `${pId}`
+        await axios.post('https://supperapp-backend.chbk.run/pre_product/favorite/create', {
+        "pre_product_id": `${pId}`
         }, 
         {
         headers: headers

@@ -356,7 +356,6 @@ const AddPreProductPage = () => {
         // Get Branches List ---------------------------------------
 
         async function GetBranches() {
-        
             await axios.get('https://supperapp-backend.chbk.run/branch/factory/branch', {
               headers:currentUserHeaders
               })
@@ -556,7 +555,7 @@ const AddPreProductPage = () => {
                             <div className='w-[70%] my-7' > 
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid className='text-lg font-bold text-asliLight' item>
-                                        وزن(kg) <ScaleRounded/> 
+                                         وزن کارتن(kg) <ScaleRounded/> 
                                     </Grid>
                                     <Grid item xs>
                                     <Slider

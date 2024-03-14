@@ -52,15 +52,12 @@ const FireNav = styled(List)({
 
 
 
-export default function HeaderDropMenu({name,family,setTriggered}) {
+export default function HeaderDropMenu({name,family}) {
 
     const route = useRouter();
     const cookie = new Cookies();
     const Au = cookie.get("tokenDastResi") ? cookie.get("tokenDastResi") : null 
 
-    React.useEffect(() => {
-      route.refresh()
-    },[1])
 
   const [open, setOpen] = React.useState(true);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -77,10 +74,10 @@ export default function HeaderDropMenu({name,family,setTriggered}) {
     cookie.remove("tokenDastResi");
     cookie.remove("role");
     cookie.remove("welcommed")
-    setTriggered(2)
     setTimeout(() => {
-      route?.push("/")
+      route.refresh()
     }, 1000);
+
     handleCloseUserMenu()
   }
 
@@ -92,7 +89,7 @@ export default function HeaderDropMenu({name,family,setTriggered}) {
                   <Box sx={{ flexGrow: 0 }}>
                   <Tooltip>
                     <IconButton className='border hover:bg-transparent ' onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                      <AccountCircle className='w-7 h-7' /> <span className='text-lg' > {name} {family} </span>
+                      <AccountCircle className='w-7 h-7' /> <span className='text-lg md:block hidden' > {name} {family} </span>
                     </IconButton>
                   </Tooltip>
                   <Menu

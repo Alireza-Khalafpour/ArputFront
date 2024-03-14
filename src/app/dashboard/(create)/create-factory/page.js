@@ -3,9 +3,9 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, Category, DeleteRounded, Edit, EditAttributes, LocationCity, LocationOnRounded, Person, RadioButtonChecked, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
+import { AddCircleOutline, Category, DeleteRounded, Edit, EditAttributes, EditRounded, LocationCity, LocationOnRounded, Person, RadioButtonChecked, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, InputAdornment, Snackbar, TextField, Typography } from "@mui/material";
-import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import { MRT_ActionMenuItem, MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import {  IconButton, Textarea } from "@mui/joy";
@@ -384,6 +384,64 @@ export const CreateCategory = ()=> {
       </Box>
     );
   },
+  enableCellActions:true,
+  renderCellActionMenuItems:({ closeMenu, row, table }) => [
+    <MRT_ActionMenuItem
+    icon={<LocationOnRounded className="text-asliDark" />}
+    key={1}
+    label=" آدرس "
+    onClick={() => {
+      GetRowIdForPatchAddress(row)
+      closeMenu();
+    }}
+    table={table}
+  />,
+  <Divider/>,
+    <MRT_ActionMenuItem
+      icon={<EditRounded className="text-asliDark" />}
+      key={1}
+      label=" ویرایش "
+      onClick={() => {
+        GetRowIdForUpdateFactory(row)
+        closeMenu();
+      }}
+      table={table}
+    />,
+    <Divider/>,
+    <MRT_ActionMenuItem
+    icon={<EditAttributes className="text-asliDark" />}
+    key={1}
+    label=" ویرایش نام کاربری"
+    onClick={() => {
+      handleEditFactoryUsername(row)
+      closeMenu();
+    }}
+    table={table}
+  />,
+  <Divider/>,
+    
+    <MRT_ActionMenuItem
+      icon={<DeleteRounded className="text-rose-500" />}
+      key={2}
+      label="غیرفعال کردن"
+      onClick={async () => {
+        GetRowIdForDelete(row.original?.id)
+        closeMenu()
+      }}
+      table={table}
+    />,
+    <Divider/>,
+    <MRT_ActionMenuItem
+    icon={<RadioButtonChecked className="text-teal-700" />}
+    key={3}
+    label="فعال کردن"
+    onClick={async () => {
+      GetRowIdForActivate(row.original?.id)
+      closeMenu()
+    }}
+    table={table}
+  />,
+  ],
   renderRowActions: ({ row }) => {
     return (
       <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
@@ -529,16 +587,8 @@ export const CreateCategory = ()=> {
   }
 
 
-  // // modal part -------------------------------------------------------------
-  // const[count, setCount] = useState(0);
-  // const[price, setPrice] = useState(0);
-  // const [image, setImage] = useState([])
-  // const[fileName, setFileName] = useState("فایلی انتخاب نشده...")
-  
-  // const DeleteImg = () => {
-    //   setFileName("فایلی انتخاب نشده...")
-    //   setImage([])
-    // }
+  // -------------------------------------------------------------
+
     
 
   const[addCategoryModal, setAddCategoryModal] = useState(false);
@@ -551,15 +601,6 @@ export const CreateCategory = ()=> {
       <div className="w-full" >
 
         <MaterialReactTable table={table}/>
-
-
-        {/* <ContextMenu
-            open={showContextMenu}
-            position={contextMenuPosition}
-            onClose={handleContextMenuClose}
-            rowData={contextMenuRowData}
-            options={contextMenuOptions}
-        /> */}
 
       <Dialog fullWidth className="w-full" scroll="paper" maxWidth="md" open={addCategoryModal} onClose={() => CloseHandler()}>
 

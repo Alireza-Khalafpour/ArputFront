@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Add, AddRounded, CommentOutlined, Mail, Subject, Telegram } from "@mui/icons-material";
 import { Avatar, Box, Button, IconButton, Input, Textarea, Typography } from "@mui/joy";
 import { Alert, Autocomplete, Checkbox, Divider, FormControlLabel, InputAdornment, List, ListItem, ListItemText, Snackbar, TextField } from "@mui/material";
-import { e2p } from "@/utils/replaceNumbers";
 import * as shamsi from 'shamsi-date-converter';
 import axios from "axios";
 import Cookies from "universal-cookie";
@@ -30,7 +29,8 @@ const TicketChatPage = () => {
     const [subject, setSubject] = useState("")
     const [content, setContent] = useState("")
     const [factoryId , setFactoryId] = useState('')
-    const [sendToFactory, setSendToFactory] = useState(false)
+    const [factoryList, setfactoryList] = useState([])
+    const [enteryError, setEnteryError] = useState(false)
     // ---------------
     const [subResponse, setSubResponse] = useState("")
     const [resetChat, setResetChat] = useState(0)
@@ -72,16 +72,33 @@ const TicketChatPage = () => {
       }
 
 
+    // fetch factory list --------------------
+    async function GetFactoryList() {
+      
+        await axios.get('https://supperapp-backend.chbk.run/template/brand/data')
+          .then((response) => {
+            setfactoryList(response.data.data)
+          })
+          .catch((error) => {
+            console.log(error, "Error");
+          });
+      }
+
+
+
+
       useEffect(() => {
         const Auth = cookie.get('tokenDastResi')
         GetDepartmentList(Auth)
         getUSer(Auth)
+        GetFactoryList()
       },[])
 
       useEffect(() => {
         const Auth = cookie.get('tokenDastResi')
         GetDepartmentList(Auth)
         getUSer(Auth)
+        GetFactoryList()
       },[resetChat])
 
 
@@ -96,14 +113,15 @@ const TicketChatPage = () => {
       
       
         async function SendTicket() {
-            if(subject != ""){
+            console.log(departmentId)
+            if(subject != "" && departmentId != "" && departmentId != null){
 
                 setLoading(true);
                 await axios.post('https://supperapp-backend.chbk.run/ticket/create', {
                   "subject": subject,
                   "content": content,
                   "department_id": departmentId,
-                  "factory_id": sendToFactory == true ? factoryId : "",
+                  "factory_id": factoryId ,
                   "file": ""
                 }, 
                 {
@@ -131,7 +149,8 @@ const TicketChatPage = () => {
                 setContent("")
 
             }else{
-                setMessage(" موضوع را مشخص کنید")
+                setEnteryError(true)
+                setMessage(" فیلد های ورودی را به درستی تکمیل کنید ")
                 setErrorAlert(true)
             }
       }
@@ -171,11 +190,12 @@ const TicketChatPage = () => {
   }
 
 
+    // reset all feilds -----------------
       const ResetAll = () => {
         setSubResponse("")
         setResetChat(1)
         document.getElementById("departments").focus();
-        scrollTo(document.getElementById("departments"))
+        document.getElementById("departments").offsetTop(0)
       } 
 
 
@@ -197,8 +217,9 @@ const TicketChatPage = () => {
                             getOptionLabel={(i)=> i.dep_name}
                             onChange={(event, val) =>{
                                 setDepartmentId(val.id)
+                                setEnteryError(false)
                             }}
-                            renderInput={(params) => <TextField {...params} variant="outlined" label=" ارسال به دپارتمان " dir="rtl"/>}
+                            renderInput={(params) => <TextField {...params} variant="outlined" error={enteryError} helperText=" دپارتمان را انتخاب کنید " label=" ارسال به دپارتمان " dir="rtl"/>}
                         />
 
 
@@ -206,8 +227,14 @@ const TicketChatPage = () => {
                             className="md:w-3/4 w-full "
                             label=" موضوع تیکت "
                             placeholder=" موضوع تیکت "
+                            error={enteryError}
+                            helperText="موضوع را مشخص کنید"
                             value={subject}
-                            onChange={(e) => setSubject(e.target.value)}
+                            onChange={(e) => {
+                                setSubject(e.target.value)
+                                setEnteryError(false)
+                            }
+                            }
                             InputProps={{
                                 startAdornment: (
                                 <InputAdornment position="end">
@@ -218,15 +245,16 @@ const TicketChatPage = () => {
                             variant="outlined"
                         />
 
-                        <FormControlLabel
-                            className="border border-asliLight rounded-xl md:w-3/4 w-full m-0 "
-                            control={<Checkbox
-                                checked={sendToFactory}
-                                onChange={(e) => setSendToFactory(e.target.checked)}
-                            />
-                            } 
-                            label=" ارسال برای کارخانه " 
+                        <Autocomplete
+                            className="md:w-3/4 w-full "
+                            noOptionsText=" داده ای موجود نیست "
+                            id="factories"
+                            options={factoryList}
+                            getOptionLabel={(i)=> i.brand_name}
+                            onChange={(event, val) => setFactoryId(val.brand_id)}
+                            renderInput={(params) => <TextField {...params} variant="outlined"  label=" ارسال به کارخانه " dir="rtl"/>}
                         />
+
                         
                     </div>
                     <ListItem
@@ -267,7 +295,7 @@ const TicketChatPage = () => {
 
                         {
                             subResponse?.sub_response?.map((i) => (
-                                <div className={`p-2 flex w-full ${i?.role === "کارخانه" ? `justify-start` : `justify-end`} `}>
+                                <div className={`p-2 flex w-full ${i?.role === "کارخانه" ? `justify-start` : `justify-end`} last:mb-48 `}>
 
                                         <div className={` p-2 w-[70%] ${i?.role === "کارخانه" ? "bg-blue-200" : "bg-orange-200"} rounded-xl`}>
                                             {i.content}
@@ -282,7 +310,7 @@ const TicketChatPage = () => {
                         }
                     </div>
 
-                    <div id="footer" className="absolute bottom-24 w-full h-20 border" >
+                    <div id="footer" className="absolute bottom-16 w-full h-20 border" >
 
                         <Textarea
                             placeholder=" اینجا بنویسید... "

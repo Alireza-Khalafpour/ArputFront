@@ -59,7 +59,7 @@ export default function SignInPage() {
         cookie.set("welcommed", false, {secure:true, maxAge: 14400  } );
         cookie.remove('activeList');
         setAlert(true)
-        setMessage(" ...در حال ورود")
+        setMessage(" در حال ورود...")
         if(response.data.role == 'client') {
           setTimeout(() => {
             route.push("/")

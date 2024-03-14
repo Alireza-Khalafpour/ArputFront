@@ -11,6 +11,7 @@ import Image from 'next/image';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import ShopsModalForPulseInMainPage from '../module/ShopsModalForPulseInMainPage';
 
 
 const ProductSwiper = ({title}) => {
@@ -18,12 +19,33 @@ const ProductSwiper = ({title}) => {
 
   const [items, setItems] = useState([])
 
+    // -----------
+    const [loading, setLoading] = useState(false);
+    const [shops, setShops] = useState([]);
+    const [displayStores, setDisplayStore] = useState(false)
+    const [pre_product_id, set_pre_product_id] = useState("")
+
+
+    // گرفتن لیست شاپ ها-----------------------------
+
+    async function GetShopList(i) {
+        setDisplayStore(true)
+        setLoading(true)
+        set_pre_product_id(i.id)
+        console.log(i)
+        await axios.get(`https://supperapp-backend.chbk.run/product/product/${i.id}`).then((response) => {
+            setShops(response.data.seller_info)
+            setLoading(false)
+        });
+    }
+    // -------------------------------------------------
+
   useEffect(() =>{
       GetItems()
   },[])
 
   async function GetItems () {
-      await axios.get('https://supperapp-backend.chbk.run/Product/products?page=0&limit=18', {
+      await axios.get('https://supperapp-backend.chbk.run/product/products?page=0&limit=18', {
           headers:{
             'accept': 'application/json',
           }
@@ -60,11 +82,11 @@ const ProductSwiper = ({title}) => {
             // <Link href={`/products/${i.id}`} className='w-full h-full z-10'>
 
               <SwiperSlide
-                className=' !flex flex-col gap-1 justify-center items-center cursor-pointer '
+                className=' !flex flex-col gap-1 justify-center items-center cursor-pointer'
               >
-                <Link href={`/products/${i.id}`}style={{backgroundImage: `url(${i.image_url})`}} className='bg-[auto 100%] bg-center bg-no-repeat border-2 rounded-lg overflow-hidden w-[130px] h-[150px] transition-all duration-500 flex justify-center items-center bg-red-100 '>
-                </Link>
-                <span className='font-semibold text-asliDark w-full' > {i.name} </span>
+                <button onClick={() => GetShopList(i)} style={{backgroundImage: `url(${i.image_url})`}} className=' bg-[auto 100%] bg-center bg-no-repeat border-2 rounded-lg overflow-hidden w-[130px] h-[150px] transition-all duration-500 flex justify-center items-center bg-red-100 '>
+                </button>
+                <span className='font-semibold text-asliDark w-full text-sm text-pretty' > {i.name} </span>
               </SwiperSlide>
             // </Link>
           ))
@@ -73,6 +95,9 @@ const ProductSwiper = ({title}) => {
 
 
       </Swiper>
+
+      <ShopsModalForPulseInMainPage pre_product_id={pre_product_id} loading={loading} displayStores={displayStores} setDisplayStore={setDisplayStore} shops={shops} />
+
     </div>
   );
 };

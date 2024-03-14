@@ -40,7 +40,7 @@ function SellerDetails({ productList }) {
             </div>
         </div>
 
-        {productList.seller_info.map((s) => (
+        {productList?.seller_info.map((s) => (
           <div className=" flex flex-col gap-3 border-b-2 border-asliDark last:border-0 border-dashed pb-2">
 
             <div className=" flex flex-col  md:ml-10 gap-4 justify-between pb-2">
@@ -49,11 +49,11 @@ function SellerDetails({ productList }) {
               <div className=" flex flex-row justify-between gap-4 py-4">
             <h2 className="mt-2 text-lg font-bold">
               {" "}
-              {s.seller_name == "" ? "آرپوت مارکت" : s.seller_name}{" "}
+              {s?.seller_name == "" ? "آرپوت مارکت" : s?.seller_name}{" "}
             </h2>
                 <h3 className=" font-semibold">
                   {" "}
-                  قیمت {s.price ? digitsEnToFa(addCommas(s?.price)) : 0} ریال{" "}
+                  قیمت {s?.price ? digitsEnToFa(addCommas(s?.price)) : 0} ریال{" "}
                 </h3>
                 <Button
                   variant="contained"

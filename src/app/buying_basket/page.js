@@ -68,7 +68,7 @@ function BuyingBasket() {
                     console.log(d)
                     route.refresh();
                     setTimeout(() => {
-                        window.location.reload();
+                        // window.location.reload();
                     }, 300);
                 }) 
                .catch(err => console.log(err)) 

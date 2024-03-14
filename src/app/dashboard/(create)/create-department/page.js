@@ -4,9 +4,9 @@ import axios from "axios";
 import * as shamsi from 'shamsi-date-converter';
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, Category, DeleteRounded, Edit, LocationCity, LocationOnRounded, RadioButtonChecked, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
+import { AddCircleOutline, Category, DeleteRounded, Edit, EditRounded, LocationCity, LocationOnRounded, RadioButtonChecked, RingVolumeOutlined, SmartphoneOutlined } from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Snackbar, TextField, Typography } from "@mui/material";
-import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import { MRT_ActionMenuItem, MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import { useRouter } from "next/navigation";
@@ -308,6 +308,42 @@ const table = useMaterialReactTable({
       </Box>
     );
   },
+  enableCellActions:true,
+  renderCellActionMenuItems:({ closeMenu, row, table }) => [
+    <MRT_ActionMenuItem
+      icon={<EditRounded className="text-asliDark" />}
+      key={1}
+      label=" ویرایش "
+      onClick={() => {
+        GetRowIdForEdit(row)
+        closeMenu();
+      }}
+      table={table}
+    />,
+    <Divider/>,
+    
+    <MRT_ActionMenuItem
+      icon={<DeleteRounded className="text-rose-500" />}
+      key={2}
+      label="غیرفعال کردن"
+      onClick={async () => {
+        GetRowIdForDelete(row.original?.id)
+        closeMenu()
+      }}
+      table={table}
+    />,
+    <Divider/>,
+    <MRT_ActionMenuItem
+    icon={<RadioButtonChecked className="text-teal-700" />}
+    key={3}
+    label="فعال کردن"
+    onClick={async () => {
+      GetRowIdForActivate(row.original?.id)
+      closeMenu()
+    }}
+    table={table}
+  />,
+  ],
   renderRowActions: ({ row }) => {
     return (
       <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>

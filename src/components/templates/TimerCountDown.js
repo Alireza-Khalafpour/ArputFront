@@ -14,7 +14,7 @@ const TimerCountDown = () => {
     let interval = useRef()
 
     const StartTimer = () => {
-        const CountDownDate = new Date('February 30, 2024 00:00:00').getTime();
+        const CountDownDate = new Date('March 15, 2024 00:00:00').getTime();
 
         interval = setInterval(() => {
             

@@ -3,9 +3,9 @@
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, Edit, EditRounded, FireTruckOutlined, FireTruckRounded, History, Payment, PostAddRounded, RadioButtonChecked, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
+import { AddCircleOutline, AddRounded, Category, CloudUpload, CurrencyExchangeRounded, Delete, DeleteForeverOutlined, DeleteRounded, DetailsOutlined, Edit, EditRounded, Email, FireTruckOutlined, FireTruckRounded, History, Payment, PersonOffOutlined, PostAddRounded, RadioButtonChecked, RefreshOutlined, TableRowsRounded } from "@mui/icons-material";
 import { Alert, Autocomplete, Box, Button, CircularProgress, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Modal, Snackbar, TextField, Tooltip } from "@mui/material";
-import { MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import { MRT_ActionMenuItem, MRT_GlobalFilterTextField, MRT_ToggleFiltersButton, MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from 'material-react-table/locales/fa';
 import ContextMenu from "@/utils/ContextMenu";
@@ -193,6 +193,7 @@ export const CreateFeature = ()=> {
 
       const handleContextMenu = (event, r) => {
         event.preventDefault();
+        console.log(r)
         setContextMenuPosition({ x: event.clientX, y: event.clientY });
         setShowContextMenu(true);
         setContextMenuRowData(r);
@@ -310,6 +311,42 @@ export const CreateFeature = ()=> {
     enableStickyFooter: true,
     enableRowActions: true,
     renderRowActionMenuItems: true,
+    enableCellActions:true,
+    renderCellActionMenuItems:({ closeMenu, row, table }) => [
+      <MRT_ActionMenuItem
+        icon={<EditRounded className="text-asliDark" />}
+        key={1}
+        label=" ویرایش ویژگی "
+        onClick={() => {
+          EditFeature(row)
+          closeMenu();
+        }}
+        table={table}
+      />,
+      <Divider/>,
+      
+      <MRT_ActionMenuItem
+        icon={<DeleteRounded className="text-rose-500" />}
+        key={2}
+        label="غیرفعال کردن"
+        onClick={async () => {
+          GetRowIdForDelete(row.original?.id)
+          closeMenu()
+        }}
+        table={table}
+      />,
+      <Divider/>,
+      <MRT_ActionMenuItem
+      icon={<RadioButtonChecked className="text-teal-700" />}
+      key={3}
+      label="فعال کردن"
+      onClick={async () => {
+        GetRowIdForActivate(row.original?.id)
+        closeMenu()
+      }}
+      table={table}
+    />,
+    ],
     muiTableBodyCellProps:{
       sx:{
         align: 'right',
@@ -411,7 +448,9 @@ export const CreateFeature = ()=> {
 
       <div>
 
-        <MaterialReactTable table={table}/>
+        <div >
+          <MaterialReactTable table={table}/>
+        </div>
 
         <ContextMenu
             open={showContextMenu}
@@ -501,7 +540,7 @@ export const CreateFeature = ()=> {
                 variant="standard"
               />
 
-              <Autocomplete
+              {/* <Autocomplete
               className="md:w-1/3 w-full"
                 noOptionsText=" داده ای موجود نیست "
                 options={categoryList}
@@ -512,7 +551,7 @@ export const CreateFeature = ()=> {
                 }}
 
                 renderInput={(params) => <TextField {...params} variant="standard" label=" افزودن دسته بندی " />}
-              />
+              /> */}
             
 
             </div>
@@ -552,7 +591,7 @@ export const CreateFeature = ()=> {
             <Button className='text-white bg-khas hover:bg-orange-600 w-28' onClick={() => EditFeatureApi()}>
             {loading ? <CircularProgress className="text-black" size="medium" /> : " ویرایش "}
             </Button>
-            <Button variant="soft" color='danger'  onClick={() => setAddFeatureModal(false)}>
+            <Button variant="soft" color='danger'  onClick={() => setEditFeatureModal(false)}>
               انصراف
             </Button>
           </DialogActions>

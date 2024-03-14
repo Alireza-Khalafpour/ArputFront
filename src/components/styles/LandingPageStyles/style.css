@@ -352,7 +352,7 @@ header.fixed .navbar {
 }
 
 .navbar-expand-lg .navbar-nav .nav-link.dark_btn {
-    color: var(--text-white);
+    /* color: var(--text-white); */
     background-color: var(--purple);
     font-size: 16px;
     padding: 9px 40px;
@@ -377,11 +377,11 @@ header.fixed .navbar {
 }
 
 .navbar-expand-lg .navbar-nav .nav-link.dark_btn::before {
-	animation: pulse-blue-medium-sm 3s infinite
+	animation: pulse-blue-medium-sm 10s infinite
 }
 
 .navbar-expand-lg .navbar-nav .nav-link.dark_btn::after  {
-	animation: pulse-blue-small-sm 3s infinite
+	animation: pulse-blue-small-sm 9s infinite
 }
 
 
@@ -918,14 +918,14 @@ iframe#youtubevideo {
     margin-top: 20px;
 }
 
-.features_section .feature_detail .left_data {
+/* .features_section .feature_detail .left_data {
     text-align: left;
     padding-right: 130px;
 }
 
 .features_section .feature_detail .right_data {
     padding-left: 130px;
-}
+} */
 
 .features_section .feature_detail .left_data .data_block .icon {
     margin-right: 0px;

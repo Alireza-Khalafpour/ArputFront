@@ -16,7 +16,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 
-const ProuductsTableOfShopAndFactory = () => {
+const ProuductsTableOfShopAndFactory = ({triggerGetShopProductApi}) => {
 
 
     const cookie = new Cookies();
@@ -50,6 +50,10 @@ const ProuductsTableOfShopAndFactory = () => {
         const Auth = cookie.get('tokenDastResi')
         ListApi(Auth);
       },[])
+
+      useEffect(() => {
+        ListApi(Auth)
+      },[triggerGetShopProductApi])
 
         // columns and data =============================================
   const columns = useMemo(

@@ -2,12 +2,10 @@ import { Chip, Divider } from "@mui/joy";
 import CommentTextArea from "@/components/module/CommentTextArea";
 import axios from "axios";
 import { cookies } from "next/headers";
-import AddProductCard from "@/components/module/AddProductCard";
 import Link from "next/link";
 import ViewProduct from "@/components/module/ViewProduct";
 import SellerDetails from "@/components/module/SellerDetails";
 import SpecificationProduct from "@/components/module/SpecificationProduct";
-import { ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
 import LikeDislikeComment from "@/components/module/LikeDislikeComment";
 
 async function SingleProduct({ params: { single_product } }) {
@@ -102,14 +100,14 @@ async function SingleProduct({ params: { single_product } }) {
                   <li className="md:w-[90%] w-full flex flex-row justify-between items-center p-4 gap-4 odd:bg-slate-200 border-black border-b-2 ">
                       <div>
                         <div
-                            className="p-2 text-sm bg-paszamine3 text-white rounded-2xl"
+                            className="p-2 text-sm bg-paszamine3 max-w-fit text-white rounded-2xl"
                           >
                             {i?.title}
                           </div>
                         <span> {i?.content} </span>
                       </div>
                       <div>
-                        <LikeDislikeComment CommentId={i.id} single_product={single_product} />
+                        <LikeDislikeComment CommentId={i.id} single_product={single_product} Like={i.like} DisLike={i.dislike} />
                       </div>
                   </li>
                 ))

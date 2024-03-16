@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Category } from "@mui/icons-material";
 import { Alert, Autocomplete, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, InputAdornment, Snackbar, TextField } from "@mui/material";
 import axios from "axios";

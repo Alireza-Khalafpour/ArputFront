@@ -4,10 +4,8 @@ import { Alert, Button, Rating, Snackbar } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import GalleryProduct from "./GalleryProduct";
 import { ExitToApp, Favorite, Palette, Share } from "@mui/icons-material";
-import ShopingButton from "./ShopingButton";
-import Link from "next/link";
 import { ThemeProvider, createTheme } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "universal-cookie";
 

@@ -3,7 +3,7 @@ import ProductSwiper from "@/components/templates/ProductSwiper";
 import Partnership from "../../public/images/Partnership.svg"
 import shoppingBag from "../../public/images/ShoppingBag.svg"
 import Discount from "../../public/images/Discount.gif"
-import {  ShoppingCart, VerifiedUser } from "@mui/icons-material";
+import {  EmailRounded, Phone, ShoppingCart, VerifiedUser } from "@mui/icons-material";
 import Link from "next/link";
 import BrandSlider from "@/components/module/BrandSlider";
 import MySlider from "@/components/templates/MySlider";
@@ -305,10 +305,7 @@ export default function Home() {
                       <div className="row flex md:flex-row flex-col justify-center  w-full gap-8">
 
                         <div className="md:w-1/3 w-full min-h-[85vh]">
-                          <div className="pricing_block highlited_block h-full">
-                            <div className="icon">
-                              <Image width={60} height={60} src={ultimate} alt="image" className="mx-auto" />
-                            </div>
+                          <div className="pricing_block highlited_block h-full py-10">
                             <div className="pkg_name w-full flex flex-col justify-center items-center ">
                               <h3> سفارشی </h3>
                               <span>برای کارخانه ها</span>
@@ -371,16 +368,14 @@ export default function Home() {
                                 <p> شناسایی موانع طبیعی </p>
                               </li>
                             </ul>
-                            <a href="#" className="btn white_btn w-full mx-auto"> سفارش دهید</a>
+                            <a href="#" className="btn white_btn mx-auto w-1/2"> سفارش دهید</a>
                           </div>
                         </div>
 
 
                         <div className="md:w-1/3 w-full min-h-[85vh]">
-                          <div className="pricing_block h-full">
-                            <div className="icon">
-                              <Image width={60} height={60} src={premium} alt="image" className="mx-auto" />
-                            </div>
+                          <div className="pricing_block h-full py-10">
+
                             <div className="pkg_name w-full flex flex-col justify-center items-center ">
                               <h3>آرپوت مارکت</h3>
                               <hr className="my-2" />
@@ -428,7 +423,7 @@ export default function Home() {
                               </li>
                             </ul>
                             
-                              <a href="#" className="btn white_btn">سفارش دهید</a>
+                              <a href="#" className="btn white_btn mx-auto w-1/2">سفارش دهید</a>
 
                           </div>
                         </div>
@@ -541,6 +536,31 @@ export default function Home() {
                   </div>
 
                 </section>
+
+                <Divider/>
+                <section className="flex flex-col gap-8 text-center">
+
+                <div className="section_title pb-6">
+
+                  <h2> پشتیبانی <span> رایگان</span></h2>
+
+                </div>
+
+                  <h3 className="text-2xl">  برای دریافت بهترین و مناسب ترین اپلیکیشن برای فروشگاه خود<Link className="text-asliLight border-b-2" href="/contactus">  با ما در ارتباط باشید </Link>   </h3>
+
+                  <div className="flex flex-row gap-4 w-full justify-center" >
+                    <h3 className="p-3 text-xl " >
+                      <Phone className="text-khas"/> ۰۹۱۷۰۴۵۶۲۰۰
+                    </h3>
+                    <a href="mailto:info@arputmarket.com" className="hover:border-b-2 p-3 text-2xl">
+                      <EmailRounded  className="text-khas"/> info@arputmarket.com
+                    </a>
+
+                  </div>
+
+                </section>
+                <Divider/>
+
 
 
 

@@ -96,7 +96,8 @@ export const MyProductsShop = ()=> {
               "name": productName,
               "pre_product_id": preProductId,
               "price": price,
-              "description": description
+              "description": description,
+              "other_image_url": []
 
           }, {
               headers: headers

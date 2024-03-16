@@ -1435,6 +1435,12 @@ iframe#youtubevideo {
     max-width:100%;
 }
 
+.pricing_block{
+    display: flex !important;
+    flex-direction: column;
+    justify-content: space-between !important;
+}
+
 /* pricing box heading h3 */
 .pricing_section .pricing_pannel .pricing_block .pkg_name h3 {
     font-size: 20px;
@@ -1461,7 +1467,8 @@ iframe#youtubevideo {
     display: flex !important;
     flex-direction: column !important;
     align-items: right !important;
-    list-style-type: circle !important;
+    align-items: baseline;
+    list-style-type: disc !important;
 }
 
 .pricing_section .pricing_pannel .pricing_block .benifits {

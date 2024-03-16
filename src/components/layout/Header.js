@@ -1,13 +1,9 @@
 'use client'
 
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Alert, Box, Divider, MenuList, Snackbar, Tooltip } from '@mui/material';
-import { Apps, ArrowDropDown, ChatOutlined, CloseRounded, ExitToApp, Favorite, Home, InstallMobileOutlined, LoginOutlined, Logout, NotificationsActive, Person, Person2, Phone, Settings, ShoppingBasket, SpaceDashboard, ThreePRounded, VideoLabel, Wallet } from '@mui/icons-material';
+import { Alert } from '@mui/material';
+import { Apps, ArrowDropDown, ChatOutlined, CloseRounded, ExitToApp, Favorite, LoginOutlined, Logout, NotificationsActive, Person, Person2, Phone, Settings, ShoppingBasket, SpaceDashboard, ThreePRounded, VideoLabel, Wallet } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
@@ -87,13 +83,8 @@ export default function Header() {
     cookie.remove("tokenDastResi");
     cookie.remove("role");
     cookie.remove("welcommed")
-    setTimeout(() => {
-      route?.push("/")
-    }, 1000);
-    setTimeout(() => {
-      route?.refresh();
-    }, 2000);
     handleCloseUserMenu()
+    window?.location?.reload();
   }
 
 
@@ -130,30 +121,6 @@ export default function Header() {
               <li className='nav-item md:block hidden' >
                 <Link href="/contactus" className='hover:text-asliLight nav-link ' > تماس با ما</Link>
               </li>
-
-{/* 
-              <li className="nav-item md:!block !hidden has_dropdown">
-                <a className="nav-link" href="#">صفحه‌ها</a>
-                <span className="drp_btn"><i> <ArrowDropDown/>  </i></span>
-                <div className="sub_menu">
-                  <ul>
-                    <li><Link href="/aboutus"> درباره ما </Link></li>
-                    <li><Link href="/contactus"> ارتباط با ما </Link></li>
-                    {
-                      cookie.get("tokenDastResi")
-                      ?
-                      null
-                      :
-                      (
-                        <>
-                          <li><Link href="/signin">ورود</Link></li>
-                          <li><Link href="/signup">ثبت نام</Link></li>
-                        </>
-                      )
-                    }
-                  </ul>
-                </div>
-              </li> */}
 
             </ul>
 

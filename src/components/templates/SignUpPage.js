@@ -166,7 +166,7 @@ export default function SignUpPage() {
           setMessage(" ثبت نام با موفقیت انجام شد. ")
           setAlert(true)
           setTimeout(() => {
-            window.location.replace("/signin")
+            // window.location.replace("/signin")
           }, 1700);
         }else if(response.data.Done === false){
           setMessage(response.data.Error_text)

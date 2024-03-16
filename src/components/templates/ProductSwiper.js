@@ -1,16 +1,11 @@
 'use client'
 
-import { Navigation, Pagination, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Controller } from 'swiper/modules';
-
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import Image from 'next/image';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import ShopsModalForPulseInMainPage from '../module/ShopsModalForPulseInMainPage';
 
 

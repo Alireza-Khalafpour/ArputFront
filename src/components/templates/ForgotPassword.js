@@ -153,7 +153,7 @@ export default function ForgotPassword() {
           setMessage(response.data?.Message)
           setAlert(true)
           setTimeout(() => {
-            window.location.replace("/signin")
+            // window.location.replace("/signin")
           }, 1500);
         }else if(response.data.Done === false){
           setMessage(response.data?.Message)

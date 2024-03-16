@@ -103,6 +103,7 @@ const CreateBundle = () => {
               setLoading(false)
               handleCloseBundleModal()
               ListApi(Auth)
+              setActiveStep(0)
             })
             .catch(function (error) {
               console.log(error, "Error");
@@ -282,7 +283,6 @@ const CreateBundle = () => {
 
 
   const GetRowId = (row) => {
-    console.log(row.original)
     setPreProductId(row.original.pre_product_id)
     setPreProductName(row.original.name);
     setAddBundleModal(true)
@@ -345,6 +345,7 @@ function handleCloseBundleModal() {
   set_number_of_product_in_box(0);
   document.getElementById('getTextureFile').value= null;
   setAddBundleModal(false)
+  setActiveStep(0)
   
 
 }
@@ -394,33 +395,33 @@ function handleCloseBundleModal() {
 
               <div className="w-full flex flex-row gap-8 justify-center items-center" >
 
-                <div className='w-32 flex flex-col justify-between items-center mt-1 p-1 text-sm' >
+                <div className=' flex flex-row gap-2 justify-between items-center mt-1 p-1 text-sm' >
                     <DeleteForeverOutlined  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg(0)}/>
-                    <Button disabled={ activeStep != 0} onClick={() => handleImageUpload("albedo_texture_url")} className="px-2 py-1 text-xs hover:bg-orange-500 bg-khas text-white rounded-xl" > آپلود albedo_texture_url</Button>
+                    <Button disabled={ activeStep != 0} onClick={() => handleImageUpload("albedo_texture_url")} className="px-2 py-4 text-xs hover:bg-orange-500 bg-khas text-white rounded-xl" > آپلود albedo_texture_url</Button>
                 </div>
               </div>   
 
               <div className="w-full flex flex-row gap-8 justify-center items-center" >
 
-                <div className='w-32 flex flex-col justify-between items-center mt-1 p-1 text-sm' >
+                <div className=' flex flex-row gap-2 justify-between items-center mt-1 p-1 text-sm' >
                     <DeleteForeverOutlined  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg(1)}/>
-                    <Button disabled={ activeStep !=1} onClick={() => handleImageUpload("metalic_texture_url")} className="px-2 py-1 text-xs hover:bg-orange-500 bg-khas text-white rounded-xl" > آپلود metalic_texture_url </Button>
+                    <Button disabled={ activeStep !=1} onClick={() => handleImageUpload("metalic_texture_url")} className="px-2 py-4 text-xs hover:bg-orange-500 bg-khas text-white rounded-xl" > آپلود metalic_texture_url </Button>
                 </div>
               </div>
 
               <div className="w-full flex flex-row gap-8 justify-center items-center" >
 
-                <div className='w-32 flex flex-col justify-between items-center mt-1 p-1 text-sm' >
+                <div className=' flex flex-row gap-2 justify-between items-center mt-1 p-1 text-sm' >
                     <DeleteForeverOutlined  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg(2)}/>
-                    <Button disabled={ activeStep != 2} onClick={() => handleImageUpload("normal_map_texture_url")} className="px-2 py-1 text-xs hover:bg-orange-500 bg-khas text-white rounded-xl" > آپلود metalic_texture_url </Button>
+                    <Button disabled={ activeStep != 2} onClick={() => handleImageUpload("normal_map_texture_url")} className="px-2 py-4 text-xs hover:bg-orange-500 bg-khas text-white rounded-xl" > آپلود metalic_texture_url </Button>
                 </div>
               </div>
 
               <div className="w-full flex flex-row gap-8 justify-center items-center" >
 
-                <div className='w-32 flex flex-col justify-between items-center mt-1 p-1 text-sm' >
+                <div className=' flex flex-row gap-2 justify-between items-center mt-1 p-1 text-sm' >
                     <DeleteForeverOutlined  titleAccess='حذف عکس' className='text-khas hover:text-orange-600 cursor-pointer' onClick={() => DeleteImg(3)}/>
-                    <Button disabled={ activeStep != 3} onClick={() => handleImageUpload("height_map_texture_url")} className="px-2 py-1 text-xs hover:bg-orange-500 bg-khas text-white rounded-xl" > آپلود metalic_texture_url </Button>
+                    <Button disabled={ activeStep != 3} onClick={() => handleImageUpload("height_map_texture_url")} className="px-2 py-4 text-xs hover:bg-orange-500 bg-khas text-white rounded-xl" > آپلود metalic_texture_url </Button>
                 </div>
               </div>
 

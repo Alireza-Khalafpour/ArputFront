@@ -1,3 +1,5 @@
+'use client'
+
 import "../styles/ProductPageLoader.css"
 
 const LoaderPage = () => {

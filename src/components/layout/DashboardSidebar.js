@@ -67,18 +67,17 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function DashbordSidebar({children}) {
 
-  
   const cookie = new Cookies();
-  const route = useRouter()
-  
-  if(cookie.get("tokenDastResi") === undefined ){
-  route.push("/")
-  }
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState(" داشبورد ")
   const [openPurchaseModal, setOpenPurchaseModal] = React.useState(false)
+
+
+  const route = useRouter()
+  
+
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -96,9 +95,22 @@ export default function DashbordSidebar({children}) {
     setOpenPurchaseModal(true)
   }
 
+    React.useEffect(() => {
+      setTimeout(() => {
+        if(cookie.get("tokenDastResi") == undefined ){
+          route.push("/")
+          }
+      }, 1500);
+  },[])
+
+
 
   return (
-    <div sx={{ display: 'flex' }}>
+
+    <div>
+
+
+<div sx={{ display: 'flex' }}>
       <AppBar position="relative" open={open} className='bg-[#132F5D]' style={{maxHeight: "4rem"}} >
         <Toolbar style={{maxHeight: '20px'}} >
           <IconButton
@@ -230,6 +242,10 @@ export default function DashbordSidebar({children}) {
                   <Link onClick={() => handleDrawerClose()} href="/dashboard/my-products"  className='text-right mr-4 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white p-3 ' >
                       مدیریت پیش محصول و محصولات (Admin)
                       <InboxIcon  className='text-khas'/>
+                  </Link>
+                  <Link  onClick={() => handleDrawerClose()} href="/dashboard/pre-product-rate-list" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+                          لیست امتیاز کالا ها
+                      <ListAltOutlined className='text-khas'/>
                   </Link>
                   <Link  onClick={() => handleDrawerClose()} href="/dashboard/create-department" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
                         دپارتمان ها  
@@ -591,5 +607,8 @@ export default function DashbordSidebar({children}) {
 
 
     </div>
+
+    </div>
+
   );
 }

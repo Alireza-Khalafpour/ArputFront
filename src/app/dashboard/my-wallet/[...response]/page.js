@@ -5,12 +5,11 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import successImg from "../../../../../public/images/Plain credit card.gif"
-import failImg from "../../.././../../public/images/Pay attention.gif"
 import { CloseRounded } from "@mui/icons-material";
 import Link from "next/link";
 
 
- function page() {
+ function PaymentWalletResponse() {
 
     const searchParams = useSearchParams();
     const Authority = searchParams.get("Authority")
@@ -77,4 +76,4 @@ import Link from "next/link";
     );
 }
 
-export default page;
+export default PaymentWalletResponse;

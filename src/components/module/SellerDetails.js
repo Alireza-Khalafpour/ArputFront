@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 
 import { KeyboardArrowUp, ShoppingCart, Star } from "@mui/icons-material";

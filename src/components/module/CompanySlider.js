@@ -27,7 +27,7 @@ const CompanySlider = () => {
                 disableOnInteraction: true,
               }}
               modules={[Pagination,Autoplay]}
-              className="mySwiper md:!block !hidden "
+              className="mySwiper md:!block !hidden !py-8 "
             >
               <SwiperSlide className='rounded-full object-cover'> <Image fill src={i1} className='object-cover rounded-full !filter-none' />  </SwiperSlide>
               <SwiperSlide className='rounded-full object-cover ' ><Image fill src={i3} className='object-cover rounded-full !filter-none ' />  </SwiperSlide>

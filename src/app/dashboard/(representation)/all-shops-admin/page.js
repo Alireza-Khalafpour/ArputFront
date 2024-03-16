@@ -17,7 +17,7 @@ import { addCommas, digitsEnToFa } from "@persian-tools/persian-tools";
 
 
 
-const page = () => {
+const AllShopsAdmin = () => {
 
     const cookie = new Cookies();
 
@@ -482,4 +482,4 @@ const table = useMaterialReactTable({
     );
 }
 
-export default page;
+export default AllShopsAdmin;

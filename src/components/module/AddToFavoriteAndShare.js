@@ -7,7 +7,6 @@ import React, { useState } from "react";
 import Cookies from "universal-cookie";
 import GeneralLoader from "./GeneralLoader";
 import { Card, CardContent, Chip, Dialog, DialogContent, DialogTitle, Rating, Slide, Typography } from "@mui/material";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { addCommas, digitsEnToFa } from "@persian-tools/persian-tools";
 

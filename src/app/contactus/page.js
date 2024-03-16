@@ -90,7 +90,7 @@ function ContactUs() {
              className="w-[70vw] h-[60vh] border-4 md:block hidden " 
              allowfullscreen="" 
              loading="lazy" 
-             referrerpolicy="no-referrer-when-downgrade"></iframe>
+             ></iframe>
 
             <div className="md:absolute md:w-1/3 w-full h-full flex flex-col justify-center p-8 items-center gap-12 bg-gradient-to-b from-asliDark to-blue-800 rounded-xl mt-10 right-2" >
 

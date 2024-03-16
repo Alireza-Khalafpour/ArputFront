@@ -70,22 +70,22 @@ export default function HeaderDropMenu({name,family}) {
     setAnchorElUser(event.currentTarget);
   };
 
-  function handleLogout() {
+   function handleLogout() {
     cookie.remove("tokenDastResi");
     cookie.remove("role");
     cookie.remove("welcommed")
-    setTimeout(() => {
-      route.refresh()
-    }, 1000);
-
     handleCloseUserMenu()
+    setTimeout(() => {
+      window?.location?.reload();
+    }, 800);
+
   }
 
 
 
   return (
 
-    <>
+    <div>
                   <Box sx={{ flexGrow: 0 }}>
                   <Tooltip>
                     <IconButton className='border hover:bg-transparent ' onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -120,6 +120,6 @@ export default function HeaderDropMenu({name,family}) {
                 </Box>
     
     
-    </>
+    </div>
   );
 }

@@ -2,12 +2,13 @@
 
 import { ThumbDownOffAltOutlined, ThumbUpOffAltOutlined } from "@mui/icons-material";
 import { Alert, Snackbar } from "@mui/material";
+import { digitsEnToFa } from "@persian-tools/persian-tools";
 import axios from "axios";
 import { useState } from "react";
 import Cookies from "universal-cookie";
 
 
-const LikeDislikeComment = ({CommentId, single_product}) => {
+const LikeDislikeComment = ({CommentId, single_product, Like, DisLike}) => {
 
     const cookie = new Cookies();
   
@@ -29,25 +30,52 @@ const LikeDislikeComment = ({CommentId, single_product}) => {
         }
 
 
-        async function LikeDislikeComment(likeORdislike) {
+        async function SendLikeDislikeComment(e) {
             setLoading(true);
-            await axios.patch('https://supperapp-backend.chbk.run/category/admin/update', 
-            {
-                "like": true,
-                "dislike": false,
-                "pre_product_id": `${single_product}`,
-                "comment_id": CommentId
-            }, {
-                headers: headers
-            })
-            .then((response) => {
-                console.log(response)
-            })
-            .catch(function (error) {
-                setMessage(" متاسفیم،خطایی رخ داده است ")
-                setErrorAlert(true)
-                setLoading(false)
-            });
+            if(e == 'like'){
+
+                await axios.patch('https://supperapp-backend.chbk.run/comment/comment_like', 
+                {
+                    "like":true,
+                    "dislike": false,
+                    "pre_product_id": `${single_product}`,
+                    "comment_id": CommentId
+                }, {
+                    headers: headers
+                })
+                .then((response) => {
+                    setMessage(response.data?.Message)
+                    setAlert(true);
+                })
+                .catch(function (error) {
+                    setMessage(" متاسفیم،خطایی رخ داده است ")
+                    setErrorAlert(true)
+                    setLoading(false)
+                });
+
+            }else if(e == 'dislike'){
+
+                await axios.patch('https://supperapp-backend.chbk.run/comment/comment_like', 
+                {
+                    "like": false,
+                    "dislike": true,
+                    "pre_product_id": `${single_product}`,
+                    "comment_id": CommentId
+                }, {
+                    headers: headers
+                })
+                .then((response) => {
+                    setMessage(response.data?.Message)
+                    setAlert(true);
+                })
+                .catch(function (error) {
+                    setMessage(" متاسفیم،خطایی رخ داده است ")
+                    setErrorAlert(true)
+                    setLoading(false)
+                });
+
+            }
+
 
         }
 
@@ -56,8 +84,8 @@ const LikeDislikeComment = ({CommentId, single_product}) => {
     return (
         <>
         <div className="flex flex-row justify-center items-center gap-3">
-            <button onClick={() => LikeDislikeComment()} ><ThumbUpOffAltOutlined className="cursor-pointer" /></button>
-            <ThumbDownOffAltOutlined/>
+                <button onClick={() => SendLikeDislikeComment("like")} ><ThumbUpOffAltOutlined className="cursor-pointer hover:text-khas" /> <span> {digitsEnToFa(Like)} </span></button>
+                <button onClick={() => SendLikeDislikeComment("dislike")} ><ThumbDownOffAltOutlined className="cursor-pointer hover:text-khas" /> <span> {digitsEnToFa(DisLike)} </span> </button>
             </div>
 
 

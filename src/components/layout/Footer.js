@@ -8,7 +8,7 @@ import Link from "next/link";
 const Footer = () => {
     return (
         <>
-            <div className=" mt-20 w-full md:h-[40vh] h-full p-5 flex flex-col justify-center  items-center bg-gradient-to-bl from-asliDark to-blue-900 rounded-tl-[150px] rounded-sm " >
+            <div className=" mt-16 w-full md:h-[40vh] h-full p-5 flex flex-col justify-center  items-center bg-gradient-to-bl from-asliDark to-blue-900 rounded-tl-[150px] rounded-sm " >
 
                 <div className="md:flex hidden flex-row justify-between items-start w-full h-16" >
                     <div className="w-1/4 " >
@@ -18,7 +18,7 @@ const Footer = () => {
                         <h3 className="border-b-4 text-xl text-white border-paszamine1 w-max mx-auto " > لینک ها </h3>
                     </div>
                     <div className="w-1/4 text-center" >
-                        <h3 className="border-b-4 text-xl text-white border-paszamine1 w-max mx-auto " >  ما رو دنبال کنید </h3>
+                        <h3 className="border-b-4 text-xl text-white border-paszamine1 w-max mx-auto " >  ما را دنبال کنید </h3>
                     </div>
                     <div className="w-1/4 text-center" >
                         <p></p>
@@ -46,7 +46,7 @@ const Footer = () => {
                 <div className="flex flex-col md:w-1/4 w-full text-center gap-4 text-white text-xl justify-around items-center h-full" >
                     <a className="border-2 border-paszamine1 p-2 px-5 rounded-2xl hover:scale-110 transition-all duration-300 text-white" href="mailto:info@arputmarket.com" > ایمیل  <AlternateEmailIcon/> </a>
                     <div className="flex flex-row justify-between items-center gap-4" >
-                        <a href='https://www.instagram.com/' target="_blank" className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-khas hover:text-white hover:bg-orange-700 m-auto cursor-pointer transition-all duration-100" > <Instagram/> </a>
+                        <a href='https://instagram.com/_u/arputmarket' target="_blank" className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-khas hover:text-white hover:bg-orange-700 m-auto cursor-pointer transition-all duration-100" > <Instagram/> </a>
                         <a href="https://www.facebook.com/" target="_blank" className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-blue-600 hover:text-white hover:bg-blue-700 m-auto cursor-pointer transition-all duration-100" > <Facebook/> </a>
                         <a href="https://www.whatsapp.com/" target="_blank" className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-green-600 hover:text-white hover:bg-green-700 m-auto cursor-pointer transition-all duration-100" > <WhatsApp/> </a>
                         <a href="https://web.telegram.org/" target="_blank" className="w-12 h-12 rounded-full flex justify-center items-center border border-white text-blue-700 hover:text-white hover:bg-blue-700 m-auto cursor-pointer transition-all duration-100" > <Telegram/> </a>

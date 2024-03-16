@@ -221,7 +221,7 @@ export const CreateCategory = ()=> {
     const CloseAddressModal = () => {
       setAddAddressModal(false)
       setTimeout(() => {
-        // route.refresh()
+        route.refresh()
         window.location.reload();
       }, 300);
     }
@@ -260,7 +260,7 @@ export const CreateCategory = ()=> {
           setAddAddressModal(false)
           ListApi(Auth)
           setTimeout(() => {
-            // route.refresh()
+            route.refresh()
             window.location.reload();
           }, 800);
         })
@@ -271,7 +271,7 @@ export const CreateCategory = ()=> {
           setAddAddressModal(false)
           setLoading(false)
           setTimeout(() => {
-            // route.refresh()
+            route.refresh()
             window.location.reload();
           }, 800);
         });

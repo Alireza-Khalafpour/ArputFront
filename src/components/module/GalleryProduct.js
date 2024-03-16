@@ -10,7 +10,6 @@ import "../styles/GalleryProduct.css";
 import "swiper/css/pagination";
 import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules";
 import { useState } from "react";
-import ImageGalleryModal from "../templates/ImageGalleryModal";
 
 function GalleryProduct({ productList }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);

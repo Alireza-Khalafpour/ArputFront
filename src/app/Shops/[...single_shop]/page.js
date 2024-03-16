@@ -1,16 +1,17 @@
+'use client'
+
 import AddToFavoriteAndShare from "@/components/module/AddToFavoriteAndShare";
 import { ArrowOutwardOutlined, AspectRatio } from "@mui/icons-material";
 import { CardOverflow, Chip } from "@mui/joy";
 import { Card, CardActions, CardContent, Divider, Rating, Typography } from "@mui/material";
-import { numberToWords } from "@persian-tools/persian-tools";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 
-async function SingleShop() {
+function SingleShop() {
 
 
-    const res = await axios.get('https://supperapp-backend.chbk.run/product/products?page=0&limit=20', {
+    const res = axios.get('https://supperapp-backend.chbk.run/product/products?page=0&limit=20', {
         headers:{
           'accept': 'application/json',
         }

@@ -119,6 +119,8 @@ export default function CommentTextArea({single_product}) {
           setLoading(false)
   
         }
+        setContent("")
+        setTitle("")
       })
       .catch(function (error) {
           console.log(error, "Error");
@@ -131,6 +133,7 @@ export default function CommentTextArea({single_product}) {
       setErrorAlert(true)
       setLoading(false)
     }
+
   }
 
 

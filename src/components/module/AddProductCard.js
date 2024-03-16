@@ -75,6 +75,8 @@ const AddProductCard = ({productList}) => {
                 setMessage(" حداقل میزان سفارش یک عدد است ")
                 setErrorAlert(true)
             }
+
+      
         }
 
 

@@ -5,11 +5,11 @@ import { Providers } from "../GlobalRedux/provider";
 const layout = ({children}) => {
     return (
         <div>
-        <Providers>
-            <DashbordSidebar>
-                {children}
-            </DashbordSidebar>
-        </Providers>
+            <Providers>
+                <DashbordSidebar>
+                    {children}
+                </DashbordSidebar>
+            </Providers>
         </div>
     );
 }

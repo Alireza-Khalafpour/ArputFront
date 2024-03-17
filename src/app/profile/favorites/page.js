@@ -1,10 +1,10 @@
 'use client'
 
-import { DiscountRounded, Money, StoreMallDirectoryRounded } from "@mui/icons-material";
+import { DiscountRounded, Favorite, Money, StoreMallDirectoryRounded } from "@mui/icons-material";
 import { Divider, Input } from "@mui/joy";
 import axios from "axios";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 
 function Favorites() {
@@ -13,17 +13,17 @@ function Favorites() {
     const cookie = new Cookies();
     const Auth = cookie.get("tokenDastResi")
 
+    const [favList, setFavList] = useState([])
+
 
         useEffect(() => {
-
-
-            axios.get('https://supperapp-backend.chbk.run/favorite_product/list',{
+            axios.get('https://supperapp-backend.chbk.run/pre_product/favorite/list',{
                 headers: {
                     'accept': 'application/json',
                     'Authorization': `Bearer ${Auth}`
                 }
             }).then((response) => {
-                console.log(response)
+                setFavList(response.data.data)
             }).catch((error) => {
                 console.log(error, "Error");
             })
@@ -35,35 +35,35 @@ function Favorites() {
 
     return (
         <>
-        jfgh
-            {/* <div className="w-full gap-2 border-2 rounded-xl flex md:flex-row flex-col justify-center items-start p-4 shadow-md" >
-        
-                <div className="md:w-1/5 w-full relative " >
-                    <Image src={i.image} width={250} height={250} title={i.product_name} className="rounded-xl" />
-                </div>
+            
+            <ul class="w-full divide-y divide-gray-400 dark:divide-gray-700 p-8">
+                {
+                    favList?.map((i) =>(
+                        <li class="p-4 w-1/2 hover:bg-slate-300 cursor-pointer" key={i?.pre_product_id}>
+                            <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                                <div class="flex-shrink-0 px-2">
+                                    <Image src={i?.image} width={60} height={60} class="w-16 h-16 rounded-full" alt={i?.pre_product_name}/>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-gray-900 truncate dark:text-white">
+                                        {i?.pre_product_name}
+                                    </p>
+                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                        {i?.category_name}
+                                    </p>
+                                </div>
+                                <div class="inline-flex items-center text-base text-gray-900 dark:text-white">
+                                    {i?.factory_name} کارخانه
+                                </div>
+                                <div class="inline-flex items-center">
+                                    <Favorite className="text-red-500" />
+                                </div>
+                            </div>
+                        </li>
+                    ))
+                }
+            </ul>
 
-                <div className="md:w-4/5 w-full flex md:flex-row flex-col justify-center items-end p-4" >
-                    <div className="md:w-2/3 w-full flex flex-col gap-2 justify-center items-start" >
-                        <h2 className="text-xl font-bold"> {i.product_name} </h2>
-                        <Divider/>
-                        <p className="text-lg" > <StoreMallDirectoryRounded className="text-asliLight mx-1 text-xl"/> {i.seller_name} </p>
-                        <p className="text-lg" > <DiscountRounded className="text-asliLight mx-1 text-xl" /> {e2p(i.off)}% تخفیف </p>
-                        <p className="text-xl my-2 p-1 border-b font-semibold" > <Money className="text-asliLight mx-1 text-xl" /> {e2p(sp(i.price))} ریال </p>
-                    </div>
-                    <div className="md:w-1/3 w-full" >
-
-                        <div className="flex flex-row-reverse justify-center items-center">
-                            <button className="w-1/5 border-2 bg-mainBlack rounded-lg rounded-r-none h-10 text-xl bg-khas text-white font-bold hover:bg-orange-600 transition-colors duration-200 " > - </button>
-                                <Input value={e2p(i.number)}  className="w-1/5 h-[32px] rounded-none bg-white text-black text-lg "/>
-                            <button className="w-1/5 border-2 bg-mainBlack rounded-lg rounded-l-none h-10 text-xl bg-khas text-white font-bold hover:bg-orange-600 transition-colors duration-200 " > + </button>
-                        </div>
-                        
-                    </div>
-
-                </div>
-
-
-            </div> */}
         </>
     );
 }

@@ -23,7 +23,6 @@ function ViewProduct({ productList, single_product }) {
   const Auth = cookie.get('tokenDastResi')
 
   const[data, setData] =useState([])
-  console.log(data)
 
  const [message, setMessage] = useState();
  const [alert, setAlert] = useState(false);
@@ -54,6 +53,7 @@ function ViewProduct({ productList, single_product }) {
       .then((response) => {
           setMessage(response?.data.Message)
           setAlert(true)
+          ListApi()
       })
       .catch(function (error) {
           console.log(error, "Error");

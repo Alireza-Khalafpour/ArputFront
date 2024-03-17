@@ -68,7 +68,7 @@ async function SingleProduct({ params: { single_product } }) {
             className="text-asliLight text-4xl"
             sx={{ "--Divider-childPosition": "10%" }} 
           >
-            <Link href={`/Shops/${single_product}/${productList?.seller_info[0]?.seller_name}`} >
+            <Link href={`/Shops/${productList?.seller_info[0]?.seller_id}/${productList?.seller_info[0]?.seller_name}`} >
             فروشگاه
             {" "}
             {productList?.seller_info[0]?.seller_name ? productList?.seller_info[0]?.seller_name : "آرپوت مارکت" }

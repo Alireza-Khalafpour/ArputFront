@@ -3,7 +3,7 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { Category, CloudUpload, Delete} from "@mui/icons-material";
+import { Category, CloudUpload, Delete, UploadFile} from "@mui/icons-material";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Modal, Slide, TextField,  } from "@mui/material";
 import {  MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { useMemo, useState } from "react";
@@ -42,9 +42,11 @@ export const MyProductsShop = ()=> {
     const [preProductId, setPreProductId] = useState('');
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState("");
-    // -----------------------------------------------
-    const [imageFiles, setImageFiles] = useState([])
-    console.log(imageFiles)
+    // upload product images------------------------------
+    const [UploadedImagesList, setUploadedImagesList] = useState([])
+    const [UploadedIdsList, setUploadedIdsList] = useState([])
+    console.log(UploadedIdsList)
+
     
     // Alerts---------------------------------------
     const [message, setMessage] = useState();
@@ -97,7 +99,7 @@ export const MyProductsShop = ()=> {
               "pre_product_id": preProductId,
               "price": price,
               "description": description,
-              "other_image_url": []
+              "other_image_url": UploadedIdsList
 
           }, {
               headers: headers
@@ -258,6 +260,45 @@ const table = useMaterialReactTable({
  
 });
 
+// upload each image to liara and collect all ids in response-----------------------
+
+
+const TextureHeaders ={
+  'accept': 'application/json',
+  'Authorization': `Bearer ${Auth}`,
+  'Content-Type': 'multipart/form-data'
+  }
+
+const formData = new FormData();
+
+
+  const handleUploadImage = async (e) => {
+    formData.append("file", e);
+    
+    setUploadedImagesList((perv) => [...perv, e?.name])
+
+        setLoading(true);
+        await axios.post('https://supperapp-backend.chbk.run/upload/upload_texture', formData,
+        {
+          headers: TextureHeaders
+        })
+        .then((response) => {
+          if(response.data.Done == true) {
+            setUploadedIdsList((perv) => [...perv, response?.data.address])
+            setAlert(true)
+            setMessage(response.data.message)
+
+          }else{
+            setErrorAlert(true)
+            setMessage(response.data.message)
+          } 
+        })
+        .catch((error) => {
+          console.log(error, "Error");
+          setLoading(false)
+        });
+  }
+
 
 
 
@@ -289,12 +330,12 @@ const table = useMaterialReactTable({
           <Divider />
           <DialogContent className="flex flex-col justify-center items-center gap-10" >           
 
-            <div className='w-full grid grid-cols-2 gap-4 justify-center items-center' >
+            <div className='w-full flex flex-row gap-10 justify-center items-center' >
 
 
               <TextField
                 id="input-with-icon-textfield"
-                className="w-1/2"
+                className="w-1/3"
                 label=" قیمت "
                 placeholder=" قیمت "
                 value={price}
@@ -310,10 +351,31 @@ const table = useMaterialReactTable({
               />
 
 
-              {/* <div className="w-1/2" >
-                  <label class="w-full mb-2 text-sm font-medium text-gray-900 dark:text-white" for="large_size"> همه عکس ها را انتخاب کنید </label>
-                  <input class="w-full text-lg text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="large_size" type="file" multiple/>
-              </div> */}
+              <div className="w-2/3 flex flex-col" >
+                  <div className="flex flex-row justify-center items-end gap-5" >
+                    <div>
+                      <label class="w-full mb-2 text-sm font-medium text-gray-900 dark:text-white" for="large_size">  عکس های محصول را یک به یک آپلود کنید </label>
+                      <input 
+                        onChange={ ({target:{files}}) =>{
+                          handleUploadImage(files[0])
+                          }
+                        }
+                        class="w-full text-lg text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                        id="large_size" 
+                        type="file"
+                        accept='image/*'
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 text-asliLight" >
+                    {
+                      UploadedImagesList?.map((i, index) =>(
+                        <li className="overflow-hidden" > {index} - {i}</li>
+                      ))
+                    }
+
+                  </div>
+              </div>
 
             </div>
 

@@ -1,17 +1,18 @@
-'use client'
 
 import AddToFavoriteAndShare from "@/components/module/AddToFavoriteAndShare";
-import { ArrowOutwardOutlined, AspectRatio } from "@mui/icons-material";
-import { CardOverflow, Chip } from "@mui/joy";
-import { Card, CardActions, CardContent, Divider, Rating, Typography } from "@mui/material";
+import { ArrowOutwardOutlined } from "@mui/icons-material";
+import { AspectRatio, Button, Card, CardActions, CardContent, CardOverflow, Chip, Typography } from "@mui/joy";
+import { Divider, Rating } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 
-function SingleShop() {
+async function SingleShop({params: { single_shop }}) {
 
 
-    const res = axios.get('https://supperapp-backend.chbk.run/product/products?page=0&limit=20', {
+    console.log(single_shop[0])
+
+    const res = await axios.get(`https://supperapp-backend.chbk.run/product/shop/list/products?shop_id=${single_shop[0]}`, {
         headers:{
           'accept': 'application/json',
         }
@@ -19,7 +20,8 @@ function SingleShop() {
           console.log(error, "Error");
         });
 
-    const productList = res?.data.data
+    const productList = res?.data?.data
+    console.log(productList)
 
 
     return (
@@ -64,9 +66,9 @@ function SingleShop() {
 
             <div className="w-3/4" >
 
-            <div id="productsPart" className="flex flex-row justify-center items-center gap-5 w-full flex-wrap" >
+            <div className="flex flex-row justify-center items-center gap-5 w-full flex-wrap" >
 
-                    {productList?.length > 0 || res === undefined ? null : (
+                    {/* {productList?.length > 0 || res === undefined ? null : (
 
                         <>
                             <h2>
@@ -75,7 +77,7 @@ function SingleShop() {
                         </>
 
                         )
-                    }
+                    } */}
 
 
                     {

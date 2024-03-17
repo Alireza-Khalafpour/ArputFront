@@ -10,6 +10,7 @@ import "../styles/GalleryProduct.css";
 import "swiper/css/pagination";
 import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules";
 import { useState } from "react";
+import ImageGalleryModal from "../templates/ImageGalleryModal";
 
 function GalleryProduct({ productList }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -99,10 +100,12 @@ function GalleryProduct({ productList }) {
           modules={[FreeMode, Navigation, Thumbs]}
           className={`mySwiper2 h-full  w-[350px] `}
         >
-          <SwiperSlide>
+          <SwiperSlide
+            onClick={() => handleClickOpenImages() }
+          >
             <Image
             
-              className="hover:cursor-pointer "
+              className="cursor-pointer "
               width={350}
               height={350}
               src={productList?.image_url[0]}
@@ -209,7 +212,7 @@ function GalleryProduct({ productList }) {
           }
         </Swiper> */}
 
-          {/* <ImageGalleryModal openImages={openImages} handleCloseImages={handleCloseImages} /> */}
+          <ImageGalleryModal openImages={openImages} handleCloseImages={handleCloseImages} ImgList={productList?.image_url} />
 
       </div>
     </>

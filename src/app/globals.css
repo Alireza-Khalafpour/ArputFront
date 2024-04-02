@@ -72,11 +72,13 @@ li{
   ::-webkit-scrollbar-thumb:hover {
       border: 2px solid transparent;
       border-radius: 20px;
-      background-color: rgba(64,54,187,0.6);
+      background-color: rgba(60,60,180,0.6);
   }
 
-  ::-webkit-scrollbar-thumb:active {
+  ::-webkit-scrollbar-thumb {
       border-radius: 20px;
+      /* background-color: #7279CC; */
+      background-color: rgba(64,54,187,0.4);
   }
 }
 /* input borders--------------------------- */

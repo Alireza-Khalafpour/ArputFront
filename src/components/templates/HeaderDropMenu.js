@@ -27,7 +27,7 @@ import Dns from '@mui/icons-material/Dns';
 import Public from '@mui/icons-material/Public';
 import { Avatar, Menu, MenuItem, Typography } from '@mui/material';
 import { AccountCircle, ExitToApp, Person, SpaceDashboard } from '@mui/icons-material';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
 const data = [
   { icon: <People />, label: 'Authentication' },
@@ -77,10 +77,10 @@ export default function HeaderDropMenu({name,family}) {
     handleCloseUserMenu()
     setTimeout(() => {
       window?.location?.reload();
+      // redirect("/")
     }, 800);
 
   }
-
 
 
   return (

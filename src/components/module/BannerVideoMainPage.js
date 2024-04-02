@@ -14,12 +14,12 @@ const BannerVideoMainPage = () => {
     return (
         <>
 
-            <div className="mx-auto w-fit h-fit relative blobVideo overflow-hidden">
+            <div className="mx-auto w-fit h-fit max-h-[75vh] relative blobVideo overflow-hidden">
                 <button onClick={() => setVideoModal(true)} className="absolute top-[50%] left-[45%] p-4 bg-khas rounded-full z-20 w-20 h-20 " >
                     <PlayArrow className="text-purple-900 text-4xl animate-pulse " />
                 </button>
-                <div className="absolute w-full h-full top-0 left-0 bg-black opacity-30 rounded-2xl md:rounded-tr-[190px]  rounded-tr-2xl md:rounded-bl-[190px] rounded-bl-2xl " ></div>
-                <video src="https://superapp-storage.storage.iran.liara.space/video/1.mp4" className="object-cover w-full " autoPlay loop muted />
+                <div className="absolute w-full h-full top-0 left-0 bg-black opacity-30 rounded-2xl md:rounded-tr-[220px]  rounded-tr-2xl md:rounded-bl-[190px] rounded-bl-2xl " ></div>
+                <video src="https://superapp-storage.storage.iran.liara.space/video/arputmarket%20insta%20reel%202.m4v" className="object-cover w-full " autoPlay loop muted />
             </div>
 
 
@@ -36,7 +36,7 @@ const BannerVideoMainPage = () => {
                         <span className='block m-auto' ></span>
                         <iframe 
                         className='w-full h-full'
-                        src="https://www.aparat.com/video/video/embed/videohash/cY0jN/vt/frame?titleShow=true&autoplay=true" 
+                        src="https://www.aparat.com/video/video/embed/videohash/QFZpD/vt/frame?titleShow=true&recom=self" 
                         allow="autoplay" 
                         allowFullScreen="true" 
                         webkitallowfullscreen="true" 

@@ -3,7 +3,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import "../styles/BrandSlider.css"
-import i1 from "../../../public/Icons/پرسپولیس.webp";
+import i1 from "../../../public/Icons/perspolis.webp";
 import i2 from "../../../public/Icons/نگین.webp";
 import i3 from "../../../public/Icons/hafez.jpg";
 import i4 from "../../../public/Icons/48498640-3ca8-4e3f-be18-089dfcdb735a.jpg";
@@ -62,81 +62,3 @@ const CompanySlider = () => {
 }
 
 export default CompanySlider;
-
-
-
-// "use client"
-
-// import { Swiper, SwiperSlide } from 'swiper/react';
-// import { Autoplay, Pagination } from 'swiper/modules';
-// import "../styles/BrandSlider.css"
-// import { useEffect, useState } from 'react';
-// import axios from 'axios';
-
-
-// const CompanySlider = () => {
-
-//   const [brandInfo, setBrandInfo] = useState([])
-
-//   async function GetBrandData() {
-      
-//     await axios.get("https://supperapp-backend.chbk.run/template/brand/data")
-//       .then((response) => {
-//         setBrandInfo(response.data.data)
-//         console.log(response.data.data)
-//       })
-//       .catch((error) => {
-//         console.log(error, "Error");
-//       });
-//   }
-
-//   useEffect(() => {
-//     GetBrandData()
-//   },[])
-
-
-//     return (
-//         <>
-//             <Swiper
-//               slidesPerView={4}
-//               spaceBetween={30}
-//               pagination={{
-//                 clickable: true,
-//               }}
-//               autoplay={{
-//                 delay: 2000,
-//                 disableOnInteraction: false,
-//               }}
-//               modules={[Pagination,Autoplay]}
-//               className="mySwiper md:!block !hidden "
-//             >
-//               {
-//                 brandInfo?.map((i) => (
-//                   <SwiperSlide style={{backgroundImage: `url(${i?.brand_logo})`}} className="bg-[auto 100%] bg-center bg-no-repeat !transition-all !duration-700 rounded-xl cursor-pointer !min-w-[13%]" key={i?.brand_name} > </SwiperSlide>
-//                 ))
-//               }
-
-//             </Swiper>
-//             <Swiper
-//               slidesPerView={2}
-//               pagination={{
-//                 clickable: true,
-//               }}
-//               autoplay={{
-//                 delay: 2000,
-//                 disableOnInteraction: false,
-//               }}
-//               modules={[Pagination,Autoplay]}
-//               className="mySwiper md:!hidden !block "
-//             >
-//               {
-//                 brandInfo?.map((i) => (
-//                   <SwiperSlide style={{backgroundImage: `url(${i?.brand_logo})`}} className="bg-[auto 100%] bg-center bg-no-repeat !transition-all !duration-700 rounded-xl cursor-pointer !min-w-[13%]" key={i?.brand_name} > </SwiperSlide>
-//                 ))
-//               }            
-//             </Swiper>
-//         </>
-//     );
-// }
-
-// export default CompanySlider;

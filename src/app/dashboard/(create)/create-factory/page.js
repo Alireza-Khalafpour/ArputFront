@@ -616,7 +616,7 @@ export const CreateCategory = ()=> {
                   className="md:w-[28%] w-[90%]"
                   id="input-with-icon-textfield"
                   label=" نام کارخانه  "
-                  placeholder=" نام کارخانه   "
+                  placeholder=" نام کارخانه "
                   value={addFactoryName}
                   onChange={(e) => setaddFactoryName(e.target.value)}
                   InputProps={{

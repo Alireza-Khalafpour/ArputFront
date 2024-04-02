@@ -5,7 +5,6 @@ import shoppingBag from "../../public/images/ShoppingBag.svg"
 import Discount from "../../public/images/Discount.gif"
 import {  EmailRounded, Phone, ShoppingCart, VerifiedUser } from "@mui/icons-material";
 import Link from "next/link";
-import BrandSlider from "@/components/module/BrandSlider";
 import MySlider from "@/components/templates/MySlider";
 import GoogleArAppModal from "@/components/module/GoogleArAppModal";
 import { Divider} from "@mui/joy";
@@ -67,7 +66,7 @@ export default function Home() {
                   </div>
 
                  
-                  <div className="md:w-1/2 w- flex justify-center items-center text-center" >
+                  <div className="md:w-1/2 flex justify-center items-center text-center" >
 
                     <BannerVideoMainPage/>
 

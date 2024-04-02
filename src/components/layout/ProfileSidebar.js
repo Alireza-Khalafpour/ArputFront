@@ -4,12 +4,21 @@ import { Face6, FavoriteBorder, LocationOn, NotificationsNone, Settings, Wysiwyg
 import { Badge } from "@mui/joy";
 import { List, ListItem } from "@mui/material";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const ProfileSidebar = ({children}) => {
 
     const [selected, setSelected] = useState(1)
+
+    useEffect(() => {
+        setTimeout(() => {
+          if(cookie.get("tokenDastResi") == undefined ){
+            route.push("/")
+            console.log("push worked")
+            }
+        }, 1500);
+    },[])
 
 
     return (

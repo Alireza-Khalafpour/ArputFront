@@ -84,7 +84,12 @@ export default function Header() {
     cookie.remove("role");
     cookie.remove("welcommed")
     handleCloseUserMenu()
-    window?.location?.reload();
+    setTimeout(() => {
+      window?.location?.reload();
+    }, 800);
+    setTimeout(() => {
+      window?.location?.replace("/");
+    }, 1400);
   }
 
 

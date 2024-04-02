@@ -1,7 +1,8 @@
 'use client'
 
-import { DiscountRounded, Favorite, Money, StoreMallDirectoryRounded } from "@mui/icons-material";
+import { Close, DiscountRounded, Favorite, Money, StoreMallDirectoryRounded } from "@mui/icons-material";
 import { Divider, Input } from "@mui/joy";
+import { Alert, Snackbar } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -13,22 +14,64 @@ function Favorites() {
     const cookie = new Cookies();
     const Auth = cookie.get("tokenDastResi")
 
+    const [message, setMessage] = useState();
+    const [alert, setAlert] = useState(false);
+    const [errorAlert, setErrorAlert] = useState(false);
+
     const [favList, setFavList] = useState([])
 
 
+    const GetFavListApi = async () =>{
+        await axios.get('https://supperapp-backend.chbk.run/pre_product/favorite/list',{
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${Auth}`
+            }
+        }).then((response) => {
+            setFavList(response.data.data)
+        }).catch((error) => {
+            console.log(error, "Error");
+        })
+    }
+
         useEffect(() => {
-            axios.get('https://supperapp-backend.chbk.run/pre_product/favorite/list',{
-                headers: {
-                    'accept': 'application/json',
-                    'Authorization': `Bearer ${Auth}`
-                }
-            }).then((response) => {
-                setFavList(response.data.data)
-            }).catch((error) => {
-                console.log(error, "Error");
-            })
+            GetFavListApi()
         },[])
 
+        const headers ={
+            'accept': 'application/json',
+            'Authorization': `Bearer ${Auth}`,
+            'Content-Type': 'application/json',
+            }
+
+
+            const DeleteFromFavorite = (id) => {
+
+                const data = {
+                    "pre_product_id": id,
+                  }
+    
+                const deleteMethod = {
+                    method: 'Delete',
+                    headers: {
+                        'accept': 'application/json',
+                        'Authorization': `Bearer ${Auth}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data) 
+                   }
+                   
+                   // make the HTTP delete request using fetch api
+                   fetch('https://supperapp-backend.chbk.run/pre_product/favorite/delete', deleteMethod)
+                   .then((res) => {
+                        res.json()
+                        setAlert(true)
+                        setMessage("حذف شد")
+                        GetFavListApi()
+                    })
+                    .catch(err => console.log(err)) 
+    
+            }
 
 
 
@@ -55,14 +98,35 @@ function Favorites() {
                                 <div class="inline-flex items-center text-base text-gray-900 dark:text-white">
                                     {i?.factory_name} کارخانه
                                 </div>
-                                <div class="inline-flex items-center">
+                                <div class="flex flex-row justify-center gap-4 items-center">
                                     <Favorite className="text-red-500" />
+                                    <button onClick={() => DeleteFromFavorite(i?.pre_product_id)} >
+                                        <Close  className="text-red-600 hover:text-red-700 z-10" />
+                                    </button>
                                 </div>
                             </div>
                         </li>
                     ))
                 }
             </ul>
+
+            <Snackbar
+            open={alert}
+            autoHideDuration={4000}
+            onClose={() => setAlert(false)}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+            <Alert variant='filled' severity='success' className='text-lg text-white font-semibold' > {message} </Alert>
+            </Snackbar>
+
+        <Snackbar
+        open={errorAlert}
+        autoHideDuration={4000}
+        onClose={() => setErrorAlert(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+        <Alert variant='filled' severity='error' className='text-lg text-white font-semibold' > {message} </Alert>
+        </Snackbar>
 
         </>
     );

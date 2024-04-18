@@ -117,7 +117,7 @@ function ContactUs() {
                 </div>
                 <div className="flex flex-col justify-center items-center gap-4" >
 
-                    <p className="text-white text-base" > شماره تماس : {info?.mobile[0]} </p>
+                    <p className="text-white " > شماره تماس : <span>{info?.mobile[0]}</span> </p>
                     <p className="text-white text-base" > تلفن : {info?.tel[0]} </p>
                     <p className="text-white text-base" > ایمیل : {info?.email[0]} </p>
                     <p className="text-white text-base" > آدرس : {info?.address[0]} </p>

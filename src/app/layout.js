@@ -4,9 +4,8 @@ import "./globals.css";
 import { Providers } from "./GlobalRedux/provider";
 import Footer from "@/components/layout/Footer";
 import NavigationBarMobile from "@/components/layout/NavigationBarMobile";
+import ReactQueryProvider from "@/components/layout/ReactQueryProvider";
 // import RepairingWebsite from "@/components/templates/RepairingWebsite";
-
-
 
 export const metadata = {
   title: "آرپوت مارکت",
@@ -17,15 +16,18 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="fa">
       <body>
         <Providers>
-          <Header/>
-            {children}
+        {/* <ReactQueryProvider> */}
+          <Header />
+          {children}
           <Footer />
           <NavigationBarMobile />
           {/* <RepairingWebsite/> */}
+        {/* </ReactQueryProvider> */}
         </Providers>
       </body>
     </html>

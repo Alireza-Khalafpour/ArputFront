@@ -8,7 +8,7 @@ import Link from "next/link";
 const Footer = () => {
     return (
         <>
-            <div className=" mt-16 w-full md:h-[40vh] h-full p-5 flex flex-col justify-center  items-center bg-gradient-to-bl from-asliDark to-blue-900 rounded-tl-[150px] rounded-sm " >
+            <div className=" mt-16 w-full md:h-[50vh] h-full p-5 !pt-10 flex flex-col justify-center  items-center bg-gradient-to-bl from-asliDark to-blue-900 rounded-tl-[150px] rounded-sm " >
 
                 <div className="md:flex hidden flex-row justify-between items-start w-full h-16" >
                     <div className="w-1/4 " >

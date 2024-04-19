@@ -16,6 +16,8 @@ import {
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { orange } from "@mui/material/colors";
 import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const FilterProducts = () => {
@@ -27,6 +29,7 @@ const FilterProducts = () => {
   const [open, setOpen] = useState(false);
   const loading = open && catgAndFeatures?.length === 0;
   const [queryParams, setQueryParams] = useState(new URLSearchParams());
+  const router = useRouter();
 
   useEffect(() => {
     let active = true;
@@ -97,12 +100,10 @@ const FilterProducts = () => {
     // Update the state with the new query parameters
     setQueryParams(new URLSearchParams(queryParams));
   };
-
   // Construct the URL with the base URL and query parameters
   const baseUrl = "https://supperapp-backend.chbk.run/filter/items";
   const finalUrl = `${baseUrl}?${queryParams.toString()}`;
-  console.log(finalUrl);
-
+  
   return (
     <>
       <div
@@ -115,6 +116,7 @@ const FilterProducts = () => {
             {" "}
             حذف فیلتر{" "}
           </button>
+          <Link href={finalUrl} > search here </Link>
         </div>
         <Divider />
         <FormControl id="asynchronous">
@@ -299,8 +301,8 @@ const FilterProducts = () => {
           >
             {features?.length > 0 ? (
               <Accordion
-                // expanded={isExpand === "features"}
-                // onChange={handleExpand("features")}
+              // expanded={isExpand === "features"}
+              // onChange={handleExpand("features")}
               >
                 <AccordionSummary
                   className="font-bold"

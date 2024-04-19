@@ -27,6 +27,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -51,13 +52,13 @@ import { useMemo, useState } from "react";
 import { MRT_Localization_FA as mrtLocalizationFa } from "material-react-table/locales/fa";
 import { Alert, Input, ModalDialog, Snackbar } from "@mui/joy";
 
-const CreateBundle = () => {
+const BundleType = () => {
   const cookie = new Cookies();
 
   const Auth = cookie.get("tokenDastResi");
 
   const [data, setData] = useState([]);
-  // add Bundle states----------------------------
+  // add other Bundle states----------------------------
   const [AddBundleModal, setAddBundleModal] = useState(false);
 
   const [preProductId, setPreProductId] = useState("");
@@ -65,14 +66,11 @@ const CreateBundle = () => {
   const [metalic_texture_url, set_metalic_texture_url] = useState("");
   const [normal_map_texture_url, set_normal_map_texture_url] = useState("");
   const [height_map_texture_url, set_height_map_texture_url] = useState("");
-  const [smoothness, set_smoothness] = useState(0);
-  const [height_map_intensity, set_height_map_intensity] = useState(0);
-  const [tile_in_texture, set_tile_in_texture] = useState(0);
-  const [number_of_product_in_box, set_number_of_product_in_box] = useState(0);
 
   const [preProductName, setPreProductName] = useState("");
-
   const [activeStep, setActiveStep] = useState(0);
+  const [bundleTypeModal, setBundleTypeModal] = useState(false);
+  const [typeName, setTypeName] = useState("");
 
   // Alerts---------------------------------------
   const [message, setMessage] = useState();
@@ -102,7 +100,7 @@ const CreateBundle = () => {
     ListApi(Auth);
   }, []);
 
-  // Add bundle Api -------------------------------------------------------
+  // Add other bundle Api -------------------------------------------------------
 
   const headers = {
     accept: "application/json",
@@ -121,10 +119,6 @@ const CreateBundle = () => {
           metalic_texture_url: metalic_texture_url,
           normal_map_texture_url: normal_map_texture_url,
           height_map_texture_url: height_map_texture_url,
-          smoothness: smoothness,
-          height_map_intensity: height_map_intensity,
-          tile_in_texture: tile_in_texture,
-          number_of_product_in_box: number_of_product_in_box,
         },
         {
           headers: headers,
@@ -146,6 +140,41 @@ const CreateBundle = () => {
         handleCloseBundleModal();
       });
   }
+  // Add new bundle type API ------------------------------
+
+  const AddTypeApi = async () => {
+    if (typeName !== "") {
+      await axios
+        .post(
+          "https://supperapp-backend.chbk.run/bundle/type/create",
+          {
+            type_name: typeName,
+            active: true,
+          },
+          {
+            headers: headers,
+          }
+        )
+        .then((response) => {
+          if (response.data.Done == true) {
+            setAlert(true);
+            setMessage(response?.data?.Message);
+            setLoading(false);
+            setTypeName("");
+            setBundleTypeModal(false);
+          } else {
+            setMessage(response?.data?.Message);
+            setErrorAlert(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error, "Error");
+          setMessage(" متاسفیم،خطایی رخ داده است ");
+          setErrorAlert(true);
+          setTypeName("");
+        });
+    }
+  };
 
   // Add image and image name-----------------------------
   const [imageForUpload, setImageForUpload] = useState();
@@ -356,6 +385,35 @@ const CreateBundle = () => {
     },
     muiTableContainerProps: { sx: { maxHeight: "500px" } },
 
+    renderTopToolbar: ({ table }) => {
+      return (
+        <Box
+          sx={() => ({
+            display: "flex",
+            gap: "0.5rem",
+            p: "8px",
+            justifyContent: "space-between",
+          })}
+        >
+          <Box sx={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+            {/* import MRT sub-components */}
+            <MRT_GlobalFilterTextField table={table} />
+            <MRT_ToggleFiltersButton table={table} />
+          </Box>
+          <Box>
+            <Box sx={{ display: "flex", gap: "0.5rem" }}>
+              <button
+                className="bg-khas text-white p-2 rounded-xl hover:bg-orange-500  "
+                onClick={() => setBundleTypeModal(true)}
+              >
+                نوع باندل جدید <AddCircleOutline />
+              </button>
+            </Box>
+          </Box>
+        </Box>
+      );
+    },
+
     renderRowActions: ({ row, table }) => {
       return (
         <div className="w-auto">
@@ -364,7 +422,7 @@ const CreateBundle = () => {
             size="small"
             className="rounded-xl bg-khas hover:bg-orange-600 p-1 text-white font-semibold "
           >
-            ایجاد باندل
+            ایجاد باندل اضافی
           </Button>
         </div>
       );
@@ -377,10 +435,6 @@ const CreateBundle = () => {
     set_metalic_texture_url("");
     set_normal_map_texture_url("");
     set_height_map_texture_url("");
-    set_smoothness(0);
-    set_height_map_intensity(0);
-    set_tile_in_texture(0);
-    set_number_of_product_in_box(0);
     document.getElementById("getTextureFile").value = null;
     setAddBundleModal(false);
     setActiveStep(0);
@@ -495,71 +549,6 @@ const CreateBundle = () => {
                   </Button>
                 </div>
               </div>
-
-              <TextField
-                id="input-with-icon-textfield"
-                className="w-full"
-                label=" smoothness "
-                placeholder=" smoothness "
-                value={smoothness}
-                onChange={(e) => set_smoothness(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className="text-asliLight" />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="outlined"
-              />
-              <TextField
-                id="input-with-icon-textfield"
-                className="w-full"
-                label=" height_map_intensity "
-                placeholder=" height_map_intensity "
-                value={height_map_intensity}
-                onChange={(e) => set_height_map_intensity(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className="text-asliLight" />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="outlined"
-              />
-              <TextField
-                id="input-with-icon-textfield"
-                className="w-full"
-                label=" tile_in_texture "
-                placeholder=" tile_in_texture "
-                value={tile_in_texture}
-                onChange={(e) => set_tile_in_texture(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className="text-asliLight" />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="outlined"
-              />
-              <TextField
-                id="input-with-icon-textfield"
-                className="w-full"
-                label=" number_of_product_in_box "
-                placeholder=" number_of_product_in_box "
-                value={number_of_product_in_box}
-                onChange={(e) => set_number_of_product_in_box(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Category className="text-asliLight" />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="outlined"
-              />
             </div>
           </DialogContent>
           <DialogActions className="p-4 flex flex-row gap-4">
@@ -579,6 +568,58 @@ const CreateBundle = () => {
           </DialogActions>
         </ModalDialog>
       </Modal>
+
+      <Dialog
+        fullWidth
+        className="w-full"
+        scroll="paper"
+        maxWidth="sm"
+        open={bundleTypeModal}
+        onClose={() => setBundleTypeModal(false)}
+      >
+        <DialogTitle className="flex justify-center items-center rounded-xl w-full h-[3rem] bg-asliDark text-paszamine1">
+          ایجاد سمپل جدید
+        </DialogTitle>
+        <Divider />
+        <DialogContent className="flex flex-col items-center gap-10 mt-12 h-full ">
+          <div className="flex flex-col justify-center items-center gap-10 w-full">
+            <div className="w-full flex md:flex-row flex-col gap-7 justify-around items-center my-10 ">
+              <TextField
+                className="md:w-[50%] w-[90%]"
+                id="input-with-icon-textfield"
+                label=" نام تایپ  "
+                placeholder=" نام تایپ   "
+                value={typeName}
+                onChange={(e) => setTypeName(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="end">
+                      <Category className="text-asliLight" />
+                    </InputAdornment>
+                  ),
+                }}
+                variant="standard"
+              />
+            </div>
+          </div>
+        </DialogContent>
+        <DialogActions className="p-4 flex flex-row gap-4 mt-10">
+          <Button
+            className="text-white bg-khas hover:bg-orange-600 w-28"
+            onClick={() => AddTypeApi()}
+          >
+            {loading ? <CircularProgress size="medium" /> : " ثبت "}
+          </Button>
+
+          <Button
+            variant="soft"
+            color="danger"
+            onClick={() => setBundleTypeModal(false)}
+          >
+            انصراف
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Snackbar
         className="bg-green-700 text-white"
@@ -617,4 +658,4 @@ const CreateBundle = () => {
   );
 };
 
-export default CreateBundle;
+export default BundleType;

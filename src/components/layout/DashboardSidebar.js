@@ -190,8 +190,16 @@ export default function DashbordSidebar({children}) {
                     >
                       <Typography>  ساخت باندل </Typography>
                     </AccordionSummary>
+                    <Link onClick={() => handleDrawerClose()} href="/dashboard/bundleManager" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+                           ثبت نام کاربر باندل 
+                        <CreateRounded className='text-khas'/>
+                    </Link>
                     <Link onClick={() => handleDrawerClose()} href="/dashboard/createBundle" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
-                          ساخت باندل 
+                          ساخت باندل نرمال
+                        <CreateRounded className='text-khas'/>
+                    </Link>
+                    <Link onClick={() => handleDrawerClose()} href="/dashboard/createBundle/bundleType" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+                           نوع باندل 
                         <CreateRounded className='text-khas'/>
                     </Link>
                   </Accordion>

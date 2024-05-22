@@ -159,7 +159,7 @@ const BundleType = () => {
           if (response.data.Done == true) {
             setAlert(true);
             setMessage(response?.data?.Message);
-            setLoading(false);
+            setLoading(false); 
             setTypeName("");
             setBundleTypeModal(false);
           } else {

@@ -12,22 +12,22 @@ export const metadata = {
   description: " فروشگاه سرامیک و کاشی",
   other: {
     enamad: "161104",
+    "google-site-verification": "2BngwW2_9i_yvpVnK7gMscU6TeM6MKxLUdA75ciwpY8"
   },
 };
 
 export default function RootLayout({ children }) {
-
   return (
     <html lang="fa">
       <body>
         <Providers>
-        {/* <ReactQueryProvider> */}
+          {/* <ReactQueryProvider> */}
           <Header />
           {children}
           <Footer />
           <NavigationBarMobile />
           {/* <RepairingWebsite/> */}
-        {/* </ReactQueryProvider> */}
+          {/* </ReactQueryProvider> */}
         </Providers>
       </body>
     </html>

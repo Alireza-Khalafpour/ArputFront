@@ -26,6 +26,7 @@
     "fix": "^0.0.3",
     "force": "^0.0.3",
     "framer-motion": "^10.16.16",
+    "froala-editor": "^4.2.0",
     "leaflet": "^1.9.4",
     "lottie-web": "^5.12.2",
     "material-react-table": "^2.0.4",

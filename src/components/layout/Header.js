@@ -120,6 +120,10 @@ export default function Header() {
               </li>
 
               <li className='nav-item md:block hidden' >
+                <Link href="/weblog" className='hover:text-asliLight nav-link ' > وبلاگ </Link>
+              </li>
+
+              <li className='nav-item md:block hidden' >
                 <Link href="/aboutus" className='hover:text-asliLight nav-link ' > درباره ما </Link>
               </li>
 

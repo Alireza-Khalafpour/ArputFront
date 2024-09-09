@@ -124,4 +124,14 @@ li{
   background-size: contain;
 }
 
-/* *************************************************** */
+/* Ltr and Rtl directions******************************* */
+.ltr-Grid {
+  direction: ltr !important;
+}
+
+/* 3 dimentions******************************* */
+
+#container3D{
+  cursor: move;
+}
+

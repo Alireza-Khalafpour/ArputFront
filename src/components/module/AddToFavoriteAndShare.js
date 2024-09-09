@@ -67,33 +67,35 @@ const AddToFavoriteAndShare = ({pId}) => {
         setLoading(true)
         await axios.get(`https://supperapp-backend.chbk.run/product/product/${id}`).then((response) => {
             setShops(response.data.seller_info)
-            console.log(response.data)
             setLoading(false)
         });
     }
 
     // رفتن به صفحه جزییات محصول و دریافت آی پی کاربر از سایت "geolocation" -----------------------------
 
-    async function FindIpAddress(i) {
-        const date = new Date();
+    // async function FindIpAddress(i) {
+    //     const date = new Date();
        
-        await axios.get("https://geolocation-db.com/json/0daad5e0-82e7-11ee-92e0-f5d620c7dcb4")
-        .then((response) => {
-            console.log(response);
-            if(response.status === 200){
-                CreatePulse(response, i)    
-            }
-        });
-    }
+    //     await axios.get("https://geolocation-db.com/json/0daad5e0-82e7-11ee-92e0-f5d620c7dcb4")
+    //     .then((response) => {
+    //         console.log(response);
+    //         if(response.status === 200){
+    //             CreatePulse(response, i)    
+    //         }
+    //     });
+    // }
 
-    async function CreatePulse(res, i) {
+
+
+
+    async function CreatePulse(i) {
         await axios.post('https://supperapp-backend.chbk.run/pulse/create',{
             "product_id": i.product_id,
             "pre_product_id": pId,
             "shop_id": i.seller_id,
             "mac_address": "",
             "ar_pulse": false,
-            "ip_address": res.data.IPv4
+            "ip_address": cookie?.get("UniqueID")
         }).then((response) => {
             console.log(response)
             setTimeout(() => {
@@ -149,7 +151,7 @@ const AddToFavoriteAndShare = ({pId}) => {
                             <div> <GeneralLoader/> </div>
                             :
                             shops?.map((i) =>(
-                                <Card onClick={() => FindIpAddress(i)} className="md:w-1/6 w-3/4 h-[200px] hover:shadow-2xl cursor-pointer" >
+                                <Card onClick={() => CreatePulse(i)} className="md:w-1/6 w-3/4 h-[200px] hover:shadow-2xl cursor-pointer" >
                                     <div className=" w-full h-full" >
                                     <CardOverflow>
                                         <AspectRatio>

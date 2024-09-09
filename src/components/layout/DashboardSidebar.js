@@ -18,7 +18,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { Accordion, AccordionSummary, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@mui/material';
-import { AddRounded, Check, CheckCircleRounded, CloseRounded, CreateRounded, ElectricBolt, ExpandMore, Factory, FactoryOutlined, FeaturedPlayListOutlined, Home, HourglassBottomOutlined, KeyboardArrowRight, ListAltOutlined, ManageAccountsOutlined, ManageSearchRounded, Payment, PaymentOutlined, Schedule, ShoppingBasket, Timer } from '@mui/icons-material';
+import { AddRounded, Check, CheckCircleRounded, CloseRounded, CreateRounded, ElectricBolt, ExpandMore, Factory, FactoryOutlined, FeaturedPlayListOutlined, Home, HourglassBottomOutlined, KeyboardArrowRight, ListAltOutlined, ManageAccountsOutlined, ManageSearchRounded, Payment, PaymentOutlined, Schedule, ShoppingBasket, Timer, Web } from '@mui/icons-material';
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 import NotAllowedPage from './NotAllowedPage';
@@ -282,6 +282,11 @@ export default function DashbordSidebar({children}) {
                   <Link  onClick={() => handleDrawerClose()} href="/dashboard/create-pulse-plan" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
                       برنامه پالس ها                        
                       <ElectricBolt className='text-khas'/>
+
+                  </Link>
+                  <Link  onClick={() => handleDrawerClose()} href="/dashboard/weblog-content" className='text-right mr-4 p-3 hover:bg-slate-700 rounded-lg transition-all duration-200 flex justify-between cursor-pointer text-white hover:text-white ' >
+                      مدیریت وبلاگ                        
+                      <Web className='text-khas'/>
 
                   </Link>
                 </Accordion>

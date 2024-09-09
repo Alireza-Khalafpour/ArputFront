@@ -34,6 +34,8 @@ import Image from "next/image";
 import BannerVideoMainPage from "@/components/module/BannerVideoMainPage";
 import CompanySlider from "@/components/module/CompanySlider";
 import SearchPartMainPage from "@/components/templates/SearchPartMainPage";
+import Mobile3D from "@/components/module/Mobile3D";
+import GenerateUniqueID from "@/utils/GenerateUniqueID";
 
 export default function Home() {
   return (
@@ -60,6 +62,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* <div id="container3D" className="max-w-max h-full" >
+        <Mobile3D/>
+      </div> */}
 
       <div className="flex md:flex-row flex-col justify-center items-center w-full md:gap-2 gap-10 rounded-3xl p-1 bg-[#ef3d52df]">
         <div className="md:w-1/2 w-full flex md:flex-row flex-col gap-10 justify-center items-center">
@@ -91,7 +97,11 @@ export default function Home() {
       <Divider></Divider>
 
       <div className="flex md:flex-row flex-col justify-center items-center w-full md:gap-2 gap-10 rounded-3xl p-1 min-h-40 bg-[#E0EDFF]">
-        <SearchPartMainPage/>
+        <SearchPartMainPage />
+      </div>
+
+      <div id="Set-Uniqe-Code" >
+        <GenerateUniqueID/>
       </div>
 
       <Divider></Divider>
@@ -112,11 +122,11 @@ export default function Home() {
         <MySlider title=" سرامیک " />
       </div>
 
-      <div className="w-full md:hidden block ">
+      <div className="w-full md:hidden block mobilePart ">
         <ProductSwiper title=" جذاب ترین ها " />
       </div>
 
-      <div className="w-full md:hidden block ">
+      <div className="w-full md:hidden block mobilePart ">
         <ProductSwiper title=" سرامیک " />
       </div>
 
@@ -198,6 +208,9 @@ export default function Home() {
 
             <div className="feature_img lg:!block !hidden ">
               <Image src={featureFrame} width={270} height={570} alt="image" />
+              {/* <div id="container3D" className="w-full h-full">
+                <Mobile3D />
+              </div> */}
             </div>
           </div>
         </div>

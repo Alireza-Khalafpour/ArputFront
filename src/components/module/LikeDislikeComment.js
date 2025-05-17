@@ -11,7 +11,7 @@ import Cookies from "universal-cookie";
 const LikeDislikeComment = ({CommentId, single_product, Like, DisLike}) => {
 
     const cookie = new Cookies();
-  
+    const url = process.env.NEXT_PUBLIC_URL
     const Auth = cookie.get('tokenDastResi')
     
     const [message, setMessage] = useState();
@@ -34,7 +34,7 @@ const LikeDislikeComment = ({CommentId, single_product, Like, DisLike}) => {
             setLoading(true);
             if(e == 'like'){
 
-                await axios.patch('https://supperapp-backend.chbk.run/comment/comment_like', 
+                await axios.patch(`${url}/comment/comment_like`, 
                 {
                     "like":true,
                     "dislike": false,
@@ -55,7 +55,7 @@ const LikeDislikeComment = ({CommentId, single_product, Like, DisLike}) => {
 
             }else if(e == 'dislike'){
 
-                await axios.patch('https://supperapp-backend.chbk.run/comment/comment_like', 
+                await axios.patch(`${url}/comment/comment_like`, 
                 {
                     "like": false,
                     "dislike": true,

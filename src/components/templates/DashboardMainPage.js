@@ -14,6 +14,8 @@ const DashboardMainPage = () => {
     const route = useRouter()
     const cookie = new Cookies();
     const Au = cookie.get("tokenDastResi") ? cookie.get("tokenDastResi") : null 
+    const url = process.env.NEXT_PUBLIC_URL
+
 
     
     const [message, setMessage] = useState("")
@@ -21,7 +23,7 @@ const DashboardMainPage = () => {
 
 
     async function getUSer(Auth) {
-        await axios.get('https://supperapp-backend.chbk.run/register/current_user', {
+        await axios.get(`${url}/register/current_user`, {
           headers:{
             'accept': 'application/json',
             'Authorization': `Bearer ${Auth}`,

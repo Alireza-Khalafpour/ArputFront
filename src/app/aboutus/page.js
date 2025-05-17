@@ -5,8 +5,10 @@ import pic from "../../../public/images/Final Light Blur Transparented.png"
 
 async function AboutUs() {
 
+  const url = process.env.NEXT_PUBLIC_URL
 
-    const res =  await axios.get('https://supperapp-backend.chbk.run/about_us/show', {
+
+    const res =  await axios.get(`${url}/about_us/show`, {
         headers:{
           'accept': 'application/json',
         }
@@ -15,7 +17,7 @@ async function AboutUs() {
           console.log(error, "Error");
         });
 
-    const content = res.data.content
+    const content = res?.data?.content
 
 
 

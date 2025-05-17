@@ -18,6 +18,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const ProuductsTableOfShopAndFactory = ({triggerGetShopProductApi}) => {
 
+  const url = process.env.NEXT_PUBLIC_URL
+
 
     const cookie = new Cookies();
     const Auth = cookie.get('tokenDastResi')
@@ -31,7 +33,7 @@ const ProuductsTableOfShopAndFactory = ({triggerGetShopProductApi}) => {
 
     async function ListApi(Au) {
       
-        await axios.get('https://supperapp-backend.chbk.run/product/shop', {
+        await axios.get(`${url}/product/shop`, {
           headers:{
             'accept': 'application/json',
             'Authorization': `Bearer ${Au}`,

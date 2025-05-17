@@ -10,9 +10,10 @@ import Link from "next/link";
 async function SingleShop({params: { single_shop }}) {
 
 
-    console.log(single_shop[0])
+    const url = process.env.NEXT_PUBLIC_URL
 
-    const res = await axios.get(`https://supperapp-backend.chbk.run/product/shop/list/products?shop_id=${single_shop[0]}`, {
+
+    const res = await axios.get(`${url}/product/shop/list/products?shop_id=${single_shop[0]}`, {
         headers:{
           'accept': 'application/json',
         }

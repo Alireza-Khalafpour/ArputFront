@@ -33,7 +33,7 @@ const MySlider = ({ title, data }) => {
   const [expand, setExpand] = useState(false);
   const [items, setItems] = useState([]);
   //------------
-  const [totalWidth, setTotalWidth] = useState(1200)
+  const [totalWidth, setTotalWidth] = useState(1200);
   // -----------
   const [loading, setLoading] = useState(false);
   const [shops, setShops] = useState([]);
@@ -48,7 +48,7 @@ const MySlider = ({ title, data }) => {
     set_pre_product_id(i.id);
     console.log(i);
     await axios
-      .get(`https://supperapp-backend.chbk.run/product/product/${i.id}`)
+      .get(`${process.env.NEXT_PUBLIC_URL}/product/product/${i.id}`)
       .then((response) => {
         setShops(response.data.seller_info);
         setLoading(false);
@@ -57,22 +57,22 @@ const MySlider = ({ title, data }) => {
   // -------------------------------------------------
 
   useEffect(() => {
-    GetItems();
-    const totalW = document?.getElementById("noScroll")
+    if (data?.length > 0) {
+      setItems(data);
+    } else {
+      GetItems();
+    }
+    const totalW = document?.getElementById("noScroll");
     setTotalWidth(totalW?.scrollWidth);
   }, []);
 
-
   async function GetItems() {
     await axios
-      .get(
-        "https://supperapp-backend.chbk.run/product/products?page=0&limit=18",
-        {
-          headers: {
-            accept: "application/json",
-          },
-        }
-      )
+      .get(`${process.env.NEXT_PUBLIC_URL}/product/products?page=0&limit=18`, {
+        headers: {
+          accept: "application/json",
+        },
+      })
       .then((response) => {
         setItems(response.data.data);
       })
@@ -106,7 +106,11 @@ const MySlider = ({ title, data }) => {
   return (
     <>
       {
-        <div className="w-full relative overflow-hidden py-2 px-10 max-h-max">
+        <div
+          className={`w-full relative overflow-hidden py-2 px-10 max-h-max ${
+            title == "نتایج" ? "backdrop-blur-xl bg-blue-100" : ""
+          } `}
+        >
           {expand == true ? null : (
             <>
               <button

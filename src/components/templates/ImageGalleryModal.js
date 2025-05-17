@@ -58,7 +58,7 @@ const ImageGalleryModal = ({handleCloseImages,openImages, ImgList}) => {
                 </div>
                 <div class="grid grid-cols-1 gap-4 w-1/3">
                     {
-                        ImgList.map((i) => (
+                        ImgList?.map((i) => (
                             <div>
                                 <img onClick={() => setSelectedImg(i)} class="h-auto max-w-full rounded-lg cursor-pointer" src={i} alt={i} />
                             </div>

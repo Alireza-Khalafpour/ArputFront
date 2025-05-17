@@ -27,6 +27,10 @@ import Cookies from "universal-cookie";
 import GeneralLoader from "./GeneralLoader";
 
 const ShopingButton = ({ productList }) => {
+
+  const url = process.env.NEXT_PUBLIC_URL
+
+
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [productId, steProductId] = useState();
@@ -66,7 +70,7 @@ const ShopingButton = ({ productList }) => {
       setLoading(true);
       await axios
         .post(
-          "https://supperapp-backend.chbk.run/user_basket/create",
+          `${url}/user_basket/create`,
           {
             product_id: `${pId}`,
             numbers: count,

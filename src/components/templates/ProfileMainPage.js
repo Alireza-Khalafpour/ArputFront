@@ -11,6 +11,8 @@ const ProfileMainPage = () => {
 
     const cookie = new Cookies();
     const Au = cookie.get("tokenDastResi") ? cookie.get("tokenDastResi") : null 
+    const url = process.env.NEXT_PUBLIC_URL
+
 
     const [message, setMessage] = useState();
     const [alert, setAlert] = useState(false);
@@ -28,7 +30,7 @@ const ProfileMainPage = () => {
 
 
     async function getUSer(Auth) {
-        await axios.get('https://supperapp-backend.chbk.run/register/current_user', {
+        await axios.get(`${url}/register/current_user`, {
           headers:{
             'accept': 'application/json',
             'Authorization': `Bearer ${Auth}`,
@@ -62,7 +64,7 @@ const ProfileMainPage = () => {
       async function EditProfileInfo() {
 
         setLoading(true);
-        await axios.patch('https://supperapp-backend.chbk.run/register/edit_profile', {
+        await axios.patch(`${url}/register/edit_profile`, {
             "first_name": Name,
             "family": Family,
             "name": ShopName,
@@ -110,7 +112,7 @@ const ProfileMainPage = () => {
         formData.append("file", imageFile);
 
         setLoading(true);
-        await axios.post('https://supperapp-backend.chbk.run/upload/upload_texture', formData,
+        await axios.post(`${url}/upload/upload_texture`, formData,
         {
           headers: headersImage
         })

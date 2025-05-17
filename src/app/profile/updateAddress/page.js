@@ -28,6 +28,8 @@ const UpdateAddress = () => {
     const [alley, setAlley] = useState()
     const [number, setNumber] = useState()
     const [zipcode, setZipcode] = useState()
+  const url = process.env.NEXT_PUBLIC_URL
+
 
     
     // update address Api --------------------------------
@@ -40,7 +42,7 @@ const UpdateAddress = () => {
 
     async function UpdateUserAddress() {
         setLoading(true);
-        await axios.put('https://supperapp-backend.chbk.run/register/user_address',
+        await axios.put(`${url}/register/user_address`,
          {
             "id": userId,
             "lat": latLang?.lat,
@@ -91,7 +93,7 @@ const UpdateAddress = () => {
         // get userId -------------------------------------
         
         function getUSer(Au) {
-            axios.get('https://supperapp-backend.chbk.run/register/current_user', {
+            axios.get(`${url}/register/current_user`, {
               headers:{
                 'accept': 'application/json',
                 'Authorization': `Bearer ${Au}`,

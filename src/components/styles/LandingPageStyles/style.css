@@ -81,7 +81,7 @@ a:hover {
 ul,
 li {
     padding: 0;
-    list-style-type: none;
+    /* list-style-type: none; */
     margin: 0;
 }
 
@@ -330,8 +330,8 @@ header.fixed .navbar {
 .navbar {
     padding-left: 0;
     padding-right: 0;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .navbar-expand-lg {

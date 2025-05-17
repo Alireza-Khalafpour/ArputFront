@@ -9,83 +9,77 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "universal-cookie";
 
-
-
 function ViewProduct({ productList, single_product }) {
-
   const theme = createTheme({
-    direction: 'rtl', // before: 'ltr', after: 'rtl'
-  }
- );
+    direction: "rtl", // before: 'ltr', after: 'rtl'
+  });
 
- const cookie = new Cookies();
-  
-  const Auth = cookie.get('tokenDastResi')
+  const cookie = new Cookies();
+  const url = process.env.NEXT_PUBLIC_URL;
 
-  const[data, setData] =useState([])
+  const Auth = cookie.get("tokenDastResi");
 
- const [message, setMessage] = useState();
- const [alert, setAlert] = useState(false);
- const [errorAlert, setErrorAlert] = useState(false);
- const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
 
-
-    
+  const [message, setMessage] = useState();
+  const [alert, setAlert] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Create Rate pre product ---------------------------------------------
 
-  const headers ={
-    'accept': 'application/json',
-    'Authorization': `Bearer ${Auth}`,
-    'Content-Type': 'application/json',
-    }
-
+  const headers = {
+    accept: "application/json",
+    Authorization: `Bearer ${Auth}`,
+    "Content-Type": "application/json",
+  };
 
   async function CreateRateApi(val) {
-
-      await axios.post('https://supperapp-backend.chbk.run/rate/create',{
-          "range":val * 2 ,
-          "pre_product_id": productList?.id
+    await axios
+      .post(
+        `${url}/rate/create`,
+        {
+          range: val * 2,
+          pre_product_id: productList?.id,
         },
-      {
-        headers: headers
-      })
+        {
+          headers: headers,
+        }
+      )
       .then((response) => {
-          setMessage(response?.data.Message)
-          setAlert(true)
-          ListApi()
+        setMessage(response?.data.Message);
+        setAlert(true);
+        ListApi();
       })
       .catch(function (error) {
-          console.log(error, "Error");
-          setMessage(" متاسفیم،خطایی رخ داده است یا وارد حساب کاربری شوید ")
-          setErrorAlert(true)
-          
+        console.log(error, "Error");
+        setMessage(" متاسفیم،خطایی رخ داده است یا وارد حساب کاربری شوید ");
+        setErrorAlert(true);
       });
+  }
 
+  // Get Rate pre-product----------------------------------------------
 
-}
+  async function ListApi() {
+    await axios
+      .get(
+        `${url}/rate/pre_product/star_rate/${single_product}`,
+        {
+          headers: headers,
+        }
+      )
+      .then((response) => {
+        setData(response.data?.rate_lists);
+      })
+      .catch((error) => {
+        console.log(error, "Error");
+      });
+  }
 
-    // Get Rate pre-product----------------------------------------------
+  useEffect(() => {
+    ListApi();
+  }, []);
 
-    async function ListApi() {
-      
-      await axios.get(`https://supperapp-backend.chbk.run/rate/pre_product/star_rate/${single_product}`, {
-        headers:headers
-        })
-        .then((response) => {
-          setData(response.data?.rate_lists)
-        })
-        .catch((error) => {
-          console.log(error, "Error");
-        });
-    }
-
-    useEffect(() => {
-      ListApi()
-    }, [])
-
-
-  
   function handleImage(e) {
     console.log(e.target);
   }
@@ -101,47 +95,57 @@ function ViewProduct({ productList, single_product }) {
         <h1 className="text-2xl p-1">{productList?.name}</h1>
         <div className="flex flex-row gap-1 ">
           {" "}
-          <span> امتیاز : </span> 
-          <ThemeProvider theme={theme} >
+          <span> امتیاز : </span>
+          <ThemeProvider theme={theme}>
             <Rating
-              onChange={(e,val) => CreateRateApi(val)}
-              value={data?.reduce((partialSum, a) => partialSum + a, 0) / data?.length}
-              />
-          </ThemeProvider>
-          {" "}
+              onChange={(e, val) => CreateRateApi(val)}
+              value={
+                data?.reduce((partialSum, a) => partialSum + a, 0) /
+                data?.length
+              }
+            />
+          </ThemeProvider>{" "}
         </div>
         {/* <Link href="#" className="p-1 bg-khas text-white rounded-xl cursor-pointer" > همه محصولات این فروشگاه </Link> */}
         <button>
-         فروشنده های دیگر
+          فروشنده های دیگر
           <KeyboardArrowDownIcon />
         </button>
       </div>
 
-
-
       <Snackbar
-          open={alert}
-          autoHideDuration={4000}
-          onClose={() => setAlert(false)}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          className="bg-green-700 text-white"
-          se
-          >
-          <Alert variant='filled' className='text-lg text-white font-semibold bg-green-700 mx-auto ' > {message} </Alert>
+        open={alert}
+        autoHideDuration={4000}
+        onClose={() => setAlert(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        className="bg-green-700 text-white"
+        se
+      >
+        <Alert
+          variant="filled"
+          className="text-lg text-white font-semibold bg-green-700 mx-auto "
+        >
+          {" "}
+          {message}{" "}
+        </Alert>
       </Snackbar>
 
       <Snackbar
         open={errorAlert}
         autoHideDuration={4000}
         onClose={() => setErrorAlert(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         className="bg-rose-700"
         se
+      >
+        <Alert
+          variant="filled"
+          className="text-lg text-white font-semibold bg-rose-700 mx-auto"
         >
-        <Alert variant='filled' className='text-lg text-white font-semibold bg-rose-700 mx-auto' > {message} </Alert>
+          {" "}
+          {message}{" "}
+        </Alert>
       </Snackbar>
-
-
     </div>
   );
 }

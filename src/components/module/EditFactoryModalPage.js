@@ -11,6 +11,8 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
 
     const cookie = new Cookies();
     const Auth = cookie.get('tokenDastResi')
+    const url = process.env.NEXT_PUBLIC_URL
+
 
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState();
@@ -50,7 +52,7 @@ const EditFactoryModalPage = ({editFactoryModal, setEditFactoryModal, editFactor
       
         async function UpdateFactoryApi() {
             setLoading(true);
-            await axios.patch('https://supperapp-backend.chbk.run/factory/update', {
+            await axios.patch(`${url}/factory/update`, {
                 "id": factoryInfo.factoryIdForEditFactory,
                 "name": factoryInfo.editFactoryName,
                 "categories": factoryInfo.editFactoryCategories,

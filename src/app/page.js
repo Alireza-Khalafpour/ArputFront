@@ -1,24 +1,13 @@
+import dynamic from "next/dynamic";
+
 import ProductSwiper from "@/components/templates/ProductSwiper";
-import Partnership from "../../public/images/Partnership.svg";
-import shoppingBag from "../../public/images/ShoppingBag.svg";
 import Discount from "../../public/images/Discount.gif";
-import {
-  EmailRounded,
-  Phone,
-  ShoppingCart,
-  VerifiedUser,
-} from "@mui/icons-material";
+import { EmailRounded, Movie, Phone } from "@mui/icons-material";
 import Link from "next/link";
 import MySlider from "@/components/templates/MySlider";
 import GoogleArAppModal from "@/components/module/GoogleArAppModal";
 import { Divider } from "@mui/joy";
-import TimerCountDown from "@/components/templates/TimerCountDown";
 
-import featureFrame from "../../public/images/features_frame.png";
-import liveChatImg from "../../public/images/live-chat.png";
-import supportImg from "../../public/images/abt_support.png";
-import functionalImg from "../../public/images/functional.png";
-import secureImg from "../../public/images/secure.png";
 import standard from "../../public/images/standard.png";
 import ultimate from "../../public/images/unlimited.png";
 import premium from "../../public/images/premium.png";
@@ -27,38 +16,56 @@ import step2 from "../../public/images/step2.png";
 import step3 from "../../public/images/step3.png";
 
 import "../components/styles/LandingPageStyles/aos.css";
-// import "../components/styles/LandingPageStyles/owl.carousel.min.css"
 import "../components/styles/LandingPageStyles/responsive.css";
 import "../components/styles/LandingPageStyles/style.css";
 import Image from "next/image";
 import BannerVideoMainPage from "@/components/module/BannerVideoMainPage";
-import CompanySlider from "@/components/module/CompanySlider";
-import SearchPartMainPage from "@/components/templates/SearchPartMainPage";
 import Mobile3D from "@/components/module/Mobile3D";
 import GenerateUniqueID from "@/utils/GenerateUniqueID";
+import LoaderPage from "@/components/module/LoaderPage";
+import MainPageBanner from "@/components/module/MainPageBanner";
+import FeaturesSectionMainPage from "@/components/module/FeaturesSectionMainPage";
+import QA_Accordion from "@/components/module/Q&A";
+
+const CompanySlider = dynamic(
+  () => import("@/components/module/CompanySlider"),
+  {
+    loading: () => <LoaderPage />,
+    ssr: true,
+  }
+);
+const TimerCountDown = dynamic(
+  () => import("@/components/templates/TimerCountDown"),
+  {
+    loading: () => <LoaderPage />,
+    ssr: true,
+  }
+);
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-20 p-8 md:max-w-[90%] w-full mx-auto ">
-      <section className="banner_section">
-        <div className="container">
-          <div className="row flex md:flex-row flex-col md:gap-0 gap-14 justify-center items-center">
-            <div className="md:w-1/2 w-full md:gap-0 gap-14 ">
-              <div className="banner_text ">
-                <h1 className="md:text-9xl text-xl ">آرپـــوت</h1>
-
-                <h2>
-                  {" "}
-                  نمایش محصول در <span> محیط واقعی </span> با گوشی همراه !!!{" "}
-                </h2>
-              </div>
-
+    <div className="flex flex-col gap-20 p-8 md:max-w-[95%] w-full mx-auto ">
+      <section className="w-full">
+        <div className="">
+          <div className="flex flex-col justify-center items-center gap-5 ">
+            <div className="flex md:flex-row flex-col md:gap-4 gap-8 w-full md:text-center text-right items-center">
               <GoogleArAppModal />
+              <h2 className="text-xl">
+                {" "}
+                نمایش محصول در{" "}
+                <span className="text-2xl text-asliLight font-semibold">
+                  {" "}
+                  محیط واقعی{" "}
+                </span>{" "}
+                با گوشی همراه !!!{" "}
+              </h2>
             </div>
+            <div className="w-full h-[60vh]">
+              <MainPageBanner />
+            </div>
+            {/* <div className="w-full">
 
-            <div className="md:w-1/2 flex justify-center items-center text-center">
-              <BannerVideoMainPage />
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -96,15 +103,10 @@ export default function Home() {
 
       <Divider></Divider>
 
-      <div className="flex md:flex-row flex-col justify-center items-center w-full md:gap-2 gap-10 rounded-3xl p-1 min-h-40 bg-[#E0EDFF]">
-        <SearchPartMainPage />
+      <div id="Set-Uniqe-Code">
+        <GenerateUniqueID />
       </div>
 
-      <div id="Set-Uniqe-Code" >
-        <GenerateUniqueID/>
-      </div>
-
-      <Divider></Divider>
 
       {/* <div className="flex flex-col gap-12 justify-center w-full items-center" > */}
       <div className="w-full text-center mx-auto text-3xl gap-4">
@@ -130,93 +132,13 @@ export default function Home() {
         <ProductSwiper title=" سرامیک " />
       </div>
 
-      <section className="row_am features_section" id="features">
-        <div className="container">
-          <div className="section_title">
-            <h2>
-              <span> ویژگی‌ها </span>ما را متفاوت میکند
-            </h2>
+      <section className="row_am how_it_works flex justify-center " id="how_it_work">
 
-            <p>
-              {" "}
-              با اپلیکیشن آرپوت مارکت می توانید محصولات و اشیاء مجازی را به صورت
-              ۳ بعدی <br /> در محیط واقعی با گوشی های همراه خود، مشاهده کنید.{" "}
-            </p>
-          </div>
-          <div className="feature_detail">
-            <div className="left_data feature_box md:!text-left !text-center lg:mr-5 mr-0 ">
-              <div className="data_block">
-                <div className="icon flex justify-center ">
-                  <Image width={60} height={60} src={secureImg} alt="image" />
-                </div>
-                <div className="text text-center">
-                  <h4> واقعیت افزوده </h4>
-                  <p>
-                    {" "}
-                    با مشاهده ی کالای مورد نظر با قابلیت AR می توانید محصولات
-                    دلخواه خود را متناسب با طراحی و تزئین خانه ی خود مقایسه و
-                    خریداری کنید{" "}
-                  </p>
-                </div>
-              </div>
+        <FeaturesSectionMainPage/>
 
-              <div className="data_block">
-                <div className="icon flex justify-center ">
-                  <Image
-                    width={60}
-                    height={60}
-                    src={functionalImg}
-                    alt="image"
-                  />
-                </div>
-                <div className="text  text-center">
-                  <h4> چند سکویی </h4>
-                  <p> قابلیت نصب بر روی سیستم عامل های اندروید و IOS </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="right_data feature_box md:!text-right !text-center lg:ml-5 ml-0 ">
-              <div className="data_block">
-                <div className="icon flex justify-center">
-                  <Image width={60} height={60} src={liveChatImg} alt="image" />
-                </div>
-                <div className="text text-center">
-                  <h4> پاسخ گویی سریع </h4>
-                  <p>
-                    {" "}
-                    در صورت بروز هر گونه مشکل پاسخ گوی شما کاربران عزیز در اسرع
-                    وقت می باشیم{" "}
-                  </p>
-                </div>
-              </div>
-
-              <div className="data_block">
-                <div className="icon flex justify-center ">
-                  <Image width={60} height={60} src={supportImg} alt="image" />
-                </div>
-                <div className="text text-center">
-                  <h4> واقعیت مجازی </h4>
-                  <p>
-                    {" "}
-                    با اپلیکیشن واقعیت مجازی ما، خود را در محیط های ۳ بعدی از
-                    پیش تعریف شده قرار دهید و حرکت کنید{" "}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="feature_img lg:!block !hidden ">
-              <Image src={featureFrame} width={270} height={570} alt="image" />
-              {/* <div id="container3D" className="w-full h-full">
-                <Mobile3D />
-              </div> */}
-            </div>
-          </div>
-        </div>
       </section>
 
-      <section class="row_am how_it_works" id="how_it_work">
+      <section class="row_am how_it_works flex justify-center " id="how_it_work">
         <div class="container">
           <div class="how_it_inner">
             <div class="section_title">
@@ -246,7 +168,7 @@ export default function Home() {
                         alt="image"
                       />
                       <div class="step_number">
-                        <h3>یک</h3>
+                        <h3>1</h3>
                       </div>
                     </div>
 
@@ -271,7 +193,7 @@ export default function Home() {
                         alt="image"
                       />
                       <div class="step_number">
-                        <h3>دو</h3>
+                        <h3>2</h3>
                       </div>
                     </div>
 
@@ -293,7 +215,7 @@ export default function Home() {
                         alt="image"
                       />
                       <div class="step_number">
-                        <h3>سه</h3>
+                        <h3>3</h3>
                       </div>
                     </div>
 
@@ -322,18 +244,18 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="toggle_block">
+          {/* <div className="toggle_block">
             <span className="month active">ماهانه</span>
             <div className="tog_block">
               <span className="tog_btn"></span>
             </div>
             <span className="years">سالانه</span>
             <span className="offer">15% تخفیف</span>
-          </div>
+          </div> */}
 
           <div className="pricing_pannel monthly_plan active w-full">
             <div className="row flex md:flex-row flex-col justify-center  w-full gap-8">
-              <div className="md:w-1/3 w-full min-h-[85vh]">
+              <div className="md:w-1/3 w-full min-h-[85vh] ">
                 <div className="pricing_block highlited_block h-full py-10">
                   <div className="pkg_name w-full flex flex-col justify-center items-center ">
                     <h3> سفارشی </h3>
@@ -341,7 +263,7 @@ export default function Home() {
                     <hr className="my-2 text-white text-xl" />
                   </div>
 
-                  <ul className="benifits !items-start !list-disc p-4 px-10">
+                  <ul className="flex flex-col gap-3 !items-start justify-start !h-full !list-disc text-white p-4 px-10">
                     <li>
                       <p> تایل از پیش تعریف شده </p>
                     </li>
@@ -397,7 +319,7 @@ export default function Home() {
                       <p> شناسایی موانع طبیعی </p>
                     </li>
                   </ul>
-                  <a href="#" className="btn white_btn mx-auto w-1/2">
+                  <a href="#" className="btn bg-white rounded-3xl py-2 mx-auto w-1/2 hover:scale-105">
                     {" "}
                     سفارش دهید
                   </a>
@@ -408,10 +330,11 @@ export default function Home() {
                 <div className="pricing_block h-full py-10">
                   <div className="pkg_name w-full flex flex-col justify-center items-center ">
                     <h3>آرپوت مارکت</h3>
-                    <hr className="my-2" />
+                    <span>  </span>
+                    <hr className="my-5" />
                   </div>
 
-                  <ul className="benifits !items-start !list-disc p-4 px-10">
+                  <ul className=" flex flex-col gap-4 !items-start justify-start h-full !list-disc p-4 px-10">
                     <li>
                       <p> تایل از پیش تعریف شده </p>
                     </li>
@@ -453,7 +376,7 @@ export default function Home() {
                     </li>
                   </ul>
 
-                  <a href="#" className="btn white_btn mx-auto w-1/2">
+                  <a href="#" className="btn bg-purple-700 text-white hover:text-white rounded-3xl py-2 mx-auto w-1/2 hover:scale-105">
                     سفارش دهید
                   </a>
                 </div>
@@ -466,7 +389,7 @@ export default function Home() {
               <div className="col-md-4">
                 <div className="pricing_block">
                   <div className="icon">
-                    <Image width={60} height={60} src={standard} alt="image" />
+                    <Image width={50} height={50} src={standard} alt="image" />
                   </div>
                   <div className="pkg_name">
                     <h3>استاندارد</h3>
@@ -499,7 +422,7 @@ export default function Home() {
               <div className="col-md-4">
                 <div className="pricing_block highlited_block">
                   <div className="icon">
-                    <Image width={60} height={60} src={ultimate} alt="image" />
+                    <Image width={50} height={50} src={ultimate} alt="image" />
                   </div>
                   <div className="pkg_name">
                     <h3>نامحدود</h3>
@@ -532,14 +455,14 @@ export default function Home() {
               <div className="col-md-4">
                 <div className="pricing_block">
                   <div className="icon">
-                    <Image width={60} height={60} src={premium} alt="image" />
+                    <Image width={50} height={50} src={premium} alt="image" />
                   </div>
                   <div className="pkg_name">
                     <h3>پریمیوم</h3>
                     <span>برای تیم های کوچک</span>
                   </div>
                   <span className="price">550 تومان</span>
-                  <ul className="benifits">
+                  <ul className="benifits list-disc">
                     <li>
                       <p>تا بیست عدد وبسایت</p>
                     </li>
@@ -565,6 +488,18 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <Divider />
+
+
+      <section className="row_am how_it_works flex justify-center " id="how_it_work">
+
+        <QA_Accordion/>
+
+      </section>
+
+
+
 
       <Divider />
       <section className="flex flex-col gap-8 text-center">

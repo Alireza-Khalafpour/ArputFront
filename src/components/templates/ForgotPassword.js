@@ -26,6 +26,8 @@ import { Checkbox, List, ListItem, ListItemDecorator, Radio, RadioGroup, Typogra
 export default function ForgotPassword() {
 
   const steps = [' شماره همراه ', ' رمزعبور حدید '];
+  const url = process.env.NEXT_PUBLIC_URL
+
 
   const [message, setMessage] = useState();
   const [alert, setAlert] = useState(false);
@@ -68,7 +70,7 @@ export default function ForgotPassword() {
     if(phoneNum.length === 11 && phoneNum !== "") {
 
       setLoading(true);
-      axios.post('https://supperapp-backend.chbk.run/register/otp',{"phone": phoneNum }, {
+      axios.post(`${url}/register/otp`,{"phone": phoneNum }, {
         'accept': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded',
         })
@@ -100,7 +102,7 @@ export default function ForgotPassword() {
     if( Otp.length === 4 && password === ConfirmPassword) {
 
     setLoading(true);
-    axios.post('https://supperapp-backend.chbk.run/register/shop',{ 
+    axios.post(`${url}/register/shop`,{ 
       "phone": phoneNum,
       "password": password,
       "code": Otp
@@ -139,7 +141,7 @@ export default function ForgotPassword() {
     if( Otp.length === 4 && password === ConfirmPassword) {
 
     setLoading(true);
-    axios.patch('https://supperapp-backend.chbk.run/register/forget_password',{ 
+    axios.patch(`${url}/register/forget_password`,{ 
       "phone": phoneNum,
       "password": password,
       "code": Otp

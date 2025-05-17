@@ -38,9 +38,8 @@ const ShopsModalForPulseInMainPage = ({
   pre_product_id,
 }) => {
   const cookie = new Cookies();
-
+  const url = process.env.NEXT_PUBLIC_URL
   const route = useRouter();
-
   const Auth = cookie.get("tokenDastResi") || null;
 
   const [message, setMessage] = useState();
@@ -53,43 +52,10 @@ const ShopsModalForPulseInMainPage = ({
     "Content-Type": "application/json",
   };
 
-  // async function AddToFavorites(pId) {
-  //     await axios.post('https://supperapp-backend.chbk.run/favorite_product/create', {
-  //     'product_id': `${pId}`
-  //     },
-  //     {
-  //     headers: headers
-  //     })
-  //     .then((response) => {
-  //         setMessage(response.data.Message)
-  //         setAlert(true)
-  //         setLoading(false)
-  //     })
-  //     .catch(function (error) {
-  //         console.log(error, "Error");
-  //         setMessage(" متاسفیم،خطایی رخ داده است یا وارد حساب خود شوید ")
-  //         setErrorAlert(true)
-  //         setLoading(false)
-  //     });
-  // }
-
-  // رفتن به صفحه جزییات محصول و دریافت آی پی کاربر از سایت "geolocation" -----------------------------
-
-  // async function FindIpAddress(i) {
-  //     const date = new Date();
-
-  //     await axios.get("https://geolocation-db.com/json/0daad5e0-82e7-11ee-92e0-f5d620c7dcb4")
-  //     .then((response) => {
-  //         console.log(response);
-  //         if(response.status === 200){
-  //             CreatePulse(response, i)
-  //         }
-  //     });
-  // }
 
   async function CreatePulse(i) {
     await axios
-      .post("https://supperapp-backend.chbk.run/pulse/create", {
+      .post(`${url}/pulse/create`, {
         product_id: i.product_id,
         pre_product_id: pre_product_id,
         shop_id: i.seller_id,

@@ -11,6 +11,8 @@ import GeneralLoader from "./GeneralLoader";
 
 const AddProductCard = ({productList}) => {
 
+    const url = process.env.NEXT_PUBLIC_URL
+
     const [count, setCount] = useState(0)
     const [loading, setLoading] = useState(false)
     const [productId ,steProductId] = useState()
@@ -51,7 +53,7 @@ const AddProductCard = ({productList}) => {
             
             if(count > 0) {
                 setLoading(true);
-                await axios.post('https://supperapp-backend.chbk.run/user_basket/create', {
+                await axios.post(`${url}/user_basket/create`, {
                     'product_id': `${pId}`,
                     "numbers": count
                 }, 

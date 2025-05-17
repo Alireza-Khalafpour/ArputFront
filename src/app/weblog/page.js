@@ -9,6 +9,8 @@ import Cookies from "universal-cookie";
 function Weblog() {
   const cookie = new Cookies();
   const Auth = cookie.get("tokenDastResi");
+  const url = process.env.NEXT_PUBLIC_URL
+
 
   const [articleList, setArticleList] = useState([]);
   const [page, setPage] = useState(1);
@@ -20,7 +22,7 @@ function Weblog() {
   const GetArticlesList = async (p) => {
     await axios
       .get(
-        `https://supperapp-backend.chbk.run/blogs/?page=${p}&limit=30`,
+        `${url}/blogs/?page=${p}&limit=30`,
         // {
         //   headers: {
         //     accept: "application/json",

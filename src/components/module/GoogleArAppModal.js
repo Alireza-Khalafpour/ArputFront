@@ -18,12 +18,8 @@ export default function GoogleArAppModal() {
 
       <ul className="app_btn">
         <li onClick={() => setOpen(true)} >
-          {/* <Link className='border-2 border-purple-900 bg-white rounded-xl p-2 hover:text-white ' href="https://superapp-storage.storage.iran.liara.space/ARPutMarketApp.apk" > <Download className="animate-bounce text-4xl" /> دانلود از گوگل پلی  </Link> */}
-          <Link className='border-2 border-purple-900 bg-white rounded-xl p-2 hover:text-white ' href="/" > <Download className="animate-bounce text-4xl" /> دانلود برنامه  </Link>
+          <Link className=' border-2 border-asliLight bg-white rounded-xl p-2 hover:border-asliDark transition-colors duration-300' href="/" > <Download className="animate-bounce text-3xl text-asliLight" /> دانلود برنامه  </Link>
         </li>
-        {/* <li onClick={() => setOpen(true)} >
-          <Link className='border-2 border-purple-900 bg-white rounded-xl p-2 hover:text-white ' href="https://superapp-storage.storage.iran.liara.space/ARPutMarketApp.apk" > <Download className="animate-bounce text-4xl" /> دانلود از اپ استور  </Link>
-        </li> */}
       </ul>
 
       <Modal open={open} onClose={() => setOpen(false)}>

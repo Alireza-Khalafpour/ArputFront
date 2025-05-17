@@ -34,6 +34,7 @@ import GeneralLoader from "../module/GeneralLoader";
 
 const AddPreProductPage = () => {
   const cookie = new Cookies();
+  const url = process.env.NEXT_PUBLIC_URL;
 
   const [categoryList, setcategoryList] = useState([]);
   const [addCateg, setaddCategs] = useState([]);
@@ -119,7 +120,7 @@ const AddPreProductPage = () => {
 
   async function categoryListApi(Au) {
     await axios
-      .get("https://supperapp-backend.chbk.run/category/list", {
+      .get(`${url}/category/list`, {
         headers: {
           accept: "application/json",
           Authorization: `Bearer ${Au}`,
@@ -135,7 +136,7 @@ const AddPreProductPage = () => {
 
   async function sampleListApi(Au) {
     await axios
-      .get("https://supperapp-backend.chbk.run/feature_samples/list", {
+      .get(`${url}/feature_samples/list`, {
         headers: {
           accept: "application/json",
           Authorization: `Bearer ${Au}`,
@@ -301,13 +302,9 @@ const AddPreProductPage = () => {
 
     setLoading(true);
     await axios
-      .post(
-        "https://supperapp-backend.chbk.run/upload/upload_texture",
-        formData,
-        {
-          headers: headers,
-        }
-      )
+      .post(`${url}/upload/upload_texture`, formData, {
+        headers: headers,
+      })
       .then((response) => {
         setPreProductData({
           ...preProductData,
@@ -333,53 +330,17 @@ const AddPreProductPage = () => {
   async function handleAddPreProduct() {
     setLoading(true);
     await axios
-      .post(
-        "https://supperapp-backend.chbk.run/pre_product/create",
-        preProductData,
-        {
-          headers: mainHeaders,
-        }
-      )
+      .post(`${url}/pre_product/create`, preProductData, {
+        headers: mainHeaders,
+      })
       .then((response) => {
         if (response.status === 200 && response.data.Done === true) {
           setAlert(true);
           setMessage(" پیش محصول جدید با موفقیت افزوده شد ");
           setLoading(false);
-          // setPreProductData(
-          //     {
-          //         "category_id": "",
-          //         "info": {
-          //             "width": 0,
-          //             "height": 0,
-          //             "weight": 0
-          //         },
-          //         "features": [],
-          //         "image_url": "",
-          //         "name":"",
-          //         "is_public": true,
-          //         "factory_id": "",
-          //         "only_in_Representation": []
-          //     }
-          // )
         } else {
           setMessage(" متاسفیم،خطایی رخ داده است ");
           setErrorAlert(true);
-          // setPreProductData(
-          //     {
-          //         "category_id": "",
-          //         "info": {
-          //             "width": 0,
-          //             "height": 0,
-          //             "weight": 0
-          //         },
-          //         "features": [],
-          //         "image_url": "",
-          //         "name":"",
-          //         "is_public": true,
-          //         "factory_id": "",
-          //         "only_in_Representation": []
-          //     }
-          // )
         }
       })
       .catch((error) => {
@@ -403,7 +364,7 @@ const AddPreProductPage = () => {
 
   async function GetCurrentUser() {
     await axios
-      .get("https://supperapp-backend.chbk.run/register/current_user", {
+      .get(`${url}/register/current_user`, {
         headers: currentUserHeaders,
       })
       .then((response) => {
@@ -421,7 +382,7 @@ const AddPreProductPage = () => {
 
   async function GetBranches() {
     await axios
-      .get("https://supperapp-backend.chbk.run/branch/factory/branch", {
+      .get(`${url}/branch/factory/branch`, {
         headers: currentUserHeaders,
       })
       .then((response) => {
@@ -442,7 +403,7 @@ const AddPreProductPage = () => {
   // get all factories when account is admin ----------------
   async function GetAllFactories(Au) {
     await axios
-      .get("https://supperapp-backend.chbk.run/factory/list", {
+      .get(`${url}/factory/list`, {
         headers: {
           accept: "application/json",
           Authorization: `Bearer ${Au}`,

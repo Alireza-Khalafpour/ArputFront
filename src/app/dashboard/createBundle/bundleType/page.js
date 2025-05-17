@@ -56,6 +56,7 @@ const BundleType = () => {
   const cookie = new Cookies();
 
   const Auth = cookie.get("tokenDastResi");
+  const url = process.env.NEXT_PUBLIC_URL;
 
   const [data, setData] = useState([]);
   // add other Bundle states----------------------------
@@ -80,7 +81,7 @@ const BundleType = () => {
 
   async function ListApi(Au) {
     await axios
-      .get("https://supperapp-backend.chbk.run/pre_product/list/all", {
+      .get(`${url}/pre_product/list/all`, {
         headers: {
           accept: "application/json",
           Authorization: `Bearer ${Au}`,
@@ -112,7 +113,7 @@ const BundleType = () => {
     // setLoading(true);
     await axios
       .patch(
-        "https://supperapp-backend.chbk.run/bundle/update",
+        `${url}/bundle/update`,
         {
           id: preProductId,
           albedo_texture_url: albedo_texture_url,
@@ -146,7 +147,7 @@ const BundleType = () => {
     if (typeName !== "") {
       await axios
         .post(
-          "https://supperapp-backend.chbk.run/bundle/type/create",
+          `${url}/bundle/type/create`,
           {
             type_name: typeName,
             active: true,
@@ -159,7 +160,7 @@ const BundleType = () => {
           if (response.data.Done == true) {
             setAlert(true);
             setMessage(response?.data?.Message);
-            setLoading(false); 
+            setLoading(false);
             setTypeName("");
             setBundleTypeModal(false);
           } else {
@@ -218,7 +219,7 @@ const BundleType = () => {
         case "albedo_texture_url":
           await axios
             .post(
-              "https://supperapp-backend.chbk.run/upload/upload_texture",
+              `${url}/upload/upload_texture`,
               formData,
               {
                 headers: TextureHeaders,
@@ -245,7 +246,7 @@ const BundleType = () => {
         case "metalic_texture_url":
           await axios
             .post(
-              "https://supperapp-backend.chbk.run/upload/upload_texture",
+              `${url}/upload/upload_texture`,
               formData,
               {
                 headers: TextureHeaders,
@@ -272,7 +273,7 @@ const BundleType = () => {
         case "normal_map_texture_url":
           await axios
             .post(
-              "https://supperapp-backend.chbk.run/upload/upload_texture",
+              `${url}/upload/upload_texture`,
               formData,
               {
                 headers: TextureHeaders,
@@ -299,7 +300,7 @@ const BundleType = () => {
         case "height_map_texture_url":
           await axios
             .post(
-              "https://supperapp-backend.chbk.run/upload/upload_texture",
+              `${url}/upload/upload_texture`,
               formData,
               {
                 headers: TextureHeaders,

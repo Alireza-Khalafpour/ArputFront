@@ -25,7 +25,7 @@ function SpecificationProduct({ productList }) {
   }, []);
 
   return (
-    <div className=" flex flex-col gap-2  px-5 basis-2/5 overflow-auto max-h-[100vh] py-3 ">
+    <div className=" flex flex-col gap-2  px-5 basis-2/5 overflow-auto max-h-[100vh]  ">
         <div className=" flex flex-col items-center justify-center gap-4 rounded-lg bg-white py-4">
           <p className="font-bold md:hidden text-center">مشخصات کلی </p>
 

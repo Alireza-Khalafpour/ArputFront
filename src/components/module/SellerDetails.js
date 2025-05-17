@@ -11,7 +11,7 @@ function SellerDetails({ productList }) {
   console.log(productList?.seller_info[0].price);
   const [Open, SetOpen] = useState(false);
   return (
-    <div className=" basis-3/5 w-full">
+    <div className=" w-full">
       <div className=" md:hidden  px-5 py-5" id="seller">
         <p className="py-3 font-bold">فروشنده ها</p>
         <button className=" inline-block rounded-2xl border-2  border-black bg-white px-2 py-1">
@@ -22,7 +22,7 @@ function SellerDetails({ productList }) {
           </p>
         </button>
       </div>
-      <div className=" mx-4 flex flex-col  gap-3 rounded-xl bg-white px-3 ">
+      <div className=" flex flex-col  gap-3 rounded-xl bg-white px-3 ">
         <div className=" md:block hidden  px-5 py-5">
           <p className="py-3 font-bold text-xl">فروشنده ها</p>
             <div className=" text-paszamine3 flex flex-row justify-around items-center gap-2 w-1/3 inline-block rounded-2xl border-2  border-black bg-white px-2 py-1 ">

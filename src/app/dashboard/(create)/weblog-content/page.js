@@ -18,11 +18,7 @@ import { Textarea } from "@mui/joy";
 
 const WeblogContent = () => {
   const editorRef = useRef(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
+  const url = process.env.NEXT_PUBLIC_URL;
 
   // snackbar and alert states----------------------------------
   const [message, setMessage] = useState();
@@ -76,7 +72,7 @@ const WeblogContent = () => {
     setLoading(true);
     await axios
       .post(
-        "https://supperapp-backend.chbk.run/upload/upload_texture",
+        `${url}/upload/upload_texture`,
         formData,
         {
           headers: headers,
@@ -135,7 +131,7 @@ const WeblogContent = () => {
   async function CreateBlog() {
     setLoading(true);
     await axios
-      .post("https://supperapp-backend.chbk.run/panel/blogs/", articleData, {
+      .post(`${url}/panel/blogs/`, articleData, {
         headers: headersCreateBlog,
       })
       .then((response) => {
@@ -202,7 +198,7 @@ const WeblogContent = () => {
             <Editor
               onChange={(e) => HandleCreateBlog(e)}
               id="main-content"
-              apiKey='5md725nosspz6b344o5vvh8a1q7bu02ibksh72czppkz9csn'
+              apiKey="5md725nosspz6b344o5vvh8a1q7bu02ibksh72czppkz9csn"
               onInit={(_evt, editor) => (editorRef.current = editor)}
               // initialValue="<p>This is the initial content of the editor.</p>"
               init={{

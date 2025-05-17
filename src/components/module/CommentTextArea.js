@@ -71,6 +71,9 @@ IconContainer.propTypes = {
 
 
 export default function CommentTextArea({single_product}) {
+
+  const url = process.env.NEXT_PUBLIC_URL
+
   const [italic, setItalic] = React.useState(false);
   const [fontWeight, setFontWeight] = React.useState('normal');
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -103,7 +106,7 @@ export default function CommentTextArea({single_product}) {
   function AddComment(single_product) {
     setLoading(true);
     if (content !== "" && content !== null && title !== "") {
-      axios.post('https://supperapp-backend.chbk.run/comment/create', {
+      axios.post(`${url}/comment/create`, {
         "content": content,
         "title": title,
         "pre_product_id": `${single_product}`

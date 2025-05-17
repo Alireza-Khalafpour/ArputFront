@@ -1,13 +1,17 @@
 import axios from "axios";
 
 async function SingleBlog({ params: { single_blog } }) {
+
+  const url = process.env.NEXT_PUBLIC_URL
+
+
   // get single product data ------------------------------
   const headers = {
     accept: "application/json",
   };
 
   const res = await axios
-    .get(`https://supperapp-backend.chbk.run/blogs/${single_blog}`, {
+    .get(`${url}/blogs/${single_blog}`, {
       headers: {
         accept: "application/json",
       },

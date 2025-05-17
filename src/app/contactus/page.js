@@ -15,6 +15,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 function ContactUs() {
+
+  const url = process.env.NEXT_PUBLIC_URL
+
+
   const [message, setMessage] = useState();
   const [alert, setAlert] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
@@ -39,7 +43,7 @@ function ContactUs() {
     if (phone !== "" && phone.length == 11 && email !== "" && content !== "") {
       axios
         .post(
-          "https://supperapp-backend.chbk.run/contact_us_form/create",
+          `${url}/contact_us_form/create`,
           {
             mobile: phone,
             email: email,
@@ -76,7 +80,7 @@ function ContactUs() {
 
   useEffect(() => {
     axios
-      .get("https://supperapp-backend.chbk.run/contact_us/show", {
+      .get(`${url}/contact_us/show`, {
         headers: {
           accept: "application/json",
         },
@@ -107,12 +111,12 @@ function ContactUs() {
     <div className="w-full h-[90vh] flex flex-col justify-center items-center relative">
       <iframe
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5549.386359235215!2d52.46493949044171!3d29.722570322303692!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3fb21a115caa0311%3A0xc9f48e432ab44733!2zRmFycyBQcm92aW5jZSwgU2hpcmF6LCBEaXN0cmljdCAxMNiMINm-2KfYsdqpINi52YTZhSDZiCDZgdmG2KfZiNix24wg2YHYp9ix2LMsIElyYW4!5e0!3m2!1sen!2sfr!4v1704699095426!5m2!1sen!2sfr"
-        className="w-[70vw] h-[60vh] border-4 md:block hidden "
+        className="w-full h-full md:block hidden "
         allowfullscreen=""
         loading="lazy"
       ></iframe>
 
-      <div className="md:absolute md:w-1/3 w-full h-full flex flex-col justify-center p-4 items-center gap-12 bg-gradient-to-b from-asliDark to-blue-800 rounded-xl mt-10 right-2">
+      <div className="md:absolute md:w-1/3 w-full h-full flex flex-col justify-center p-4 items-center gap-12 bg-gradient-to-b from-asliDark to-blue-800 rounded-xl mt-10 left-2">
         <h3 className="text-white text-2xl border-b-2 p-1 border-khas ">
           {" "}
           فرم ارتباط با ما{" "}

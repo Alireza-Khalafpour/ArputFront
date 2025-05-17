@@ -1,6 +1,6 @@
 "use client";
 
-import { ExpandMore } from "@mui/icons-material";
+import { ExpandMore, FilterAlt } from "@mui/icons-material";
 import {
   Accordion,
   AccordionDetails,
@@ -20,7 +20,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const FilterProducts = () => {
+const FilterProducts = ({ setShowSideFilter }) => {
+  const url = process.env.NEXT_PUBLIC_URL;
+
   const [catgAndFeatures, setCatgAndFeatures] = useState([]);
   const [features, setFeatures] = useState([]);
   const [factories, setFactories] = useState([]);
@@ -40,7 +42,7 @@ const FilterProducts = () => {
 
     (async () => {
       await axios
-        .get("https://supperapp-backend.chbk.run/filter/", {
+        .get(`${url}/filter/`, {
           headers: {
             accept: "application/json",
           },
@@ -101,25 +103,37 @@ const FilterProducts = () => {
     setQueryParams(new URLSearchParams(queryParams));
   };
   // Construct the URL with the base URL and query parameters
-  const baseUrl = "https://supperapp-backend.chbk.run/filter/items";
+  const baseUrl = `${url}/filter/items`;
   const finalUrl = `${baseUrl}?${queryParams.toString()}`;
-  
+
   return (
     <>
       <div
         id="filterPart"
-        className="w-1/6 md:flex hidden max-h-[540px] min-h-[420px] overflow-y-scroll bg-white border-asliLight rounded-xl border-2 border-solid p-3 flex-col gap-4"
+        className="w-1/5 md:flex hidden max-h-[540px] min-h-[420px] overflow-y-scroll bg-white border-asliLight rounded-xl border-2 border-solid p-3 flex-col gap-4"
       >
         <div className="w-full flex flex-row justify-between items-center">
-          <span className="text-xl"> فیلتر ها </span>
-          <button className="text-sm text-khas" onClick={() => setFeatures([])}>
+          <FilterAlt
+            onClick={() => setShowSideFilter(false)}
+            className="p-2 bg-khas rounded-full mx-2 text-white text-4xl cursor-pointer hover:bg-orange-500 hover:scale-105"
+          />
+          <button
+            className="text-sm text-khas hover:scale-105"
+            onClick={() => setFeatures([])}
+          >
             {" "}
             حذف فیلتر{" "}
           </button>
-          <Link href={finalUrl} > search here </Link>
+          <Link
+            href={finalUrl}
+            className="bg-khas text-white py-1 px-2 rounded-2xl hover:scale-105 hover:text-white"
+          >
+            {" "}
+            اعمال{" "}
+          </Link>
         </div>
         <Divider />
-        <FormControl id="asynchronous">
+        <FormControl id="asynchronouss">
           <FormLabel>دسته بندی ها</FormLabel>
           <Autocomplete
             placeholder="دسته بندی ها"

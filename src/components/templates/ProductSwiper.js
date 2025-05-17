@@ -11,6 +11,8 @@ import ShopsModalForPulseInMainPage from '../module/ShopsModalForPulseInMainPage
 
 const ProductSwiper = ({title}) => {
 
+  const url = process.env.NEXT_PUBLIC_URL
+
 
   const [items, setItems] = useState([])
 
@@ -28,7 +30,7 @@ const ProductSwiper = ({title}) => {
         setLoading(true)
         set_pre_product_id(i.id)
         console.log(i)
-        await axios.get(`https://supperapp-backend.chbk.run/product/product/${i.id}`).then((response) => {
+        await axios.get(`${url}/product/product/${i.id}`).then((response) => {
             setShops(response.data.seller_info)
             setLoading(false)
         });
@@ -40,7 +42,7 @@ const ProductSwiper = ({title}) => {
   },[])
 
   async function GetItems () {
-      await axios.get('https://supperapp-backend.chbk.run/product/products?page=0&limit=18', {
+      await axios.get(`${url}/product/products?page=0&limit=18`, {
           headers:{
             'accept': 'application/json',
           }

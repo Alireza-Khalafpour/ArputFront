@@ -11,6 +11,8 @@ const TicketHistorySidebar = ({setSubResponse, alert , setResetChat}) => {
 
     const cookie = new Cookies();
     const Auth = cookie.get('tokenDastResi')
+    const url = process.env.NEXT_PUBLIC_URL
+
     // ---------------
     const [ticketHistoryList, setTicketHistoryList] = useState([])
 
@@ -18,7 +20,7 @@ const TicketHistorySidebar = ({setSubResponse, alert , setResetChat}) => {
         // Get Tickets history list -----------------
         async function GetTicketHistoryList(Au) {
       
-            await axios.get('https://supperapp-backend.chbk.run/ticket/user_ticket', {
+            await axios.get(`${url}/ticket/user_ticket`, {
               headers:{
                 'accept': 'application/json',
                 'Authorization': `Bearer ${Au}`,

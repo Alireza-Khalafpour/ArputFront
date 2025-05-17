@@ -55,6 +55,7 @@ const CreateBundle = () => {
   const cookie = new Cookies();
 
   const Auth = cookie.get("tokenDastResi");
+  const url = process.env.NEXT_PUBLIC_URL;
 
   const [data, setData] = useState([]);
   // add Bundle states----------------------------
@@ -82,7 +83,7 @@ const CreateBundle = () => {
 
   async function ListApi(Au) {
     await axios
-      .get("https://supperapp-backend.chbk.run/pre_product/list/all", {
+      .get(`${url}/pre_product/list/all`, {
         headers: {
           accept: "application/json",
           Authorization: `Bearer ${Au}`,
@@ -114,7 +115,7 @@ const CreateBundle = () => {
     // setLoading(true);
     await axios
       .patch(
-        "https://supperapp-backend.chbk.run/bundle/update",
+        `${url}/bundle/update`,
         {
           id: preProductId,
           albedo_texture_url: albedo_texture_url,
@@ -189,7 +190,7 @@ const CreateBundle = () => {
         case "albedo_texture_url":
           await axios
             .post(
-              "https://supperapp-backend.chbk.run/upload/upload_texture",
+              `${url}/upload/upload_texture`,
               formData,
               {
                 headers: TextureHeaders,
@@ -216,7 +217,7 @@ const CreateBundle = () => {
         case "metalic_texture_url":
           await axios
             .post(
-              "https://supperapp-backend.chbk.run/upload/upload_texture",
+              `${url}/upload/upload_texture`,
               formData,
               {
                 headers: TextureHeaders,
@@ -243,7 +244,7 @@ const CreateBundle = () => {
         case "normal_map_texture_url":
           await axios
             .post(
-              "https://supperapp-backend.chbk.run/upload/upload_texture",
+              `${url}/upload/upload_texture`,
               formData,
               {
                 headers: TextureHeaders,
@@ -270,7 +271,7 @@ const CreateBundle = () => {
         case "height_map_texture_url":
           await axios
             .post(
-              "https://supperapp-backend.chbk.run/upload/upload_texture",
+              `${url}/upload/upload_texture`,
               formData,
               {
                 headers: TextureHeaders,

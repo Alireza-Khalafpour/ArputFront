@@ -1,7 +1,10 @@
+"use client";
+
 import {
   ArrowOutward,
   ArrowOutwardOutlined,
   Favorite,
+  FilterAlt,
   Share,
 } from "@mui/icons-material";
 import {
@@ -16,23 +19,26 @@ import {
 } from "@mui/joy";
 import axios from "axios";
 import Link from "next/link";
-import { Rating } from "@mui/material";
+import { Drawer, Rating } from "@mui/material";
 import { e2p } from "@/utils/replaceNumbers";
 import AddToFavoriteAndShare from "@/components/module/AddToFavoriteAndShare";
 import Image from "next/image";
 import { numberToWords } from "@persian-tools/persian-tools";
 import FilterProducts from "@/components/templates/FilterProducts";
+import FilterProductsNewDesign from "@/components/templates/FilterProductsNewDesign";
+import { useState } from "react";
 
 async function Products() {
+  const url = process.env.NEXT_PUBLIC_URL;
+
+  const [showSideFilter, setShowSideFilter] = useState(false);
+
   const res = await axios
-    .get(
-      "https://supperapp-backend.chbk.run/product/products?page=0&limit=20",
-      {
-        headers: {
-          accept: "application/json",
-        },
-      }
-    )
+    .get(`${url}/product/products?page=0&limit=20`, {
+      headers: {
+        accept: "application/json",
+      },
+    })
     .catch((error) => {
       console.log(error, "Error");
     });
@@ -40,13 +46,27 @@ async function Products() {
   const productList = res?.data.data;
 
   return (
-    <div className="flex flex-row w-full h-full justify-center items-start gap-10 p-4">
-        
-        <FilterProducts />
-      
+    <div
+      className={`flex ${
+        showSideFilter ? "flex-row" : "flex-col"
+      } w-full h-full justify-center items-start gap-10 p-6 m-auto`}
+    >
+      {showSideFilter ? <FilterProducts setShowSideFilter={setShowSideFilter} /> : null}
+
+      {showSideFilter ? null : (
+        <div className="w-full bg-paszamine2 p-2 rounded-lg flex flex-row items-center">
+          <FilterAlt
+            onClick={() => setShowSideFilter(true)}
+            className="p-2 bg-khas rounded-full mx-2 text-white text-4xl cursor-pointer hover:bg-orange-500 hover:scale-105"
+          />
+
+          <FilterProductsNewDesign />
+        </div>
+      )}
+
       <div
         id="productsPart"
-        className=" w-5/6 flex flex-row justify-start items-center gap-5 flex-wrap"
+        className=" w-full flex flex-row justify-start items-center gap-8 flex-wrap mx-auto"
       >
         {productList?.length > 0 || res === undefined ? null : (
           <>
@@ -56,7 +76,7 @@ async function Products() {
 
         {productList?.map((i) => (
           <Card
-            className="md:w-1/5 w-full h-[420px] hover:shadow-2xl "
+            className="md:w-1/6 w-full h-[420px] hover:shadow-2xl "
             key={i.id}
           >
             <div className=" w-full h-full" key={i.id}>

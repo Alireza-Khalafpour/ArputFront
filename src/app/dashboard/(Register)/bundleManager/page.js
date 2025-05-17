@@ -30,6 +30,7 @@ const defaultTheme = createTheme();
 const RegisterBundleManager = () => {
   const cookie = new Cookies();
   const Auth = cookie.get("tokenDastResi");
+  const url = process.env.NEXT_PUBLIC_URL;
 
   const [message, setMessage] = React.useState();
   const [alert, setAlert] = React.useState(false);
@@ -53,7 +54,7 @@ const RegisterBundleManager = () => {
       setLoading(true);
       axios
         .post(
-          "https://supperapp-backend.chbk.run/register/otp",
+          `${url}/register/otp`,
           { phone: phoneNumber },
           {
             accept: "application/json",
@@ -87,7 +88,7 @@ const RegisterBundleManager = () => {
   function handleRegister() {
     axios
       .post(
-        "https://supperapp-backend.chbk.run/register/bundle_manager",
+        `${url}/register/bundle_manager`,
         {
           phone: phoneNumber,
           password: password,
